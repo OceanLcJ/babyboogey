@@ -15,6 +15,7 @@ import { Copy } from "./copy";
 
 import { type TableColumn } from "@/types/blocks/table";
 import { type Pagination } from "@/types/blocks/base";
+import { Dropdown } from "./dropdown";
 
 export function Table({
   columns,
@@ -63,7 +64,7 @@ export function Table({
                     cellContent = (
                       <Image
                         value={value}
-                        options={column.options}
+                        metadata={column.metadata}
                         className={column.className}
                       />
                     );
@@ -71,7 +72,7 @@ export function Table({
                     cellContent = (
                       <Time
                         value={value}
-                        options={column.options}
+                        metadata={column.metadata}
                         className={column.className}
                       />
                     );
@@ -79,12 +80,28 @@ export function Table({
                     cellContent = (
                       <Label
                         value={value}
-                        options={column.options}
+                        metadata={column.metadata}
                         className={column.className}
                       />
                     );
                   } else if (column.type === "copy" && value) {
-                    cellContent = <Copy text={value}>{content}</Copy>;
+                    cellContent = (
+                      <Copy
+                        value={value}
+                        metadata={column.metadata}
+                        className={column.className}
+                      >
+                        {content}
+                      </Copy>
+                    );
+                  } else if (column.type === "dropdown") {
+                    cellContent = (
+                      <Dropdown
+                        value={content}
+                        metadata={column.metadata}
+                        className={column.className}
+                      />
+                    );
                   }
 
                   return (

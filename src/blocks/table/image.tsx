@@ -1,10 +1,10 @@
 export function Image({
   value,
-  options,
+  metadata,
   className,
 }: {
   value: string;
-  options?: any;
+  metadata?: Record<string, any>;
   className?: string;
 }) {
   return (

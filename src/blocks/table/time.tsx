@@ -2,17 +2,17 @@ import moment from "moment";
 
 export function Time({
   value,
-  options,
+  metadata,
   className,
 }: {
   value: string | Date;
-  options?: any;
+  metadata?: Record<string, any>;
   className?: string;
 }) {
   return (
     <div className={className}>
-      {options?.format
-        ? moment(value).format(options?.format)
+      {metadata?.format
+        ? moment(value).format(metadata?.format)
         : moment(value).fromNow()}
     </div>
   );

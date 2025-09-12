@@ -4,6 +4,7 @@ import { and, count, desc, eq } from "drizzle-orm";
 
 export type Taxonomy = typeof taxonomy.$inferSelect;
 export type NewTaxonomy = typeof taxonomy.$inferInsert;
+export type UpdateTaxonomy = Partial<Omit<NewTaxonomy, "id" | "createdAt">>;
 
 export enum TaxonomyType {
   CATEGORY = "category",
@@ -19,6 +20,40 @@ export enum TaxonomyStatus {
 
 export async function addTaxonomy(data: NewTaxonomy) {
   const [result] = await db().insert(taxonomy).values(data).returning();
+
+  return result;
+}
+
+export async function updateTaxonomy(id: string, data: UpdateTaxonomy) {
+  const [result] = await db()
+    .update(taxonomy)
+    .set(data)
+    .where(eq(taxonomy.id, id))
+    .returning();
+
+  return result;
+}
+
+export async function findTaxonomy({
+  id,
+  slug,
+  status,
+}: {
+  id?: string;
+  slug?: string;
+  status?: TaxonomyStatus;
+}) {
+  const [result] = await db()
+    .select()
+    .from(taxonomy)
+    .where(
+      and(
+        id ? eq(taxonomy.id, id) : undefined,
+        slug ? eq(taxonomy.slug, slug) : undefined,
+        status ? eq(taxonomy.status, status) : undefined
+      )
+    )
+    .limit(1);
 
   return result;
 }
@@ -84,6 +119,18 @@ export async function getCategories({
     page,
     limit,
   });
+}
+
+export async function findCategory({
+  id,
+  slug,
+  status,
+}: {
+  id?: string;
+  slug?: string;
+  status?: TaxonomyStatus;
+}) {
+  return findTaxonomy({ id, slug, status });
 }
 
 export async function getCategoriesCount(): Promise<number> {

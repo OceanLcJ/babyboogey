@@ -2,15 +2,15 @@ import { Badge } from "@/components/ui/badge";
 
 export function Label({
   value,
-  options,
+  metadata,
   className,
 }: {
   value: string;
-  options?: any;
+  metadata?: Record<string, any>;
   className?: string;
 }) {
   return (
-    <Badge variant={options?.variant ?? "secondary"} className={className}>
+    <Badge variant={metadata?.variant ?? "secondary"} className={className}>
       {value.toString()}
     </Badge>
   );

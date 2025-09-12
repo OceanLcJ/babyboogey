@@ -3,17 +3,28 @@
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ReactNode } from "react";
 import { toast } from "sonner";
+import { CopyIcon } from "lucide-react";
 
 export function Copy({
-  text,
+  value,
+  metadata,
+  className,
   children,
 }: {
-  text: string;
+  value: string;
+  metadata?: Record<string, any>;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <CopyToClipboard text={text} onCopy={() => toast.success("Copied")}>
-      <div className="cursor-pointer">{children}</div>
+    <CopyToClipboard
+      text={value}
+      onCopy={() => toast.success(metadata?.message ?? "Copied")}
+    >
+      <div className={`cursor-pointer flex items-center gap-2 ${className}`}>
+        {children}
+        <CopyIcon className="w-3 h-3" />
+      </div>
     </CopyToClipboard>
   );
 }

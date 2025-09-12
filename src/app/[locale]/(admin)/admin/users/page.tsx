@@ -11,7 +11,7 @@ export default async function AdminUsersPage() {
       { name: "id", title: "ID", type: "copy" },
       { name: "name", title: "Name" },
       { name: "image", title: "Avatar", type: "image" },
-      { name: "email", title: "Email", type: "email" },
+      { name: "email", title: "Email", type: "copy" },
       { name: "emailVerified", title: "Email Verified", type: "label" },
       { name: "createdAt", title: "Created At", type: "time" },
     ],

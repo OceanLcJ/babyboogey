@@ -3,14 +3,38 @@ import { FormCard } from "@/blocks/form";
 import { Form } from "@/types/blocks/form";
 import {
   addTaxonomy,
+  findCategory,
+  findTaxonomy,
   NewTaxonomy,
   TaxonomyStatus,
   TaxonomyType,
+  updateTaxonomy,
+  UpdateTaxonomy,
 } from "@/services/taxonomy";
 import { getUuid } from "@/lib/hash";
 import { getUserInfo } from "@/services/user";
 
-export default async function CategoryAddPage() {
+export default async function CategoryEditPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const category = await findCategory({ id });
+  if (!category) {
+    return "Category not found";
+  }
+
+  const user = await getUserInfo();
+  if (!user) {
+    return "no auth";
+  }
+
+  if (!user || category.userId !== user.id) {
+    return "access denied";
+  }
+
   const form: Form = {
     fields: [
       {
@@ -34,18 +58,20 @@ export default async function CategoryAddPage() {
     ],
     passby: {
       type: "category",
+      category: category,
+      user: user,
     },
-    data: {},
+    data: category,
     submit: {
       button: {
-        text: "Add Category",
+        text: "Edit Category",
       },
       handler: async (data, passby) => {
         "use server";
 
-        const user = await getUserInfo();
-        if (!user) {
-          throw new Error("no auth");
+        const { user, category } = passby;
+        if (!user || !category || category.userId !== user.id) {
+          throw new Error("access denied");
         }
 
         const slug = data.get("slug") as string;
@@ -56,12 +82,9 @@ export default async function CategoryAddPage() {
           throw new Error("slug and title are required");
         }
 
-        const newCategory: NewTaxonomy = {
-          id: getUuid(),
-          userId: user.id,
+        const updateCategory: UpdateTaxonomy = {
           parentId: "", // todo: select parent category
           slug: slug.trim().toLowerCase(),
-          type: TaxonomyType.CATEGORY,
           title: title.trim(),
           description: description.trim(),
           image: "",
@@ -69,15 +92,15 @@ export default async function CategoryAddPage() {
           status: TaxonomyStatus.PUBLISHED,
         };
 
-        const result = await addTaxonomy(newCategory);
+        const result = await updateTaxonomy(category.id, updateCategory);
 
         if (!result) {
-          throw new Error("add category failed");
+          throw new Error("update category failed");
         }
 
         return {
           status: "success",
-          message: "category added",
+          message: "category updated",
           redirect_url: "/admin/categories",
         };
       },
@@ -88,7 +111,7 @@ export default async function CategoryAddPage() {
     <>
       <Header />
       <Main>
-        <MainHeader title="Add Category" />
+        <MainHeader title="Edit Category" />
         <FormCard form={form} className="md:max-w-xl" />
       </Main>
     </>

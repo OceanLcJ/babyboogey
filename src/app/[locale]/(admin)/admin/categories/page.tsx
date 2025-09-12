@@ -2,31 +2,67 @@ import { Header, Main, MainHeader } from "@/blocks/dashboard";
 import { TableCard } from "@/blocks/table";
 import { type Table } from "@/types/blocks/table";
 import { Button } from "@/types/blocks/base";
-import { getCategories, getCategoriesCount } from "@/services/taxonomy";
-import { Pagination } from "@/blocks/base/pagination";
+import {
+  getCategories,
+  getCategoriesCount,
+  type Taxonomy,
+} from "@/services/taxonomy";
 
 export default async function CategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page: string }>;
+  searchParams: Promise<{ page?: number; pageSize?: number }>;
 }) {
-  const { page: queryPage } = await searchParams;
-  const page = parseInt(queryPage) || 1;
-  const limit = 2;
+  const { page: pageNum, pageSize } = await searchParams;
+  const page = pageNum || 1;
+  const limit = pageSize || 30;
 
+  const total = await getCategoriesCount();
   const data = await getCategories({
     page,
     limit,
   });
-  const total = await getCategoriesCount();
 
   const table: Table = {
     columns: [
+      {
+        name: "slug",
+        title: "Slug",
+        type: "copy",
+        metadata: { message: "Copied" },
+      },
       { name: "title", title: "Title" },
-      { name: "slug", title: "Slug", type: "copy" },
-      { name: "status", title: "Status", type: "label" },
+      {
+        name: "status",
+        title: "Status",
+        type: "label",
+        metadata: { variant: "outline" },
+      },
       { name: "createdAt", title: "Created At", type: "time" },
       { name: "updatedAt", title: "Updated At", type: "time" },
+      {
+        name: "action",
+        title: "",
+        type: "dropdown",
+        callback: (item: Taxonomy) => {
+          return [
+            {
+              name: "edit",
+              title: "Edit",
+              icon: "RiEditLine",
+              url: `/admin/categories/${item.id}/edit`,
+            },
+          ];
+        },
+      },
+    ],
+    actions: [
+      {
+        name: "edit",
+        text: "Edit",
+        icon: "RiEditLine",
+        url: "/admin/categories/[id]/edit",
+      },
     ],
     data,
     pagination: {
