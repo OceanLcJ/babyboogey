@@ -226,6 +226,7 @@ export function Form({
             variant={submit.button.variant}
             className="flex items-center justify-center gap-2 font-semibold cursor-pointer"
             disabled={loading}
+            size={submit.button.size || "sm"}
           >
             {loading ? (
               <Loader className="mr-2 h-4 w-4 animate-spin" />

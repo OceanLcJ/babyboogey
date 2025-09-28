@@ -27,18 +27,21 @@ export function MainHeader({
           <p className="text-muted-foreground">{description || ""}</p>
         </div>
         <div>
-          {actions?.map((action) => (
-            <Button
-              asChild
-              key={action.title}
-              onClick={action.onClick}
-              variant={action.variant || "default"}
+          {actions?.map((action, idx) => (
+            <Link
+              key={idx}
+              href={action.url || ""}
+              target={action.target || "_self"}
             >
-              <Link href={action.url || ""} target={action.target || "_self"}>
+              <Button
+                onClick={action.onClick}
+                variant={action.variant || "default"}
+                size={action.size || "sm"}
+              >
                 {action.icon && <SmartIcon name={action.icon as string} />}
                 {action.title}
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           ))}
         </div>
       </div>
