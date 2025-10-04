@@ -64,6 +64,13 @@
       "when": 1759159329927,
       "tag": "0008_dashing_lady_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1759476114236,
+      "tag": "0009_big_wasp",
+      "breakpoints": true
     }
   ]
 }

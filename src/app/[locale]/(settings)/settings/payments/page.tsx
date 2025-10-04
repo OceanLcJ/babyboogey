@@ -93,7 +93,11 @@ export default async function PaymentsPage({
 
   return (
     <div className="space-y-8">
-      <TableCard table={table} />
+      <TableCard
+        title="Payments"
+        description="View your payments"
+        table={table}
+      />
     </div>
   );
 }

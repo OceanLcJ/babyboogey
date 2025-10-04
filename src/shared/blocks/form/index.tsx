@@ -127,7 +127,6 @@ export function Form({
 
       setLoading(true);
       const res = await submit.handler(formData, passby);
-      setLoading(false);
 
       if (!res) {
         throw new Error("No response received from server");
@@ -144,6 +143,8 @@ export function Form({
       if (res.redirect_url) {
         router.push(res.redirect_url as any);
       }
+
+      setLoading(false);
     } catch (err: any) {
       console.log("submit form error", err);
       toast.error(err.message || "submit form failed");

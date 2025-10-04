@@ -2,6 +2,7 @@ import { getUserInfo } from "@/shared/services/user";
 import { Empty } from "@/shared/blocks/common";
 import { Form as FormType } from "@/shared/types/blocks/form";
 import { FormCard } from "@/shared/blocks/form";
+import { UpdateUser, updateUser } from "@/shared/services/user";
 
 export default async function ProfilePage() {
   const user = await getUserInfo();
@@ -10,25 +11,43 @@ export default async function ProfilePage() {
   }
 
   const form: FormType = {
-    title: "Profile",
     fields: [
+      {
+        name: "email",
+        title: "Email",
+        type: "email",
+        attributes: { disabled: true },
+      },
       { name: "name", title: "Name", type: "text" },
-      { name: "email", title: "Email", type: "email" },
     ],
     data: user,
     passby: {
-      type: "user",
       user: user,
     },
     submit: {
       handler: async (data: FormData, passby: any) => {
         "use server";
 
-        throw new Error("test");
+        const { user } = passby;
+        if (!user) {
+          throw new Error("no auth");
+        }
+
+        const name = data.get("name") as string;
+        if (!name?.trim()) {
+          throw new Error("name is required");
+        }
+
+        const updatedUser: UpdateUser = {
+          name: name.trim(),
+        };
+
+        await updateUser(user.id, updatedUser);
 
         return {
           status: "success",
-          message: "Profile updated" + data.get("name") + data.get("email"),
+          message: "Profile updated",
+          redirect_url: "/settings/profile",
         };
       },
       button: {
@@ -39,7 +58,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="space-y-8">
-      <FormCard form={form} />
+      <FormCard title="Profile" description="Update your profile" form={form} />
     </div>
   );
 }

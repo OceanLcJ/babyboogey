@@ -208,3 +208,18 @@ export const credit = pgTable("credit", {
   deletedAt: timestamp("deleted_at"),
   consumedDetail: text("consumed_detail"), // consumed detail
 });
+
+export const apikey = pgTable("apikey", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  title: text("title").notNull(),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  deletedAt: timestamp("deleted_at"),
+});

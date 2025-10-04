@@ -1,6 +1,6 @@
 import { type Table } from "@/shared/types/blocks/table";
 import { TableCard } from "@/shared/blocks/table";
-import { Card } from "@/shared/blocks/card";
+import { PanelCard } from "@/shared/blocks/panel";
 import { getUserInfo } from "@/shared/services/user";
 import { Empty } from "@/shared/blocks/common";
 import {
@@ -96,20 +96,23 @@ export default async function CreditsPage({
 
   return (
     <div className="space-y-8">
-      <Card
+      <PanelCard
         title="Credits Balance"
-        footer={
-          <Link href="/pricing">
-            <Button>Buy Credits</Button>
-          </Link>
-        }
+        buttons={[
+          {
+            title: "Buy Credits",
+            url: "/pricing",
+            target: "_blank",
+            icon: "Coins",
+          },
+        ]}
         className="max-w-md"
       >
         <div className="text-3xl font-bold text-primary">
           {remainingCredits}
         </div>
-      </Card>
-      <TableCard table={table} />
+      </PanelCard>
+      <TableCard title="Credits History" table={table} />
     </div>
   );
 }

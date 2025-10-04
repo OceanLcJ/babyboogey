@@ -14,6 +14,7 @@ export interface Table {
   title?: string;
   columns: TableColumn[];
   data: any[];
+  emptyMessage?: string;
   pagination?: Pagination;
   actions?: Button[];
 }

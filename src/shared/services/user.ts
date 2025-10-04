@@ -1,6 +1,6 @@
 import { user } from "@/config/db/schema";
 import { db } from "@/core/db";
-import { desc, inArray } from "drizzle-orm";
+import { desc, eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/core/auth";
 import { getRemainingCredits } from "./credit";
@@ -13,8 +13,18 @@ export interface UserCredits {
 export type User = typeof user.$inferSelect & {
   credits?: UserCredits;
 };
-
 export type NewUser = typeof user.$inferInsert;
+export type UpdateUser = Partial<Omit<NewUser, "id" | "createdAt" | "email">>;
+
+export async function updateUser(userId: string, updatedUser: UpdateUser) {
+  const [result] = await db()
+    .update(user)
+    .set(updatedUser)
+    .where(eq(user.id, userId))
+    .returning();
+
+  return result;
+}
 
 export async function getUsers({
   page = 1,
