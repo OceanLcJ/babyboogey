@@ -19,6 +19,14 @@ export default async function ProfilePage() {
         attributes: { disabled: true },
       },
       { name: "name", title: "Name", type: "text" },
+      {
+        name: "image",
+        title: "Avatar",
+        type: "upload_image",
+        metadata: {
+          max: 1,
+        },
+      },
     ],
     data: user,
     passby: {
@@ -38,8 +46,12 @@ export default async function ProfilePage() {
           throw new Error("name is required");
         }
 
+        const image = data.get("image");
+        console.log("image", image, typeof image);
+
         const updatedUser: UpdateUser = {
           name: name.trim(),
+          image: image as string,
         };
 
         await updateUser(user.id, updatedUser);

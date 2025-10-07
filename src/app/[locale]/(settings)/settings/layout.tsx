@@ -73,12 +73,7 @@ export default async function SettingsLayout({
   };
 
   return (
-    <ConsoleLayout
-      title={title}
-      nav={nav}
-      topNav={topNav}
-      className="py-16 md:py-20"
-    >
+    <ConsoleLayout title={title} nav={nav} className="py-16 md:py-20">
       {children}
     </ConsoleLayout>
   );

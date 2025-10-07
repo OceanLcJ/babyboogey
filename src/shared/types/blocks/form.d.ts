@@ -24,7 +24,8 @@ export interface FormField {
     | "richtext_editor"
     | "markdown_editor"
     | "switch"
-    | "checkbox";
+    | "checkbox"
+    | "upload_image";
   placeholder?: string;
   group?: string;
   options?: {
@@ -35,6 +36,7 @@ export interface FormField {
   tip?: string;
   attributes?: Record<string, any>;
   validation?: ValidationRule;
+  metadata?: Record<string, any>;
 }
 
 export interface FormSubmit {

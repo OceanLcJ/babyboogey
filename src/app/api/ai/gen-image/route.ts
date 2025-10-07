@@ -1,7 +1,7 @@
 import { respData, respErr } from "@/shared/lib/resp";
 import { experimental_generateImage as generateImage } from "ai";
 import { replicate } from "@ai-sdk/replicate";
-import { newStorage } from "@/extensions/storage";
+import { storageService } from "@/shared/services/storage";
 import { getUuid } from "@/shared/lib/hash";
 
 export async function POST(req: Request) {
@@ -23,8 +23,6 @@ export async function POST(req: Request) {
       return respErr("gen images failed");
     }
 
-    const storage = newStorage();
-
     const batch = getUuid();
 
     const processedImages = await Promise.all(
@@ -34,21 +32,27 @@ export async function POST(req: Request) {
         const body = Buffer.from(image.base64, "base64");
 
         try {
-          const res = await storage.uploadFile({
+          const res = await storageService.uploadFile({
             body,
             key,
             contentType: "image/png",
             disposition: "inline",
           });
 
+          if (!res.success) {
+            throw new Error(res.error || "Upload failed");
+          }
+
           return {
-            ...res,
+            url: res.url,
+            key: res.key,
             filename,
           };
         } catch (err) {
           console.log("upload file failed:", err);
           return {
             filename,
+            error: err instanceof Error ? err.message : "Unknown error",
           };
         }
       })

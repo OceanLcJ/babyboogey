@@ -32,10 +32,39 @@ import { useState } from "react";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { isArray } from "util";
 import { Label } from "@/shared/components/ui/label";
+import { UploadImage } from "./upload-image";
 
 function buildFieldSchema(field: FormFieldType) {
   if (field.type === "switch") {
     return z.boolean();
+  }
+
+  if (
+    field.type === "upload_image" &&
+    field.metadata?.max &&
+    field.metadata.max > 1
+  ) {
+    let arraySchema = z.array(z.string());
+
+    if (field.validation?.required) {
+      arraySchema = arraySchema.min(1, {
+        message: field.validation.message || `${field.title} is required`,
+      });
+    }
+
+    return arraySchema;
+  }
+
+  if (field.type === "upload_image") {
+    let schema = z.string();
+
+    if (field.validation?.required) {
+      schema = schema.min(1, {
+        message: field.validation.message || `${field.title} is required`,
+      });
+    }
+
+    return schema;
   }
 
   let schema = z.string();
@@ -116,6 +145,21 @@ export function Form({
         console.log("switch value", val, field.name);
         defaultValues[field.name] =
           val === true || val === "true" || val === 1 || val === "1";
+      } else if (
+        field.type === "upload_image" &&
+        field.metadata?.max &&
+        field.metadata.max > 1
+      ) {
+        // 多图上传：默认值为数组
+        const val = data?.[field.name] ?? field.value;
+        if (typeof val === "string" && val) {
+          // 如果是逗号分隔的字符串，转换为数组
+          defaultValues[field.name] = val.split(",").filter(Boolean);
+        } else if (Array.isArray(val)) {
+          defaultValues[field.name] = val;
+        } else {
+          defaultValues[field.name] = [];
+        }
       } else {
         defaultValues[field.name] = data?.[field.name] || field.value || "";
       }
@@ -128,15 +172,37 @@ export function Form({
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data", data);
+    console.log("=== Form Submit Start ===");
+    console.log("[Form Submit] Raw form data:", data);
+
+    // 检查 upload_image 字段
+    fields?.forEach((field) => {
+      if (field.type === "upload_image" && field.name) {
+        console.log(`[Form Submit] Upload field "${field.name}":`, {
+          value: data[field.name],
+          type: typeof data[field.name],
+          isArray: Array.isArray(data[field.name]),
+          metadata: field.metadata,
+        });
+      }
+    });
+
     if (!submit?.handler) return;
 
     try {
       const formData = new FormData();
 
       Object.entries(data).forEach(([key, value]) => {
-        // 保留布尔值和其他类型的原始值
-        formData.append(key, String(value));
+        // 如果是数组，用逗号拼接
+        if (Array.isArray(value)) {
+          const joinedValue = value.join(",");
+          console.log(`[Form Submit] ${key} (array):`, value, "→", joinedValue);
+          formData.append(key, joinedValue);
+        } else {
+          console.log(`[Form Submit] ${key}:`, value);
+          // 保留布尔值和其他类型的原始值
+          formData.append(key, String(value));
+        }
       });
 
       setLoading(true);
@@ -224,6 +290,13 @@ export function Form({
                         </div>
                       ) : item.type === "markdown_editor" ? (
                         <Markdown field={item} formField={field} data={data} />
+                      ) : item.type === "upload_image" ? (
+                        <UploadImage
+                          field={item}
+                          formField={field}
+                          data={data}
+                          metadata={item.metadata}
+                        />
                       ) : (
                         <Input field={item} formField={field} data={data} />
                       )}

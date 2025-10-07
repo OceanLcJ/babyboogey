@@ -320,19 +320,13 @@ export const settings: Setting[] = [
     tab: "storage",
   },
   {
-    name: "r2_region",
-    title: "Region",
-    type: "text",
-    placeholder: "",
-    group: "r2",
-    tab: "storage",
-  },
-  {
     name: "r2_endpoint",
     title: "Endpoint",
     type: "url",
-    placeholder: "",
+    placeholder: "https://<account-id>.r2.cloudflarestorage.com",
+    tip: "Leave empty to use the default R2 endpoint",
     group: "r2",
+    tab: "storage",
   },
   {
     name: "r2_domain",
