@@ -2,22 +2,30 @@ import {
   Blog as BlogType,
   Category as CategoryType,
 } from "@/shared/types/blocks/blog";
-import { Link } from "@/core/i18n/navigation";
-import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/utils";
+import { Tab } from "@/shared/types/blocks/common";
+import { Tabs } from "@/shared/blocks/common/tabs";
+import { Link } from "@/core/i18n/navigation";
 
 export function Blog({
   blog,
-  currentCategory,
   className,
-  srOnlyTitle,
 }: {
   blog: BlogType;
-  currentCategory?: CategoryType;
   className?: string;
-  srOnlyTitle?: string;
 }) {
-  const t = useTranslations();
+  const tabs: Tab[] = [];
+  blog.categories?.map((category: CategoryType) => {
+    tabs.push({
+      name: category.slug,
+      title: category.title,
+      url:
+        !category.slug || category.slug === "all"
+          ? "/blog"
+          : `/blog/category/${category.slug}`,
+      is_active: blog.currentCategory?.slug == category.slug,
+    });
+  });
 
   return (
     <section
@@ -25,7 +33,9 @@ export function Blog({
       className={cn("py-16 md:py-36", blog.className, className)}
     >
       <div className="mx-auto mb-12 text-center">
-        {srOnlyTitle && <h1 className="sr-only">{srOnlyTitle}</h1>}
+        {blog.sr_only_title && (
+          <h1 className="sr-only">{blog.sr_only_title}</h1>
+        )}
         <h2 className="mb-6 text-pretty text-3xl font-bold lg:text-4xl">
           {blog.title}
         </h2>
@@ -37,26 +47,14 @@ export function Blog({
       <div className="container flex flex-col items-center gap-8 lg:px-16">
         {blog.categories && (
           <div className="mb-2 flex flex-wrap items-center justify-center gap-4">
-            {blog.categories?.map((c) => (
-              <Link
-                key={c.id}
-                href={c.url || ""}
-                className={`px-4 py-1 rounded-md text-sm border ${
-                  currentCategory && currentCategory.slug === c.slug
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-foreground"
-                }`}
-              >
-                {c.title}
-              </Link>
-            ))}
+            <Tabs tabs={tabs} />
           </div>
         )}
 
         {blog.posts && blog.posts.length > 0 ? (
           <div className="w-full flex flex-wrap items-start">
             {blog.posts?.map((item, idx) => (
-              <a
+              <Link
                 key={idx}
                 href={item.url || ""}
                 target={item.target || "_self"}
@@ -88,13 +86,11 @@ export function Blog({
                     )} */}
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         ) : (
-          <div className="text-muted-foreground text-md py-8">
-            {t("blog.no_content")}
-          </div>
+          <div className="text-muted-foreground text-md py-8">No Content</div>
         )}
       </div>
     </section>

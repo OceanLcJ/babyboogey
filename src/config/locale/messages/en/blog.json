@@ -1,8 +1,14 @@
 {
-  "page_title": "ShipAny Blog",
-  "title": "Blog",
-  "description": "Read about our latest product features, solutions, and updates.",
-  "all": "All",
-  "category_not_found": "Category not found",
-  "post_not_found": "Post not found"
+  "metadata": {
+    "title": "Blog",
+    "description": "Read about our latest product features, solutions, and updates."
+  },
+  "page": {
+    "title": "ShipAny Blog",
+    "description": "Read about our latest product features, solutions, and updates."
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Read about our latest product features, solutions, and updates."
+  }
 }

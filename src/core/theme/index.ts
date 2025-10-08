@@ -17,7 +17,7 @@ export function getActiveTheme(): string {
 /**
  * load theme page
  */
-export async function loadThemePage(pageName: string, theme?: string) {
+export async function getThemePage(pageName: string, theme?: string) {
   const loadTheme = theme || getActiveTheme();
 
   try {
@@ -50,7 +50,7 @@ export async function loadThemePage(pageName: string, theme?: string) {
 /**
  * load theme layout
  */
-export async function loadThemeLayout(layoutName: string, theme?: string) {
+export async function getThemeLayout(layoutName: string, theme?: string) {
   const loadTheme = theme || getActiveTheme();
 
   try {
@@ -83,7 +83,7 @@ export async function loadThemeLayout(layoutName: string, theme?: string) {
 /**
  * load theme block
  */
-export async function loadThemeBlock(blockName: string, theme?: string) {
+export async function getThemeBlock(blockName: string, theme?: string) {
   const loadTheme = theme || getActiveTheme();
 
   try {

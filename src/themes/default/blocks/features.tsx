@@ -2,14 +2,14 @@
 
 import { SmartIcon } from "@/shared/blocks/common/smart-icon";
 import { cn } from "@/shared/lib/utils";
-import { Features as FeaturesProps } from "@/shared/types/blocks/landing";
+import { Features as FeaturesType } from "@/shared/types/blocks/landing";
 import { ScrollAnimation } from "@/shared/components/ui/scroll-animation";
 
 export function Features({
   features,
   className,
 }: {
-  features: FeaturesProps;
+  features: FeaturesType;
   className?: string;
 }) {
   return (

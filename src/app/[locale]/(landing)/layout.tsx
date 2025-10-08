@@ -1,12 +1,29 @@
 import { ReactNode } from "react";
-import { loadThemeLayout } from "@/core/theme";
+import { getTranslations } from "next-intl/server";
+import { getThemeLayout } from "@/core/theme";
+import {
+  Header as HeaderType,
+  Footer as FooterType,
+} from "@/shared/types/blocks/landing";
 
 export default async function LandingLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const Layout = await loadThemeLayout("landing");
+  // load page data
+  const t = await getTranslations("landing");
 
-  return <Layout>{children}</Layout>;
+  // load layout component
+  const Layout = await getThemeLayout("landing");
+
+  // header and footer to display
+  const header: HeaderType = t.raw("header");
+  const footer: FooterType = t.raw("footer");
+
+  return (
+    <Layout header={header} footer={footer}>
+      {children}
+    </Layout>
+  );
 }

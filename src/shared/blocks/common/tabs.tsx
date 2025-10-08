@@ -30,7 +30,7 @@ export function Tabs({
         tabs?.find((tab) => tab.name === tabName) || ({} as Tab);
       if (currentTab.url) {
         router.push(currentTab.url);
-        setTab(currentTab);
+        // setTab(currentTab);
       }
     }
   }, [tabName]);

@@ -1,10 +1,13 @@
-import { CTA, Showcases } from "@/themes/default/blocks";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getThemePage } from "@/core/theme";
 import { getMetadata } from "@/shared/lib/seo";
-import { getTranslations } from "next-intl/server";
-import { setRequestLocale } from "next-intl/server";
+import {
+  Showcases as ShowcasesType,
+  CTA as CTAType,
+} from "@/shared/types/blocks/landing";
 
 export const generateMetadata = getMetadata({
-  metadataKey: "showcases",
+  metadataKey: "showcases.metadata",
   canonicalUrl: "/showcases",
 });
 
@@ -16,14 +19,18 @@ export default async function ShowcasesPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations("landing");
-  const tt = await getTranslations("showcases");
+  // load landing data
+  const tl = await getTranslations("landing");
 
-  return (
-    <>
-      <Showcases showcases={t.raw("showcases")} srOnlyTitle={tt.raw("title")} />
+  // load showcases data
+  const t = await getTranslations("showcases");
 
-      <CTA cta={t.raw("cta")} className="bg-muted" />
-    </>
-  );
+  // load page component
+  const Page = await getThemePage("showcases");
+
+  // build sections
+  const showcases: ShowcasesType = t.raw("showcases");
+  const cta: CTAType = tl.raw("cta");
+
+  return <Page locale={locale} showcases={showcases} cta={cta} />;
 }

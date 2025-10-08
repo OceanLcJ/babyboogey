@@ -1,34 +1,27 @@
-import { Blog } from "@/themes/default/blocks";
-import { getMetadata } from "@/shared/lib/seo";
-import { Blog as BlogType } from "@/shared/types/blocks/blog";
-import { getPosts, PostStatus, PostType } from "@/shared/services/post";
 import {
-  findTaxonomy,
+  Blog as BlogType,
+  Category as CategoryType,
+  Post as PostType,
+} from "@/shared/types/blocks/blog";
+import {
+  getPosts,
+  PostStatus,
+  PostType as DBPostType,
+} from "@/shared/services/post";
+import {
   getTaxonomies,
   TaxonomyStatus,
   TaxonomyType,
 } from "@/shared/services/taxonomy";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import moment from "moment";
-import { envConfigs } from "@/config";
-import { Empty } from "@/shared/blocks/common";
+import { getThemePage } from "@/core/theme";
+import { getMetadata } from "@/shared/lib/seo";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-
-  return {
-    title: "Blog",
-    description:
-      "Read about our latest product features, solutions, and updates.",
-    alternates: {
-      canonical: `${envConfigs.app_url}/blog`,
-    },
-  };
-}
+export const generateMetadata = getMetadata({
+  metadataKey: "blog.metadata",
+  canonicalUrl: "/blog",
+});
 
 export default async function BlogPage({
   params,
@@ -40,48 +33,46 @@ export default async function BlogPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
+  // load blog data
   const t = await getTranslations("blog");
 
   const { page: pageNum, pageSize } = await searchParams;
   const page = pageNum || 1;
   const limit = pageSize || 30;
 
-  const posts = await getPosts({
-    type: PostType.ARTICLE,
+  // get blog posts
+  const postsData = await getPosts({
+    type: DBPostType.ARTICLE,
     status: PostStatus.PUBLISHED,
     page,
     limit,
   });
 
-  const categories = await getTaxonomies({
+  // get blog categories
+  const categoriesData = await getTaxonomies({
     type: TaxonomyType.CATEGORY,
     status: TaxonomyStatus.PUBLISHED,
   });
 
   // current category data
-  const currentCategory = {
+  const currentCategory: CategoryType = {
     id: "all",
     slug: "all",
-    title: t("all"),
+    title: "All",
     url: `/blog`,
   };
 
-  // category data
-  const categoryData = categories.map((category) => ({
+  // build categoties data
+  const categories: CategoryType[] = categoriesData.map((category) => ({
     id: category.id,
     slug: category.slug,
     title: category.title,
     url: `/blog/category/${category.slug}`,
   }));
-  categoryData.unshift({
-    id: "all",
-    slug: "all",
-    title: t("all"),
-    url: `/blog`,
-  });
+  categories.unshift(currentCategory);
 
-  // post data
-  const postData = posts.map((post) => ({
+  // build posts data
+  const posts: PostType[] = postsData.map((post) => ({
     id: post.id,
     title: post.title || "",
     description: post.description || "",
@@ -92,18 +83,16 @@ export default async function BlogPage({
     url: `/blog/${post.slug}`,
   }));
 
+  // build blog data
   const blog: BlogType = {
-    title: t("title"),
-    description: t("description"),
-    categories: categoryData,
-    posts: postData,
+    ...t.raw("blog"),
+    categories,
+    currentCategory,
+    posts,
   };
 
-  return (
-    <Blog
-      blog={blog}
-      currentCategory={currentCategory}
-      srOnlyTitle={t("page_title")}
-    />
-  );
+  // load page component
+  const Page = await getThemePage("blog");
+
+  return <Page locale={locale} blog={blog} />;
 }

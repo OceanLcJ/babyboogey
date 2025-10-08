@@ -13,7 +13,9 @@ export interface SectionItem extends NavItem {}
 
 export interface Section {
   id?: string;
+  block?: string;
   label?: string;
+  sr_only_title?: string;
   title?: string;
   description?: string;
   tip?: string;
@@ -102,9 +104,13 @@ export interface Landing {
   header?: Header;
   hero?: Hero;
   logos?: Logos;
+  introduce?: Features;
+  benefits?: Features;
+  usage?: Features;
   features?: Features;
   stats?: Stats;
   showcases?: Showcases;
+  subscribe?: Subscribe;
   faq?: FAQ;
   cta?: CTA;
   testimonials?: Testimonials;

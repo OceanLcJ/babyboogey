@@ -75,10 +75,6 @@
         {
           "title": "Profile",
           "url": "/settings/profile"
-        },
-        {
-          "title": "Admin",
-          "url": "/admin/"
         }
       ]
     },
@@ -87,6 +83,7 @@
     "show_locale": true
   },
   "hero": {
+    "id": "hero",
     "title": "Ship AI Startups in hours, not days",
     "highlight_text": "in hours",
     "description": "ShipAny is a NextJS boilerplate for building AI SaaS startups.<br/>Ship Fast with a variety of templates and components.",
@@ -325,103 +322,6 @@
         "title": "AI-Ready Infrastructure",
         "description": "Pre-configured AI integration with built-in credits system and API sales.",
         "icon": "RiRobot2Line"
-      }
-    ]
-  },
-  "showcases": {
-    "id": "showcase",
-    "title": "AI SaaS Startups built with ShipAny",
-    "description": "Easy to use and fast to ship.",
-    "items": [
-      {
-        "title": "ThinkAny",
-        "description": "AI Search Engine",
-        "url": "https://thinkany.ai",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/7.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "HeyBeauty",
-        "description": "AI Virtual Try On",
-        "url": "https://heybeauty.ai",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/5.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "AI Wallpaper",
-        "description": "AI Wallpaper Generator",
-        "url": "https://aiwallpaper.shop",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/1.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "AI Cover",
-        "description": "AI Cover Generator",
-        "url": "https://aicover.design",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/2.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "GPTs Works",
-        "description": "GPTs Directory",
-        "url": "https://gpts.works",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/3.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "Melodisco",
-        "description": "AI Music Player",
-        "url": "https://melodis.co",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/4.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "Pagen",
-        "description": "AI Landing Page Generator",
-        "url": "https://pagen.so",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/6.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "SoraFM",
-        "description": "AI Video Generator",
-        "url": "https://sorafm.trys.ai",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/8.png",
-          "alt": "showcases"
-        }
-      },
-      {
-        "title": "PodLM",
-        "description": "AI Podcast Generator",
-        "url": "https://podlm.ai",
-        "target": "_blank",
-        "image": {
-          "src": "/imgs/cases/9.png",
-          "alt": "showcases"
-        }
       }
     ]
   },

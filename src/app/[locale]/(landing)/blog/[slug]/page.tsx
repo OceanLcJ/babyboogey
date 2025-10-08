@@ -1,64 +1,42 @@
 import { findPost } from "@/shared/services/post";
-import { BlogDetailTwo } from "@/themes/default/blocks/blog-detail-two";
-import { getTranslations } from "next-intl/server";
-import { envConfigs } from "@/config";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Post as PostType } from "@/shared/types/blocks/blog";
 import { Empty } from "@/shared/blocks/common";
+import { getThemePage } from "@/core/theme";
 import moment from "moment";
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const t = await getTranslations("blog");
-
-  const { slug } = await params;
-  const post = await findPost({ slug });
-  if (!post) {
-    return {
-      title: t("page_title"),
-      description: t("description"),
-    };
-  }
-
-  return {
-    title: post.title || "",
-    description: post.description || "",
-    alternates: {
-      canonical: `${envConfigs.app_url}/blog/${slug}`,
-    },
-  };
-}
 
 export default async function BlogDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+
+  // load blog data
   const t = await getTranslations("blog");
 
-  const post = await findPost({ slug });
-  if (!post) {
-    return <Empty message={t("post_not_found")} />;
+  // get post data
+  const postData = await findPost({ slug });
+  if (!postData) {
+    return <Empty message={`Post not found`} />;
   }
 
-  const postData: PostType = {
-    id: post.id,
-    slug: post.slug,
-    title: post.title || "",
-    description: post.description || "",
-    content: post.content || "",
-    created_at: moment(post.createdAt).format("MMM D, YYYY") || "",
-    author_name: post.authorName || "",
-    author_image: post.authorImage || "",
-    url: `/blog/${post.slug}`,
+  // build post data
+  const post: PostType = {
+    id: postData.id,
+    slug: postData.slug,
+    title: postData.title || "",
+    description: postData.description || "",
+    content: postData.content || "",
+    created_at: moment(postData.createdAt).format("MMM D, YYYY") || "",
+    author_name: postData.authorName || "",
+    author_image: postData.authorImage || "",
+    url: `/blog/${postData.slug}`,
   };
 
-  return (
-    <>
-      <BlogDetailTwo post={postData} />
-    </>
-  );
+  // load page component
+  const Page = await getThemePage("blog-detail");
+
+  return <Page locale={locale} post={post} />;
 }

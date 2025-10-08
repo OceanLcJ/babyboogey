@@ -1,8 +1,10 @@
 export interface Blog {
   id?: string;
+  sr_only_title?: string;
   title?: string;
   description?: string;
   categories?: Category[];
+  currentCategory?: Category;
   posts: Post[];
   className?: string;
 }

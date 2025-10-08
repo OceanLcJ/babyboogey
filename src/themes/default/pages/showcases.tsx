@@ -1,23 +1,22 @@
+import {
+  Showcases as ShowcasesType,
+  CTA as CTAType,
+} from "@/shared/types/blocks/landing";
 import { CTA, Showcases } from "@/themes/default/blocks";
-import { getTranslations } from "next-intl/server";
-import { setRequestLocale } from "next-intl/server";
 
 export default async function ShowcasesPage({
-  params,
+  locale,
+  showcases,
+  cta,
 }: {
-  params: Promise<{ locale: string }>;
+  locale?: string;
+  showcases: ShowcasesType;
+  cta?: CTAType;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale);
-
-  const t = await getTranslations("landing");
-  const tt = await getTranslations("showcases");
-
   return (
     <>
-      <Showcases showcases={t.raw("showcases")} srOnlyTitle={tt.raw("title")} />
-
-      <CTA cta={t.raw("cta")} className="bg-muted" />
+      <Showcases showcases={showcases} />
+      {cta && <CTA cta={cta} className="bg-muted" />}
     </>
   );
 }

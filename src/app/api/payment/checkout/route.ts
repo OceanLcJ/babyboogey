@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const { product_id, currency } = await req.json();
 
     const t = await getTranslations("pricing");
-    const pricing = t.raw("default");
+    const pricing = t.raw("pricing");
 
     const pricingItem = pricing.items.find(
       (item: any) => item.product_id === product_id

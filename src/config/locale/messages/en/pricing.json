@@ -1,6 +1,13 @@
 {
-  "default": {
-    "name": "pricing",
+  "metadata": {
+    "title": "Pricing",
+    "description": "Start with a plan"
+  },
+  "page": {
+    "title": "Pricing Table"
+  },
+  "pricing": {
+    "id": "pricing",
     "label": "Pricing",
     "title": "Pricing",
     "description": "Get all features of ShipAny, Ship your AI SaaS startups fast.",
