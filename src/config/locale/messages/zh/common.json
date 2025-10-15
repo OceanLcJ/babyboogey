@@ -27,5 +27,10 @@
     "billing_title": "账单",
     "name_title": "姓名",
     "name_placeholder": "请输入您的姓名"
+  },
+  "payment": {
+    "choose_payment_method": "选择支付方式",
+    "choose_payment_method_description": "",
+    "cancel_title": "取消"
   }
 }

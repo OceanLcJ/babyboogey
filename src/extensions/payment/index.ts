@@ -101,6 +101,7 @@ export interface PaymentRequest {
  * Checkout info interface
  */
 export interface CheckoutInfo {
+  provider?: string;
   sessionId?: string;
   checkoutUrl?: string;
 }
@@ -249,6 +250,7 @@ export class PaymentManager {
   // get provider by name
   getProvider(name: string): PaymentProvider | undefined {
     const provider = this.providers.find((p) => p.name === name);
+
     if (!provider && this.defaultProvider) {
       return this.defaultProvider;
     }

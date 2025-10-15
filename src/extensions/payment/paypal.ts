@@ -119,6 +119,7 @@ export class PayPalProvider implements PaymentProvider {
         provider: this.name,
         checkoutParams: payload,
         checkoutInfo: {
+          provider: this.name,
           sessionId: result.id,
           checkoutUrl: approvalUrl,
         },

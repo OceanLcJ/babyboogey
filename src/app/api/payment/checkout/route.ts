@@ -20,7 +20,10 @@ import { getAllConfigs } from "@/shared/services/config";
 
 export async function POST(req: Request) {
   try {
-    const { product_id, currency, locale } = await req.json();
+    const { product_id, currency, locale, payment_provider } = await req.json();
+    if (!product_id) {
+      return respErr("product_id is required");
+    }
 
     const t = await getTranslations("pricing");
     const pricing = t.raw("pricing");
@@ -43,20 +46,29 @@ export async function POST(req: Request) {
       return respErr("no auth, please sign in");
     }
 
-    // checkout currency
-    let checkoutCurrency = currency || pricingItem.currency || "";
-    checkoutCurrency = checkoutCurrency.toLowerCase();
-
+    // get configs
     const configs = await getAllConfigs();
-    const defaultPaymentProvider = configs.payment_provider;
+
+    // choose payment provider
+    let paymentProviderName = payment_provider || "";
+    if (!paymentProviderName) {
+      paymentProviderName = configs.default_payment_provider;
+    }
+    if (!paymentProviderName) {
+      return respErr("no payment provider configured");
+    }
 
     // get default payment provider
     const paymentService = await getPaymentService();
 
-    const paymentProvider = paymentService.getProvider(defaultPaymentProvider);
+    const paymentProvider = paymentService.getProvider(paymentProviderName);
     if (!paymentProvider || !paymentProvider.name) {
       return respErr("no payment provider configured");
     }
+
+    // checkout currency
+    let checkoutCurrency = currency || pricingItem.currency || "";
+    checkoutCurrency = checkoutCurrency.toLowerCase();
 
     // get payment interval
     const paymentInterval: PaymentInterval =
@@ -157,7 +169,7 @@ export async function POST(req: Request) {
     await createOrder(order);
 
     // create payment
-    const result = await paymentService.createPayment(checkoutInfo);
+    const result = await paymentProvider.createPayment(checkoutInfo);
 
     if (
       !result.success ||

@@ -22,6 +22,7 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { SmartIcon } from "@/shared/blocks/common";
 import { Subscription } from "@/shared/services/subscription";
+import { PaymentModal } from "@/shared/blocks/payment/payment-modal";
 
 export function Pricing({
   pricing,
@@ -34,7 +35,13 @@ export function Pricing({
 }) {
   const locale = useLocale();
   const t = useTranslations("pricing.page");
-  const { user, setIsShowSignModal } = useAppContext();
+  const {
+    user,
+    isShowPaymentModal,
+    setIsShowSignModal,
+    setIsShowPaymentModal,
+    configs,
+  } = useAppContext();
 
   const [group, setGroup] = useState(() => {
     // find current pricing item
@@ -49,10 +56,30 @@ export function Pricing({
       currentItem?.group || featuredGroup?.name || pricing.groups?.[0]?.name
     );
   });
+
+  // current pricing item
+  const [pricingItem, setPricingItem] = useState<PricingItem | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [productId, setProductId] = useState<string | null>(null);
 
-  const handleCheckout = async (item: PricingItem, cn_pay: boolean = false) => {
+  const handlePayment = async (item: PricingItem) => {
+    if (!user) {
+      setIsShowSignModal(true);
+      return;
+    }
+    if (configs.select_payment_enabled === "true") {
+      setPricingItem(item);
+      setIsShowPaymentModal(true);
+    } else {
+      handleCheckout(item);
+    }
+  };
+
+  const handleCheckout = async (
+    item: PricingItem,
+    paymentProvider?: string
+  ) => {
     try {
       if (!user) {
         setIsShowSignModal(true);
@@ -61,8 +88,9 @@ export function Pricing({
 
       const params = {
         product_id: item.product_id,
-        currency: cn_pay ? "cny" : item.currency,
+        currency: item.currency,
         locale: locale || "en",
+        payment_provider: paymentProvider || "",
       };
 
       setIsLoading(true);
@@ -79,7 +107,7 @@ export function Pricing({
       if (response.status === 401) {
         setIsLoading(false);
         setProductId(null);
-
+        setPricingItem(null);
         setIsShowSignModal(true);
         return;
       }
@@ -210,7 +238,7 @@ export function Pricing({
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => handleCheckout(item)}
+                      onClick={() => handlePayment(item)}
                       disabled={isLoading}
                       className={cn(
                         "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -221,9 +249,7 @@ export function Pricing({
                       {isLoading && item.product_id === productId ? (
                         <>
                           <Loader2 className="size-4 animate-spin" />
-                          <span className="hidden md:block">
-                            {t("processing")}
-                          </span>
+                          <span className="block">{t("processing")}</span>
                         </>
                       ) : (
                         <>
@@ -233,9 +259,7 @@ export function Pricing({
                               className="size-4"
                             />
                           )}
-                          <span className="hidden md:block">
-                            {item.button?.title}
-                          </span>
+                          <span className="block">{item.button?.title}</span>
                         </>
                       )}
                     </Button>
@@ -262,6 +286,14 @@ export function Pricing({
           })}
         </div>
       </div>
+
+      <PaymentModal
+        isLoading={isLoading}
+        pricingItem={pricingItem}
+        onCheckout={(item, paymentProvider) =>
+          handleCheckout(item, paymentProvider)
+        }
+      />
     </section>
   );
 }

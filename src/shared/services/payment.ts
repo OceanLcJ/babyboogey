@@ -12,9 +12,10 @@ import { Configs, getAllConfigs } from "@/shared/services/config";
 export function getPaymentServiceWithConfigs(configs: Configs) {
   const paymentManager = new PaymentManager();
 
-  const defaultProvider = configs.payment_provider;
+  const defaultProvider = configs.default_payment_provider;
+
   // add stripe provider
-  if (configs.stripe_secret_key && configs.stripe_publishable_key) {
+  if (configs.stripe_enabled === "true") {
     paymentManager.addProvider(
       new StripeProvider({
         secretKey: configs.stripe_secret_key,
@@ -25,23 +26,27 @@ export function getPaymentServiceWithConfigs(configs: Configs) {
   }
 
   // add creem provider
-  if (configs.creem_api_key) {
+  if (configs.creem_enabled === "true") {
     paymentManager.addProvider(
       new CreemProvider({
         apiKey: configs.creem_api_key,
-        environment: "sandbox",
+        environment:
+          configs.creem_environment === "production" ? "production" : "sandbox",
       }),
       defaultProvider === "creem"
     );
   }
 
   // add paypal provider
-  if (configs.paypal_client_id && configs.paypal_client_secret) {
+  if (configs.paypal_enabled === "true") {
     paymentManager.addProvider(
       new PayPalProvider({
         clientId: configs.paypal_client_id,
         clientSecret: configs.paypal_client_secret,
-        environment: "sandbox",
+        environment:
+          configs.paypal_environment === "production"
+            ? "production"
+            : "sandbox",
       }),
       defaultProvider === "paypal"
     );

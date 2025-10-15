@@ -53,7 +53,7 @@ export function SignModal() {
           <DrawerTitle>{t("sign_in_title")}</DrawerTitle>
           <DrawerDescription>{t("sign_in_description")}</DrawerDescription>
         </DrawerHeader>
-        <SignInForm callbackUrl={callbackURL} className="mt-8" />
+        <SignInForm callbackUrl={callbackURL} className="mt-8 px-4" />
         <DrawerFooter className="pt-4">
           <DrawerClose asChild>
             <Button variant="outline">{t("cancel_title")}</Button>

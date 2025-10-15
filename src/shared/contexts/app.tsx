@@ -16,6 +16,8 @@ export interface ContextValue {
   isCheckSign: boolean;
   isShowSignModal: boolean;
   setIsShowSignModal: (show: boolean) => void;
+  isShowPaymentModal: boolean;
+  setIsShowPaymentModal: (show: boolean) => void;
   configs: Record<string, string>;
 }
 
@@ -37,6 +39,9 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
   // show sign modal
   const [isShowSignModal, setIsShowSignModal] = useState(false);
+
+  // show payment modal
+  const [isShowPaymentModal, setIsShowPaymentModal] = useState(false);
 
   const fetchConfigs = async function () {
     try {
@@ -109,6 +114,8 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         isCheckSign,
         isShowSignModal,
         setIsShowSignModal,
+        isShowPaymentModal,
+        setIsShowPaymentModal,
         configs,
       }}
     >

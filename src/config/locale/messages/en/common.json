@@ -27,5 +27,10 @@
     "billing_title": "Billing",
     "name_title": "Name",
     "name_placeholder": "Input your name here"
+  },
+  "payment": {
+    "choose_payment_method": "Choose Payment Method",
+    "choose_payment_method_description": "",
+    "cancel_title": "Cancel"
   }
 }

@@ -135,6 +135,7 @@ export class StripeProvider implements PaymentProvider {
         provider: this.name,
         checkoutParams: sessionParams,
         checkoutInfo: {
+          provider: this.name,
           sessionId: session.id,
           checkoutUrl: session.url,
         },

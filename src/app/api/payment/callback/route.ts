@@ -73,6 +73,9 @@ export async function GET(req: Request) {
       }
     }
 
+    console.log("payment callback", order, session);
+    return;
+
     // payment success
     if (session.paymentStatus === PaymentStatus.SUCCESS) {
       // update order status to be paid

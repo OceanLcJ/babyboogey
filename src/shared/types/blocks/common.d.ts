@@ -27,6 +27,7 @@ export interface NavItem {
   url?: string;
   target?: string;
   type?: string;
+  icon_url?: string;
   icon?: string | ReactNode;
   badge?: string;
   image?: Image;

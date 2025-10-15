@@ -1,6 +1,6 @@
 import { credit, order, subscription } from "@/config/db/schema";
 import { db } from "@/core/db";
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, inArray } from "drizzle-orm";
 import { NewSubscription } from "./subscription";
 import { NewCredit } from "./credit";
 import { appendUserToResult, User } from "./user";
@@ -45,7 +45,7 @@ export async function getOrders({
   limit = 30,
 }: {
   userId?: string;
-  status?: string;
+  status?: string[];
   getUser?: boolean;
   paymentType?: PaymentType;
   page?: number;
@@ -57,7 +57,7 @@ export async function getOrders({
     .where(
       and(
         userId ? eq(order.userId, userId) : undefined,
-        status ? eq(order.status, status) : undefined,
+        status ? inArray(order.status, status) : undefined,
         paymentType ? eq(order.paymentType, paymentType) : undefined
       )
     )
@@ -82,7 +82,7 @@ export async function getOrdersCount({
 }: {
   userId?: string;
   paymentType?: PaymentType;
-  status?: string;
+  status?: string[];
 } = {}): Promise<number> {
   const [result] = await db()
     .select({ count: count() })
@@ -90,7 +90,7 @@ export async function getOrdersCount({
     .where(
       and(
         userId ? eq(order.userId, userId) : undefined,
-        status ? eq(order.status, status) : undefined,
+        status ? inArray(order.status, status) : undefined,
         paymentType ? eq(order.paymentType, paymentType) : undefined
       )
     );

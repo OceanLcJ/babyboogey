@@ -85,6 +85,7 @@ export class CreemProvider implements PaymentProvider {
         provider: this.name,
         checkoutParams: payload,
         checkoutInfo: {
+          provider: this.name,
           sessionId: result.id,
           checkoutUrl: result.checkout_url,
         },
@@ -162,12 +163,12 @@ export class CreemProvider implements PaymentProvider {
             session.product?.billing_period === "every-month"
               ? PaymentInterval.MONTH
               : subscription.product?.billing_period === "every-year"
-              ? PaymentInterval.YEAR
-              : subscription.product?.billing_period === "every-week"
-              ? PaymentInterval.WEEK
-              : subscription.product?.billing_period === "every-day"
-              ? PaymentInterval.DAY
-              : undefined,
+                ? PaymentInterval.YEAR
+                : subscription.product?.billing_period === "every-week"
+                  ? PaymentInterval.WEEK
+                  : subscription.product?.billing_period === "every-day"
+                    ? PaymentInterval.DAY
+                    : undefined,
           intervalCount: 1,
           billingUrl: billingUrl,
         };
