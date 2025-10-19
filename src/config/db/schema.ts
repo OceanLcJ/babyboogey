@@ -241,3 +241,59 @@ export const apikey = pgTable("apikey", {
     .notNull(),
   deletedAt: timestamp("deleted_at"),
 });
+
+// RBAC Tables
+export const role = pgTable("role", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(), // admin, editor, viewer
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  sort: integer("sort").default(0).notNull(),
+});
+
+export const permission = pgTable("permission", {
+  id: text("id").primaryKey(),
+  code: text("code").notNull().unique(), // admin.users.read, admin.posts.write
+  resource: text("resource").notNull(), // users, posts, categories
+  action: text("action").notNull(), // read, write, delete
+  title: text("title").notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const rolePermission = pgTable("role_permission", {
+  id: text("id").primaryKey(),
+  roleId: text("role_id")
+    .notNull()
+    .references(() => role.id, { onDelete: "cascade" }),
+  permissionId: text("permission_id")
+    .notNull()
+    .references(() => permission.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const userRole = pgTable("user_role", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  roleId: text("role_id")
+    .notNull()
+    .references(() => role.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+  expiresAt: timestamp("expires_at"),
+});

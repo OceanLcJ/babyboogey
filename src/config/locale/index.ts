@@ -31,6 +31,8 @@ export const localeMessagesPaths = [
   "settings/apikeys",
   "admin/sidebar",
   "admin/users",
+  "admin/roles",
+  "admin/permissions",
   "admin/categories",
   "admin/posts",
   "admin/payments",

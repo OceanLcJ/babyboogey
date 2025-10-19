@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -24,6 +25,11 @@ import { SmartIcon } from "@/shared/blocks/common/smart-icon";
 export function Nav({ nav, className }: { nav: NavType; className?: string }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <SidebarGroup className={className}>
@@ -44,7 +50,9 @@ export function Nav({ nav, className }: { nav: NavType; className?: string }) {
                     tooltip={item?.title}
                     className={`${
                       item?.is_active ||
-                      (item?.url && pathname.startsWith(item?.url as string))
+                      (mounted &&
+                        item?.url &&
+                        pathname.startsWith(item?.url as string))
                         ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
                         : ""
                     }`}
@@ -72,7 +80,8 @@ export function Nav({ nav, className }: { nav: NavType; className?: string }) {
                             asChild
                             className={`${
                               subItem.is_active ||
-                              pathname.endsWith(subItem.url as string)
+                              (mounted &&
+                                pathname.endsWith(subItem.url as string))
                                 ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
                                 : ""
                             }`}

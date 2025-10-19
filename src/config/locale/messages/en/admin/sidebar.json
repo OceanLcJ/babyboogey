@@ -18,6 +18,16 @@
           "title": "Users",
           "url": "/admin/users",
           "icon": "User"
+        },
+        {
+          "title": "Roles",
+          "url": "/admin/roles",
+          "icon": "Users"
+        },
+        {
+          "title": "Permissions",
+          "url": "/admin/permissions",
+          "icon": "ShieldCheck"
         }
       ]
     },

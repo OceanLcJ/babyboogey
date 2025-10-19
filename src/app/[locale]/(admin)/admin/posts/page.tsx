@@ -1,27 +1,33 @@
 import { Header, Main, MainHeader } from "@/shared/blocks/dashboard";
 import { TableCard } from "@/shared/blocks/table";
 import { type Table } from "@/shared/types/blocks/table";
-import { getUserInfo } from "@/shared/services/user";
 import { getPosts, getPostsCount, Post } from "@/shared/services/post";
 import { PostType } from "@/shared/services/post";
 import { Button, Crumb } from "@/shared/types/blocks/common";
-import { getTaxonomies, TaxonomyType } from "@/shared/services/taxonomy";
-import { Empty } from "@/shared/blocks/common";
-import { getTranslations } from "next-intl/server";
+import { getTaxonomies } from "@/shared/services/taxonomy";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
 
 export default async function PostsPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ page?: number; pageSize?: number }>;
 }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to read posts
+  await requirePermission({
+    code: PERMISSIONS.POSTS_READ,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
+
   const { page: pageNum, pageSize } = await searchParams;
   const page = pageNum || 1;
   const limit = pageSize || 30;
-
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
 
   const t = await getTranslations("admin.posts");
 

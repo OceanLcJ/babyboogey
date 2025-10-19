@@ -2,18 +2,28 @@ import { Header, Main, MainHeader } from "@/shared/blocks/dashboard";
 import { FormCard } from "@/shared/blocks/form";
 import { Form } from "@/shared/types/blocks/form";
 import { getUuid } from "@/shared/lib/hash";
-import { getUserInfo } from "@/shared/services/user";
 import { addPost, NewPost, PostType } from "@/shared/services/post";
 import { PostStatus } from "@/shared/services/post";
-import { Empty } from "@/shared/blocks/common";
 import { Crumb } from "@/shared/types/blocks/common";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS } from "@/core/rbac";
+import { requirePermission } from "@/core/rbac";
+import { getUserInfo } from "@/shared/services/user";
 
-export default async function PostAddPage() {
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
+export default async function PostAddPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to add posts
+  await requirePermission({
+    code: PERMISSIONS.POSTS_WRITE,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
 
   const t = await getTranslations("admin.posts");
 
@@ -51,7 +61,6 @@ export default async function PostAddPage() {
     ],
     passby: {
       type: "post",
-      user: user,
     },
     data: {},
     submit: {
@@ -61,7 +70,7 @@ export default async function PostAddPage() {
       handler: async (data, passby) => {
         "use server";
 
-        const { user } = passby;
+        const user = await getUserInfo();
         if (!user) {
           throw new Error("no auth");
         }

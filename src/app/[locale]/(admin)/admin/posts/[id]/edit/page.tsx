@@ -1,7 +1,6 @@
 import { Header, Main, MainHeader } from "@/shared/blocks/dashboard";
 import { FormCard } from "@/shared/blocks/form";
 import { Form } from "@/shared/types/blocks/form";
-import { getUserInfo } from "@/shared/services/user";
 import {
   updatePost,
   UpdatePost,
@@ -14,25 +13,30 @@ import {
   TaxonomyStatus,
   TaxonomyType,
 } from "@/shared/services/taxonomy";
-import { Empty } from "@/shared/blocks/common";
 import { Crumb } from "@/shared/types/blocks/common";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
+import { getUserInfo } from "@/shared/services/user";
+import { Empty } from "@/shared/blocks/common";
 
 export default async function PostEditPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { id } = await params;
+  const { locale, id } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to edit posts
+  await requirePermission({
+    code: PERMISSIONS.POSTS_WRITE,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
 
   const post = await findPost({ id });
   if (!post) {
     return <Empty message="Post not found" />;
-  }
-
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
   }
 
   const t = await getTranslations("admin.posts");
@@ -88,7 +92,6 @@ export default async function PostEditPage({
     ],
     passby: {
       type: "post",
-      user: user,
       post: post,
     },
     data: post,
@@ -99,7 +102,13 @@ export default async function PostEditPage({
       handler: async (data, passby) => {
         "use server";
 
-        const { user, post } = passby;
+        const user = await getUserInfo();
+        if (!user) {
+          throw new Error("no auth");
+        }
+
+        const { post } = passby;
+
         if (!user || !post) {
           throw new Error("no auth");
         }

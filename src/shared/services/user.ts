@@ -4,8 +4,7 @@ import { desc, eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
 import { getAuth } from "@/core/auth";
 import { getRemainingCredits } from "./credit";
-import { envConfigs } from "@/config";
-import { getAuthOptions } from "@/core/auth/config";
+import { getUserRoles, getUserPermissions, Role, Permission } from "./rbac";
 
 export interface UserCredits {
   remainingCredits: number;
@@ -14,6 +13,8 @@ export interface UserCredits {
 
 export type User = typeof user.$inferSelect & {
   credits?: UserCredits;
+  roles?: Role[];
+  permissions?: Permission[];
 };
 export type NewUser = typeof user.$inferInsert;
 export type UpdateUser = Partial<Omit<NewUser, "id" | "createdAt" | "email">>;
@@ -24,6 +25,12 @@ export async function updateUser(userId: string, updatedUser: UpdateUser) {
     .set(updatedUser)
     .where(eq(user.id, userId))
     .returning();
+
+  return result;
+}
+
+export async function findUserById(userId: string) {
+  const [result] = await db().select().from(user).where(eq(user.id, userId));
 
   return result;
 }

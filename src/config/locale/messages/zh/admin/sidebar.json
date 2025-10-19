@@ -18,6 +18,16 @@
           "title": "用户",
           "url": "/admin/users",
           "icon": "User"
+        },
+        {
+          "title": "角色",
+          "url": "/admin/roles",
+          "icon": "Users"
+        },
+        {
+          "title": "权限",
+          "url": "/admin/permissions",
+          "icon": "ShieldCheck"
         }
       ]
     },

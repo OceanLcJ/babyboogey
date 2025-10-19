@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { DashboardLayout } from "@/shared/blocks/dashboard/layout";
 import { Sidebar as SidebarType } from "@/shared/types/blocks/dashboard";
+import { requireAdminAccess } from "@/core/rbac/permission";
 
 /**
  * Admin layout to manage datas
@@ -15,6 +16,12 @@ export default async function AdminLayout({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+
+  // Check if user has admin access permission
+  await requireAdminAccess({
+    redirectUrl: `/no-permission`,
+    locale: locale || "",
+  });
 
   const t = await getTranslations("admin");
 

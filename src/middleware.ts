@@ -39,9 +39,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(signInUrl);
     }
 
-    // Note: We only check if session token exists here.
-    // Full session validation happens on the client side and in API routes.
-    // This is a lightweight check to prevent unauthorized access to protected routes.
+    // For admin routes, we need to check RBAC permissions
+    // Note: Full permission check happens in the page/API route level
+    // This is a lightweight session check to prevent unauthorized access
+    // The detailed permission check (admin.access and specific permissions)
+    // will be done in the layout or individual pages using requirePermission()
   }
 
   intlResponse.headers.set("x-pathname", request.nextUrl.pathname);

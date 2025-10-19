@@ -29,7 +29,7 @@ import { useRouter } from "@/core/i18n/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Checkbox } from "@/shared/components/ui/checkbox";
+import { Checkbox } from "./checkbox";
 import { isArray } from "util";
 import { Label } from "@/shared/components/ui/label";
 import { UploadImage } from "./upload-image";
@@ -53,6 +53,12 @@ function buildFieldSchema(field: FormFieldType) {
     }
 
     return arraySchema;
+  }
+
+  if (field.type === "checkbox") {
+    let schema = z.array(z.string());
+
+    return schema;
   }
 
   if (field.type === "upload_image") {
@@ -195,11 +201,12 @@ export function Form({
       Object.entries(data).forEach(([key, value]) => {
         // If it's an array, join with commas
         if (Array.isArray(value)) {
-          const joinedValue = value.join(",");
-          console.log(`[Form Submit] ${key} (array):`, value, "→", joinedValue);
-          formData.append(key, joinedValue);
+          // const joinedValue = value.join(",");
+          // console.log(`[Form Submit] ${key} (array):`, value, "→", joinedValue);
+          // formData.append(key, joinedValue);
+          formData.append(key, JSON.stringify(value));
         } else {
-          console.log(`[Form Submit] ${key}:`, value);
+          // console.log(`[Form Submit] ${key}:`, value);
           // Preserve boolean and other types' original values
           formData.append(key, String(value));
         }
@@ -267,27 +274,7 @@ export function Form({
                       ) : item.type === "switch" ? (
                         <Switch field={item} formField={field} data={data} />
                       ) : item.type === "checkbox" ? (
-                        <div className="flex items-center gap-2 flex-wrap ">
-                          {item.options?.map((option: any) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center gap-2"
-                            >
-                              <Checkbox
-                                value={option.value}
-                                checked={
-                                  isArray(field.value)
-                                    ? field.value.includes(option.value)
-                                    : field.value === option.value
-                                }
-                                onCheckedChange={(checked) => {
-                                  field.onChange(checked);
-                                }}
-                              />
-                              <Label>{option.title}</Label>
-                            </div>
-                          ))}
-                        </div>
+                        <Checkbox field={item} formField={field} data={data} />
                       ) : item.type === "markdown_editor" ? (
                         <Markdown field={item} formField={field} data={data} />
                       ) : item.type === "upload_image" ? (

@@ -1,26 +1,31 @@
 import { Header, Main, MainHeader } from "@/shared/blocks/dashboard";
 import { TableCard } from "@/shared/blocks/table";
 import { type Table } from "@/shared/types/blocks/table";
-import { getUserInfo } from "@/shared/services/user";
-
 import { Crumb, Tab } from "@/shared/types/blocks/common";
-import { Empty } from "@/shared/blocks/common";
-import { getOrders, getOrdersCount, Order } from "@/shared/services/order";
+import { getOrders, getOrdersCount } from "@/shared/services/order";
 import { PaymentType } from "@/extensions/payment";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
 export default async function PaymentsPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{
     page?: number;
     pageSize?: number;
     type?: string;
   }>;
 }) {
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to read payments
+  await requirePermission({
+    code: PERMISSIONS.PAYMENTS_READ,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
 
   const t = await getTranslations("admin.payments");
 

@@ -6,15 +6,25 @@ import { saveConfigs } from "@/shared/services/config";
 import { getConfigs } from "@/shared/services/config";
 import { getSettingGroups, getSettings } from "@/shared/services/settings";
 import { getUserInfo } from "@/shared/services/user";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requireAllPermissions } from "@/core/rbac";
 
 export default async function SettingsPage({
   params,
 }: {
-  params: Promise<{ tab: string }>;
+  params: Promise<{ locale: string; tab: string }>;
 }) {
+  const { locale, tab } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to read settings
+  await requireAllPermissions({
+    codes: [PERMISSIONS.SETTINGS_READ, PERMISSIONS.SETTINGS_WRITE],
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
+
   const configs = await getConfigs();
-  const { tab } = await params;
 
   const settingGroups = await getSettingGroups();
   const settings = await getSettings();

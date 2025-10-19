@@ -21,7 +21,7 @@ export function Image({
     <img
       src={value}
       alt={value}
-      className={`w-10 h-10 rounded-full ${className}`}
+      className={`shrink-0 w-10 h-10 rounded-full object-cover ${className}`}
     />
   );
 }

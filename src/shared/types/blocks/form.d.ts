@@ -32,7 +32,7 @@ export interface FormField {
     title: string;
     value: string;
   }[];
-  value?: string;
+  value?: any;
   tip?: string;
   attributes?: Record<string, any>;
   validation?: ValidationRule;

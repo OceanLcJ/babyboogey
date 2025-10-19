@@ -5,25 +5,30 @@ import { Button, Crumb } from "@/shared/types/blocks/common";
 import {
   getTaxonomies,
   getTaxonomiesCount,
-  TaxonomyStatus,
   TaxonomyType,
   type Taxonomy,
 } from "@/shared/services/taxonomy";
-import { getTranslations } from "next-intl/server";
-import { getUserInfo } from "@/shared/services/user";
-import { Empty } from "@/shared/blocks/common";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
 
 export default async function CategoriesPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ page?: number; pageSize?: number }>;
 }) {
-  const t = await getTranslations("admin.categories");
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
+  // Check if user has permission to read categories
+  await requirePermission({
+    code: PERMISSIONS.CATEGORIES_READ,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
+
+  const t = await getTranslations("admin.categories");
 
   const { page: pageNum, pageSize } = await searchParams;
   const page = pageNum || 1;

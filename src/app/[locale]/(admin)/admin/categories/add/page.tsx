@@ -8,16 +8,25 @@ import {
   TaxonomyType,
 } from "@/shared/services/taxonomy";
 import { getUuid } from "@/shared/lib/hash";
-import { getUserInfo } from "@/shared/services/user";
 import { Crumb } from "@/shared/types/blocks/common";
-import { Empty } from "@/shared/blocks/common";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
+import { getUserInfo } from "@/shared/services/user";
 
-export default async function CategoryAddPage() {
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
+export default async function CategoryAddPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to add categories
+  await requirePermission({
+    code: PERMISSIONS.CATEGORIES_WRITE,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
 
   const t = await getTranslations("admin.categories");
 
@@ -50,7 +59,6 @@ export default async function CategoryAddPage() {
     ],
     passby: {
       type: "category",
-      user: user,
     },
     data: {},
     submit: {
@@ -60,7 +68,7 @@ export default async function CategoryAddPage() {
       handler: async (data, passby) => {
         "use server";
 
-        const { user } = passby;
+        const user = await getUserInfo();
         if (!user) {
           throw new Error("no auth");
         }

@@ -1,28 +1,33 @@
 import { Header, Main, MainHeader } from "@/shared/blocks/dashboard";
 import { TableCard } from "@/shared/blocks/table";
 import { type Table } from "@/shared/types/blocks/table";
-import { getUserInfo } from "@/shared/services/user";
 import {
   getCredits,
   getCreditsCount,
-  Credit,
   CreditStatus,
   CreditTransactionType,
 } from "@/shared/services/credit";
 
 import { Crumb, Tab } from "@/shared/types/blocks/common";
-import { Empty } from "@/shared/blocks/common";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { PERMISSIONS, requirePermission } from "@/core/rbac";
 
 export default async function CreditsPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ page?: number; pageSize?: number; type?: string }>;
 }) {
-  const user = await getUserInfo();
-  if (!user) {
-    return <Empty message="no auth" />;
-  }
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  // Check if user has permission to read credits
+  await requirePermission({
+    code: PERMISSIONS.CREDITS_READ,
+    redirectUrl: "/admin/no-permission",
+    locale,
+  });
 
   const t = await getTranslations("admin.credits");
 
