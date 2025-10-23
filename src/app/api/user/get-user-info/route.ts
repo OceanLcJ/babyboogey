@@ -12,13 +12,13 @@ export async function POST(req: Request) {
       return respErr('no auth, please sign in');
     }
 
-    // get remaining credits
-    const remainingCredits = await getRemainingCredits(user.id);
-
     // check if user is admin
     const isAdmin = await hasPermission(user.id, PERMISSIONS.ADMIN_ACCESS);
 
-    return respData({ ...user, isAdmin, remainingCredits });
+    // get remaining credits
+    const remainingCredits = await getRemainingCredits(user.id);
+
+    return respData({ ...user, isAdmin, credits: { remainingCredits } });
   } catch (e) {
     console.log('get user info failed:', e);
     return respErr('get user info failed');
