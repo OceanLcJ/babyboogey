@@ -24,6 +24,12 @@ textarea {
   @apply border-border outline-ring/50 bg-background;
 }
 
+table,
+th,
+td {
+  @apply border-border border p-3;
+}
+
 button {
   @apply border-border outline-ring/50 cursor-pointer;
 }
