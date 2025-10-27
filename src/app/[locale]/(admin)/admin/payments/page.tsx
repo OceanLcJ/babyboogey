@@ -4,8 +4,12 @@ import { PERMISSIONS, requirePermission } from '@/core/rbac';
 import { PaymentType } from '@/extensions/payment';
 import { Header, Main, MainHeader } from '@/shared/blocks/dashboard';
 import { TableCard } from '@/shared/blocks/table';
-import { getOrders, getOrdersCount } from '@/shared/services/order';
-import { Crumb, Tab } from '@/shared/types/blocks/common';
+import {
+  getOrders,
+  getOrdersCount,
+  OrderStatus,
+} from '@/shared/services/order';
+import { Crumb, Filter, Search, Tab } from '@/shared/types/blocks/common';
 import { type Table } from '@/shared/types/blocks/table';
 
 export default async function PaymentsPage({
@@ -17,6 +21,9 @@ export default async function PaymentsPage({
     page?: number;
     pageSize?: number;
     type?: string;
+    status?: string;
+    provider?: string;
+    orderNo?: string;
   }>;
 }) {
   const { locale } = await params;
@@ -31,7 +38,14 @@ export default async function PaymentsPage({
 
   const t = await getTranslations('admin.payments');
 
-  const { page: pageNum, pageSize, type } = await searchParams;
+  const {
+    page: pageNum,
+    pageSize,
+    type,
+    status,
+    provider,
+    orderNo,
+  } = await searchParams;
   const page = pageNum || 1;
   const limit = pageSize || 30;
 
@@ -61,12 +75,74 @@ export default async function PaymentsPage({
     },
   ];
 
+  const filters: Filter[] = [
+    {
+      name: 'status',
+      title: t('list.filters.status.title'),
+      value: status,
+      options: [
+        { value: 'all', label: t('list.filters.status.options.all') },
+        {
+          value: OrderStatus.PAID,
+          label: t('list.filters.status.options.paid'),
+        },
+        {
+          value: OrderStatus.CREATED,
+          label: t('list.filters.status.options.created'),
+        },
+        {
+          value: OrderStatus.FAILED,
+          label: t('list.filters.status.options.failed'),
+        },
+      ],
+    },
+    {
+      name: 'provider',
+      title: t('list.filters.provider.title'),
+      value: provider,
+      options: [
+        { value: 'all', label: t('list.filters.provider.options.all') },
+        {
+          value: 'stripe',
+          label: t('list.filters.provider.options.stripe'),
+        },
+        {
+          value: 'creem',
+          label: t('list.filters.provider.options.creem'),
+        },
+        {
+          value: 'lemonsqueezy',
+          label: t('list.filters.provider.options.lemonsqueezy'),
+        },
+        {
+          value: 'paypal',
+          label: t('list.filters.provider.options.paypal'),
+        },
+      ],
+    },
+  ];
+
+  const search: Search = {
+    name: 'orderNo',
+    title: t('list.search.order_no.title'),
+    placeholder: t('list.search.order_no.placeholder'),
+    value: orderNo,
+  };
+
   const total = await getOrdersCount({
+    orderNo: orderNo ? (orderNo as string) : undefined,
     paymentType: type as PaymentType,
+    paymentProvider:
+      provider && provider !== 'all' ? (provider as string) : undefined,
+    status: status && status !== 'all' ? (status as OrderStatus) : undefined,
   });
 
   const payments = await getOrders({
+    orderNo: orderNo ? (orderNo as string) : undefined,
     paymentType: type as PaymentType,
+    paymentProvider:
+      provider && provider !== 'all' ? (provider as string) : undefined,
+    status: status && status !== 'all' ? (status as OrderStatus) : undefined,
     getUser: true,
     page,
     limit,
@@ -120,7 +196,12 @@ export default async function PaymentsPage({
     <>
       <Header crumbs={crumbs} />
       <Main>
-        <MainHeader title={t('list.title')} tabs={tabs} />
+        <MainHeader
+          title={t('list.title')}
+          tabs={tabs}
+          filters={filters}
+          search={search}
+        />
         <TableCard table={table} />
       </Main>
     </>

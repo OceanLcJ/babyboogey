@@ -21,6 +21,33 @@
       "all": "All",
       "subscription": "Subscription",
       "one-time": "One-Time"
+    },
+    "filters": {
+      "status": {
+        "title": "Status",
+        "options": {
+          "all": "All",
+          "paid": "Paid",
+          "created": "Created",
+          "failed": "Failed"
+        }
+      },
+      "provider": {
+        "title": "Provider",
+        "options": {
+          "all": "All",
+          "stripe": "Stripe",
+          "creem": "Creem",
+          "lemonsqueezy": "Lemonsqueezy",
+          "paypal": "Paypal"
+        }
+      }
+    },
+    "search": {
+      "order_no": {
+        "title": "Order No",
+        "placeholder": "Order No"
+      }
     }
   }
 }

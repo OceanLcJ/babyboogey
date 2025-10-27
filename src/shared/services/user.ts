@@ -41,13 +41,16 @@ export async function findUserById(userId: string) {
 export async function getUsers({
   page = 1,
   limit = 30,
+  email,
 }: {
+  email?: string;
   page?: number;
   limit?: number;
 } = {}): Promise<User[]> {
   const result = await db()
     .select()
     .from(user)
+    .where(email ? eq(user.email, email) : undefined)
     .orderBy(desc(user.createdAt))
     .limit(limit)
     .offset((page - 1) * limit);
@@ -55,8 +58,11 @@ export async function getUsers({
   return result;
 }
 
-export async function getUsersCount() {
-  const [result] = await db().select({ count: count() }).from(user);
+export async function getUsersCount({ email }: { email?: string }) {
+  const [result] = await db()
+    .select({ count: count() })
+    .from(user)
+    .where(email ? eq(user.email, email) : undefined);
   return result?.count || 0;
 }
 

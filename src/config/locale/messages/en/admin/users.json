@@ -21,6 +21,12 @@
       "view": "View User",
       "delete": "Delete User",
       "edit_roles": "Edit Roles"
+    },
+    "search": {
+      "email": {
+        "title": "Email",
+        "placeholder": "Email"
+      }
     }
   },
   "edit": {

@@ -32,13 +32,13 @@ export default async function PaymentsPage({
   const total = await getOrdersCount({
     paymentType: type as PaymentType,
     userId: user.id,
-    status: [OrderStatus.PAID],
+    status: OrderStatus.PAID,
   });
 
   const orders = await getOrders({
     paymentType: type as PaymentType,
     userId: user.id,
-    status: [OrderStatus.PAID],
+    status: OrderStatus.PAID,
     page,
     limit,
   });

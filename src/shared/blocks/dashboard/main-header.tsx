@@ -2,17 +2,29 @@ import { Link } from '@/core/i18n/navigation';
 import { SmartIcon } from '@/shared/blocks/common/smart-icon';
 import { Tabs } from '@/shared/blocks/common/tabs';
 import { Button } from '@/shared/components/ui/button';
-import { Button as ButtonType, Tab } from '@/shared/types/blocks/common';
+import {
+  Button as ButtonType,
+  Filter as FilterType,
+  Search as SearchType,
+  Tab,
+} from '@/shared/types/blocks/common';
+
+import { Filter } from './filter';
+import { Search } from './search';
 
 export function MainHeader({
   title,
   description,
   tabs,
+  filters,
+  search,
   actions,
 }: {
   title?: string;
   description?: string;
   tabs?: Tab[];
+  filters?: FilterType[];
+  search?: SearchType;
   actions?: ButtonType[];
 }) {
   return (
@@ -42,6 +54,16 @@ export function MainHeader({
         </div>
       </div>
       {tabs && tabs.length > 0 ? <Tabs tabs={tabs} /> : null}
+      {(search || filters) && (
+        <div className="mb-6 flex justify-start gap-2">
+          {search && <Search search={search} />}
+          {filters && filters.length > 0
+            ? filters.map((filter) => (
+                <Filter key={filter.name} filter={filter} />
+              ))
+            : null}
+        </div>
+      )}
     </div>
   );
 }

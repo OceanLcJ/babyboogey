@@ -49,6 +49,25 @@ export interface Crumb extends NavItem {}
 
 export interface Tab extends NavItem {}
 
+export interface FilterOption {
+  value?: string;
+  label: string;
+}
+
+export interface Filter {
+  name: string;
+  title: string;
+  value?: string;
+  options?: FilterOption[];
+}
+
+export interface Search {
+  name: string;
+  title?: string;
+  placeholder?: string;
+  value?: string;
+}
+
 // button props for button component
 export interface Button extends NavItem {
   size?: 'default' | 'sm' | 'lg' | 'icon';

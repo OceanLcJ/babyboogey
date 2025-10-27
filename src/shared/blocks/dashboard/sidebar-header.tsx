@@ -14,7 +14,7 @@ import { SidebarHeader as SidebarHeaderType } from '@/shared/types/blocks/dashbo
 export function SidebarHeader({ header }: { header: SidebarHeaderType }) {
   const { open } = useSidebar();
   return (
-    <SidebarHeaderComponent className="mb-4">
+    <SidebarHeaderComponent className="mb-0">
       <SidebarMenu>
         <SidebarMenuItem className="flex items-center justify-between">
           {(open || !header.show_trigger) && (

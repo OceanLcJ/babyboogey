@@ -1,4 +1,4 @@
-import { and, count, desc, eq, inArray } from 'drizzle-orm';
+import { and, count, desc, eq } from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { credit, order, subscription } from '@/config/db/schema';
@@ -8,7 +8,6 @@ import { NewCredit } from './credit';
 import {
   NewSubscription,
   UpdateSubscription,
-  updateSubscriptionById,
   updateSubscriptionBySubscriptionNo,
 } from './subscription';
 import { appendUserToResult, User } from './user';
@@ -44,17 +43,21 @@ export async function createOrder(newOrder: NewOrder) {
  * get orders
  */
 export async function getOrders({
+  orderNo,
   userId,
   status,
   getUser,
   paymentType,
+  paymentProvider,
   page = 1,
   limit = 30,
 }: {
+  orderNo?: string;
   userId?: string;
-  status?: string[];
+  status?: OrderStatus;
   getUser?: boolean;
   paymentType?: PaymentType;
+  paymentProvider?: string;
   page?: number;
   limit?: number;
 } = {}): Promise<Order[]> {
@@ -63,9 +66,11 @@ export async function getOrders({
     .from(order)
     .where(
       and(
+        orderNo ? eq(order.orderNo, orderNo) : undefined,
         userId ? eq(order.userId, userId) : undefined,
-        status ? inArray(order.status, status) : undefined,
-        paymentType ? eq(order.paymentType, paymentType) : undefined
+        status ? eq(order.status, status) : undefined,
+        paymentType ? eq(order.paymentType, paymentType) : undefined,
+        paymentProvider ? eq(order.paymentProvider, paymentProvider) : undefined
       )
     )
     .orderBy(desc(order.createdAt))
@@ -83,22 +88,28 @@ export async function getOrders({
  * get orders count
  */
 export async function getOrdersCount({
+  orderNo,
   userId,
   paymentType,
   status,
+  paymentProvider,
 }: {
+  orderNo?: string;
   userId?: string;
   paymentType?: PaymentType;
-  status?: string[];
+  paymentProvider?: string;
+  status?: OrderStatus;
 } = {}): Promise<number> {
   const [result] = await db()
     .select({ count: count() })
     .from(order)
     .where(
       and(
+        orderNo ? eq(order.orderNo, orderNo) : undefined,
         userId ? eq(order.userId, userId) : undefined,
-        status ? inArray(order.status, status) : undefined,
-        paymentType ? eq(order.paymentType, paymentType) : undefined
+        status ? eq(order.status, status) : undefined,
+        paymentType ? eq(order.paymentType, paymentType) : undefined,
+        paymentProvider ? eq(order.paymentProvider, paymentProvider) : undefined
       )
     );
 

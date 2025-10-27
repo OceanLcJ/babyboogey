@@ -6,7 +6,7 @@ import { TableCard } from '@/shared/blocks/table';
 import { Badge } from '@/shared/components/ui/badge';
 import { getUserRoles } from '@/shared/services/rbac';
 import { getUsers, getUsersCount, User } from '@/shared/services/user';
-import { Crumb } from '@/shared/types/blocks/common';
+import { Crumb, Search } from '@/shared/types/blocks/common';
 import { type Table } from '@/shared/types/blocks/table';
 
 export default async function AdminUsersPage({
@@ -17,6 +17,7 @@ export default async function AdminUsersPage({
   searchParams: Promise<{
     page?: number;
     pageSize?: number;
+    email?: string;
   }>;
 }) {
   const { locale } = await params;
@@ -30,12 +31,15 @@ export default async function AdminUsersPage({
 
   const t = await getTranslations('admin.users');
 
-  const { page: pageNum, pageSize } = await searchParams;
+  const { page: pageNum, pageSize, email } = await searchParams;
   const page = pageNum || 1;
   const limit = pageSize || 30;
 
-  const total = await getUsersCount();
+  const total = await getUsersCount({
+    email,
+  });
   const users = await getUsers({
+    email,
     page,
     limit,
   });
@@ -44,6 +48,13 @@ export default async function AdminUsersPage({
     { title: t('list.crumbs.admin'), url: '/admin' },
     { title: t('list.crumbs.users'), is_active: true },
   ];
+
+  const search: Search = {
+    name: 'email',
+    title: t('list.search.email.title'),
+    placeholder: t('list.search.email.placeholder'),
+    value: email,
+  };
 
   const table: Table = {
     columns: [
@@ -112,7 +123,7 @@ export default async function AdminUsersPage({
     <>
       <Header crumbs={crumbs} />
       <Main>
-        <MainHeader title={t('list.title')} />
+        <MainHeader title={t('list.title')} search={search} />
         <TableCard table={table} />
       </Main>
     </>
