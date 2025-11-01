@@ -271,6 +271,13 @@ export interface PaymentProvider {
     customerId: string;
     returnUrl?: string;
   }): Promise<PaymentBilling>;
+
+  // cancel subscription
+  cancelSubscription?({
+    subscriptionId,
+  }: {
+    subscriptionId: string;
+  }): Promise<PaymentSession>;
 }
 
 /**

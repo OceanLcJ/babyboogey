@@ -1,5 +1,6 @@
 import {
   CheckoutSession,
+  PaymentBilling,
   PaymentConfigs,
   PaymentCustomField,
   PaymentEvent,
@@ -167,6 +168,14 @@ export class CreemProvider implements PaymentProvider {
           event.object as any
         );
       } else if (eventType === PaymentEventType.PAYMENT_SUCCESS) {
+        paymentSession = await this.buildPaymentSessionFromInvoice(
+          event.object as any
+        );
+      } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
+        paymentSession = await this.buildPaymentSessionFromSubscription(
+          event.object as any
+        );
+      } else if (eventType === PaymentEventType.SUBSCRIBE_CANCELED) {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.object as any
         );
@@ -181,6 +190,51 @@ export class CreemProvider implements PaymentProvider {
         eventResult: event,
         paymentSession: paymentSession,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getPaymentBilling({
+    customerId,
+    returnUrl,
+  }: {
+    customerId: string;
+    returnUrl?: string;
+  }): Promise<PaymentBilling> {
+    try {
+      const billing = await this.makeRequest('/v1/customers/billing', 'POST', {
+        customer_id: customerId,
+      });
+
+      if (!billing.customer_portal_link) {
+        throw new Error('get billing url failed');
+      }
+
+      return {
+        billingUrl: billing.customer_portal_link,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async cancelSubscription({
+    subscriptionId,
+  }: {
+    subscriptionId: string;
+  }): Promise<PaymentSession> {
+    try {
+      const result = await this.makeRequest(
+        `/v1/subscriptions/${subscriptionId}/cancel`,
+        'POST'
+      );
+
+      if (!result.canceled_at) {
+        throw new Error('cancel subscription failed');
+      }
+
+      return await this.buildPaymentSessionFromSubscription(result);
     } catch (error) {
       throw error;
     }
@@ -243,18 +297,21 @@ export class CreemProvider implements PaymentProvider {
       case 'checkout.completed':
         return PaymentEventType.CHECKOUT_SUCCESS;
       case 'subscription.paid':
-        // todo: paied
         return PaymentEventType.PAYMENT_SUCCESS;
-      case 'invoice.payment_failed':
-        // todo: subscription paid faied
-        return PaymentEventType.PAYMENT_FAILED;
       case 'subscription.update':
-        // todo: subscription updated
+        return PaymentEventType.SUBSCRIBE_UPDATED;
+      case 'subscription.paused':
+        return PaymentEventType.SUBSCRIBE_UPDATED;
+      case 'subscription.active':
         return PaymentEventType.SUBSCRIBE_UPDATED;
       case 'subscription.canceled':
-        // todo: subscription canceled
         return PaymentEventType.SUBSCRIBE_CANCELED;
       default:
+        // not handle other event type
+        // subscription.expired
+        // subscription.trialing
+        // refund.created
+        // dispute.created
         throw new Error(`Not handle creem event type: ${eventType}`);
     }
   }
@@ -321,10 +378,12 @@ export class CreemProvider implements PaymentProvider {
   }
 
   // build payment session from subscription session
-  private async buildPaymentSessionFromSubscription(
-    subscription: any
+  private async buildPaymentSessionFromInvoice(
+    invoice: any
   ): Promise<PaymentSession> {
-    const order = subscription.order || subscription.last_transaction;
+    const order = invoice.order || invoice.last_transaction;
+
+    const subscription = invoice.subscription || invoice;
 
     const subscriptionCreatedAt = new Date(subscription.created_at);
     const currentPeriodStartAt = new Date(
@@ -340,7 +399,7 @@ export class CreemProvider implements PaymentProvider {
 
     const result: PaymentSession = {
       provider: this.name,
-      paymentStatus: this.mapCreemStatus(subscription),
+      paymentStatus: this.mapCreemStatus(invoice),
       paymentInfo: {
         description: order?.description,
         amount: order?.amount || 0,
@@ -351,16 +410,36 @@ export class CreemProvider implements PaymentProvider {
         discountCurrency: order?.currency || '',
         paymentAmount: order?.amount_paid || 0,
         paymentCurrency: order?.currency || '',
-        paymentEmail: subscription.customer?.email,
-        paymentUserName: subscription.customer?.name,
-        paymentUserId: subscription.customer?.id,
+        paymentEmail: invoice.customer?.email,
+        paymentUserName: invoice.customer?.name,
+        paymentUserId: invoice.customer?.id,
         paidAt: order?.created_at ? new Date(order.created_at) : undefined,
         invoiceId: '', // todo: invoice id
         invoiceUrl: '',
         subscriptionCycleType: cycleType,
       },
-      paymentResult: subscription,
-      metadata: subscription.metadata,
+      paymentResult: invoice,
+      metadata: invoice.metadata,
+    };
+
+    if (subscription) {
+      result.subscriptionId = subscription.id;
+      result.subscriptionInfo = await this.buildSubscriptionInfo(
+        subscription,
+        subscription.product
+      );
+      result.subscriptionResult = subscription;
+    }
+
+    return result;
+  }
+
+  // build payment session from subscription
+  private async buildPaymentSessionFromSubscription(
+    subscription: any
+  ): Promise<PaymentSession> {
+    const result: PaymentSession = {
+      provider: this.name,
     };
 
     if (subscription) {
@@ -410,6 +489,8 @@ export class CreemProvider implements PaymentProvider {
       subscriptionInfo.canceledAt = new Date(subscription.canceled_at);
     } else if (subscription.status === 'trialing') {
       subscriptionInfo.status = SubscriptionStatus.TRIALING;
+    } else if (subscription.status === 'paused') {
+      subscriptionInfo.status = SubscriptionStatus.PAUSED;
     } else {
       throw new Error(
         `Unknown Creem subscription status: ${subscription.status}`

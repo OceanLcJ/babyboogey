@@ -61,6 +61,27 @@ export default async function PaymentsPage({
         metadata: { variant: 'outline' },
       },
       {
+        title: t('fields.price'),
+        callback: function (item) {
+          const currency = (item.currency || 'USD').toUpperCase();
+
+          let prefix = '';
+          if (currency === 'USD') {
+            prefix = `$`;
+          } else if (currency === 'EUR') {
+            prefix = `€`;
+          } else if (currency === 'CNY') {
+            prefix = `¥`;
+          } else {
+            prefix = `${currency} `;
+          }
+
+          return (
+            <div className="text-primary">{`${prefix}${item.amount / 100}`}</div>
+          );
+        },
+      },
+      {
         title: t('fields.paid_amount'),
         callback: function (item) {
           const currency = (item.paymentCurrency || 'USD').toUpperCase();
@@ -78,6 +99,27 @@ export default async function PaymentsPage({
 
           return (
             <div className="text-primary">{`${prefix}${item.paymentAmount / 100}`}</div>
+          );
+        },
+      },
+      {
+        title: t('fields.discount_amount'),
+        callback: function (item) {
+          const currency = (item.discountCurrency || 'USD').toUpperCase();
+
+          let prefix = '';
+          if (currency === 'USD') {
+            prefix = `$`;
+          } else if (currency === 'EUR') {
+            prefix = `€`;
+          } else if (currency === 'CNY') {
+            prefix = `¥`;
+          } else {
+            prefix = `${currency} `;
+          }
+
+          return (
+            <div className="text-primary">{`${prefix}${item.discountAmount / 100}`}</div>
           );
         },
       },

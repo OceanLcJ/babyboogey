@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { Empty } from '@/shared/blocks/common';
 import { PanelCard } from '@/shared/blocks/panel';
 import { TableCard } from '@/shared/blocks/table';
+import { Button } from '@/shared/components/ui/button';
 import {
   getCurrentSubscription,
   getSubscriptions,
@@ -118,6 +119,28 @@ export default async function BillingPage({
           return '-';
         },
       },
+      {
+        title: t('fields.action'),
+        type: 'dropdown',
+        callback: function (item) {
+          if (
+            item.status !== SubscriptionStatus.ACTIVE &&
+            item.status !== SubscriptionStatus.TRIALING
+          ) {
+            return null;
+          }
+
+          return [
+            {
+              title: t('view.buttons.cancel'),
+              url: `/settings/billing/cancel?subscription_no=${item.subscriptionNo}`,
+              icon: 'Ban',
+              size: 'sm',
+              variant: 'outline',
+            },
+          ];
+        },
+      },
     ],
     data: subscriptions,
     pagination: {
@@ -139,6 +162,24 @@ export default async function BillingPage({
       name: 'active',
       url: '/settings/billing?status=active',
       is_active: status === 'active',
+    },
+    {
+      title: t('list.tabs.trialing'),
+      name: 'trialing',
+      url: '/settings/billing?status=trialing',
+      is_active: status === 'trialing',
+    },
+    {
+      title: t('list.tabs.paused'),
+      name: 'paused',
+      url: '/settings/billing?status=paused',
+      is_active: status === 'paused',
+    },
+    {
+      title: t('list.tabs.expired'),
+      name: 'expired',
+      url: '/settings/billing?status=expired',
+      is_active: status === 'expired',
     },
     {
       title: t('list.tabs.pending_cancel'),
@@ -165,10 +206,7 @@ export default async function BillingPage({
         size: 'sm',
       },
     ];
-    if (
-      currentSubscription.paymentUserId &&
-      currentSubscription.paymentProvider === 'stripe'
-    ) {
+    if (currentSubscription.paymentUserId) {
       buttons.push({
         title: t('view.buttons.manage'),
         url: `/settings/billing/retrieve?subscription_no=${currentSubscription.subscriptionNo}`,

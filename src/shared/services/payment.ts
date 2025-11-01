@@ -504,12 +504,7 @@ export async function handleSubscriptionUpdated({
     throw new Error('invalid subscription info');
   }
 
-  let updateSubscriptionStatus: SubscriptionStatus = SubscriptionStatus.ACTIVE;
-  if (subscriptionInfo.status === 'pending_cancel') {
-    updateSubscriptionStatus = SubscriptionStatus.PENDING_CANCEL;
-  } else if (subscriptionInfo.status === 'canceled') {
-    updateSubscriptionStatus = SubscriptionStatus.CANCELED;
-  }
+  let updateSubscriptionStatus: SubscriptionStatus = subscriptionInfo.status;
 
   await updateSubscriptionBySubscriptionNo(subscriptionNo, {
     status: updateSubscriptionStatus,
@@ -521,7 +516,7 @@ export async function handleSubscriptionUpdated({
     canceledReasonType: subscriptionInfo.canceledReasonType || '',
   });
 
-  console.log('handle subscription updated', subscriptionInfo);
+  // console.log('handle subscription updated', subscriptionInfo);
 }
 
 export async function handleSubscriptionCanceled({
@@ -553,5 +548,5 @@ export async function handleSubscriptionCanceled({
     canceledReasonType: subscriptionInfo.canceledReasonType,
   });
 
-  console.log('handle subscription canceled', subscriptionInfo);
+  // console.log('handle subscription canceled', subscriptionInfo);
 }
