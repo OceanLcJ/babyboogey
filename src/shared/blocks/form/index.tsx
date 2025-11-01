@@ -39,6 +39,69 @@ function buildFieldSchema(field: FormFieldType) {
     return z.boolean();
   }
 
+  if (field.type === 'number') {
+    // Accept both number (from initial data) and string (from input onChange)
+    let schema = z.union([z.number(), z.string()]);
+
+    if (field.validation?.required) {
+      schema = schema.refine(
+        (val) => {
+          if (val === null || val === undefined || val === '') {
+            return false;
+          }
+          return true;
+        },
+        {
+          message: field.validation.message || `${field.title} is required`,
+        }
+      );
+    }
+
+    // Validate that the value can be converted to a valid number
+    schema = schema.refine(
+      (val) => {
+        const num = typeof val === 'number' ? val : Number(val);
+        return !isNaN(num) && isFinite(num);
+      },
+      {
+        message:
+          field.validation?.message || `${field.title} must be a valid number`,
+      }
+    );
+
+    // Apply min validation if specified
+    if (field.validation?.min !== undefined) {
+      schema = schema.refine(
+        (val) => {
+          const num = typeof val === 'number' ? val : Number(val);
+          return num >= field.validation!.min!;
+        },
+        {
+          message:
+            field.validation?.message ||
+            `${field.title} must be at least ${field.validation.min}`,
+        }
+      );
+    }
+
+    // Apply max validation if specified
+    if (field.validation?.max !== undefined) {
+      schema = schema.refine(
+        (val) => {
+          const num = typeof val === 'number' ? val : Number(val);
+          return num <= field.validation!.max!;
+        },
+        {
+          message:
+            field.validation?.message ||
+            `${field.title} must be at most ${field.validation.max}`,
+        }
+      );
+    }
+
+    return schema;
+  }
+
   if (
     field.type === 'upload_image' &&
     field.metadata?.max &&
@@ -166,6 +229,11 @@ export function Form({
         } else {
           defaultValues[field.name] = [];
         }
+      } else if (field.type === 'number') {
+        // Convert number to string for input fields (HTML inputs always return strings)
+        const val = data?.[field.name] ?? field.value;
+        defaultValues[field.name] =
+          val !== null && val !== undefined ? String(val) : '';
       } else {
         defaultValues[field.name] = data?.[field.name] || field.value || '';
       }
