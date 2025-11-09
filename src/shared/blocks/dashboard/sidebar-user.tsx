@@ -64,7 +64,7 @@ export function SidebarUser({ user }: { user: SidebarUserType }) {
 
   if (session?.user) {
     return (
-      <SidebarMenu className="gap-4">
+      <SidebarMenu className="gap-4 px-3">
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

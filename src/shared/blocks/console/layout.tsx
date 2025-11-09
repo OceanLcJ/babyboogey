@@ -39,7 +39,7 @@ export function ConsoleLayout({
                   key={idx}
                   href={item.url || ''}
                   className={`text-muted-foreground hover:bg-foreground/10 flex items-center gap-2 px-3 py-2 ${
-                    item.is_active || pathname === item.url
+                    item.is_active || pathname?.startsWith(item.url as string)
                       ? 'border-primary text-muted-foreground border-b-2'
                       : ''
                   } hover:text-foreground duration-200 ease-linear`}

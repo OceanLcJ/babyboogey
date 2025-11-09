@@ -1,10 +1,31 @@
 {
   "title": "活动",
   "nav": {
-    "tasks": "AI 任务"
+    "items": [
+      {
+        "title": "AI 任务",
+        "url": "/activity/ai-tasks",
+        "icon": "RiTaskLine"
+      },
+      {
+        "title": "AI 对话",
+        "url": "/activity/chats",
+        "icon": "RiChat2Line"
+      }
+    ]
   },
   "top_nav": {
-    "activity": "活动",
-    "settings": "设置"
+    "items": [
+      {
+        "title": "活动",
+        "url": "/activity",
+        "icon": "Activity"
+      },
+      {
+        "title": "设置",
+        "url": "/settings",
+        "icon": "Settings"
+      }
+    ]
   }
 }

@@ -82,6 +82,11 @@
           "title": "AI任务",
           "url": "/admin/ai-tasks",
           "icon": "Brain"
+        },
+        {
+          "title": "AI 对话",
+          "url": "/admin/chats",
+          "icon": "MessageCircle"
         }
       ]
     }
