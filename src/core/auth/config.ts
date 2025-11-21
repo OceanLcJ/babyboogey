@@ -6,6 +6,7 @@ import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { getUuid } from '@/shared/lib/hash';
 import { getAllConfigs } from '@/shared/models/config';
+import { grantCreditsForNewUser } from '@/shared/models/credit';
 
 // Static auth options - NO database connection
 // This ensures zero database calls during build time
@@ -42,6 +43,24 @@ export async function getAuthOptions() {
           schema: schema,
         })
       : null,
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user: any) => {},
+          after: async (user: any) => {
+            try {
+              if (!user.id) {
+                throw new Error('user id is required');
+              }
+
+              await grantCreditsForNewUser(user);
+            } catch (e) {
+              console.log('grant credits for new user failed', e);
+            }
+          },
+        },
+      },
+    },
     emailAndPassword: {
       enabled: configs.email_auth_enabled !== 'false',
     },

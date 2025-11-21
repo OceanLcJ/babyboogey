@@ -30,6 +30,12 @@ export async function getSettingTabs(tab: string) {
 
   const tabs: Tab[] = [
     {
+      name: 'general',
+      title: t('edit.tabs.general'),
+      url: '/admin/settings/general',
+      is_active: tab === 'general',
+    },
+    {
       name: 'auth',
       title: t('edit.tabs.auth'),
       url: '/admin/settings/auth',
@@ -92,6 +98,12 @@ export async function getSettingTabs(tab: string) {
 export async function getSettingGroups() {
   const t = await getTranslations('admin.settings');
   const settingGroups: SettingGroup[] = [
+    {
+      name: 'credit',
+      title: t('groups.credit'),
+      description: 'custom credit settings',
+      tab: 'general',
+    },
     {
       name: 'email_auth',
       title: t('groups.email_auth'),
@@ -253,6 +265,42 @@ export async function getSettingGroups() {
 
 export async function getSettings() {
   const settings: Setting[] = [
+    {
+      name: 'initial_credits_enabled',
+      title: 'Initial Credits Enabled',
+      type: 'switch',
+      value: 'false',
+      group: 'credit',
+      tab: 'general',
+      tip: 'whether grant initial credits for new user',
+    },
+    {
+      name: 'initial_credits_amount',
+      title: 'Initial Credits Amount',
+      type: 'number',
+      placeholder: '0',
+      group: 'credit',
+      tab: 'general',
+      tip: 'initial credits amount for new user',
+    },
+    {
+      name: 'initial_credits_valid_days',
+      title: 'Initial Credits Valid Days',
+      type: 'number',
+      placeholder: '30',
+      group: 'credit',
+      tab: 'general',
+      tip: 'initial credits will expire after this days',
+    },
+    {
+      name: 'initial_credits_description',
+      title: 'Initial Credits Description',
+      type: 'text',
+      placeholder: 'initial credits for free trial',
+      group: 'credit',
+      tab: 'general',
+      tip: 'description for initial credits',
+    },
     {
       name: 'email_auth_enabled',
       title: 'Enabled',
