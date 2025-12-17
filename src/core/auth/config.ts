@@ -6,6 +6,7 @@ import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { getUuid } from '@/shared/lib/hash';
 import { grantCreditsForNewUser } from '@/shared/models/credit';
+import { grantRoleForNewUser } from '@/shared/services/rbac';
 
 // Static auth options - NO database connection
 // This ensures zero database calls during build time
@@ -50,9 +51,13 @@ export async function getAuthOptions(configs: Record<string, string>) {
                 throw new Error('user id is required');
               }
 
+              // grant credits for new user
               await grantCreditsForNewUser(user);
+
+              // grant role for new user
+              await grantRoleForNewUser(user);
             } catch (e) {
-              console.log('grant credits for new user failed', e);
+              console.log('grant credits or role for new user failed', e);
             }
           },
         },
