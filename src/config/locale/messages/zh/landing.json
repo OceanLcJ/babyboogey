@@ -78,6 +78,7 @@
               "title": "文档",
               "description": "阅读文档",
               "url": "/docs",
+              "target": "_blank",
               "icon": "BookOpenText"
             }
           ]

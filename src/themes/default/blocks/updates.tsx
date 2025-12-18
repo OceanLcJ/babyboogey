@@ -31,14 +31,15 @@ export function Updates({
                 <div className="flex flex-col gap-y-6 md:flex-row">
                   <div className="flex-shrink-0 md:w-48">
                     <div className="pb-10 md:sticky md:top-8">
-                      <time className="text-muted-foreground mb-3 block text-sm font-medium">
-                        {post.date}
-                      </time>
-
                       {post.version && (
                         <div className="text-foreground border-primary text-primary relative z-10 inline-flex items-center justify-center rounded-lg border px-2 py-1 text-xs font-bold">
                           v{post.version}
                         </div>
+                      )}
+                      {post.date && post.date && (
+                        <time className="text-muted-foreground mt-3 block text-sm font-medium">
+                          {post.date}
+                        </time>
                       )}
                     </div>
                   </div>

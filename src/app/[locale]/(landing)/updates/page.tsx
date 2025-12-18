@@ -36,11 +36,25 @@ export default async function UpdatesPage({
       postPrefix: '/updates/',
     });
 
-    posts = allPosts.sort((a, b) => {
-      const dateA = new Date(a.date || '').getTime();
-      const dateB = new Date(b.date || '').getTime();
-      return dateB - dateA;
-    });
+    posts = allPosts
+      // sort posts by date desc
+      .sort((a, b) => {
+        const dateA = new Date(a.date || '').getTime();
+        const dateB = new Date(b.date || '').getTime();
+        return dateB - dateA;
+      })
+      // sort posts by created_at desc
+      .sort((a, b) => {
+        const createdAtA = new Date(a.created_at || '').getTime();
+        const createdAtB = new Date(b.created_at || '').getTime();
+        return createdAtB - createdAtA;
+      })
+      // sort posts by version desc
+      .sort((a, b) => {
+        const versionA = a.version || '';
+        const versionB = b.version || '';
+        return versionB.localeCompare(versionA);
+      });
   } catch (error) {
     console.log('getting posts failed:', error);
   }

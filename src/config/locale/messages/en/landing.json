@@ -78,6 +78,7 @@
               "title": "Docs",
               "description": "Read Documentation",
               "url": "/docs",
+              "target": "_blank",
               "icon": "BookOpenText"
             }
           ]
