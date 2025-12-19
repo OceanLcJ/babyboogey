@@ -19,7 +19,7 @@ if (
 
 export type ConfigMap = Record<string, string>;
 
-export const envConfigs = {
+export const envConfigs: ConfigMap = {
   app_url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
   app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'ShipAny App',
   app_description: process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? '',
