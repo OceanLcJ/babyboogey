@@ -22,6 +22,10 @@ const getSchemaAliasTarget = () => {
     return './src/config/db/schema.sqlite.ts';
   }
 
+  if (databaseProvider === 'mysql') {
+    return './src/config/db/schema.mysql.ts';
+  }
+
   return './src/config/db/schema.ts';
 };
 

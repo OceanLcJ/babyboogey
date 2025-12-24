@@ -10,17 +10,24 @@
  *   npx tsx scripts/init-rbac.ts --admin-email=your@email.com
  */
 
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/core/db';
-import {
-  permission,
-  role,
-  rolePermission,
-  user,
-  userRole,
-} from '@/config/db/schema';
+import { envConfigs } from '@/config';
 import { getUuid } from '@/shared/lib/hash';
+
+async function loadSchemaTables(): Promise<any> {
+  if (envConfigs.database_provider === 'mysql') {
+    return (await import('@/config/db/schema.mysql')) as any;
+  }
+
+  if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
+    return (await import('@/config/db/schema.sqlite')) as any;
+  }
+
+  // Default: PostgreSQL
+  return (await import('@/config/db/schema')) as any;
+}
 
 // Default permissions
 const defaultPermissions = [
@@ -319,6 +326,9 @@ async function initializeRBAC() {
   console.log('🚀 Starting RBAC initialization...\n');
 
   try {
+    const { permission, role, rolePermission, user, userRole } =
+      (await loadSchemaTables()) as any;
+
     // 1. Create permissions
     console.log('📝 Creating permissions...');
     const createdPermissions: Record<string, string> = {};
@@ -334,14 +344,11 @@ async function initializeRBAC() {
         console.log(`   ✓ Permission already exists: ${perm.code}`);
         createdPermissions[perm.code] = existing.id;
       } else {
-        const [created] = await db()
+        const id = getUuid();
+        await db()
           .insert(permission)
-          .values({
-            id: getUuid(),
-            ...perm,
-          })
-          .returning();
-        createdPermissions[perm.code] = created.id;
+          .values({ id, ...perm });
+        createdPermissions[perm.code] = id;
         console.log(`   ✓ Created permission: ${perm.code}`);
       }
     }
@@ -367,18 +374,16 @@ async function initializeRBAC() {
         console.log(`   ✓ Role already exists: ${roleData.name}`);
         roleId = existingRole.id;
       } else {
-        const [created] = await db()
-          .insert(role)
-          .values({
-            id: getUuid(),
-            name: roleData.name,
-            title: roleData.title,
-            description: roleData.description,
-            status: roleData.status,
-            sort: roleData.sort,
-          })
-          .returning();
-        roleId = created.id;
+        const id = getUuid();
+        await db().insert(role).values({
+          id,
+          name: roleData.name,
+          title: roleData.title,
+          description: roleData.description,
+          status: roleData.status,
+          sort: roleData.sort,
+        });
+        roleId = id;
         console.log(`   ✓ Created role: ${roleData.name}`);
       }
 
@@ -445,8 +450,10 @@ async function initializeRBAC() {
           .select()
           .from(userRole)
           .where(
-            eq(userRole.userId, adminUser.id) &&
+            and(
+              eq(userRole.userId, adminUser.id),
               eq(userRole.roleId, superAdminRoleId)
+            )
           );
 
         if (!existingUserRole) {

@@ -1,5 +1,6 @@
 import { envConfigs } from '@/config';
 
+import { closeMysqlDb, getMysqlDb } from './mysql';
 import { closePostgresDb, getPostgresDb } from './postgres';
 import { getSqliteDb } from './sqlite';
 
@@ -15,6 +16,10 @@ import { getSqliteDb } from './sqlite';
 export function db(): any {
   if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
     return getSqliteDb() as any;
+  }
+
+  if (envConfigs.database_provider === 'mysql') {
+    return getMysqlDb() as any;
   }
 
   return getPostgresDb() as any;
@@ -37,10 +42,13 @@ export function dbSqlite(): ReturnType<typeof getSqliteDb> {
 }
 
 export async function closeDb() {
-  if (envConfigs.database_provider !== 'postgresql') {
+  if (envConfigs.database_provider === 'postgresql') {
+    await closePostgresDb();
     return;
   }
 
-  // Only for postgres
-  await closePostgresDb();
+  if (envConfigs.database_provider === 'mysql') {
+    await closeMysqlDb();
+    return;
+  }
 }

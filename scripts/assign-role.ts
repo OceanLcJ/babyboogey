@@ -9,15 +9,23 @@
  *   npx tsx scripts/assign-role.ts --email=user@example.com --role=viewer --expires-days=30
  */
 
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { db } from '@/core/db';
-import { user } from '@/config/db/schema';
-import {
-  assignRoleToUser,
-  getRoleByName,
-  getUserRoles,
-} from '@/shared/services/rbac';
+import { envConfigs } from '@/config';
+import { getUuid } from '@/shared/lib/hash';
+
+async function loadSchemaTables(): Promise<any> {
+  if (envConfigs.database_provider === 'mysql') {
+    return (await import('@/config/db/schema.mysql')) as any;
+  }
+
+  if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
+    return (await import('@/config/db/schema.sqlite')) as any;
+  }
+
+  return (await import('@/config/db/schema')) as any;
+}
 
 async function assignRole() {
   const args = process.argv.slice(2);
@@ -47,6 +55,10 @@ async function assignRole() {
   }
 
   try {
+    const { user, role, userRole } = (await loadSchemaTables()) as any;
+    const sqlEq: any = eq;
+    const sqlAnd: any = and;
+
     // Find user
     let targetUser;
 
@@ -57,7 +69,7 @@ async function assignRole() {
       const [foundUser] = await db()
         .select()
         .from(user)
-        .where(eq(user.email, email));
+        .where(sqlEq(user.email, email));
 
       targetUser = foundUser;
     } else if (userIdArg) {
@@ -67,7 +79,7 @@ async function assignRole() {
       const [foundUser] = await db()
         .select()
         .from(user)
-        .where(eq(user.id, userId));
+        .where(sqlEq(user.id, userId));
 
       targetUser = foundUser;
     }
@@ -83,9 +95,12 @@ async function assignRole() {
     const roleName = roleArg.split('=')[1];
     console.log(`🔍 Looking up role: ${roleName}`);
 
-    const role = await getRoleByName(roleName);
+    const [foundRole] = await db()
+      .select()
+      .from(role)
+      .where(sqlEq(role.name, roleName));
 
-    if (!role) {
+    if (!foundRole) {
       console.error(`❌ Role not found: ${roleName}`);
       console.log('\nAvailable roles:');
       console.log('  - super_admin');
@@ -98,14 +113,22 @@ async function assignRole() {
       process.exit(1);
     }
 
-    console.log(`✓ Found role: ${role.title}\n`);
+    console.log(`✓ Found role: ${foundRole.title}\n`);
 
     // Check if user already has this role
-    const existingRoles = await getUserRoles(targetUser.id);
-    const hasRole = existingRoles.some((r) => r.id === role.id);
+    const [existingUserRole] = await db()
+      .select()
+      .from(userRole)
+      .where(
+        sqlAnd(
+          sqlEq(userRole.userId, targetUser.id),
+          sqlEq(userRole.roleId, foundRole.id)
+        )
+      );
+    const hasRole = !!existingUserRole;
 
     if (hasRole) {
-      console.log(`ℹ️  User already has role: ${role.title}`);
+      console.log(`ℹ️  User already has role: ${foundRole.title}`);
       console.log('   No changes made.');
       process.exit(0);
     }
@@ -121,12 +144,17 @@ async function assignRole() {
 
     // Assign role
     console.log(`🔄 Assigning role to user...`);
-    await assignRoleToUser(targetUser.id, role.id, expiresAt);
+    await db().insert(userRole).values({
+      id: getUuid(),
+      userId: targetUser.id,
+      roleId: foundRole.id,
+      expiresAt,
+    });
 
     console.log(`\n✅ Successfully assigned role!`);
     console.log(`\n📊 Summary:`);
     console.log(`   User: ${targetUser.name} (${targetUser.email})`);
-    console.log(`   Role: ${role.title} (${role.name})`);
+    console.log(`   Role: ${foundRole.title} (${foundRole.name})`);
     if (expiresAt) {
       console.log(`   Expires: ${expiresAt.toISOString()}`);
     } else {
