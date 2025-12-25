@@ -195,12 +195,20 @@ export function db(): any {
   return getPostgresDb() as any;
 }
 
-export function dbPg(): ReturnType<typeof getPostgresDb> {
+export function dbPostgres(): ReturnType<typeof getPostgresDb> {
   if (envConfigs.database_provider !== 'postgresql') {
     throw new Error('Database provider is not PostgreSQL');
   }
 
   return getPostgresDb();
+}
+
+export function dbMysql(): ReturnType<typeof getMysqlDb> {
+  if (envConfigs.database_provider !== 'mysql') {
+    throw new Error('Database provider is not MySQL');
+  }
+
+  return getMysqlDb();
 }
 
 export function dbSqlite(): ReturnType<typeof getSqliteDb> {
