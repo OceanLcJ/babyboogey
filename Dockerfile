@@ -15,12 +15,6 @@ FROM deps AS builder
 
 WORKDIR /app
 
-# Ensure Next.js build-time schema alias matches the target database dialect.
-# Example:
-#   docker build --build-arg DATABASE_PROVIDER=mysql -t app .
-ARG DATABASE_PROVIDER=postgresql
-ENV DATABASE_PROVIDER=$DATABASE_PROVIDER
-
 # Install dependencies based on the preferred package manager
 COPY . .
 RUN pnpm build

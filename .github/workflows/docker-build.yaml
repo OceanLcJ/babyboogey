@@ -6,25 +6,11 @@ on:
   pull_request:
     branches: ['main', 'dev']
   workflow_dispatch:
-    inputs:
-      database_provider:
-        description: 'Build-time DATABASE_PROVIDER for schema alias (postgresql/mysql/sqlite/turso)'
-        required: false
-        default: 'postgresql'
-        type: choice
-        options:
-          - postgresql
-          - mysql
-          - sqlite
-          - turso
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   SVR_NAME: ${{ github.event.repository.name }}
-  # Change the fallback value ('postgresql') to switch the default build dialect for push/PR builds.
-  # Manual workflow_dispatch can still override it via inputs.
-  DATABASE_PROVIDER: ${{ github.event.inputs.database_provider || 'postgresql' }}
 
 jobs:
   build-and-push:
@@ -62,5 +48,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            DATABASE_PROVIDER=${{ env.DATABASE_PROVIDER }}
