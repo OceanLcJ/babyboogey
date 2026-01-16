@@ -1,4 +1,4 @@
-import { and, count, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, or } from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { credit, order, subscription } from '@/config/db/schema';
@@ -138,16 +138,50 @@ export async function findOrderByOrderNo(orderNo: string) {
 }
 
 /**
+ * find order by transaction id and payment provider
+ */
+export async function findOrderByTransactionId({
+  transactionId,
+  paymentProvider,
+}: {
+  transactionId: string;
+  paymentProvider: string;
+}) {
+  const [result] = await db()
+    .select()
+    .from(order)
+    .where(
+      and(
+        eq(order.transactionId, transactionId),
+        eq(order.paymentProvider, paymentProvider)
+      )
+    );
+
+  return result;
+}
+
+/**
  * update order
  */
 export async function updateOrderByOrderNo(
   orderNo: string,
-  updateOrder: UpdateOrder
+  updateOrder: UpdateOrder,
+  options?: {
+    // Only update if current status matches (optimistic lock)
+    expectedStatus?: OrderStatus;
+  }
 ) {
+  const conditions = [eq(order.orderNo, orderNo)];
+
+  // Add status check for optimistic locking
+  if (options?.expectedStatus) {
+    conditions.push(eq(order.status, options.expectedStatus));
+  }
+
   const [result] = await db()
     .update(order)
     .set(updateOrder)
-    .where(eq(order.orderNo, orderNo))
+    .where(and(...conditions))
     .returning();
 
   return result;
@@ -249,12 +283,30 @@ export async function updateOrderInTransaction({
       result.credit = existingCredit;
     }
 
-    // update order
+    // update order with optimistic lock
+    // only update if status is not PAID (prevent duplicate processing)
     const [orderResult] = await tx
       .update(order)
       .set(updateOrder)
-      .where(eq(order.orderNo, orderNo))
+      .where(
+        and(
+          eq(order.orderNo, orderNo),
+          // Only update if not already paid (optimistic lock)
+          updateOrder.status === OrderStatus.PAID
+            ? or(
+                eq(order.status, OrderStatus.CREATED),
+                eq(order.status, OrderStatus.PENDING)
+              )
+            : undefined
+        )
+      )
       .returning();
+
+    // If no order was updated and we're trying to set status to PAID,
+    // it means the order was already processed
+    if (!orderResult && updateOrder.status === OrderStatus.PAID) {
+      console.log(`Order ${orderNo} already paid or not in CREATED status, skipping update`);
+    }
 
     result.order = orderResult;
 

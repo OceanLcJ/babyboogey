@@ -2,7 +2,10 @@ import {
   PaymentEventType,
   SubscriptionCycleType,
 } from '@/extensions/payment/types';
-import { findOrderByOrderNo } from '@/shared/models/order';
+import {
+  findOrderByOrderNo,
+  findOrderByTransactionId,
+} from '@/shared/models/order';
 import { findSubscriptionByProviderSubscriptionId } from '@/shared/models/subscription';
 import {
   getPaymentService,
@@ -66,32 +69,114 @@ export async function POST(
         session,
       });
     } else if (eventType === PaymentEventType.PAYMENT_SUCCESS) {
-      // only handle subscription payment
+      // handle subscription payment or one-time payment
       if (session.subscriptionId && session.subscriptionInfo) {
-        if (
-          session.paymentInfo?.subscriptionCycleType ===
-          SubscriptionCycleType.RENEWAL
-        ) {
-          // only handle subscription renewal payment
-          const existingSubscription =
-            await findSubscriptionByProviderSubscriptionId({
-              provider: provider,
-              subscriptionId: session.subscriptionId,
-            });
-          if (!existingSubscription) {
-            throw new Error('subscription not found');
+        // Find existing subscription in database
+        const existingSubscription =
+          await findSubscriptionByProviderSubscriptionId({
+            provider: provider,
+            subscriptionId: session.subscriptionId,
+          });
+
+        if (existingSubscription) {
+          // Determine if this is a renewal or first payment
+          const subscriptionCycleType =
+            session.paymentInfo?.subscriptionCycleType;
+          const transactionId = session.paymentInfo?.transactionId;
+
+          // Method 1: Use subscriptionCycleType if available (Stripe, Creem, PayPal all provide this)
+          if (subscriptionCycleType) {
+            if (subscriptionCycleType === SubscriptionCycleType.CREATE) {
+              console.log(
+                `Subscription ${session.subscriptionId}: subscriptionCycleType is CREATE, ` +
+                  'skipping PAYMENT_SUCCESS as this is the first payment (already handled)'
+              );
+              return Response.json({ message: 'success' });
+            }
+
+            if (subscriptionCycleType === SubscriptionCycleType.RENEWAL) {
+              // Idempotency check: skip if transaction already processed
+              if (transactionId) {
+                const existingOrder = await findOrderByTransactionId({
+                  transactionId,
+                  paymentProvider: provider,
+                });
+                if (existingOrder) {
+                  console.log(
+                    `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
+                  );
+                  return Response.json({ message: 'success' });
+                }
+              }
+
+              console.log(
+                `Subscription ${session.subscriptionId}: subscriptionCycleType is RENEWAL, treating as RENEWAL`
+              );
+
+              await handleSubscriptionRenewal({
+                subscription: existingSubscription,
+                session,
+              });
+              return Response.json({ message: 'success' });
+            }
           }
 
-          // handle subscription renewal payment
-          await handleSubscriptionRenewal({
-            subscription: existingSubscription,
-            session,
-          });
+          // Method 2: Fall back to transactionId-based idempotency check
+          // If subscriptionCycleType is not available, check if this transaction already exists
+          if (transactionId) {
+            const existingOrder = await findOrderByTransactionId({
+              transactionId,
+              paymentProvider: provider,
+            });
+            if (existingOrder) {
+              console.log(
+                `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
+              );
+              return Response.json({ message: 'success' });
+            }
+
+            // Transaction not found - treat as renewal (subscription exists but transaction is new)
+            console.log(
+              `Subscription ${session.subscriptionId}: new transaction ${transactionId}, treating as RENEWAL`
+            );
+
+            await handleSubscriptionRenewal({
+              subscription: existingSubscription,
+              session,
+            });
+          } else {
+            console.log(
+              `Subscription ${session.subscriptionId}: no subscriptionCycleType and no transactionId, cannot determine if renewal`
+            );
+          }
         } else {
-          console.log('not handle subscription first payment');
+          // Subscription not in database - this might be first payment
+          // But first payment should be handled via CHECKOUT_SUCCESS or SUBSCRIBE_UPDATED
+          console.log(
+            `Subscription ${session.subscriptionId} not found in database, ` +
+              `subscriptionCycleType: ${session.paymentInfo?.subscriptionCycleType}, ` +
+              'not handling via PAYMENT_SUCCESS'
+          );
         }
       } else {
-        console.log('not handle one-time payment');
+        // handle one-time payment
+        const orderNo = session.metadata?.order_no;
+
+        if (!orderNo) {
+          console.log('one-time payment: order_no not found in metadata, skipping');
+          return Response.json({ message: 'success' });
+        }
+
+        const order = await findOrderByOrderNo(orderNo);
+        if (!order) {
+          throw new Error('order not found');
+        }
+
+        // handleCheckoutSuccess has idempotency check and optimistic lock
+        await handleCheckoutSuccess({
+          order,
+          session,
+        });
       }
     } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
       // only handle subscription update

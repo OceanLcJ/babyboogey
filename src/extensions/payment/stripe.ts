@@ -491,9 +491,11 @@ export class StripeProvider implements PaymentProvider {
       paymentInfo: {
         transactionId: invoice.id,
         discountCode: '',
-        discountAmount: invoice.total_discount_amounts
-          ? invoice.total_discount_amounts[0].amount
-          : 0,
+        discountAmount:
+          invoice.total_discount_amounts &&
+          invoice.total_discount_amounts.length > 0
+            ? invoice.total_discount_amounts[0].amount
+            : 0,
         discountCurrency: invoice.currency || '',
         paymentAmount: invoice.amount_paid,
         paymentCurrency: invoice.currency,

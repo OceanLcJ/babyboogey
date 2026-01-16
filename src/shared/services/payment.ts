@@ -87,6 +87,7 @@ export function getPaymentServiceWithConfigs(configs: Configs) {
       new PayPalProvider({
         clientId: configs.paypal_client_id,
         clientSecret: configs.paypal_client_secret,
+        webhookId: configs.paypal_webhook_id,
         environment:
           configs.paypal_environment === 'production'
             ? 'production'
@@ -131,6 +132,18 @@ export async function handleCheckoutSuccess({
   const orderNo = order.orderNo;
   if (!orderNo) {
     throw new Error('invalid order');
+  }
+
+  // Idempotency check: if order is already paid, skip processing
+  if (order.status === OrderStatus.PAID) {
+    console.log(`Order ${orderNo} is already paid, skipping`);
+    return;
+  }
+
+  // Only process orders in CREATED or PENDING status
+  if (order.status !== OrderStatus.CREATED && order.status !== OrderStatus.PENDING) {
+    console.log(`Order ${orderNo} status is ${order.status}, not processing`);
+    return;
   }
 
   if (order.paymentType === PaymentType.SUBSCRIPTION) {
