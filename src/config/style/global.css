@@ -11,6 +11,25 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    background-image:
+      radial-gradient(circle at 10% 20%, #e0e7ff 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, #dbeafe 0%, transparent 40%);
+    background-attachment: fixed;
+  }
+}
+
+@theme inline {
+  --animate-bounce-custom: bounce-custom 2s infinite;
+  @keyframes bounce-custom {
+    0%,
+    100% {
+      transform: translateY(-5%) rotate(6deg);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0) rotate(6deg);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
   }
 }
 

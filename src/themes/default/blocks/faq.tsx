@@ -35,13 +35,13 @@ export function Faq({
             <Accordion
               type="single"
               collapsible
-              className="bg-muted dark:bg-muted/50 w-full rounded-2xl p-1"
+              className="w-full rounded-2xl p-1"
             >
               {section.items?.map((item, idx) => (
                 <div className="group" key={idx}>
                   <AccordionItem
                     value={item.question || item.title || ''}
-                    className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
+                    className="data-[state=open]:bg-card peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
                   >
                     <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
                       {item.question || item.title || ''}

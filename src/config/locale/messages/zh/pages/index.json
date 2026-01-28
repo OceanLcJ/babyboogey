@@ -147,8 +147,7 @@
               "alt": "introduce"
             }
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "benefits": {
         "block": "features-accordion",
@@ -230,8 +229,7 @@
               "alt": "usage"
             }
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "features": {
         "id": "features",
@@ -287,8 +285,7 @@
             "title": "50+",
             "description": "专业模板"
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "testimonials": {
         "id": "testimonials",
@@ -400,8 +397,7 @@
             "variant": "outline",
             "icon": "BookOpenText"
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "subscribe": {
         "id": "subscribe",
@@ -415,8 +411,7 @@
             "title": "订阅"
           },
           "action": "/api/subscribe"
-        },
-        "className": "bg-muted"
+        }
       }
     }
   }

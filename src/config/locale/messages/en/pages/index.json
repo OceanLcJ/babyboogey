@@ -148,8 +148,7 @@
               "alt": "introduce"
             }
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "benefits": {
         "block": "features-accordion",
@@ -231,8 +230,7 @@
               "alt": "usage"
             }
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "features": {
         "id": "features",
@@ -288,8 +286,7 @@
             "title": "50+",
             "description": "Templates"
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "testimonials": {
         "id": "testimonials",
@@ -401,8 +398,7 @@
             "variant": "outline",
             "icon": "BookOpenText"
           }
-        ],
-        "className": "bg-muted"
+        ]
       },
       "subscribe": {
         "id": "subscribe",
@@ -416,8 +412,7 @@
             "title": "Subscribe"
           },
           "action": "/api/subscribe"
-        },
-        "className": "bg-muted"
+        }
       }
     }
   }
