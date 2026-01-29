@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { getThemePage } from '@/core/theme';
+import { VideoGenerator } from '@/shared/blocks/generator';
 import type { DynamicPage } from '@/shared/types/blocks/landing';
 
 export const revalidate = 3600;
@@ -15,9 +16,16 @@ export default async function LandingPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  // We can still use valid translations if we want, or hardcode for the design demo
   const t = await getTranslations('landing');
   const tIndex = await getTranslations('pages.index');
+  const customHero = tIndex.raw('custom_hero') as {
+    title_line1: string;
+    title_line2: string;
+    description: string;
+    cta_button: string;
+    card_static: string;
+    card_boogie: string;
+  };
 
   // get page data from original source
   const page: DynamicPage = tIndex.raw('page');
@@ -39,56 +47,85 @@ export default async function LandingPage({
             {/* Left Side: Copy + CTA */}
             <div className="text-center lg:text-left">
               <h1 className="text-5xl font-bold tracking-tight text-[var(--foreground)] sm:text-6xl mb-6">
-                Make Your Photos <br />
-                <span className="text-[var(--primary)]">Dance & Boogie!</span>
+                {customHero.title_line1} <br />
+                <span className="text-[var(--primary)]">{customHero.title_line2}</span>
               </h1>
               <p className="mt-6 text-lg leading-8 text-[var(--secondary)] mb-10 max-w-lg mx-auto lg:mx-0">
-                Transform static memories into cheerful, bouncing animations with just one click. The cutest way to share moments!
+                {customHero.description}
               </p>
               <div className="flex items-center justify-center lg:justify-start gap-x-6">
                 <Link
-                  href="/login"
+                  href="#generator"
                   className="rounded-full bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-[var(--primary-foreground)] shadow-[0_10px_20px_-10px_rgba(252,211,77,0.6)] hover:bg-[var(--primary)]/90 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
                 >
-                  Get Boogieing <ArrowRight className="w-5 h-5" />
+                  {customHero.cta_button} <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
             </div>
 
             {/* Right Side: Visual Demo */}
-            <div className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center">
+            <div className="relative w-full h-[450px] lg:h-[550px] flex items-center justify-center">
 
-              {/* Card 1: Static */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-48 h-64 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] p-4 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-white">
-                <div className="w-full h-full bg-gray-100 rounded-2xl flex items-center justify-center overflow-hidden">
-                  <span className="text-4xl">😐</span>
+              {/* Card 1: Static Photo */}
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-gray-100">
+                <div className="w-full h-full rounded-2xl overflow-hidden">
+                  <img
+                    src="https://img.aibabydance.org/assets/imgs/example/image-1.png"
+                    alt="Static baby photo"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <p className="mt-3 font-bold text-gray-400 text-sm">Static Photo</p>
+                <p className="mt-3 font-bold text-gray-400 text-sm">{customHero.card_static}</p>
               </div>
 
-              {/* Connecting Arrow (SVG) */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-3/4 z-0 text-[var(--primary)] opacity-80">
-                <svg width="150" height="80" viewBox="0 0 150 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 60 C 40 10, 110 10, 140 60" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="10 10" />
-                  <path d="M130 50 L 140 60 L 145 45" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              {/* Connecting Arrow (Animated) - Behind cards */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 text-[var(--primary)]">
+                <svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M20 80 C 60 20, 160 20, 200 80"
+                    stroke="currentColor"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    strokeDasharray="15 10"
+                    className="animate-dash"
+                  />
+                  <path
+                    d="M185 65 L 200 80 L 192 95"
+                    stroke="currentColor"
+                    strokeWidth="6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="animate-pulse"
+                  />
                 </svg>
               </div>
 
-              {/* Card 2: Boogie */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-48 h-64 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] p-4 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-white animate-bounce-custom">
-                <div className="w-full h-full bg-yellow-50 rounded-2xl flex items-center justify-center overflow-hidden relative">
-                  <span className="text-6xl animate-bounce">💃</span>
-                  {/* Sparkles */}
+              {/* Card 2: Dancing Video */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-gray-100">
+                <div className="w-full h-full rounded-2xl overflow-hidden relative">
+                  <video
+                    src="https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4"
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
                   <span className="absolute top-2 right-2 text-xl">✨</span>
                   <span className="absolute bottom-2 left-2 text-xl">✨</span>
                 </div>
-                <p className="mt-3 font-bold text-[var(--primary)] text-sm">Boogie Mode!</p>
+                <p className="mt-3 font-bold text-[var(--primary)] text-sm">{customHero.card_boogie}</p>
               </div>
 
             </div>
 
           </div>
         </div>
+      </div>
+
+      {/* Video Generator Section */}
+      <div id="generator">
+        <VideoGenerator />
       </div>
 
       {/* Render the rest of the dynamic page content */}
