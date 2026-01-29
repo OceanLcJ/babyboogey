@@ -1,47 +1,63 @@
 {
   "metadata": {
-    "title": "AI Video Generator",
-    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video."
+    "title": "AI Baby Dance Generator",
+    "description": "Turn baby photos into dancing videos with AI. Make baby sing and dance in seconds!"
   },
   "page": {
-    "title": "AI Video Generator",
-    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video."
+    "title": "AI Baby Dance Generator",
+    "description": "Turn baby photos into dancing videos with AI. Make baby sing and dance in seconds!"
   },
   "generator": {
-    "title": "Video Generator",
-    "description": "Generate videos with AI models, support text-to-video, image-to-video and video-to-video.",
+    "title": "Create Dance Video",
+    "description": "Two simple steps: Upload photo + Select dance style",
     "tabs": {
-      "text-to-video": "Text to Video",
-      "image-to-video": "Image to Video",
-      "video-to-video": "Video to Video"
+      "text-to-video": "Create Dance",
+      "image-to-video": "Photo to Dance",
+      "video-to-video": "Remix Video"
     },
     "form": {
       "provider": "Provider",
-      "model": "Model",
+      "model": "Dance Style",
       "select_provider": "Select Provider",
-      "select_model": "Select Model",
-      "prompt": "Prompt",
-      "prompt_placeholder": "Describe the video content, such as scene, action, style, etc.",
-      "reference_image": "Reference Image",
-      "reference_image_placeholder": "Upload a reference image for video generation",
+      "select_model": "Select Dance Style",
+      "prompt": "Dance Description",
+      "prompt_placeholder": "Describe the dance moves, music style, or scene (e.g., baby doing hip-hop, cheerful birthday dance)",
+      "reference_image": "1. Upload Baby Photo 📸",
+      "reference_image_placeholder": "Click to upload or drag photo (JPG, PNG, WebP, max 10MB)",
       "reference_video": "Reference Video URL",
-      "reference_video_placeholder": "Enter the URL of the reference video",
-      "some_images_failed_to_upload": "Image failed to upload, please delete and re-upload",
-      "prompt_too_long": "Prompt is too long, please delete some content"
+      "reference_video_placeholder": "Enter a video URL to remix",
+      "some_images_failed_to_upload": "Photo upload failed, please try again",
+      "prompt_too_long": "Description is too long, please shorten it",
+      "dance_style": "2. Select Dance Style 💃",
+      "dance_templates_count": "{count} dance templates",
+      "try_example_images": "Or try example images",
+      "example_image_alt": "Example {index}",
+      "resolution": "Output Resolution",
+      "resolution_720p": "720p (SD)",
+      "resolution_1080p": "1080p (HD)",
+      "resolution_credits": "{credits} credits",
+      "estimated_cost": "Estimated Cost:",
+      "available_credits": "Available",
+      "orientation": "Character Orientation",
+      "orientation_image": "Follow Photo",
+      "orientation_video": "Follow Video",
+      "public_toggle": "Public Work",
+      "public_toggle_desc": "Allow others to view your generated video"
     },
     "generate": "Generate Video",
     "checking_account": "Checking Account...",
     "loading": "Loading...",
-    "generating": "Generating...",
-    "sign_in_to_generate": "Sign In to Generate Video",
-    "credits_cost": "Cost {credits} credits",
-    "credits_remaining": "Remaining {credits} credits",
+    "generating": "Creating Dance Video...",
+    "sign_in_to_generate": "Sign In to Generate",
+    "credits_cost": "Cost: {credits}",
+    "credits_remaining": "Remaining: {credits}",
     "buy_credits": "Buy Credits",
     "progress": "Progress",
-    "generated_videos": "Video Preview",
-    "ready_to_generate": "Ready to Generate",
-    "ready_for_generating": "Ready for Generating",
-    "no_videos_generated": "No Videos Generated"
+    "preview_title": "Template Preview",
+    "generated_videos": "Dance Preview",
+    "ready_to_generate": "Creating your baby dance video...",
+    "ready_for_generating": "Ready to boogie!",
+    "no_videos_generated": "No Dance Videos Yet",
+    "privacy_notice": "🔒 Privacy: Your photos are encrypted and automatically deleted after processing. We never share your data with third parties."
   }
 }
-

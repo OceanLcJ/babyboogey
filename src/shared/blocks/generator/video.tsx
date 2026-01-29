@@ -1,29 +1,32 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { IconX } from '@tabler/icons-react';
 import {
+  Check,
   CreditCard,
   Download,
+  Image as ImageIcon,
   Loader2,
-  Sparkles,
   User,
   Video,
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Link } from '@/core/i18n/navigation';
 import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
-import { ImageUploader, ImageUploaderValue } from '@/shared/blocks/common';
 import { Button } from '@/shared/components/ui/button';
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
 import { Label } from '@/shared/components/ui/label';
 import { Progress } from '@/shared/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -31,9 +34,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
-import { Textarea } from '@/shared/components/ui/textarea';
+import { Switch } from '@/shared/components/ui/switch';
 import { useAppContext } from '@/shared/contexts/app';
+import { cn } from '@/shared/lib/utils';
 
 interface VideoGeneratorProps {
   maxSizeMB?: number;
@@ -58,77 +61,157 @@ interface BackendTask {
   taskResult: string | null;
 }
 
-type VideoGeneratorTab = 'text-to-video' | 'image-to-video' | 'video-to-video';
+interface DanceTemplate {
+  id: string;
+  name: string;
+  nameZh: string;
+  videoUrl: string;
+  duration: string;
+  isPro?: boolean;
+  isHot?: boolean;
+}
 
 const POLL_INTERVAL = 15000;
-const GENERATION_TIMEOUT = 600000; // 10 minutes for video
-const MAX_PROMPT_LENGTH = 2000;
+const GENERATION_TIMEOUT = 600000;
 
-const textToVideoCredits = 6;
-const imageToVideoCredits = 8;
-const videoToVideoCredits = 10;
-
-const MODEL_OPTIONS = [
-  // Replicate models
+const DANCE_TEMPLATES: DanceTemplate[] = [
   {
-    value: 'google/veo-3.1',
-    label: 'Veo 3.1',
-    provider: 'replicate',
-    scenes: ['text-to-video', 'image-to-video'],
+    id: 'temp-05',
+    name: 'Rhythm Beat',
+    nameZh: '节奏感舞步',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4',
+    duration: '0:04',
   },
   {
-    value: 'openai/sora-2',
-    label: 'Sora 2',
-    provider: 'replicate',
-    scenes: ['text-to-video', 'image-to-video'],
-  },
-  // Fal models
-  {
-    value: 'fal-ai/veo3',
-    label: 'Veo 3',
-    provider: 'fal',
-    scenes: ['text-to-video'],
+    id: 'viral-dance',
+    name: 'Viral Dance',
+    nameZh: '热门舞蹈',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/effects_video_shortform_viral_dance.mp4',
+    duration: '0:05',
+    isHot: true,
   },
   {
-    value: 'fal-ai/wan-pro/image-to-video',
-    label: 'Wan Pro',
-    provider: 'fal',
-    scenes: ['image-to-video'],
+    id: 'temp-01',
+    name: 'Cool Moves',
+    nameZh: '酷炫街舞',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-01.mp4',
+    duration: '0:15',
+    isPro: true,
   },
   {
-    value: 'fal-ai/kling-video/o1/video-to-video/edit',
-    label: 'Kling Video O1',
-    provider: 'fal',
-    scenes: ['video-to-video'],
-  },
-  // Kie models
-  {
-    value: 'sora-2-pro-image-to-video',
-    label: 'Sora 2 Pro',
-    provider: 'kie',
-    scenes: ['image-to-video'],
+    id: 'temp-02',
+    name: 'Fun Groove',
+    nameZh: '趣味律动',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-02.mp4',
+    duration: '0:09',
+    isPro: true,
   },
   {
-    value: 'sora-2-pro-text-to-video',
-    label: 'Sora 2 Pro',
-    provider: 'kie',
-    scenes: ['text-to-video'],
+    id: 'temp-03',
+    name: 'Happy Bounce',
+    nameZh: '欢乐蹦跳',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-03.mp4',
+    duration: '0:09',
+    isPro: true,
+  },
+  {
+    id: 'temp-04',
+    name: 'Smooth Sway',
+    nameZh: '柔和摇摆',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-04.mp4',
+    duration: '0:21',
+    isPro: true,
+  },
+  {
+    id: 'temp-06',
+    name: 'Cute Wiggle',
+    nameZh: '可爱扭动',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-06.mp4',
+    duration: '0:08',
+    isPro: true,
+  },
+  {
+    id: 'temp-07',
+    name: 'Quick Steps',
+    nameZh: '快速小步',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-07.mp4',
+    duration: '0:15',
+    isPro: true,
+  },
+  {
+    id: 'temp-08',
+    name: 'Gentle Wave',
+    nameZh: '温柔波浪',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-08.mp4',
+    duration: '0:09',
+    isPro: true,
+  },
+  {
+    id: 'temp-09',
+    name: 'Energy Burst',
+    nameZh: '活力四射',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-09.mp4',
+    duration: '0:19',
+    isPro: true,
+  },
+  {
+    id: 'temp-10',
+    name: 'Playful Steps',
+    nameZh: '俏皮舞步',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-10.mp4',
+    duration: '0:17',
+    isPro: true,
+  },
+  {
+    id: 'temp-11',
+    name: 'Sweet Moves',
+    nameZh: '甜美律动',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-11.mp4',
+    duration: '0:16',
+    isPro: true,
+  },
+  {
+    id: 'temp-12',
+    name: 'Dynamic Dance',
+    nameZh: '动感舞蹈',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-12.mp4',
+    duration: '0:14',
+    isPro: true,
+  },
+  {
+    id: 'template-0',
+    name: 'Cute Boy',
+    nameZh: '默认模板',
+    videoUrl:
+      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/template-0.mp4',
+    duration: '0:14',
+    isPro: true,
   },
 ];
 
-const PROVIDER_OPTIONS = [
-  {
-    value: 'replicate',
-    label: 'Replicate',
-  },
-  {
-    value: 'fal',
-    label: 'Fal',
-  },
-  {
-    value: 'kie',
-    label: 'Kie',
-  },
+const EXAMPLE_IMAGES = [
+  'https://img.aibabydance.org/assets/imgs/example/image-1.png',
+  'https://img.aibabydance.org/assets/imgs/example/image-2.png',
+  'https://img.aibabydance.org/assets/imgs/example/image-3.jpg',
+  'https://img.aibabydance.org/assets/imgs/example/image-4.jpg',
+];
+
+const RESOLUTION_OPTIONS = [
+  { value: '720p', credits: 60 },
+  { value: '1080p', credits: 120 },
 ];
 
 function parseTaskResult(taskResult: string | null): any {
@@ -149,7 +232,6 @@ function extractVideoUrls(result: any): string[] {
     return [];
   }
 
-  // check videos array first
   const videos = result.videos;
   if (videos && Array.isArray(videos)) {
     return videos
@@ -166,7 +248,6 @@ function extractVideoUrls(result: any): string[] {
       .filter(Boolean);
   }
 
-  // check output
   const output = result.output ?? result.video ?? result.data;
 
   if (!output) {
@@ -203,24 +284,47 @@ function extractVideoUrls(result: any): string[] {
   return [];
 }
 
+const uploadImageFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append('files', file);
+
+  const response = await fetch('/api/storage/upload-image', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Upload failed with status ${response.status}`);
+  }
+
+  const result = await response.json();
+  if (result.code !== 0 || !result.data?.urls?.length) {
+    throw new Error(result.message || 'Upload failed');
+  }
+
+  return result.data.urls[0] as string;
+};
+
 export function VideoGenerator({
-  maxSizeMB = 50,
+  maxSizeMB = 10,
   srOnlyTitle,
 }: VideoGeneratorProps) {
   const t = useTranslations('ai.video.generator');
+  const locale = useLocale();
 
-  const [activeTab, setActiveTab] =
-    useState<VideoGeneratorTab>('text-to-video');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<{
+    preview: string;
+    url?: string;
+    status: 'idle' | 'uploading' | 'uploaded' | 'error';
+  } | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<DanceTemplate>(
+    DANCE_TEMPLATES[0]
+  );
+  const [resolution, setResolution] = useState('720p');
+  const [orientation, setOrientation] = useState('image');
+  const [isPublic, setIsPublic] = useState(true);
 
-  const [costCredits, setCostCredits] = useState<number>(textToVideoCredits);
-  const [provider, setProvider] = useState(PROVIDER_OPTIONS[0]?.value ?? '');
-  const [model, setModel] = useState(MODEL_OPTIONS[0]?.value ?? '');
-  const [prompt, setPrompt] = useState('');
-  const [referenceImageItems, setReferenceImageItems] = useState<
-    ImageUploaderValue[]
-  >([]);
-  const [referenceImageUrls, setReferenceImageUrls] = useState<string[]>([]);
-  const [referenceVideoUrl, setReferenceVideoUrl] = useState<string>('');
   const [generatedVideos, setGeneratedVideos] = useState<GeneratedVideo[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -241,49 +345,9 @@ export function VideoGenerator({
     setIsMounted(true);
   }, []);
 
-  const promptLength = prompt.trim().length;
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
-  const isPromptTooLong = promptLength > MAX_PROMPT_LENGTH;
-  const isTextToVideoMode = activeTab === 'text-to-video';
-  const isImageToVideoMode = activeTab === 'image-to-video';
-  const isVideoToVideoMode = activeTab === 'video-to-video';
-
-  const handleTabChange = (value: string) => {
-    const tab = value as VideoGeneratorTab;
-    setActiveTab(tab);
-
-    const availableModels = MODEL_OPTIONS.filter(
-      (option) => option.scenes.includes(tab) && option.provider === provider
-    );
-
-    if (availableModels.length > 0) {
-      setModel(availableModels[0].value);
-    } else {
-      setModel('');
-    }
-
-    if (tab === 'text-to-video') {
-      setCostCredits(textToVideoCredits);
-    } else if (tab === 'image-to-video') {
-      setCostCredits(imageToVideoCredits);
-    } else if (tab === 'video-to-video') {
-      setCostCredits(videoToVideoCredits);
-    }
-  };
-
-  const handleProviderChange = (value: string) => {
-    setProvider(value);
-
-    const availableModels = MODEL_OPTIONS.filter(
-      (option) => option.scenes.includes(activeTab) && option.provider === value
-    );
-
-    if (availableModels.length > 0) {
-      setModel(availableModels[0].value);
-    } else {
-      setModel('');
-    }
-  };
+  const currentCost =
+    RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.credits ?? 60;
 
   const taskStatusLabel = useMemo(() => {
     if (!taskStatus) {
@@ -304,26 +368,53 @@ export function VideoGenerator({
     }
   }, [taskStatus]);
 
-  const handleReferenceImagesChange = useCallback(
-    (items: ImageUploaderValue[]) => {
-      setReferenceImageItems(items);
-      const uploadedUrls = items
-        .filter((item) => item.status === 'uploaded' && item.url)
-        .map((item) => item.url as string);
-      setReferenceImageUrls(uploadedUrls);
-    },
-    []
-  );
+  const maxBytes = maxSizeMB * 1024 * 1024;
 
-  const isReferenceUploading = useMemo(
-    () => referenceImageItems.some((item) => item.status === 'uploading'),
-    [referenceImageItems]
-  );
+  const handleFileSelect = async (file: File) => {
+    if (!file.type?.startsWith('image/')) {
+      toast.error('Only image files are supported');
+      return;
+    }
+    if (file.size > maxBytes) {
+      toast.error(`File exceeds the ${maxSizeMB}MB limit`);
+      return;
+    }
 
-  const hasReferenceUploadError = useMemo(
-    () => referenceImageItems.some((item) => item.status === 'error'),
-    [referenceImageItems]
-  );
+    const preview = URL.createObjectURL(file);
+    setUploadedImage({ preview, status: 'uploading' });
+
+    try {
+      const url = await uploadImageFile(file);
+      setUploadedImage({ preview: url, url, status: 'uploaded' });
+    } catch (error: any) {
+      console.error('Upload failed:', error);
+      toast.error(error?.message || 'Upload failed');
+      setUploadedImage((prev) =>
+        prev ? { ...prev, status: 'error' } : null
+      );
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  const handleExampleClick = (url: string) => {
+    setUploadedImage({ preview: url, url, status: 'uploaded' });
+  };
+
+  const handleRemoveImage = () => {
+    if (uploadedImage?.preview.startsWith('blob:')) {
+      URL.revokeObjectURL(uploadedImage.preview);
+    }
+    setUploadedImage(null);
+  };
 
   const resetTaskState = useCallback(() => {
     setIsGenerating(false);
@@ -436,7 +527,7 @@ export function VideoGenerator({
         return true;
       }
     },
-    [generationStartTime, resetTaskState]
+    [generationStartTime, resetTaskState, fetchUserCredits]
   );
 
   useEffect(() => {
@@ -481,29 +572,13 @@ export function VideoGenerator({
       return;
     }
 
-    if (remainingCredits < costCredits) {
+    if (remainingCredits < currentCost) {
       toast.error('Insufficient credits. Please top up to keep creating.');
       return;
     }
 
-    const trimmedPrompt = prompt.trim();
-    if (!trimmedPrompt && isTextToVideoMode) {
-      toast.error('Please enter a prompt before generating.');
-      return;
-    }
-
-    if (!provider || !model) {
-      toast.error('Provider or model is not configured correctly.');
-      return;
-    }
-
-    if (isImageToVideoMode && referenceImageUrls.length === 0) {
-      toast.error('Please upload a reference image before generating.');
-      return;
-    }
-
-    if (isVideoToVideoMode && !referenceVideoUrl) {
-      toast.error('Please provide a reference video URL before generating.');
+    if (!uploadedImage?.url) {
+      toast.error('Please upload a baby photo before generating.');
       return;
     }
 
@@ -514,16 +589,6 @@ export function VideoGenerator({
     setGenerationStartTime(Date.now());
 
     try {
-      const options: any = {};
-
-      if (isImageToVideoMode) {
-        options.image_input = referenceImageUrls;
-      }
-
-      if (isVideoToVideoMode) {
-        options.video_input = [referenceVideoUrl];
-      }
-
       const resp = await fetch('/api/ai/generate', {
         method: 'POST',
         headers: {
@@ -531,11 +596,17 @@ export function VideoGenerator({
         },
         body: JSON.stringify({
           mediaType: AIMediaType.VIDEO,
-          scene: activeTab,
-          provider,
-          model,
-          prompt: trimmedPrompt,
-          options,
+          scene: 'image-to-video',
+          provider: 'replicate',
+          model: 'google/veo-3.1',
+          prompt: '',
+          options: {
+            image_input: [uploadedImage.url],
+            template_id: selectedTemplate.id,
+            resolution,
+            orientation,
+            is_public: isPublic,
+          },
         }),
       });
 
@@ -562,9 +633,8 @@ export function VideoGenerator({
             videoUrls.map((url, index) => ({
               id: `${newTaskId}-${index}`,
               url,
-              provider,
-              model,
-              prompt: trimmedPrompt,
+              provider: 'replicate',
+              model: 'google/veo-3.1',
             }))
           );
           toast.success('Video generated successfully');
@@ -593,7 +663,6 @@ export function VideoGenerator({
 
     try {
       setDownloadingVideoId(video.id);
-      // fetch video via proxy
       const resp = await fetch(
         `/api/proxy/file?url=${encodeURIComponent(video.url)}`
       );
@@ -620,286 +689,415 @@ export function VideoGenerator({
   };
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="container">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <Card>
-              <CardHeader>
-                {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
-                <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                  {t('title')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6 pb-8">
-                <Tabs value={activeTab} onValueChange={handleTabChange}>
-                  <TabsList className="bg-primary/10 grid w-full grid-cols-3">
-                    <TabsTrigger value="text-to-video">
-                      {t('tabs.text-to-video')}
-                    </TabsTrigger>
-                    <TabsTrigger value="image-to-video">
-                      {t('tabs.image-to-video')}
-                    </TabsTrigger>
-                    <TabsTrigger value="video-to-video">
-                      {t('tabs.video-to-video')}
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
+    <section className="container">
+      {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
+      <div className="mx-auto mb-12 max-w-2xl text-center">
+        <h2 className="mb-4 text-3xl font-bold">{t('title')}</h2>
+        <p className="text-muted-foreground text-lg">{t('description')}</p>
+      </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>{t('form.provider')}</Label>
-                    <Select
-                      value={provider}
-                      onValueChange={handleProviderChange}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t('form.select_provider')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PROVIDER_OPTIONS.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>{t('form.model')}</Label>
-                    <Select value={model} onValueChange={setModel}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t('form.select_model')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {MODEL_OPTIONS.filter(
-                          (option) =>
-                            option.scenes.includes(activeTab) &&
-                            option.provider === provider
-                        ).map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {isImageToVideoMode && (
-                  <div className="space-y-4">
-                    <ImageUploader
-                      title={t('form.reference_image')}
-                      allowMultiple={true}
-                      maxImages={3}
-                      maxSizeMB={maxSizeMB}
-                      onChange={handleReferenceImagesChange}
-                      emptyHint={t('form.reference_image_placeholder')}
-                    />
-
-                    {hasReferenceUploadError && (
-                      <p className="text-destructive text-xs">
-                        {t('form.some_images_failed_to_upload')}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {isVideoToVideoMode && (
-                  <div className="space-y-2">
-                    <Label htmlFor="video-url">
-                      {t('form.reference_video')}
-                    </Label>
-                    <Textarea
-                      id="video-url"
-                      value={referenceVideoUrl}
-                      onChange={(e) => setReferenceVideoUrl(e.target.value)}
-                      placeholder={t('form.reference_video_placeholder')}
-                      className="min-h-20"
-                    />
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="video-prompt">{t('form.prompt')}</Label>
-                  <Textarea
-                    id="video-prompt"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder={t('form.prompt_placeholder')}
-                    className="min-h-32"
+      <div className="mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Left Card - Create */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ImageIcon className="h-5 w-5" aria-hidden="true" />
+                {t('title')}
+              </CardTitle>
+              <CardDescription>{t('description')}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 pb-6">
+              {/* Step 1: Upload Photo */}
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold">
+                  {t('form.reference_image')}
+                </Label>
+                <div className="space-y-4">
+                  <input
+                    ref={inputRef}
+                    accept="image/*"
+                    className="hidden"
+                    type="file"
+                    onChange={handleInputChange}
                   />
-                  <div className="text-muted-foreground flex items-center justify-between text-xs">
-                    <span>
-                      {promptLength} / {MAX_PROMPT_LENGTH}
-                    </span>
-                    {isPromptTooLong && (
-                      <span className="text-destructive">
-                        {t('form.prompt_too_long')}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {!isMounted ? (
-                  <Button className="w-full" disabled size="lg">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('loading')}
-                  </Button>
-                ) : isCheckSign ? (
-                  <Button className="w-full" disabled size="lg">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('checking_account')}
-                  </Button>
-                ) : user ? (
-                  <Button
-                    size="lg"
-                    className="w-full"
-                    onClick={handleGenerate}
-                    disabled={
-                      isGenerating ||
-                      (isTextToVideoMode && !prompt.trim()) ||
-                      isPromptTooLong ||
-                      isReferenceUploading ||
-                      hasReferenceUploadError ||
-                      (isImageToVideoMode && referenceImageUrls.length === 0) ||
-                      (isVideoToVideoMode && !referenceVideoUrl)
-                    }
-                  >
-                    {isGenerating ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        {t('generating')}
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        {t('generate')}
-                      </>
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    size="lg"
-                    className="w-full"
-                    onClick={() => setIsShowSignModal(true)}
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    {t('sign_in_to_generate')}
-                  </Button>
-                )}
-
-                {!isMounted ? (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-primary">
-                      {t('credits_cost', { credits: costCredits })}
-                    </span>
-                    <span>{t('credits_remaining', { credits: 0 })}</span>
-                  </div>
-                ) : user && remainingCredits > 0 ? (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-primary">
-                      {t('credits_cost', { credits: costCredits })}
-                    </span>
-                    <span>
-                      {t('credits_remaining', { credits: remainingCredits })}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-primary">
-                        {t('credits_cost', { credits: costCredits })}
-                      </span>
-                      <span>
-                        {t('credits_remaining', { credits: remainingCredits })}
-                      </span>
-                    </div>
-                    <Link href="/pricing">
-                      <Button variant="outline" className="w-full" size="lg">
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        {t('buy_credits')}
-                      </Button>
-                    </Link>
-                  </div>
-                )}
-
-                {isGenerating && (
-                  <div className="space-y-2 rounded-lg border p-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span>{t('progress')}</span>
-                      <span>{progress}%</span>
-                    </div>
-                    <Progress value={progress} />
-                    {taskStatusLabel && (
-                      <p className="text-muted-foreground text-center text-xs">
-                        {taskStatusLabel}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                  <Video className="h-5 w-5" />
-                  {t('generated_videos')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pb-8">
-                {generatedVideos.length > 0 ? (
-                  <div className="space-y-6">
-                    {generatedVideos.map((video) => (
-                      <div key={video.id} className="space-y-3">
-                        <div className="relative overflow-hidden rounded-lg border">
-                          <video
-                            src={video.url}
-                            controls
-                            className="h-auto w-full"
-                            preload="metadata"
+                  <div className="flex flex-nowrap gap-4">
+                    {uploadedImage ? (
+                      <div className="group border-border bg-muted/50 hover:border-border hover:bg-muted relative overflow-hidden rounded-xl border p-1 shadow-sm transition">
+                        <div className="relative overflow-hidden rounded-lg">
+                          <img
+                            alt="Reference"
+                            className="h-32 w-32 rounded-lg object-cover"
+                            src={uploadedImage.preview}
                           />
-
-                          <div className="absolute right-2 bottom-2 flex justify-end text-sm">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="ml-auto"
-                              onClick={() => handleDownloadVideo(video)}
-                              disabled={downloadingVideoId === video.id}
-                            >
-                              {downloadingVideoId === video.id ? (
-                                <>
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                </>
-                              ) : (
-                                <>
-                                  <Download className="h-4 w-4" />
-                                </>
-                              )}
-                            </Button>
-                          </div>
+                          {uploadedImage.status === 'uploading' && (
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 text-xs font-medium text-white">
+                              Uploading...
+                            </div>
+                          )}
+                          {uploadedImage.status === 'error' && (
+                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-red-500/70 text-xs font-medium text-white">
+                              Failed
+                            </div>
+                          )}
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                            onClick={handleRemoveImage}
+                          >
+                            <IconX className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="border-border bg-muted/50 hover:border-border hover:bg-muted flex h-[136px] w-[136px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed p-1 shadow-sm transition"
+                        onClick={() => inputRef.current?.click()}
+                      >
+                        <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">Upload</span>
+                      </button>
+                    )}
+                  </div>
+                  <div className="text-muted-foreground text-xs">
+                    {t('form.reference_image_placeholder')}
+                  </div>
+                </div>
+
+                {/* Example Images */}
+                <div className="space-y-1.5">
+                  <p className="text-muted-foreground text-xs">
+                    {t('form.try_example_images')}
+                  </p>
+                  <div className="flex gap-2">
+                    {EXAMPLE_IMAGES.map((url, index) => (
+                      <button
+                        key={url}
+                        className="border-muted hover:border-primary relative h-12 w-12 overflow-hidden rounded-md border-2 transition-all hover:scale-105"
+                        onClick={() => handleExampleClick(url)}
+                      >
+                        <img
+                          src={url}
+                          alt={t('form.example_image_alt', { index: index + 1 })}
+                          className="h-full w-full object-cover"
+                        />
+                      </button>
                     ))}
                   </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-full">
-                      <Video className="text-muted-foreground h-10 w-10" />
+                </div>
+              </div>
+
+              {/* Step 2: Select Dance Style */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-semibold">
+                    {t('form.dance_style')}
+                  </Label>
+                  <span className="text-muted-foreground text-xs">
+                    {t('form.dance_templates_count', {
+                      count: DANCE_TEMPLATES.length,
+                    })}
+                  </span>
+                </div>
+                <div className="relative -mx-2 px-2">
+                  <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent flex gap-2 overflow-x-auto pb-2">
+                    {DANCE_TEMPLATES.map((template) => (
+                      <button
+                        key={template.id}
+                        className={cn(
+                          'group relative w-[120px] flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:scale-[1.02]',
+                          selectedTemplate.id === template.id
+                            ? 'border-primary ring-primary/20 ring-2'
+                            : 'border-muted hover:border-primary/50'
+                        )}
+                        onClick={() => setSelectedTemplate(template)}
+                      >
+                        <div className="from-muted to-muted/50 relative aspect-[3/4] overflow-hidden bg-gradient-to-br">
+                          <video
+                            src={template.videoUrl}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            muted
+                            loop
+                            playsInline
+                            autoPlay
+                            preload="auto"
+                          />
+                          <div className="absolute right-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                            {template.duration}
+                          </div>
+                          {selectedTemplate.id === template.id && (
+                            <div className="bg-primary absolute left-1 top-1 rounded-full p-0.5">
+                              <Check className="text-primary-foreground h-2.5 w-2.5" />
+                            </div>
+                          )}
+                          {template.isHot && (
+                            <div className="absolute left-1 top-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                              ⭐
+                            </div>
+                          )}
+                          {template.isPro && !template.isHot && (
+                            <div className="absolute bottom-1 left-1 rounded bg-blue-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                              💎 Pro
+                            </div>
+                          )}
+                        </div>
+                        <div className="bg-background p-1.5">
+                          <p className="truncate text-xs font-medium">
+                            {locale === 'zh' ? template.nameZh : template.name}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3 rounded-lg border p-3">
+                {/* Resolution */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">
+                    {t('form.resolution')}
+                  </Label>
+                  <Select value={resolution} onValueChange={setResolution}>
+                    <SelectTrigger className="w-fit">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {RESOLUTION_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          <div className="flex w-full items-center justify-between gap-4">
+                            <span>
+                              {t(`form.resolution_${opt.value}` as any)}
+                            </span>
+                            <span className="text-muted-foreground text-xs">
+                              {t('form.resolution_credits', {
+                                credits: opt.credits,
+                              })}
+                            </span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Estimated Cost */}
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">
+                    {t('form.estimated_cost')}
+                  </span>
+                  <span className="font-medium text-destructive">
+                    {currentCost} {t('form.resolution_credits', { credits: '' }).replace('{credits}', '').trim()}
+                    <span className="text-muted-foreground ml-1 font-normal">
+                      ({t('form.available_credits')}: {remainingCredits})
+                    </span>
+                  </span>
+                </div>
+
+                {/* Orientation */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">
+                    {t('form.orientation')}
+                  </Label>
+                  <RadioGroup
+                    value={orientation}
+                    onValueChange={setOrientation}
+                    className="grid gap-3"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="image" id="orient-image" />
+                      <Label
+                        htmlFor="orient-image"
+                        className="cursor-pointer text-xs font-normal"
+                      >
+                        {t('form.orientation_image')}
+                      </Label>
                     </div>
-                    <p className="text-muted-foreground">
-                      {isGenerating
-                        ? t('ready_to_generate')
-                        : t('no_videos_generated')}
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="video" id="orient-video" />
+                      <Label
+                        htmlFor="orient-video"
+                        className="cursor-pointer text-xs font-normal"
+                      >
+                        {t('form.orientation_video')}
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              </div>
+
+              {/* Public Toggle */}
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="space-y-0">
+                  <Label
+                    htmlFor="public-toggle"
+                    className="cursor-pointer text-sm font-medium"
+                  >
+                    {t('form.public_toggle')}
+                  </Label>
+                  <p className="text-muted-foreground text-xs">
+                    {t('form.public_toggle_desc')}
+                  </p>
+                </div>
+                <Switch
+                  id="public-toggle"
+                  checked={isPublic}
+                  onCheckedChange={setIsPublic}
+                />
+              </div>
+
+              {/* Generate Button */}
+              {!isMounted ? (
+                <Button className="w-full" disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('loading')}
+                </Button>
+              ) : isCheckSign ? (
+                <Button className="w-full" disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t('checking_account')}
+                </Button>
+              ) : user ? (
+                <Button
+                  className="w-full"
+                  onClick={handleGenerate}
+                  disabled={
+                    isGenerating ||
+                    uploadedImage?.status === 'uploading' ||
+                    uploadedImage?.status === 'error' ||
+                    !uploadedImage?.url
+                  }
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {t('generating')}
+                    </>
+                  ) : (
+                    t('generate')
+                  )}
+                </Button>
+              ) : (
+                <Button className="w-full" onClick={() => setIsShowSignModal(true)}>
+                  <User className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {t('sign_in_to_generate')}
+                </Button>
+              )}
+
+              {/* Credits Info */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-primary">
+                    {t('credits_cost', { credits: currentCost })}
+                  </span>
+                  <span>{t('credits_remaining', { credits: remainingCredits })}</span>
+                </div>
+                <Link href="/pricing">
+                  <Button variant="outline" size="sm" className="w-full gap-1.5">
+                    <CreditCard className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                    {t('buy_credits')}
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Progress */}
+              {isGenerating && (
+                <div className="space-y-2 rounded-lg border p-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>{t('progress')}</span>
+                    <span>{progress}%</span>
+                  </div>
+                  <Progress value={progress} />
+                  {taskStatusLabel && (
+                    <p className="text-muted-foreground text-center text-xs">
+                      {taskStatusLabel}
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Right Card - Preview */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Video className="h-5 w-5" aria-hidden="true" />
+                {generatedVideos.length > 0
+                  ? t('generated_videos')
+                  : t('preview_title')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pb-8">
+              {generatedVideos.length > 0 ? (
+                <div className="space-y-4">
+                  {generatedVideos.map((video) => (
+                    <div key={video.id} className="space-y-3">
+                      <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
+                        <video
+                          src={video.url}
+                          controls
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="h-auto max-h-[600px] w-full object-contain"
+                          preload="auto"
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => handleDownloadVideo(video)}
+                        disabled={downloadingVideoId === video.id}
+                      >
+                        {downloadingVideoId === video.id ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Download className="mr-2 h-4 w-4" />
+                        )}
+                        Download
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
+                    <video
+                      src={selectedTemplate.videoUrl}
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="h-auto max-h-[600px] w-full object-contain"
+                      preload="auto"
+                    />
+                  </div>
+                  <div className="bg-muted/50 space-y-2 rounded-lg border p-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">
+                        {locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name}
+                      </h3>
+                      <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-medium">
+                        {selectedTemplate.duration}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-muted/50 border-primary/20 rounded-lg border p-3">
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      {t('privacy_notice')}
                     </p>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>

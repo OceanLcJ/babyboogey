@@ -1,47 +1,63 @@
 {
   "metadata": {
-    "title": "AI 视频生成器",
-    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。"
+    "title": "AI 宝宝跳舞视频生成器",
+    "description": "用 AI 把宝宝照片变成跳舞视频，让宝宝唱歌跳舞！"
   },
   "page": {
-    "title": "AI 视频生成器",
-    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。"
+    "title": "AI 宝宝跳舞视频生成器",
+    "description": "用 AI 把宝宝照片变成跳舞视频，让宝宝唱歌跳舞！"
   },
   "generator": {
-    "title": "视频生成器",
-    "description": "使用 AI 模型生成视频，支持文本到视频、图片到视频和视频到视频。",
+    "title": "创建跳舞视频",
+    "description": "只需两步：上传照片 + 选择舞蹈风格",
     "tabs": {
-      "text-to-video": "文生视频",
-      "image-to-video": "图生视频",
-      "video-to-video": "视频转视频"
+      "text-to-video": "创建舞蹈",
+      "image-to-video": "照片变舞蹈",
+      "video-to-video": "视频混剪"
     },
     "form": {
       "provider": "服务商",
-      "model": "模型",
+      "model": "舞蹈风格",
       "select_provider": "选择服务商",
-      "select_model": "选择模型",
-      "prompt": "提示词",
-      "prompt_placeholder": "描述视频内容，如场景、动作、风格等",
-      "reference_image": "参考图片",
-      "reference_image_placeholder": "上传参考图片用于视频生成",
+      "select_model": "选择舞蹈风格",
+      "prompt": "舞蹈描述",
+      "prompt_placeholder": "描述舞蹈动作、音乐风格或场景（如：宝宝跳街舞、欢乐生日舞）",
+      "reference_image": "1. 上传宝宝照片 📸",
+      "reference_image_placeholder": "点击上传或拖拽照片 (JPG, PNG, WebP, max 10MB)",
       "reference_video": "参考视频链接",
-      "reference_video_placeholder": "输入参考视频的链接",
-      "some_images_failed_to_upload": "图片上传失败，请删除并重新上传",
-      "prompt_too_long": "提示词太长，请删除一些内容"
+      "reference_video_placeholder": "输入要混剪的视频链接",
+      "some_images_failed_to_upload": "照片上传失败，请重试",
+      "prompt_too_long": "描述太长了，请精简一下",
+      "dance_style": "2. 选择舞蹈风格 💃",
+      "dance_templates_count": "{count} 个舞蹈模板",
+      "try_example_images": "或试试示例图片",
+      "example_image_alt": "示例 {index}",
+      "resolution": "输出分辨率",
+      "resolution_720p": "720p (标清)",
+      "resolution_1080p": "1080p (高清)",
+      "resolution_credits": "{credits} 积分",
+      "estimated_cost": "预计消耗：",
+      "available_credits": "可用",
+      "orientation": "角色朝向",
+      "orientation_image": "跟随照片",
+      "orientation_video": "跟随视频",
+      "public_toggle": "公开作品",
+      "public_toggle_desc": "允许其他人查看您生成的视频"
     },
-    "generate": "生成视频",
-    "checking_account": "检查账户...",
+    "generate": "开始生成",
+    "checking_account": "检查账户中...",
     "loading": "加载中...",
-    "generating": "生成中...",
-    "sign_in_to_generate": "登录生成视频",
-    "credits_cost": "消耗 {credits} 积分",
-    "credits_remaining": "剩余 {credits} 积分",
+    "generating": "正在制作跳舞视频...",
+    "sign_in_to_generate": "登录以生成视频",
+    "credits_cost": "消耗积分: {credits}",
+    "credits_remaining": "剩余积分: {credits}",
     "buy_credits": "购买积分",
     "progress": "进度",
-    "generated_videos": "视频预览",
-    "ready_to_generate": "准备生成",
-    "ready_for_generating": "准备生成",
-    "no_videos_generated": "没有生成视频"
+    "preview_title": "模板预览",
+    "generated_videos": "舞蹈预览",
+    "ready_to_generate": "正在制作宝宝跳舞视频...",
+    "ready_for_generating": "准备开跳！",
+    "no_videos_generated": "还没有跳舞视频",
+    "privacy_notice": "🔒 隐私保护：您的照片经过加密处理，处理完成后自动删除。我们绝不会将您的数据分享给第三方。"
   }
 }
-
