@@ -107,17 +107,17 @@
     "show_theme": true,
     "show_locale": true,
     "topbanner": {
-      "text": "此网站是 ShipAny 模板的演示站点，购买 ShipAny 模板，请访问 <a href='https://shipany.ai/zh/pricing' class='text-orange-300' target='_blank'>ShipAny 官网</a>"
+      "text": ""
     }
   },
   "footer": {
     "id": "footer",
     "brand": {
-      "title": "ShipAny Two",
-      "description": "ShipAny 是专为 AI SaaS 创业项目打造的 NextJS 模板。丰富模板与组件，极速交付你的产品。",
+      "title": "AI Baby Dance",
+      "description": "AI 宝宝跳舞生成器 - 用 AI 技术将宝宝照片变成可爱的跳舞视频，几秒钟创造神奇时刻。",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny Two",
+        "alt": "AI 宝宝跳舞生成器",
         "width": 100,
         "height": 100
       },
@@ -161,26 +161,6 @@
             {
               "title": "对话",
               "url": "/chat",
-              "target": "_blank"
-            }
-          ]
-        },
-        {
-          "title": "合作伙伴",
-          "children": [
-            {
-              "title": "ShipAny",
-              "url": "https://shipany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "ThinkAny",
-              "url": "https://thinkany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "MCP.so",
-              "url": "https://mcp.so",
               "target": "_blank"
             }
           ]
