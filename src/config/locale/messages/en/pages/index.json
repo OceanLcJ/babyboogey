@@ -1,8 +1,15 @@
 {
+  "custom_hero": {
+    "title_line1": "Make Your Photos",
+    "title_line2": "Dance & Boogie!",
+    "description": "The #1 AI baby dance generator — animate baby photos into cheerful, bouncing videos with one click. Make baby dance videos free!",
+    "cta_button": "Start Dancing Free",
+    "card_static": "Static Photo",
+    "card_boogie": "Boogie Mode!"
+  },
   "page": {
     "show_sections": [
       "hero",
-      "logos",
       "introduce",
       "benefits",
       "usage",
@@ -15,173 +22,181 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "Ship AI Startups in hours, not days",
-        "highlight_text": "in hours",
-        "description": "ShipAny is a NextJS boilerplate for building AI SaaS startups.<br/>Ship Fast with a variety of templates and components.",
+        "title": "The World's Cutest <strong>AI Baby Dance Generator</strong>!",
+        "highlight_text": "Generator",
+        "description": "Turn any static baby photo into a hilarious <strong>Singing & Dancing</strong> sensation. No editing skills needed — just pure joy.",
         "announcement": {
           "badge": "New",
-          "title": "🎉 ShipAny Template Two",
-          "url": "/pricing"
+          "title": "🎉 Make Baby Dance Videos Free",
+          "url": "/create"
         },
-        "tip": "🎁 Special offer for the first 1000 users",
+        "tip": "⭐️ Trusted by 10,000+ happy parents & ticklish grandparents",
         "buttons": [
           {
-            "title": "Get Started",
+            "title": "Start Dancing Free",
             "icon": "Zap",
-            "url": "/pricing",
+            "url": "/create",
             "target": "_self",
             "variant": "default"
           },
           {
-            "title": "Read Document",
+            "title": "View Templates",
             "icon": "BookOpenText",
-            "url": "/docs",
-            "target": "_blank",
+            "url": "/templates",
+            "target": "_self",
             "variant": "outline"
           }
         ],
         "show_avatars": true,
-        "avatars_tip": "999+ users are using ShipAny",
+        "avatars_tip": "10,000+ happy parents",
         "show_award": false,
         "image": {
-          "src": "/imgs/features/admin.png",
-          "alt": "hero",
+          "src": "/imgs/features/baby-hero.png",
+          "alt": "AI Baby Dance Generator - Animate Baby Photos Online",
           "width": 1200,
           "height": 800
         },
         "image_invert": {
-          "src": "/imgs/features/admin-dark.png",
-          "alt": "hero",
+          "src": "/imgs/features/baby-hero-dark.png",
+          "alt": "AI Baby Dance Generator",
           "width": 1200,
           "height": 800
         },
         "background_image": {
-          "src": "/imgs/bg/tree.jpg",
-          "alt": "hero"
+          "src": "/imgs/bg/confetti.jpg",
+          "alt": "background"
         }
-      },
-      "logos": {
-        "id": "logos",
-        "title": "ShipAny is built on the shoulders of giants",
-        "items": [
-          {
-            "title": "Next.js",
-            "image": {
-              "src": "/imgs/logos/nextjs.svg",
-              "alt": "Next.js"
-            }
-          },
-          {
-            "title": "React",
-            "image": {
-              "src": "/imgs/logos/react.svg",
-              "alt": "React"
-            }
-          },
-          {
-            "title": "TailwindCSS",
-            "image": {
-              "src": "/imgs/logos/tailwindcss.svg",
-              "alt": "TailwindCSS"
-            }
-          },
-          {
-            "title": "Shadcn/UI",
-            "image": {
-              "src": "/imgs/logos/shadcn.svg",
-              "alt": "Shadcn/UI"
-            }
-          },
-          {
-            "title": "Vercel",
-            "image": {
-              "src": "/imgs/logos/vercel.svg",
-              "alt": "Vercel"
-            }
-          }
-        ]
       },
       "introduce": {
         "block": "features-list",
         "id": "introduce",
-        "title": "What is ShipAny",
-        "label": "Introduce",
-        "description": "ShipAny is a NextJS boilerplate for building AI SaaS startups, including templates, components, and documentation.",
+        "title": "The Easiest Baby Dance Video Maker Online",
+        "label": "What is BabyBoogey",
+        "description": "BabyBoogey is the simplest way to animate baby photos into hilarious singing & dancing videos. No editing skills required.",
         "image": {
-          "src": "/imgs/features/landing-page.png",
-          "alt": "introduce"
+          "src": "/imgs/features/baby-party.png",
+          "alt": "Baby Dance Video Maker"
         },
         "items": [
           {
-            "title": "Ready-to-use Templates",
-            "description": "Choose from dozens of production-ready AI SaaS templates to quickly start your project.",
-            "icon": "RiNextjsFill",
+            "title": "Animate Baby Photos",
+            "description": "Upload any baby photo and watch our AI bring it to life with adorable dance moves and expressions.",
+            "icon": "RiImageAddLine",
             "image": {
               "src": "/imgs/features/1.png",
-              "alt": "introduce"
+              "alt": "Animate Baby Photo"
             }
           },
           {
-            "title": "Infrastructure Setup",
-            "description": "Get instant access to scalable infrastructure with best practices built-in.",
-            "icon": "RiDatabase2Line",
+            "title": "Baby Singing Video Maker",
+            "description": "Create lip sync magic — make baby sing happy birthday, holiday songs, and viral hits.",
+            "icon": "RiMusic2Fill",
             "image": {
               "src": "/imgs/features/2.png",
-              "alt": "introduce"
+              "alt": "Baby Singing Video Maker"
             }
           },
           {
-            "title": "Quick Deployment",
-            "description": "Deploy your AI SaaS application to production in hours, not days.",
-            "icon": "RiCloudyFill",
+            "title": "Face Animator Online",
+            "description": "Advanced face animator online technology keeps faces natural while adding fun dance expressions.",
+            "icon": "RiEmotionHappyLine",
             "image": {
               "src": "/imgs/features/3.png",
-              "alt": "introduce"
+              "alt": "Face Animator Online"
             }
           },
           {
-            "title": "AI Integration",
-            "description": "Integrate AI into your project with ease using our built-in AI SDK.",
-            "icon": "RiRobot2Line",
+            "title": "Free to Start",
+            "description": "Make baby dance videos free — no credit card required, no watermark on basic videos.",
+            "icon": "RiGiftLine",
             "image": {
               "src": "/imgs/features/4.png",
-              "alt": "introduce"
+              "alt": "Make Baby Dance Video Free"
             }
           }
         ]
       },
       "benefits": {
-        "block": "features-accordion",
+        "block": "features-list",
         "id": "benefits",
-        "title": "Why Choose ShipAny",
-        "label": "Benefits",
-        "description": "Get everything you need to launch your AI startup - from ready-to-use templates to technical support.",
+        "title": "Perfect for Every Occasion",
+        "label": "Use Cases",
+        "description": "Create unforgettable moments with our baby dance video maker.",
+        "image": {
+          "src": "/imgs/features/baby-party.png",
+          "alt": "Baby Dance Video Use Cases"
+        },
         "items": [
           {
-            "title": "Complete Framework",
-            "description": "Built on Next.js with authentication, payments, and AI integration - everything works out of the box.",
-            "icon": "RiNextjsFill",
+            "title": "🎂 Birthday Wishes",
+            "description": "Make baby sing happy birthday for the ultimate personalized greeting. A singing baby video that steals the show!",
+            "icon": "RiCake2Fill",
             "image": {
-              "src": "/imgs/features/user-billing.png",
-              "alt": "benefits"
+              "src": "/imgs/features/birthday.png",
+              "alt": "Make Baby Sing Happy Birthday"
             }
           },
           {
-            "title": "Rich Templates Library",
-            "description": "Choose from various AI SaaS templates to kickstart your project - chatbots, image generation, and more.",
-            "icon": "RiClapperboardAiLine",
+            "title": "🎄 Holiday Cards",
+            "description": "Turn photo into dancing baby for Christmas, New Year, and every festive celebration. Fun for the whole family.",
+            "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/admin-settings.png",
-              "alt": "benefits"
+              "src": "/imgs/features/holiday.png",
+              "alt": "Holiday Baby Dance Card"
             }
           },
           {
-            "title": "Technical Guidance",
-            "description": "Get dedicated support and join our developer community to ensure your successful launch.",
-            "icon": "RiCodeFill",
+            "title": "😂 Just for Laughs",
+            "description": "Create a funny kid dance video guaranteed to go viral. Cure the Monday blues with pure baby joy!",
+            "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/landing-page.png",
-              "alt": "benefits"
+              "src": "/imgs/features/laugh.png",
+              "alt": "Funny Baby Dance Video"
+            }
+          },
+          {
+            "title": "🎁 Gifts for Grandparents",
+            "description": "Animate baby photos into heartwarming dance videos. The digital gift that guarantees a smile every time.",
+            "icon": "RiHeartFill",
+            "image": {
+              "src": "/imgs/features/love.png",
+              "alt": "Baby Dance Video Gift"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Why Parents Love Our AI Baby Dance Generator",
+        "label": "Features",
+        "description": "The secret sauce behind every giggle and viral moment.",
+        "items": [
+          {
+            "title": "Viral Dance Moves",
+            "description": "Turn photo into dancing baby in seconds — no choreography needed, just pure AI magic that looks amazingly real.",
+            "icon": "RiMusic2Fill",
+            "image": {
+              "src": "/imgs/features/dance.png",
+              "alt": "Turn Photo Into Dancing Baby"
+            }
+          },
+          {
+            "title": "Baby Singing Video Maker",
+            "description": "Create the ultimate lip sync baby photo greeting. Our singing video maker turns any face into a musical sensation.",
+            "icon": "RiMicFill",
+            "image": {
+              "src": "/imgs/features/sing.png",
+              "alt": "Lip Sync Baby Photo"
+            }
+          },
+          {
+            "title": "Crystal Clear Face Animation",
+            "description": "Our face animator online ensures faces stay recognizable, safe, and adorable. No weird distortions — just pure cuteness.",
+            "icon": "RiSafe2Fill",
+            "image": {
+              "src": "/imgs/features/safe.png",
+              "alt": "Face Animator Online"
             }
           }
         ]
@@ -189,212 +204,163 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
-        "title": "How to Launch with ShipAny",
-        "description": "Get your AI SaaS startup running in three simple steps:",
+        "title": "How to Animate Baby Photos in Seconds",
+        "description": "Make baby dance videos free in three simple steps:",
         "image": {
-          "src": "/imgs/features/1.png",
-          "alt": "usage"
+          "src": "/imgs/features/step-1.png",
+          "alt": "How to Make Baby Dance Video"
         },
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
-            "title": "Get ShipAny",
-            "description": "Buy ShipAny with a one-time payment. Check your email for the code and documentation.",
+            "title": "Upload Photo",
+            "description": "Pick any baby photo — cute or grumpy! Our AI baby dance generator works with any clear snapshot.",
             "image": {
-              "src": "/imgs/features/5.png",
-              "alt": "usage"
+              "src": "/imgs/features/upload.png",
+              "alt": "Upload Baby Photo"
             }
           },
           {
-            "title": "Start Your Project",
-            "description": "Read the documentation and clone the code of ShipAny. Start building your AI SaaS startup.",
+            "title": "Choose Template",
+            "description": "Select a viral dance move or a happy birthday song. Dozens of templates to animate baby photos your way.",
             "image": {
-              "src": "/imgs/features/6.png",
-              "alt": "usage"
+              "src": "/imgs/features/template.png",
+              "alt": "Choose Baby Dance Template"
             }
           },
           {
-            "title": "Customize Your Project",
-            "description": "Modify the template with your data and contents. Specific AI functionality needs.",
+            "title": "Watch 'Em Boogie!",
+            "description": "Export your baby dance video and share the giggles. Turn photo into dancing baby magic in seconds!",
             "image": {
-              "src": "/imgs/features/7.png",
-              "alt": "usage"
+              "src": "/imgs/features/export.png",
+              "alt": "Export Baby Dance Video"
             }
-          },
-          {
-            "title": "Deploy to Production",
-            "description": "Deploy your project to production with a few steps and start serving customers immediately.",
-            "image": {
-              "src": "/imgs/features/8.png",
-              "alt": "usage"
-            }
-          }
-        ]
-      },
-      "features": {
-        "id": "features",
-        "title": "Key Features of ShipAny",
-        "description": "Everything you need to launch your AI SaaS startup quickly and efficiently.",
-        "items": [
-          {
-            "title": "Next.js Boilerplate",
-            "description": "Production-ready Next.js templates with SEO-friendly structure and i18n support.",
-            "icon": "RiNextjsFill"
-          },
-          {
-            "title": "Authentication & Payments",
-            "description": "Integrated Google OAuth, one-tap login, and Stripe payment processing.",
-            "icon": "RiKey2Fill"
-          },
-          {
-            "title": "Data Infrastructure",
-            "description": "Built-in Supabase integration for reliable and scalable data storage.",
-            "icon": "RiDatabase2Line"
-          },
-          {
-            "title": "One-Click Deployment",
-            "description": "Seamless deployment to Vercel or Cloudflare with automated setup.",
-            "icon": "RiCloudy2Fill"
-          },
-          {
-            "title": "Business Analytics",
-            "description": "Integrated Google Analytics and Search Console for tracking growth.",
-            "icon": "RiBarChart2Line"
-          },
-          {
-            "title": "AI-Ready Infrastructure",
-            "description": "Pre-configured AI integration with built-in credits system and API sales.",
-            "icon": "RiRobot2Line"
           }
         ]
       },
       "stats": {
         "id": "stats",
-        "title": "People Love ShipAny",
-        "description": "for it's easy to use and fast to ship.",
+        "title": "Numbers Don't Lie",
+        "description": "But our dancing babies might fudge the truth.",
         "items": [
           {
-            "title": "999+",
-            "description": "Customers"
+            "title": "10,000+",
+            "description": "Happy Families"
           },
           {
-            "title": "200+",
-            "description": "Blocks"
+            "title": "5M+",
+            "description": "Dance Videos Created"
           },
           {
             "title": "50+",
-            "description": "Templates"
+            "description": "Viral Templates"
           }
         ]
       },
       "testimonials": {
         "id": "testimonials",
-        "title": "What Users Say About ShipAny",
-        "description": "Hear from developers and founders who launched their AI startups with ShipAny.",
+        "title": "What Parents Say",
+        "description": "Real reviews from real parents (and some ticklish grandparents).",
         "items": [
           {
-            "name": "David Chen",
-            "role": "Founder of AIWallpaper.shop",
-            "quote": "ShipAny saved us months of development time. We launched our AI wallpaper business in just 2 days and got our first paying customer within a week!",
+            "name": "Sarah J.",
+            "role": "Mom of one",
+            "quote": "Best baby dance video maker ever! Grandma cried laughing when she saw baby Tom singing Elvis. Worth every penny!",
             "image": {
               "src": "/imgs/avatars/1.png",
-              "alt": "david"
+              "alt": "Sarah"
             }
           },
           {
-            "name": "Rachel Kim",
-            "role": "CTO at HeyBeauty.ai",
-            "quote": "The pre-built AI infrastructure is a game-changer. We didn't have to worry about architecture - just focused on our AI beauty tech and went live fast.",
+            "name": "Mike T.",
+            "role": "Fun Dad",
+            "quote": "I used the AI baby dance generator to make a birthday video for my wife. It was the highlight of the party!",
             "image": {
               "src": "/imgs/avatars/2.png",
-              "alt": "rachel"
+              "alt": "Mike"
             }
           },
           {
-            "name": "Marcus Thompson",
-            "role": "Solo Developer",
-            "quote": "As a solo developer, ShipAny gave me everything I needed - auth, payments, AI integration, and beautiful UI. Launched my SaaS in a weekend!",
+            "name": "Emily R.",
+            "role": "Creator",
+            "quote": "So easy to animate baby photos. The face animator online keeps my baby's face looking natural, not creepy like other apps.",
             "image": {
               "src": "/imgs/avatars/3.png",
-              "alt": "marcus"
+              "alt": "Emily"
             }
           },
           {
-            "name": "Sofia Garcia",
-            "role": "CEO of Melodisco",
-            "quote": "The templates are production-ready and highly customizable. We built our AI music platform in hours instead of months. Incredible time-to-market!",
+            "name": "Jessica L.",
+            "role": "Toddler Mom",
+            "quote": "My toddler loves watching herself dance! I can make baby dance videos free and she's entertained for hours.",
             "image": {
               "src": "/imgs/avatars/4.png",
-              "alt": "sofia"
+              "alt": "Jessica"
             }
           },
           {
-            "name": "James Wilson",
-            "role": "Tech Lead at GPTs.works",
-            "quote": "ShipAny's infrastructure is rock-solid. We scaled from 0 to 10k users without touching the backend. Best investment for our AI startup.",
+            "name": "Chris P.",
+            "role": "TikToker",
+            "quote": "This baby dance video maker is insane. I turn photo into dancing baby content and it gets 10k views overnight!",
             "image": {
               "src": "/imgs/avatars/5.png",
-              "alt": "james"
+              "alt": "Chris"
             }
           },
           {
-            "name": "Anna Zhang",
-            "role": "Startup Founder",
-            "quote": "From idea to launch in 3 days! ShipAny's templates and deployment tools made it possible to test our AI business concept incredibly fast.",
+            "name": "Amanda B.",
+            "role": "Auntie",
+            "quote": "I used it to make baby sing happy birthday for my niece. The lip sync baby photo feature is hilarious and so realistic!",
             "image": {
               "src": "/imgs/avatars/6.png",
-              "alt": "anna"
+              "alt": "Amanda"
             }
           }
         ]
       },
       "faq": {
         "id": "faq",
-        "title": "Frequently Asked Questions About ShipAny",
-        "description": "Have another question? Contact us on Discord or by email.",
+        "title": "Frequently Asked Questions",
+        "description": "Everything you need to know about our AI baby dance generator.",
         "items": [
           {
-            "question": "What exactly is ShipAny and how does it work?",
-            "answer": "ShipAny is a comprehensive NextJS boilerplate designed specifically for building AI SaaS startups. It provides ready-to-use templates, infrastructure setup, and deployment tools that help you launch your AI business in hours instead of days."
+            "question": "Is the AI baby dance generator free to use?",
+            "answer": "Yes! You can make baby dance videos free with our basic plan. We offer premium templates for advanced baby dance video maker features and higher resolution exports."
           },
           {
-            "question": "Do I need advanced technical skills to use ShipAny?",
-            "answer": "While basic programming knowledge is helpful, ShipAny is designed to be developer-friendly. Our templates and documentation make it easy to get started, even if you're not an expert in AI or cloud infrastructure."
+            "question": "Can I make my baby sing happy birthday?",
+            "answer": "Absolutely! Our baby singing video maker lets you lip sync baby photos to popular songs, including birthday classics and holiday tunes. It's the perfect personalized gift."
           },
           {
-            "question": "What types of AI SaaS can I build with ShipAny?",
-            "answer": "ShipAny supports a wide range of AI applications, from content generation to data analysis tools. Our templates cover popular use cases like AI chatbots, content generators, image processing apps, and more."
+            "question": "How does the face animator online work?",
+            "answer": "Upload any photo and our AI will animate baby photo faces with natural-looking movements. The face animator online preserves facial features while adding fun dance moves and expressions."
           },
           {
-            "question": "How long does it typically take to launch with ShipAny?",
-            "answer": "With ShipAny, you can have a working prototype in hours and a production-ready application in hours. Our one-click deployment and pre-configured infrastructure significantly reduce the traditional months-long development cycle."
+            "question": "How long does it take to turn photo into dancing baby?",
+            "answer": "Most videos are ready in under 30 seconds. Our AI baby dance generator is optimized for speed so you can share your baby dance video instantly on social media."
           },
           {
-            "question": "What's included in the ShipAny infrastructure?",
-            "answer": "ShipAny provides a complete infrastructure stack including authentication, database setup, API integration, payment processing, and scalable cloud deployment. Everything is pre-configured following industry best practices."
-          },
-          {
-            "question": "Can I customize the templates to match my brand?",
-            "answer": "Absolutely! All ShipAny templates are fully customizable. You can modify the design, features, and functionality to match your brand identity and specific business requirements while maintaining the robust underlying infrastructure."
+            "question": "Do I need professional photos to animate baby photos?",
+            "answer": "Not at all! Any clear snapshot works with our baby dance video maker. Even casual selfies become amazing lip sync baby photo masterpieces with our AI technology."
           }
         ]
       },
       "cta": {
         "id": "cta",
-        "title": "Ship your first AI SaaS Startup",
-        "description": "Start from here, ship with ShipAny.",
+        "title": "Ready to Make Your Baby a Star?",
+        "description": "Join thousands of families using the best AI baby dance generator. Start free today!",
         "buttons": [
           {
-            "title": "Get ShipAny",
-            "url": "https://shipany.ai",
-            "target": "_blank",
+            "title": "Start Dancing Free",
+            "url": "/create",
+            "target": "_self",
             "icon": "Zap"
           },
           {
-            "title": "Read Document",
-            "url": "/docs",
-            "target": "_blank",
+            "title": "View Templates",
+            "url": "/templates",
+            "target": "_self",
             "variant": "outline",
             "icon": "BookOpenText"
           }
@@ -402,8 +368,8 @@
       },
       "subscribe": {
         "id": "subscribe",
-        "title": "Subscribe to our newsletter",
-        "description": "Get the latest news and updates from ShipAny.",
+        "title": "Get New Dance Template Alerts",
+        "description": "Be the first to know about new viral dance templates and features.",
         "submit": {
           "input": {
             "placeholder": "Enter your email"
