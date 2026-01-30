@@ -1028,25 +1028,6 @@ export function VideoGenerator({
                 </div>
               </div>
 
-              {/* Prompt */}
-              <div className="space-y-2">
-                <Label className="text-sm font-semibold">{t('form.prompt')}</Label>
-                <Textarea
-                  value={prompt}
-                  maxLength={MAX_PROMPT_LENGTH}
-                  placeholder={t('form.prompt_placeholder')}
-                  onChange={(e) => {
-                    setPromptTouched(true);
-                    setPrompt(e.target.value);
-                  }}
-                />
-                <div className="text-muted-foreground flex items-center justify-between text-xs">
-                  <span />
-                  <span>
-                    {prompt.length}/{MAX_PROMPT_LENGTH}
-                  </span>
-                </div>
-              </div>
 
               {/* Options */}
               <div className="space-y-3 rounded-lg border p-3">
