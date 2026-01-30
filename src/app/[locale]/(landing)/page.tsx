@@ -35,6 +35,11 @@ export default async function LandingPage({
     delete page.sections.hero;
   }
 
+  // Hide testimonials/comments on the homepage for now
+  if (page.sections?.testimonials) {
+    page.sections.testimonials.disabled = true;
+  }
+
   // load dynamic page component
   const Page = await getThemePage('dynamic-page');
 
