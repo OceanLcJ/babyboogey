@@ -2,10 +2,10 @@
   "header": {
     "id": "header",
     "brand": {
-      "title": "ShipAny Two",
+      "title": "BabyBoogey",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny Two",
+        "alt": "AI Baby Dance Generator",
         "width": 100,
         "height": 100
       },
@@ -21,37 +21,12 @@
         {
           "title": "Showcases",
           "url": "/showcases",
-          "icon": "Box"
+          "icon": "Images"
         },
         {
           "title": "Pricing",
-          "url": "/pricing",
-          "icon": "DollarSign"
-        },
-        {
-          "title": "Content",
-          "icon": "FileText",
-          "children": [
-            {
-              "title": "Blog",
-              "description": "Read Blog Posts",
-              "url": "/blog",
-              "icon": "Newspaper"
-            },
-            {
-              "title": "Updates",
-              "description": "Read Update Logs",
-              "url": "/updates",
-              "icon": "Clock"
-            },
-            {
-              "title": "Docs",
-              "description": "Read Documentation",
-              "url": "/docs",
-              "target": "_blank",
-              "icon": "BookOpenText"
-            }
-          ]
+          "url": "/#pricing",
+          "icon": "CreditCard"
         }
       ]
     },
@@ -73,7 +48,7 @@
         }
       ]
     },
-    "show_sign": true,
+    "show_sign": false,
     "show_theme": true,
     "show_locale": true,
     "topbanner": {
@@ -83,13 +58,13 @@
   "footer": {
     "id": "footer",
     "brand": {
-      "title": "AI Baby Dance",
+      "title": "BabyBoogey",
       "description": "AI Baby Dance Generator - Transform your baby photos into adorable dancing videos with AI technology. Create magical moments in seconds.",
       "logo": {
         "src": "/logo.png",
         "alt": "AI Baby Dance Generator",
-        "width": 1024,
-        "height": 1024
+        "width": 100,
+        "height": 100
       },
       "url": "/"
     },
@@ -110,27 +85,7 @@
             },
             {
               "title": "Pricing",
-              "url": "/pricing",
-              "target": "_self"
-            }
-          ]
-        },
-        {
-          "title": "Resources",
-          "children": [
-            {
-              "title": "Documents",
-              "url": "/docs",
-              "target": "_self"
-            },
-            {
-              "title": "Blog",
-              "url": "/blog",
-              "target": "_self"
-            },
-            {
-              "title": "Chat",
-              "url": "/chat",
+              "url": "/#pricing",
               "target": "_self"
             }
           ]
@@ -142,25 +97,13 @@
         {
           "title": "X",
           "icon": "RiTwitterXFill",
-          "url": "https://x.com/your-app-name",
-          "target": "_blank"
-        },
-        {
-          "title": "Github",
-          "icon": "Github",
-          "url": "https://github.com/your-app-name",
-          "target": "_blank"
-        },
-        {
-          "title": "Discord",
-          "icon": "RiDiscordFill",
-          "url": "https://discord.gg/your-app-name",
+          "url": "https://x.com/babyboogey",
           "target": "_blank"
         },
         {
           "title": "Email",
           "icon": "Mail",
-          "url": "mailto:support@your-domain.com",
+          "url": "mailto:support@babyboogey.com",
           "target": "_self"
         }
       ]

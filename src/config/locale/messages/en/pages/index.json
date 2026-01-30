@@ -14,8 +14,7 @@
       "benefits",
       "usage",
       "features",
-      "stats",
-      "testimonials",
+      "pricing",
       "faq",
       "cta"
     ],
@@ -258,6 +257,301 @@
           }
         ]
       },
+      "pricing": {
+        "id": "pricing",
+        "block": "pricing",
+        "title": "Choose Your Perfect Plan",
+        "description": "Select the best plan for your AI baby dance video needs. All plans support HD 1080p and SD 720p video generation.",
+        "groups": [
+          {
+            "name": "credits",
+            "title": "Credit Packs",
+            "is_featured": true
+          },
+          {
+            "name": "monthly",
+            "title": "Monthly"
+          },
+          {
+            "name": "yearly",
+            "title": "Yearly",
+            "label": "Save 30%"
+          }
+        ],
+        "items": [
+          {
+            "title": "Starter",
+            "description": "Perfect for getting started",
+            "features_title": "Includes:",
+            "features": [
+              "200 credits (never expire)",
+              "~3 720p videos",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.9",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "Buy Now",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter",
+            "product_name": "Starter Credit Pack",
+            "credits": 200,
+            "group": "credits"
+          },
+          {
+            "title": "Standard",
+            "description": "Best value for casual creators",
+            "label": "Popular",
+            "features_title": "Includes:",
+            "features": [
+              "650 credits (never expire)",
+              "~10 720p videos",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "one-time",
+            "amount": 999,
+            "currency": "USD",
+            "price": "$9.99",
+            "original_price": "$19.9",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "Buy Now",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard",
+            "product_name": "Standard Credit Pack",
+            "credits": 650,
+            "group": "credits"
+          },
+          {
+            "title": "Premium",
+            "description": "Best choice for bulk creation",
+            "features_title": "Includes:",
+            "features": [
+              "1600 credits (never expire)",
+              "~25 720p videos",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "one-time",
+            "amount": 1999,
+            "currency": "USD",
+            "price": "$19.99",
+            "original_price": "$39.9",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "Buy Now",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium",
+            "product_name": "Premium Credit Pack",
+            "credits": 1600,
+            "group": "credits"
+          },
+          {
+            "title": "Starter",
+            "description": "Perfect for getting started",
+            "features_title": "Includes:",
+            "features": [
+              "300 credits/month",
+              "~5 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "month",
+            "amount": 699,
+            "currency": "USD",
+            "price": "$6.99",
+            "original_price": "$9.99",
+            "unit": "/ month",
+            "is_featured": false,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-monthly",
+            "product_name": "Starter Monthly",
+            "credits": 300,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "Standard",
+            "description": "Best value for regular creators",
+            "label": "Popular",
+            "features_title": "Includes:",
+            "features": [
+              "800 credits/month",
+              "~13 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage",
+              "Priority support"
+            ],
+            "interval": "month",
+            "amount": 1299,
+            "currency": "USD",
+            "price": "$12.99",
+            "original_price": "$19.99",
+            "unit": "/ month",
+            "is_featured": true,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-monthly",
+            "product_name": "Standard Monthly",
+            "credits": 800,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "Premium",
+            "description": "Unlimited creativity",
+            "features_title": "Includes:",
+            "features": [
+              "2000 credits/month",
+              "~33 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage",
+              "Priority support"
+            ],
+            "interval": "month",
+            "amount": 2499,
+            "currency": "USD",
+            "price": "$24.99",
+            "original_price": "$39.99",
+            "unit": "/ month",
+            "is_featured": false,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-monthly",
+            "product_name": "Premium Monthly",
+            "credits": 2000,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Premium"
+          },
+          {
+            "title": "Starter",
+            "description": "Perfect for getting started",
+            "features_title": "Includes:",
+            "features": [
+              "300 credits/month",
+              "~5 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "year",
+            "amount": 5900,
+            "currency": "USD",
+            "price": "$4.90",
+            "original_price": "$6.99",
+            "unit": "/ month",
+            "is_featured": false,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-yearly",
+            "product_name": "Starter Yearly",
+            "credits": 3600,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "Standard",
+            "description": "Best value for regular creators",
+            "label": "Popular",
+            "features_title": "Includes:",
+            "features": [
+              "800 credits/month",
+              "~13 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage",
+              "Priority support"
+            ],
+            "interval": "year",
+            "amount": 10900,
+            "currency": "USD",
+            "price": "$9.10",
+            "original_price": "$12.99",
+            "unit": "/ month",
+            "is_featured": true,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-yearly",
+            "product_name": "Standard Yearly",
+            "credits": 9600,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "Premium",
+            "description": "Unlimited creativity",
+            "features_title": "Includes:",
+            "features": [
+              "2000 credits/month",
+              "~33 720p videos/month",
+              "No watermark",
+              "Commercial license",
+              "Private storage",
+              "Priority support"
+            ],
+            "interval": "year",
+            "amount": 20900,
+            "currency": "USD",
+            "price": "$17.40",
+            "original_price": "$24.99",
+            "unit": "/ month",
+            "is_featured": false,
+            "button": {
+              "title": "Subscribe",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-yearly",
+            "product_name": "Premium Yearly",
+            "credits": 24000,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Premium"
+          }
+        ]
+      },
       "testimonials": {
         "id": "testimonials",
         "title": "What Parents Say",
@@ -353,13 +647,13 @@
         "buttons": [
           {
             "title": "Start Dancing Free",
-            "url": "/create",
+            "url": "/#generator",
             "target": "_self",
             "icon": "Zap"
           },
           {
             "title": "View Templates",
-            "url": "/templates",
+            "url": "/showcases",
             "target": "_self",
             "variant": "outline",
             "icon": "BookOpenText"

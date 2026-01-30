@@ -14,8 +14,7 @@
       "benefits",
       "usage",
       "features",
-      "stats",
-      "testimonials",
+      "pricing",
       "faq",
       "cta"
     ],
@@ -258,6 +257,301 @@
           }
         ]
       },
+      "pricing": {
+        "id": "pricing",
+        "block": "pricing",
+        "title": "选择最适合您的套餐",
+        "description": "为您的AI宝宝跳舞视频需求选择最佳方案。所有套餐均支持高清1080p和标清720p视频生成。",
+        "groups": [
+          {
+            "name": "credits",
+            "title": "积分包",
+            "is_featured": true
+          },
+          {
+            "name": "monthly",
+            "title": "月度订阅"
+          },
+          {
+            "name": "yearly",
+            "title": "年度订阅",
+            "label": "省30%"
+          }
+        ],
+        "items": [
+          {
+            "title": "入门包",
+            "description": "完美的入门体验",
+            "features_title": "包含内容：",
+            "features": [
+              "200积分（永久有效）",
+              "~3个720p视频",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.9",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "立即购买",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter",
+            "product_name": "入门积分包",
+            "credits": 200,
+            "group": "credits"
+          },
+          {
+            "title": "标准包",
+            "description": "休闲创作超值之选",
+            "label": "热门",
+            "features_title": "包含内容：",
+            "features": [
+              "650积分（永久有效）",
+              "~10个720p视频",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 999,
+            "currency": "USD",
+            "price": "$9.99",
+            "original_price": "$19.9",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "立即购买",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard",
+            "product_name": "标准积分包",
+            "credits": 650,
+            "group": "credits"
+          },
+          {
+            "title": "超大包",
+            "description": "批量创作最佳选择",
+            "features_title": "包含内容：",
+            "features": [
+              "1600积分（永久有效）",
+              "~25个720p视频",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 1999,
+            "currency": "USD",
+            "price": "$19.99",
+            "original_price": "$39.9",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "立即购买",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium",
+            "product_name": "超大积分包",
+            "credits": 1600,
+            "group": "credits"
+          },
+          {
+            "title": "入门版",
+            "description": "完美的入门体验",
+            "features_title": "包含内容：",
+            "features": [
+              "300积分/月",
+              "~5个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "month",
+            "amount": 699,
+            "currency": "USD",
+            "price": "$6.99",
+            "original_price": "$9.99",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-monthly",
+            "product_name": "入门版月度订阅",
+            "credits": 300,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "入门版"
+          },
+          {
+            "title": "标准版",
+            "description": "常规创作者的超值选择",
+            "label": "热门",
+            "features_title": "包含内容：",
+            "features": [
+              "800积分/月",
+              "~13个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储",
+              "优先客服支持"
+            ],
+            "interval": "month",
+            "amount": 1299,
+            "currency": "USD",
+            "price": "$12.99",
+            "original_price": "$19.99",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-monthly",
+            "product_name": "标准版月度订阅",
+            "credits": 800,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "标准版"
+          },
+          {
+            "title": "高级版",
+            "description": "无限创意释放",
+            "features_title": "包含内容：",
+            "features": [
+              "2000积分/月",
+              "~33个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储",
+              "优先客服支持"
+            ],
+            "interval": "month",
+            "amount": 2499,
+            "currency": "USD",
+            "price": "$24.99",
+            "original_price": "$39.99",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-monthly",
+            "product_name": "高级版月度订阅",
+            "credits": 2000,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "高级版"
+          },
+          {
+            "title": "入门版",
+            "description": "完美的入门体验",
+            "features_title": "包含内容：",
+            "features": [
+              "300积分/月",
+              "~5个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "year",
+            "amount": 5900,
+            "currency": "USD",
+            "price": "$4.90",
+            "original_price": "$6.99",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-yearly",
+            "product_name": "入门版年度订阅",
+            "credits": 3600,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "入门版"
+          },
+          {
+            "title": "标准版",
+            "description": "常规创作者的超值选择",
+            "label": "热门",
+            "features_title": "包含内容：",
+            "features": [
+              "800积分/月",
+              "~13个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储",
+              "优先客服支持"
+            ],
+            "interval": "year",
+            "amount": 10900,
+            "currency": "USD",
+            "price": "$9.10",
+            "original_price": "$12.99",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-yearly",
+            "product_name": "标准版年度订阅",
+            "credits": 9600,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "标准版"
+          },
+          {
+            "title": "高级版",
+            "description": "无限创意释放",
+            "features_title": "包含内容：",
+            "features": [
+              "2000积分/月",
+              "~33个720p视频/月",
+              "无水印",
+              "商业授权",
+              "私有存储",
+              "优先客服支持"
+            ],
+            "interval": "year",
+            "amount": 20900,
+            "currency": "USD",
+            "price": "$17.40",
+            "original_price": "$24.99",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "订阅",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-yearly",
+            "product_name": "高级版年度订阅",
+            "credits": 24000,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "高级版"
+          }
+        ]
+      },
       "testimonials": {
         "id": "testimonials",
         "title": "家长们怎么说",
@@ -353,13 +647,13 @@
         "buttons": [
           {
             "title": "免费开始",
-            "url": "/create",
+            "url": "/#generator",
             "target": "_self",
             "icon": "Zap"
           },
           {
             "title": "浏览模板",
-            "url": "/templates",
+            "url": "/showcases",
             "target": "_self",
             "variant": "outline",
             "icon": "BookOpenText"
