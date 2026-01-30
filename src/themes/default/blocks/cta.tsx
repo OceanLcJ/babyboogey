@@ -34,13 +34,14 @@ export function Cta({
           </ScrollAnimation>
 
           <ScrollAnimation delay={0.3}>
-            <div className="mt-12 flex flex-wrap justify-center gap-4">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
               {section.buttons?.map((button, idx) => (
                 <Button
                   asChild
-                  size={button.size || 'default'}
+                  size={button.size || 'lg'}
                   variant={button.variant || 'default'}
                   key={idx}
+                  className="min-w-[180px]"
                 >
                   <Link
                     href={button.url || ''}
