@@ -1,148 +1,133 @@
 {
   "metadata": {
     "title": "Showcases",
-    "description": "Awesome projects built with ShipAny"
+    "description": "Amazing dance videos created with AI Baby"
   },
   "page": {
     "title": "Showcases",
     "sections": {
       "showcases": {
         "id": "showcases",
-        "title": "AI SaaS Startups built with ShipAny",
-        "description": "Easy to use and fast to ship.",
+        "block": "showcases-flow",
+        "title": "AI Baby Dance Gallery",
+        "description": "Check out the cute and funny baby dance videos created by our community!",
+        "use_this_template": "Use This Template",
         "groups": [
           {
             "name": "all",
             "title": "All"
           },
           {
-            "name": "ai-chatbot",
-            "title": "AI Chatbot"
+            "name": "hot",
+            "title": "Hot"
           },
           {
-            "name": "ai-image",
-            "title": "AI Image"
+            "name": "pro",
+            "title": "Pro"
           },
           {
-            "name": "ai-video",
-            "title": "AI Video"
-          },
-          {
-            "name": "ai-audio",
-            "title": "AI Audio"
-          },
-          {
-            "name": "ai-music",
-            "title": "AI Music"
-          },
-          {
-            "name": "ai-coding",
-            "title": "AI Coding"
-          },
-          {
-            "name": "other",
-            "title": "Other"
+            "name": "funny",
+            "title": "Funny"
           }
         ],
         "items": [
           {
-            "title": "ThinkAny",
-            "description": "AI Search Engine",
-            "url": "https://thinkany.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/7.png",
-              "alt": "showcases"
-            },
-            "group": "ai-chatbot"
+            "id": "temp-05",
+            "title": "Rhythm Beat",
+            "description": "Rhythmic Steps",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4",
+            "group": "hot"
           },
           {
-            "title": "HeyBeauty",
-            "description": "AI Virtual Try On",
-            "url": "https://heybeauty.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/5.png",
-              "alt": "showcases"
-            },
-            "group": "ai-image"
+            "id": "viral-dance",
+            "title": "Viral Dance",
+            "description": "Trending Dance",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/effects_video_shortform_viral_dance.mp4",
+            "group": "hot"
           },
           {
-            "title": "AI Wallpaper",
-            "description": "AI Wallpaper Generator",
-            "url": "https://aiwallpaper.shop",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/1.png",
-              "alt": "showcases"
-            },
-            "group": "ai-image"
+            "id": "temp-01",
+            "title": "Cool Moves",
+            "description": "Cool Street Dance",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-01.mp4",
+            "group": "pro"
           },
           {
-            "title": "AI Cover",
-            "description": "AI Cover Generator",
-            "url": "https://aicover.design",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/2.png",
-              "alt": "showcases"
-            },
-            "group": "ai-image"
+            "id": "temp-02",
+            "title": "Fun Groove",
+            "description": "Fun Rhythm",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-02.mp4",
+            "group": "pro"
           },
           {
-            "title": "GPTs Works",
-            "description": "GPTs Directory",
-            "url": "https://gpts.works",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/3.png",
-              "alt": "showcases"
-            },
-            "group": "other"
+            "id": "temp-03",
+            "title": "Happy Bounce",
+            "description": "Joyful Bouncing",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-03.mp4",
+            "group": "pro"
           },
           {
-            "title": "Melodisco",
-            "description": "AI Music Player",
-            "url": "https://melodis.co",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/4.png",
-              "alt": "showcases"
-            },
-            "group": "ai-music"
+            "id": "temp-04",
+            "title": "Smooth Sway",
+            "description": "Gentle Sway",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-04.mp4",
+            "group": "pro"
           },
           {
-            "title": "Pagen",
-            "description": "AI Landing Page Generator",
-            "url": "https://pagen.so",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/6.png",
-              "alt": "showcases"
-            },
-            "group": "ai-coding"
+            "id": "temp-06",
+            "title": "Cute Wiggle",
+            "description": "Cute Wiggle",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-06.mp4",
+            "group": "funny"
           },
           {
-            "title": "SoraFM",
-            "description": "AI Video Generator",
-            "url": "https://sorafm.trys.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/8.png",
-              "alt": "showcases"
-            },
-            "group": "ai-video"
+            "id": "temp-07",
+            "title": "Quick Steps",
+            "description": "Quick Steps",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-07.mp4",
+            "group": "funny"
           },
           {
-            "title": "PodLM",
-            "description": "AI Podcast Generator",
-            "url": "https://podlm.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/9.png",
-              "alt": "showcases"
-            },
-            "group": "ai-audio"
+            "id": "temp-08",
+            "title": "Gentle Wave",
+            "description": "Gentle Wave",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-08.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-09",
+            "title": "Energy Burst",
+            "description": "Full of Energy",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-09.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "temp-10",
+            "title": "Playful Steps",
+            "description": "Playful Steps",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-10.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-11",
+            "title": "Sweet Moves",
+            "description": "Sweet Rhythm",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-11.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-12",
+            "title": "Dynamic Dance",
+            "description": "Dynamic Dance",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-12.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "template-0",
+            "title": "Cute Boy",
+            "description": "Default Template",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/template-0.mp4",
+            "group": "hot"
           }
         ]
       }

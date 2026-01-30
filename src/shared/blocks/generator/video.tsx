@@ -12,6 +12,7 @@ import {
   Video,
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { Link } from '@/core/i18n/navigation';
@@ -340,6 +341,17 @@ export function VideoGenerator({
 
   const { user, isCheckSign, setIsShowSignModal, fetchUserCredits } =
     useAppContext();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const templateId = searchParams.get('template');
+    if (templateId) {
+      const template = DANCE_TEMPLATES.find((t) => t.id === templateId);
+      if (template) {
+        setSelectedTemplate(template);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     setIsMounted(true);

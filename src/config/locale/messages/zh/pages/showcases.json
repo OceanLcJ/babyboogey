@@ -1,148 +1,133 @@
 {
   "metadata": {
     "title": "案例展示",
-    "description": "用 ShipAny 打造的精彩项目"
+    "description": "AI 宝贝生成的精彩舞蹈视频"
   },
   "page": {
     "title": "案例展示",
     "sections": {
       "showcases": {
         "id": "showcases",
-        "title": "用 ShipAny 构建的 AI SaaS 创业项目",
-        "description": "简单、快速、高效。",
+        "block": "showcases-flow",
+        "title": "AI 宝贝舞蹈精选",
+        "description": "看看大家创作的可爱、搞笑的宝宝跳舞视频！",
+        "use_this_template": "使用这个模板",
         "groups": [
           {
             "name": "all",
-            "title": "所有项目"
+            "title": "全部"
           },
           {
-            "name": "ai-chatbot",
-            "title": "AI 聊天机器人"
+            "name": "hot",
+            "title": "热门"
           },
           {
-            "name": "ai-image",
-            "title": "AI 图片"
+            "name": "pro",
+            "title": "专业"
           },
           {
-            "name": "ai-video",
-            "title": "AI 视频"
-          },
-          {
-            "name": "ai-audio",
-            "title": "AI 音频"
-          },
-          {
-            "name": "ai-music",
-            "title": "AI 音乐"
-          },
-          {
-            "name": "ai-coding",
-            "title": "AI 编程"
-          },
-          {
-            "name": "other",
-            "title": "其他"
+            "name": "funny",
+            "title": "搞笑"
           }
         ],
         "items": [
           {
-            "title": "ThinkAny",
-            "description": "AI 搜索引擎",
-            "url": "https://thinkany.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/7.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-chatbot"
+            "id": "temp-05",
+            "title": "Rhythm Beat",
+            "description": "节奏感舞步",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4",
+            "group": "hot"
           },
           {
-            "title": "HeyBeauty",
-            "description": "AI 虚拟试妆",
-            "url": "https://heybeauty.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/5.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-image"
+            "id": "viral-dance",
+            "title": "Viral Dance",
+            "description": "热门舞蹈",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/effects_video_shortform_viral_dance.mp4",
+            "group": "hot"
           },
           {
-            "title": "AI Wallpaper",
-            "description": "AI 壁纸生成器",
-            "url": "https://aiwallpaper.shop",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/1.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-image"
+            "id": "temp-01",
+            "title": "Cool Moves",
+            "description": "酷炫街舞",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-01.mp4",
+            "group": "pro"
           },
           {
-            "title": "AI Cover",
-            "description": "AI 封面生成器",
-            "url": "https://aicover.design",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/2.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-image"
+            "id": "temp-02",
+            "title": "Fun Groove",
+            "description": "趣味律动",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-02.mp4",
+            "group": "pro"
           },
           {
-            "title": "GPTs Works",
-            "description": "GPTs 导航",
-            "url": "https://gpts.works",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/3.png",
-              "alt": "案例展示"
-            },
-            "group": "other"
+            "id": "temp-03",
+            "title": "Happy Bounce",
+            "description": "欢乐蹦跳",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-03.mp4",
+            "group": "pro"
           },
           {
-            "title": "Melodisco",
-            "description": "AI 音乐播放器",
-            "url": "https://melodis.co",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/4.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-music"
+            "id": "temp-04",
+            "title": "Smooth Sway",
+            "description": "柔和摇摆",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-04.mp4",
+            "group": "pro"
           },
           {
-            "title": "Pagen",
-            "description": "AI 落地页生成器",
-            "url": "https://pagen.so",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/6.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-coding"
+            "id": "temp-06",
+            "title": "Cute Wiggle",
+            "description": "可爱扭动",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-06.mp4",
+            "group": "funny"
           },
           {
-            "title": "SoraFM",
-            "description": "AI 视频生成器",
-            "url": "https://sorafm.trys.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/8.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-video"
+            "id": "temp-07",
+            "title": "Quick Steps",
+            "description": "快速小步",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-07.mp4",
+            "group": "funny"
           },
           {
-            "title": "PodLM",
-            "description": "AI 播客生成器",
-            "url": "https://podlm.ai",
-            "target": "_blank",
-            "image": {
-              "src": "/imgs/cases/9.png",
-              "alt": "案例展示"
-            },
-            "group": "ai-audio"
+            "id": "temp-08",
+            "title": "Gentle Wave",
+            "description": "温柔波浪",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-08.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-09",
+            "title": "Energy Burst",
+            "description": "活力四射",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-09.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "temp-10",
+            "title": "Playful Steps",
+            "description": "俏皮舞步",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-10.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-11",
+            "title": "Sweet Moves",
+            "description": "甜美律动",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-11.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-12",
+            "title": "Dynamic Dance",
+            "description": "动感舞蹈",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-12.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "template-0",
+            "title": "Cute Boy",
+            "description": "默认模板",
+            "video": "https://img.aibabydance.org/uploads/assets/imgs/templates/hd/template-0.mp4",
+            "group": "hot"
           }
         ]
       }

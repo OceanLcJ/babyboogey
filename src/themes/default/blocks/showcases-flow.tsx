@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Link } from '@/core/i18n/navigation';
 import { LazyImage } from '@/shared/blocks/common';
@@ -18,6 +19,7 @@ export function ShowcasesFlow({
   section: Section;
   className?: string;
 }) {
+  const t = useTranslations('pages.showcases.page.sections.showcases');
   const groups = (section as any).groups || [];
   const [selectedGroup, setSelectedGroup] = useState<string>(
     groups.length > 0 ? groups[0].name : ''
@@ -177,12 +179,23 @@ export function ShowcasesFlow({
               }}
               whileHover={{ scale: 1.02 }}
             >
-              <LazyImage
-                src={item.image?.src ?? ''}
-                alt={item.image?.alt ?? ''}
-                className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              />
+              {item.video ? (
+                <video
+                  src={item.video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <LazyImage
+                  src={item.image?.src ?? ''}
+                  alt={item.image?.alt ?? ''}
+                  className="h-auto w-full transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                />
+              )}
               <div className="absolute inset-0 flex flex-col justify-end bg-black/60 p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <h3 className="mb-2 translate-y-4 text-sm font-medium text-white transition-transform duration-300 group-hover:translate-y-0">
                   {item.title}
@@ -281,11 +294,20 @@ export function ShowcasesFlow({
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="relative max-h-full max-w-full overflow-hidden rounded-lg">
-                  <LazyImage
-                    src={filteredItems[selectedIndex].image?.src ?? ''}
-                    alt={filteredItems[selectedIndex].image?.alt ?? ''}
-                    className="h-auto max-h-[90vh] w-auto max-w-full object-contain"
-                  />
+                  {filteredItems[selectedIndex].video ? (
+                    <video
+                      src={filteredItems[selectedIndex].video}
+                      controls
+                      autoPlay
+                      className="h-auto max-h-[90vh] w-auto max-w-full"
+                    />
+                  ) : (
+                    <LazyImage
+                      src={filteredItems[selectedIndex].image?.src ?? ''}
+                      alt={filteredItems[selectedIndex].image?.alt ?? ''}
+                      className="h-auto max-h-[90vh] w-auto max-w-full object-contain"
+                    />
+                  )}
                   <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 text-white">
                     <h3 className="mb-2 text-2xl font-bold">
                       {filteredItems[selectedIndex].title}
@@ -295,7 +317,21 @@ export function ShowcasesFlow({
                         {filteredItems[selectedIndex].description}
                       </p>
                     )}
-                    {(filteredItems[selectedIndex] as any).button && (
+                    {filteredItems[selectedIndex].id && (
+                      <div className="mt-6">
+                        <Button
+                          asChild
+                          size="lg"
+                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg text-lg h-12 rounded-full"
+                        >
+                          <Link href={`/ai-video-generator?template=${filteredItems[selectedIndex].id}`}>
+                            <SmartIcon name="Wand2" className="mr-2 size-5" />
+                            {t('use_this_template')}
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
+                    {(filteredItems[selectedIndex] as any).button && !filteredItems[selectedIndex].id && (
                       <div className="mt-4">
                         <Button
                           asChild
@@ -321,14 +357,14 @@ export function ShowcasesFlow({
                           >
                             {(filteredItems[selectedIndex] as any).button
                               .icon && (
-                              <SmartIcon
-                                name={
-                                  (filteredItems[selectedIndex] as any).button
-                                    .icon as string
-                                }
-                                className="text-white"
-                              />
-                            )}
+                                <SmartIcon
+                                  name={
+                                    (filteredItems[selectedIndex] as any).button
+                                      .icon as string
+                                  }
+                                  className="text-white"
+                                />
+                              )}
                             {(filteredItems[selectedIndex] as any).button.title}
                           </Link>
                         </Button>

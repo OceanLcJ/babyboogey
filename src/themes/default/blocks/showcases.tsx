@@ -129,17 +129,28 @@ export function Showcases({
                 <Card className="dark:hover:shadow-primary/10 overflow-hidden p-0 transition-all hover:shadow-lg">
                   <CardContent className="p-0">
                     <motion.div
-                      className="relative aspect-16/10 w-full overflow-hidden"
+                      className="relative aspect-[9/16] w-full overflow-hidden"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Image
-                        src={item.image?.src ?? ''}
-                        alt={item.image?.alt ?? ''}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        fill
-                        className="rounded-t-lg object-cover transition-transform duration-300"
-                      />
+                      {item.video ? (
+                        <video
+                          src={item.video}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="h-full w-full object-cover transition-transform duration-300"
+                        />
+                      ) : (
+                        <Image
+                          src={item.image?.src ?? ''}
+                          alt={item.image?.alt ?? ''}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          fill
+                          className="rounded-t-lg object-cover transition-transform duration-300"
+                        />
+                      )}
                     </motion.div>
                     <div className="p-6">
                       <h3 className="mb-2 line-clamp-1 text-xl font-semibold text-balance">
