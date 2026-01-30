@@ -1,0 +1,30 @@
+---
+title: Image-to-Video Prompting Notes
+---
+
+This note summarizes common prompt patterns across image-to-video tools and how we apply them in this repo’s “Photo to Dance” flow.
+
+## Market patterns (high-level)
+
+- The **input image defines the subject + composition**; the prompt should focus on **motion, action, and camera**.
+- “Image-to-video” prompts generally work better when you **describe what changes over time**, not what already exists in the image.
+- Many tools support **negative prompts** to reduce artifacts like warping, flicker, extra limbs, or text overlays.
+
+## Veo (via Replicate) parameters worth supporting
+
+- `prompt`
+- `image` (image-to-video, first frame) or `reference_images` (reference-to-video)
+- `negative_prompt`
+- `duration` (seconds)
+- `aspect_ratio`
+- `resolution`
+
+## Recommended prompt structure (Photo to Dance)
+
+Keep it short and motion-first:
+
+- **Action:** “The child starts dancing…”
+- **Dance style:** “hip-hop / cute wiggle / viral dance…”
+- **Constraints:** “keep identity and clothing consistent; stable background; smooth motion”
+- **Camera:** “locked-off medium shot” (or slow push-in if desired)
+
