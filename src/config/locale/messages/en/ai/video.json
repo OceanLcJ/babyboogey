@@ -42,7 +42,10 @@
       "orientation_image": "Follow Photo",
       "orientation_video": "Follow Video",
       "public_toggle": "Public Work",
-      "public_toggle_desc": "Allow others to view your generated video"
+      "public_toggle_desc": "Allow others to view your generated video",
+      "checking_membership": "Checking membership...",
+      "pro_template_sign_in_first": "Sign in to unlock Pro templates",
+      "pro_template_member_only": "Pro templates are for members only. Please upgrade on the pricing page."
     },
     "generate": "Generate Video",
     "checking_account": "Checking Account...",

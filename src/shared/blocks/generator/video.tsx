@@ -8,6 +8,7 @@ import {
   Download,
   Image as ImageIcon,
   Loader2,
+  Lock,
   User,
   Video,
 } from 'lucide-react';
@@ -15,7 +16,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
-import { Link } from '@/core/i18n/navigation';
+import { Link, useRouter } from '@/core/i18n/navigation';
 import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -36,6 +37,7 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select';
 import { Switch } from '@/shared/components/ui/switch';
+import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
 import { cn } from '@/shared/lib/utils';
 
@@ -74,6 +76,65 @@ interface DanceTemplate {
 
 const POLL_INTERVAL = 15000;
 const GENERATION_TIMEOUT = 600000;
+const MAX_PROMPT_LENGTH = 500;
+
+const DEFAULT_NEGATIVE_PROMPT =
+  'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
+
+const DANCE_TEMPLATE_PROMPTS: Record<string, string> = {
+  'temp-05':
+    "Animate the child in the photo doing a rhythmic beat dance: bouncy steps, shoulder pops, and simple hand waves. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.",
+  'viral-dance':
+    'Animate the child in the photo doing a trendy viral short-form dance: energetic, playful, easy-to-follow moves with hand gestures and hip sways. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-01':
+    'Animate the child in the photo doing cool hip-hop street dance: sharp arm hits, confident footwork, and head bobs. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-02':
+    'Animate the child in the photo doing a fun funky groove: playful swaying, light steps, and cheerful energy. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-03':
+    'Animate the child in the photo doing a happy bouncy dance: small hops, claps, and joyful moves. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-04':
+    'Animate the child in the photo doing a smooth sway dance: gentle side-to-side sways with fluid arm waves. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-06':
+    'Animate the child in the photo doing a cute wiggle dance: tiny shoulder shakes, head bops, and adorable wiggly moves. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-07':
+    'Animate the child in the photo doing quick-step dance: fast footwork, small hops, and lively rhythm. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-08':
+    'Animate the child in the photo doing a gentle wave dance: flowing arm waves and calm rhythmic sways. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-09':
+    'Animate the child in the photo doing an energy burst dance: dynamic moves, quick transitions, and high-energy rhythm. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-10':
+    'Animate the child in the photo doing playful dance steps: fun gestures, lighthearted moves, and cheerful vibe. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-11':
+    'Animate the child in the photo doing sweet cute dance: soft gestures, charming moves, and gentle rhythm. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'temp-12':
+    'Animate the child in the photo doing a dynamic dance: varied moves, energetic transitions, and lively rhythm. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
+  'template-0':
+    'Animate the child in the photo doing a cute upbeat dance in place. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.',
+};
+
+function getDefaultDancePrompt(template: DanceTemplate) {
+  return (
+    DANCE_TEMPLATE_PROMPTS[template.id] ??
+    'Animate the child in the photo dancing in place. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.'
+  );
+}
+
+function parseTemplateDurationSeconds(duration: string): number | null {
+  const match = duration.match(/^(\d+):(\d{2})$/);
+  if (!match) {
+    return null;
+  }
+  const minutes = Number(match[1]);
+  const seconds = Number(match[2]);
+  if (!Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+    return null;
+  }
+  return minutes * 60 + seconds;
+}
+
+function clampVeoDurationSeconds(seconds: number): number {
+  return Math.min(10, Math.max(4, Math.round(seconds)));
+}
 
 const DANCE_TEMPLATES: DanceTemplate[] = [
   {
@@ -312,6 +373,7 @@ export function VideoGenerator({
 }: VideoGeneratorProps) {
   const t = useTranslations('ai.video.generator');
   const locale = useLocale();
+  const router = useRouter();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [uploadedImage, setUploadedImage] = useState<{
@@ -322,6 +384,8 @@ export function VideoGenerator({
   const [selectedTemplate, setSelectedTemplate] = useState<DanceTemplate>(
     DANCE_TEMPLATES[0]
   );
+  const [prompt, setPrompt] = useState('');
+  const [promptTouched, setPromptTouched] = useState(false);
   const [resolution, setResolution] = useState('720p');
   const [orientation, setOrientation] = useState('image');
   const [isPublic, setIsPublic] = useState(true);
@@ -339,23 +403,72 @@ export function VideoGenerator({
   );
   const [isMounted, setIsMounted] = useState(false);
 
-  const { user, isCheckSign, setIsShowSignModal, fetchUserCredits } =
+  const {
+    user,
+    isCheckSign,
+    setIsShowSignModal,
+    fetchUserCredits,
+    fetchUserInfo,
+  } =
     useAppContext();
   const searchParams = useSearchParams();
 
+  const canUseProTemplates =
+    !!user?.isAdmin || !!user?.membership?.canUseProTemplates;
+
+  const lastBlockedTemplateIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!user?.id) {
+      return;
+    }
+
+    // Ensure membership info is loaded for gating Pro templates.
+    if (user.membership === undefined) {
+      fetchUserInfo();
+    }
+  }, [user?.id, user?.membership, fetchUserInfo]);
+
   useEffect(() => {
     const templateId = searchParams.get('template');
+    if (!templateId) {
+      lastBlockedTemplateIdRef.current = null;
+      return;
+    }
+
     if (templateId) {
       const template = DANCE_TEMPLATES.find((t) => t.id === templateId);
-      if (template) {
+      if (template && (!template.isPro || canUseProTemplates)) {
         setSelectedTemplate(template);
+        lastBlockedTemplateIdRef.current = null;
+      } else if (
+        template?.isPro &&
+        user?.id &&
+        user.membership !== undefined &&
+        lastBlockedTemplateIdRef.current !== templateId
+      ) {
+        lastBlockedTemplateIdRef.current = templateId;
+        toast.error(t('form.pro_template_member_only'));
       }
     }
-  }, [searchParams]);
+  }, [searchParams, canUseProTemplates, user?.id, user?.membership, t]);
+
+  useEffect(() => {
+    if (!canUseProTemplates && selectedTemplate?.isPro) {
+      setSelectedTemplate(DANCE_TEMPLATES[0]);
+    }
+  }, [canUseProTemplates, selectedTemplate]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (promptTouched) {
+      return;
+    }
+    setPrompt(getDefaultDancePrompt(selectedTemplate));
+  }, [selectedTemplate, promptTouched]);
 
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
   const currentCost =
@@ -381,6 +494,28 @@ export function VideoGenerator({
   }, [taskStatus]);
 
   const maxBytes = maxSizeMB * 1024 * 1024;
+
+  const handleTemplateSelect = (template: DanceTemplate) => {
+    if (template.isPro && !canUseProTemplates) {
+      if (!user) {
+        setIsShowSignModal(true);
+        toast.error(t('form.pro_template_sign_in_first'));
+        return;
+      }
+
+      if (user.membership === undefined) {
+        fetchUserInfo();
+        toast(t('form.checking_membership'));
+        return;
+      }
+
+      toast.error(t('form.pro_template_member_only'));
+      router.push('/pricing');
+      return;
+    }
+
+    setSelectedTemplate(template);
+  };
 
   const handleFileSelect = async (file: File) => {
     if (!file.type?.startsWith('image/')) {
@@ -594,6 +729,19 @@ export function VideoGenerator({
       return;
     }
 
+    const finalPrompt =
+      prompt.trim() || getDefaultDancePrompt(selectedTemplate);
+
+    if (finalPrompt.length > MAX_PROMPT_LENGTH) {
+      toast.error(t('form.prompt_too_long'));
+      return;
+    }
+
+    const durationFromTemplate = parseTemplateDurationSeconds(
+      selectedTemplate.duration
+    );
+    const duration = clampVeoDurationSeconds(durationFromTemplate ?? 8);
+
     setIsGenerating(true);
     setProgress(15);
     setTaskStatus(AITaskStatus.PENDING);
@@ -611,13 +759,12 @@ export function VideoGenerator({
           scene: 'image-to-video',
           provider: 'replicate',
           model: 'google/veo-3.1',
-          prompt: '',
+          prompt: finalPrompt,
           options: {
             image_input: [uploadedImage.url],
-            template_id: selectedTemplate.id,
             resolution,
-            orientation,
-            is_public: isPublic,
+            duration,
+            negative_prompt: DEFAULT_NEGATIVE_PROMPT,
           },
         }),
       });
@@ -815,54 +962,89 @@ export function VideoGenerator({
                 </div>
                 <div className="relative -mx-2 px-2">
                   <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent flex gap-2 overflow-x-auto pb-2">
-                    {DANCE_TEMPLATES.map((template) => (
-                      <button
-                        key={template.id}
-                        className={cn(
-                          'group relative w-[120px] flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:scale-[1.02]',
-                          selectedTemplate.id === template.id
-                            ? 'border-primary ring-primary/20 ring-2'
-                            : 'border-muted hover:border-primary/50'
-                        )}
-                        onClick={() => setSelectedTemplate(template)}
-                      >
-                        <div className="from-muted to-muted/50 relative aspect-[3/4] overflow-hidden bg-gradient-to-br">
-                          <video
-                            src={template.videoUrl}
-                            className="absolute inset-0 h-full w-full object-cover"
-                            muted
-                            loop
-                            playsInline
-                            autoPlay
-                            preload="auto"
-                          />
-                          <div className="absolute right-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
-                            {template.duration}
+                    {DANCE_TEMPLATES.map((template) => {
+                      const isLocked =
+                        !!template.isPro && !canUseProTemplates;
+
+                      return (
+                        <button
+                          key={template.id}
+                          className={cn(
+                            'group relative w-[120px] flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all hover:scale-[1.02]',
+                            isLocked && 'opacity-70',
+                            selectedTemplate.id === template.id
+                              ? 'border-primary ring-primary/20 ring-2'
+                              : 'border-muted hover:border-primary/50'
+                          )}
+                          onClick={() => handleTemplateSelect(template)}
+                        >
+                          <div className="from-muted to-muted/50 relative aspect-[3/4] overflow-hidden bg-gradient-to-br">
+                            <video
+                              src={template.videoUrl}
+                              className="absolute inset-0 h-full w-full object-cover"
+                              muted
+                              loop
+                              playsInline
+                              autoPlay
+                              preload="auto"
+                            />
+                            <div className="absolute right-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                              {template.duration}
+                            </div>
+                            {selectedTemplate.id === template.id && (
+                              <div className="bg-primary absolute left-1 top-1 rounded-full p-0.5">
+                                <Check className="text-primary-foreground h-2.5 w-2.5" />
+                              </div>
+                            )}
+                            {template.isHot && (
+                              <div className="absolute left-1 top-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                                ⭐
+                              </div>
+                            )}
+                            {template.isPro && !template.isHot && (
+                              <div className="absolute bottom-1 left-1 rounded bg-blue-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                                {isLocked ? (
+                                  <span className="inline-flex items-center gap-1">
+                                    <Lock className="h-3 w-3" />
+                                    Pro
+                                  </span>
+                                ) : (
+                                  '💎 Pro'
+                                )}
+                              </div>
+                            )}
                           </div>
-                          {selectedTemplate.id === template.id && (
-                            <div className="bg-primary absolute left-1 top-1 rounded-full p-0.5">
-                              <Check className="text-primary-foreground h-2.5 w-2.5" />
-                            </div>
-                          )}
-                          {template.isHot && (
-                            <div className="absolute left-1 top-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
-                              ⭐
-                            </div>
-                          )}
-                          {template.isPro && !template.isHot && (
-                            <div className="absolute bottom-1 left-1 rounded bg-blue-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
-                              💎 Pro
-                            </div>
-                          )}
-                        </div>
-                        <div className="bg-background p-1.5">
-                          <p className="truncate text-xs font-medium">
-                            {locale === 'zh' ? template.nameZh : template.name}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
+                          <div className="bg-background p-1.5">
+                            <p className="truncate text-xs font-medium">
+                              {locale === 'zh'
+                                ? template.nameZh
+                                : template.name}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
+                </div>
+              </div>
+
+              {/* Prompt */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">{t('form.prompt')}</Label>
+                <Textarea
+                  value={prompt}
+                  maxLength={MAX_PROMPT_LENGTH}
+                  placeholder={t('form.prompt_placeholder')}
+                  onChange={(e) => {
+                    setPromptTouched(true);
+                    setPrompt(e.target.value);
+                  }}
+                />
+                <div className="text-muted-foreground flex items-center justify-between text-xs">
+                  <span />
+                  <span>
+                    {prompt.length}/{MAX_PROMPT_LENGTH}
+                  </span>
                 </div>
               </div>
 

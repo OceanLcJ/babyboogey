@@ -13,9 +13,22 @@ export interface UserCredits {
   expiresAt: Date | null;
 }
 
+export interface UserMembership {
+  canUseProTemplates: boolean;
+  hasPaidOrder: boolean;
+  hasSubscription: boolean;
+  subscription: {
+    status: string;
+    productId: string | null;
+    planName: string | null;
+    currentPeriodEnd: Date | null;
+  } | null;
+}
+
 export type User = typeof user.$inferSelect & {
   isAdmin?: boolean;
   credits?: UserCredits;
+  membership?: UserMembership;
   roles?: Role[];
   permissions?: Permission[];
 };

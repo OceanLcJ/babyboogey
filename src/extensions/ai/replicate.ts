@@ -282,7 +282,13 @@ export class ReplicateProvider implements AIProvider {
         input.input_images = options.image_input;
         delete input.image_input;
       } else if (['google/veo-3.1'].includes(model)) {
-        input.reference_images = input.image_input;
+        // Prefer true image-to-video (first frame) when a single image is provided.
+        // Use reference-to-video only when multiple reference images are provided.
+        if (options.image_input.length > 1) {
+          input.reference_images = options.image_input;
+        } else if (options.image_input[0]) {
+          input.image = options.image_input[0];
+        }
         delete input.image_input;
       } else if (['openai/sora-2'].includes(model)) {
         input.input_reference = options.image_input[0];

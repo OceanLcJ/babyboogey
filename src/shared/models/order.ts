@@ -30,6 +30,18 @@ export enum OrderStatus {
   FAILED = 'failed', // order paid, but failed
 }
 
+export async function hasPaidOrder(userId: string): Promise<boolean> {
+  if (!userId) return false;
+
+  const [result] = await db()
+    .select({ count: count() })
+    .from(order)
+    .where(and(eq(order.userId, userId), eq(order.status, OrderStatus.PAID)))
+    .limit(1);
+
+  return (result?.count || 0) > 0;
+}
+
 /**
  * create order
  */

@@ -324,7 +324,9 @@ export function ShowcasesFlow({
                           size="lg"
                           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg text-lg h-12 rounded-full"
                         >
-                          <Link href={`/ai-video-generator?template=${filteredItems[selectedIndex].id}`}>
+                          <Link
+                            href={`/?template=${filteredItems[selectedIndex].id}#generator`}
+                          >
                             <SmartIcon name="Wand2" className="mr-2 size-5" />
                             {t('use_this_template')}
                           </Link>

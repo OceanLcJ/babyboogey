@@ -42,7 +42,10 @@
       "orientation_image": "跟随照片",
       "orientation_video": "跟随视频",
       "public_toggle": "公开作品",
-      "public_toggle_desc": "允许其他人查看您生成的视频"
+      "public_toggle_desc": "允许其他人查看您生成的视频",
+      "checking_membership": "正在检查会员状态...",
+      "pro_template_sign_in_first": "请先登录以解锁 Pro 模板",
+      "pro_template_member_only": "Pro 模板仅限会员使用，请先购买套餐/订阅"
     },
     "generate": "开始生成",
     "checking_account": "检查账户中...",
