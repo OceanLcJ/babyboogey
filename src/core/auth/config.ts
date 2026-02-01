@@ -29,7 +29,12 @@ const authOptions = {
   appName: envConfigs.app_name,
   baseURL: envConfigs.auth_url,
   secret: envConfigs.auth_secret,
-  trustedOrigins: envConfigs.app_url ? [envConfigs.app_url] : [],
+  trustedOrigins: [
+    ...(envConfigs.app_url ? [envConfigs.app_url] : []),
+    ...(envConfigs.auth_trusted_origins
+      ? envConfigs.auth_trusted_origins.split(',').filter(Boolean)
+      : []),
+  ],
   user: {
     // Allow persisting custom columns on user table.
     // Without this, better-auth may ignore extra properties during create/update.

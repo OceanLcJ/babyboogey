@@ -19,6 +19,7 @@ enabled = true
 [vars]
 # app
 NEXT_PUBLIC_APP_URL = "https://babyboogey.com"
+AUTH_TRUSTED_ORIGINS = "https://babyboogey.com,https://babyboogey.21131911496283.workers.dev"
 NEXT_PUBLIC_APP_NAME = "AI Baby Dance Generator"
 
 # theme
