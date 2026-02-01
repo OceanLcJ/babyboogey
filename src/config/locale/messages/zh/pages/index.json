@@ -23,7 +23,7 @@
         "id": "hero",
         "title": "全球最可爱的 <strong>AI 宝宝跳舞生成器</strong>！",
         "highlight_text": "生成器",
-        "description": "将任何静态宝宝照片变成搞笑的<strong>唱歌跳舞</strong>动画。无需任何编辑技能 — 只需纯粹的快乐。",
+        "description": "将任何静态宝宝照片变成搞笑的<strong>跳舞</strong>动画。无需任何编辑技能 — 只需纯粹的快乐。",
         "announcement": {
           "badge": "全新",
           "title": "🎉 免费制作宝宝跳舞视频",
@@ -86,15 +86,7 @@
               "alt": "照片动画"
             }
           },
-          {
-            "title": "宝宝唱歌视频",
-            "description": "口型同步魔法 — 让宝宝唱生日歌、节日歌曲和热门金曲。",
-            "icon": "RiMusic2Fill",
-            "image": {
-              "src": "/imgs/features/2.png",
-              "alt": "宝宝唱歌视频"
-            }
-          },
+
           {
             "title": "在线人脸动画",
             "description": "先进的人脸动画技术保持面部自然，同时添加有趣的舞蹈表情。",
@@ -126,15 +118,6 @@
           "alt": "宝宝跳舞使用场景"
         },
         "items": [
-          {
-            "title": "🎂 生日祝福",
-            "description": "让宝宝唱生日歌，打造最特别的个性化生日贺卡视频！",
-            "icon": "RiCake2Fill",
-            "image": {
-              "src": "/imgs/features/birthday.png",
-              "alt": "宝宝生日跳舞"
-            }
-          },
           {
             "title": "🎄 节日贺卡",
             "description": "将照片变成跳舞宝宝，适用于圣诞节、新年和各种节日庆典。全家同乐！",
@@ -180,15 +163,7 @@
               "alt": "宝宝舞蹈动作"
             }
           },
-          {
-            "title": "宝宝唱歌视频制作",
-            "description": "打造终极口型同步照片贺卡。我们的唱歌视频制作器能将任何面孔变成音乐小明星。",
-            "icon": "RiMicFill",
-            "image": {
-              "src": "/imgs/features/sing.png",
-              "alt": "口型同步照片"
-            }
-          },
+
           {
             "title": "超清人脸动画",
             "description": "我们的在线人脸动画器确保面部清晰可辨、安全可爱。绝无奇怪的变形 — 只有纯粹的可爱。",
@@ -222,7 +197,7 @@
           },
           {
             "title": "选择模板",
-            "description": "选一个爆款舞蹈动作或生日歌曲。数十种模板让你随心制作宝宝动画。",
+            "description": "选一个爆款舞蹈动作。数十种模板让你随心制作宝宝动画。",
             "image": {
               "src": "/imgs/features/template.png",
               "alt": "选择舞蹈模板"
@@ -558,15 +533,6 @@
         "description": "来自真实家长（和一些笑到停不下来的祖父母）的真实评价。",
         "items": [
           {
-            "name": "Sarah J.",
-            "role": "一个孩子的妈妈",
-            "quote": "最棒的宝宝跳舞视频制作器！奶奶看到小 Tom 唱猫王的时候笑哭了。每一分钱都值！",
-            "image": {
-              "src": "/imgs/avatars/1.png",
-              "alt": "Sarah"
-            }
-          },
-          {
             "name": "Mike T.",
             "role": "欢乐爸爸",
             "quote": "我用 AI 宝宝跳舞生成器给老婆做了个生日视频，成了派对的最大亮点！",
@@ -601,15 +567,6 @@
               "src": "/imgs/avatars/5.png",
               "alt": "Chris"
             }
-          },
-          {
-            "name": "Amanda B.",
-            "role": "姑姑",
-            "quote": "我用它给侄女做了个唱生日歌的视频。口型同步照片功能既搞笑又逼真！",
-            "image": {
-              "src": "/imgs/avatars/6.png",
-              "alt": "Amanda"
-            }
           }
         ]
       },
@@ -622,10 +579,7 @@
             "question": "AI 宝宝跳舞生成器免费吗？",
             "answer": "是的！基础功能完全免费，可以免费制作宝宝跳舞视频。我们还提供高级模板，支持更多跳舞视频制作功能和更高分辨率的导出。"
           },
-          {
-            "question": "能让宝宝唱生日歌吗？",
-            "answer": "当然可以！我们的宝宝唱歌视频制作器可以让照片口型同步到热门歌曲，包括经典生日歌和节日曲目。这是最完美的个性化礼物。"
-          },
+
           {
             "question": "在线人脸动画是怎么工作的？",
             "answer": "上传任意照片，AI 会为宝宝面部添加自然逼真的动态效果。人脸动画器会保留面部特征，同时添加有趣的舞蹈动作和表情。"

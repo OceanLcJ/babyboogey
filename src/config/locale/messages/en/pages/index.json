@@ -23,7 +23,7 @@
         "id": "hero",
         "title": "The World's Cutest <strong>AI Baby Dance Generator</strong>!",
         "highlight_text": "Generator",
-        "description": "Turn any static baby photo into a hilarious <strong>Singing & Dancing</strong> sensation. No editing skills needed — just pure joy.",
+        "description": "Turn any static baby photo into a hilarious <strong>Dancing</strong> sensation. No editing skills needed — just pure joy.",
         "announcement": {
           "badge": "New",
           "title": "🎉 Make Baby Dance Videos Free",
@@ -86,15 +86,7 @@
               "alt": "Animate Baby Photo"
             }
           },
-          {
-            "title": "Baby Singing Video Maker",
-            "description": "Create lip sync magic — make baby sing happy birthday, holiday songs, and viral hits.",
-            "icon": "RiMusic2Fill",
-            "image": {
-              "src": "/imgs/features/2.png",
-              "alt": "Baby Singing Video Maker"
-            }
-          },
+
           {
             "title": "Face Animator Online",
             "description": "Advanced face animator online technology keeps faces natural while adding fun dance expressions.",
@@ -126,15 +118,6 @@
           "alt": "Baby Dance Video Use Cases"
         },
         "items": [
-          {
-            "title": "🎂 Birthday Wishes",
-            "description": "Make baby sing happy birthday for the ultimate personalized greeting. A singing baby video that steals the show!",
-            "icon": "RiCake2Fill",
-            "image": {
-              "src": "/imgs/features/birthday.png",
-              "alt": "Make Baby Sing Happy Birthday"
-            }
-          },
           {
             "title": "🎄 Holiday Cards",
             "description": "Turn photo into dancing baby for Christmas, New Year, and every festive celebration. Fun for the whole family.",
@@ -180,15 +163,7 @@
               "alt": "Turn Photo Into Dancing Baby"
             }
           },
-          {
-            "title": "Baby Singing Video Maker",
-            "description": "Create the ultimate lip sync baby photo greeting. Our singing video maker turns any face into a musical sensation.",
-            "icon": "RiMicFill",
-            "image": {
-              "src": "/imgs/features/sing.png",
-              "alt": "Lip Sync Baby Photo"
-            }
-          },
+
           {
             "title": "Crystal Clear Face Animation",
             "description": "Our face animator online ensures faces stay recognizable, safe, and adorable. No weird distortions — just pure cuteness.",
@@ -222,7 +197,7 @@
           },
           {
             "title": "Choose Template",
-            "description": "Select a viral dance move or a happy birthday song. Dozens of templates to animate baby photos your way.",
+            "description": "Select a viral dance move. Dozens of templates to animate baby photos your way.",
             "image": {
               "src": "/imgs/features/template.png",
               "alt": "Choose Baby Dance Template"
@@ -558,15 +533,6 @@
         "description": "Real reviews from real parents (and some ticklish grandparents).",
         "items": [
           {
-            "name": "Sarah J.",
-            "role": "Mom of one",
-            "quote": "Best baby dance video maker ever! Grandma cried laughing when she saw baby Tom singing Elvis. Worth every penny!",
-            "image": {
-              "src": "/imgs/avatars/1.png",
-              "alt": "Sarah"
-            }
-          },
-          {
             "name": "Mike T.",
             "role": "Fun Dad",
             "quote": "I used the AI baby dance generator to make a birthday video for my wife. It was the highlight of the party!",
@@ -601,15 +567,6 @@
               "src": "/imgs/avatars/5.png",
               "alt": "Chris"
             }
-          },
-          {
-            "name": "Amanda B.",
-            "role": "Auntie",
-            "quote": "I used it to make baby sing happy birthday for my niece. The lip sync baby photo feature is hilarious and so realistic!",
-            "image": {
-              "src": "/imgs/avatars/6.png",
-              "alt": "Amanda"
-            }
           }
         ]
       },
@@ -622,10 +579,7 @@
             "question": "Is the AI baby dance generator free to use?",
             "answer": "Yes! You can make baby dance videos free with our basic plan. We offer premium templates for advanced baby dance video maker features and higher resolution exports."
           },
-          {
-            "question": "Can I make my baby sing happy birthday?",
-            "answer": "Absolutely! Our baby singing video maker lets you lip sync baby photos to popular songs, including birthday classics and holiday tunes. It's the perfect personalized gift."
-          },
+
           {
             "question": "How does the face animator online work?",
             "answer": "Upload any photo and our AI will animate baby photo faces with natural-looking movements. The face animator online preserves facial features while adding fun dance moves and expressions."
@@ -636,7 +590,7 @@
           },
           {
             "question": "Do I need professional photos to animate baby photos?",
-            "answer": "Not at all! Any clear snapshot works with our baby dance video maker. Even casual selfies become amazing lip sync baby photo masterpieces with our AI technology."
+            "answer": "Not at all! Any clear snapshot works with our baby dance video maker. Even casual selfies become amazing baby photo masterpieces with our AI technology."
           }
         ]
       },
