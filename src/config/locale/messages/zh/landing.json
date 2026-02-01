@@ -48,7 +48,7 @@
         }
       ]
     },
-    "show_sign": false,
+    "show_sign": true,
     "show_theme": true,
     "show_locale": true,
     "topbanner": {
