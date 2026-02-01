@@ -1,0 +1,78 @@
+diff --git a/dist/cli/commands/deploy.js b/dist/cli/commands/deploy.js
+index 83fdae9fc267bd16da333642514076c0efc4bc26..f1c1c6dcd9c2f44e883db76014c3f2c63087cad5 100644
+--- a/dist/cli/commands/deploy.js
++++ b/dist/cli/commands/deploy.js
+@@ -1,6 +1,6 @@
+ import { DEPLOYMENT_MAPPING_ENV_NAME } from "../templates/skew-protection.js";
+ import { runWrangler } from "../utils/run-wrangler.js";
+-import { getEnvFromPlatformProxy, quoteShellMeta } from "./helpers.js";
++import { getEnvFromPlatformProxy } from "./helpers.js";
+ import { populateCache, withPopulateCacheOptions } from "./populate-cache.js";
+ import { getDeploymentMapping } from "./skew-protection.js";
+ import { getNormalizedOptions, printHeaders, readWranglerConfig, retrieveCompiledConfig, withWranglerPassthroughArgs, } from "./utils.js";
+@@ -27,7 +27,7 @@ export async function deployCommand(args) {
+         "deploy",
+         ...args.wranglerArgs,
+         ...(deploymentMapping
+-            ? [`--var ${DEPLOYMENT_MAPPING_ENV_NAME}:${quoteShellMeta(JSON.stringify(deploymentMapping))}`]
++            ? ["--var", `${DEPLOYMENT_MAPPING_ENV_NAME}:${JSON.stringify(deploymentMapping)}`]
+             : []),
+     ], {
+         logging: "all",
+diff --git a/dist/cli/commands/upload.js b/dist/cli/commands/upload.js
+index 15fb67b69f6cb76ade78caaa03fe17ed94c6c493..32c78afe40bcfd39f3c1d949d9ef7f41078b9c83 100644
+--- a/dist/cli/commands/upload.js
++++ b/dist/cli/commands/upload.js
+@@ -1,6 +1,6 @@
+ import { DEPLOYMENT_MAPPING_ENV_NAME } from "../templates/skew-protection.js";
+ import { runWrangler } from "../utils/run-wrangler.js";
+-import { getEnvFromPlatformProxy, quoteShellMeta } from "./helpers.js";
++import { getEnvFromPlatformProxy } from "./helpers.js";
+ import { populateCache, withPopulateCacheOptions } from "./populate-cache.js";
+ import { getDeploymentMapping } from "./skew-protection.js";
+ import { getNormalizedOptions, printHeaders, readWranglerConfig, retrieveCompiledConfig, withWranglerPassthroughArgs, } from "./utils.js";
+@@ -27,10 +27,11 @@ export async function uploadCommand(args) {
+         shouldUsePreviewId: false,
+     }, envVars);
+     runWrangler(buildOpts, [
+-        "versions upload",
++        "versions",
++        "upload",
+         ...args.wranglerArgs,
+         ...(deploymentMapping
+-            ? [`--var ${DEPLOYMENT_MAPPING_ENV_NAME}:${quoteShellMeta(JSON.stringify(deploymentMapping))}`]
++            ? ["--var", `${DEPLOYMENT_MAPPING_ENV_NAME}:${JSON.stringify(deploymentMapping)}`]
+             : []),
+     ], { logging: "all" });
+ }
+diff --git a/dist/cli/utils/run-wrangler.js b/dist/cli/utils/run-wrangler.js
+index ac58425e7e8f2428ab34b13a11f966f476210093..47a2ebbea6723d8dafc4f34fec9faa4dcee04876 100644
+--- a/dist/cli/utils/run-wrangler.js
++++ b/dist/cli/utils/run-wrangler.js
+@@ -38,18 +38,18 @@ function injectPassthroughFlagForArgs(options, args) {
+ }
+ export function runWrangler(options, args, wranglerOpts = {}) {
+     const shouldPipeLogs = wranglerOpts.logging === "error";
++    const wranglerArgs = injectPassthroughFlagForArgs(options, [
++        ...args,
++        ...(wranglerOpts.environment ? ["--env", wranglerOpts.environment] : []),
++        ...(wranglerOpts.configPath ? ["--config", wranglerOpts.configPath] : []),
++        ...(wranglerOpts.target === "remote" ? ["--remote"] : []),
++        ...(wranglerOpts.target === "local" ? ["--local"] : []),
++    ]);
+     const result = spawnSync(options.packager, [
+         options.packager === "bun" ? "x" : "exec",
+         "wrangler",
+-        ...injectPassthroughFlagForArgs(options, [
+-            ...args,
+-            wranglerOpts.environment && `--env ${wranglerOpts.environment}`,
+-            wranglerOpts.configPath && `--config ${wranglerOpts.configPath}`,
+-            wranglerOpts.target === "remote" && "--remote",
+-            wranglerOpts.target === "local" && "--local",
+-        ].filter((v) => !!v)),
++        ...wranglerArgs,
+     ], {
+-        shell: true,
+         stdio: shouldPipeLogs ? ["ignore", "pipe", "pipe"] : "inherit",
+         env: {
+             ...process.env,

@@ -50,7 +50,7 @@
     "@libsql/client": "^0.15.9",
     "@next/bundle-analyzer": "^15.5.7",
     "@next/third-parties": "^15.5.7",
-    "@opennextjs/cloudflare": "^1.10.1",
+    "@opennextjs/cloudflare": "^1.16.1",
     "@openrouter/ai-sdk-provider": "^1.2.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@paypal/paypal-server-sdk": "1.1.0",
@@ -104,9 +104,9 @@
     "markdown-it": "^14.1.0",
     "moment": "^2.30.1",
     "motion": "^12.23.12",
-    "next": "15.5.7",
     "mysql2": "^3.16.0",
     "nanoid": "^5.1.6",
+    "next": "15.5.7",
     "next-intl": "^4.3.4",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.6",
@@ -164,12 +164,15 @@
     "tsx": "^4.20.3",
     "tw-animate-css": "^1.3.5",
     "typescript": "^5",
-    "wrangler": "^4.34.0"
+    "wrangler": "^4.61.1"
   },
   "pnpm": {
     "overrides": {
       "@types/react": "19.2.2",
       "@types/react-dom": "19.2.1"
+    },
+    "patchedDependencies": {
+      "@opennextjs/cloudflare@1.16.1": "patches/@opennextjs__cloudflare@1.16.1.patch"
     }
   }
 }
