@@ -200,11 +200,12 @@ export function db(): any {
     );
   }
 
-  if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
+  const provider = envConfigs.database_provider;
+  if (provider === 'sqlite' || provider === 'turso') {
     return withSqliteCompat(getSqliteDb() as any);
   }
 
-  if (envConfigs.database_provider === 'mysql') {
+  if (provider === 'mysql') {
     return withMysqlCompat(getMysqlDb() as any);
   }
 
@@ -228,7 +229,8 @@ export function dbMysql(): ReturnType<typeof getMysqlDb> {
 }
 
 export function dbSqlite(): ReturnType<typeof getSqliteDb> {
-  if (!['sqlite', 'turso'].includes(envConfigs.database_provider)) {
+  const provider = envConfigs.database_provider;
+  if (provider !== 'sqlite' && provider !== 'turso') {
     throw new Error('Database provider is not SQLite');
   }
 

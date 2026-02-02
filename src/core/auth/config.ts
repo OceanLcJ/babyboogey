@@ -182,7 +182,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
       enabled: configs.email_auth_enabled !== 'false',
       requireEmailVerification: emailVerificationEnabled,
       // Avoid creating a session immediately after sign up when verification is required.
-      autoSignIn: emailVerificationEnabled ? false : true,
+      autoSignIn: !emailVerificationEnabled,
     },
     ...(emailVerificationEnabled
       ? {
@@ -268,9 +268,7 @@ export function getDatabaseProvider(
 ): 'sqlite' | 'pg' | 'mysql' {
   switch (provider) {
     case 'sqlite':
-      return 'sqlite';
     case 'turso':
-      return 'sqlite';
     case 'd1':
       return 'sqlite';
     case 'postgresql':

@@ -49,13 +49,7 @@ const nextConfig = {
       },
     ];
   },
-  turbopack: {
-    resolveAlias: {
-      // fs: {
-      //   browser: './empty.ts', // We recommend to fix code imports before using this method
-      // },
-    },
-  },
+  turbopack: {},
   experimental: {
     // Disable mdxRs for Vercel deployment compatibility with fumadocs-mdx
     ...(process.env.VERCEL ? {} : { mdxRs: true }),

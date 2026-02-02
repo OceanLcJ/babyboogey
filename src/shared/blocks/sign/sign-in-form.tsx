@@ -78,15 +78,6 @@ export function SignInForm({
           callbackURL: callbackUrl,
         },
         {
-          onRequest: (ctx) => {
-            // loading is already set above; keep as no-op for safety
-          },
-          onResponse: (ctx) => {
-            // Do NOT reset loading here; navigation may not have completed yet.
-          },
-          onSuccess: (ctx) => {
-            // Keep loading=true until navigation completes.
-          },
           onError: (e: any) => {
             const status = e?.error?.status;
             if (status === 403) {
@@ -139,9 +130,7 @@ export function SignInForm({
                 type="email"
                 placeholder={t('email_placeholder')}
                 required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
+                onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
             </div>

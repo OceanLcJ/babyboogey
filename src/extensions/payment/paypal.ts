@@ -55,24 +55,16 @@ export class PayPalProvider implements PaymentProvider {
   }: {
     order: PaymentOrder;
   }): Promise<CheckoutSession> {
-    try {
-      await this.ensureAccessToken();
+    await this.ensureAccessToken();
 
-      // check payment price
-      if (!order.price) {
-        throw new Error('price is required');
-      }
-
-      if (order.type === PaymentType.SUBSCRIPTION) {
-        // create subscription payment
-        return await this.createSubscriptionPayment(order);
-      } else {
-        // create one-time payment
-        return await this.createOneTimePayment(order);
-      }
-    } catch (error) {
-      throw error;
+    if (!order.price) {
+      throw new Error('price is required');
     }
+
+    if (order.type === PaymentType.SUBSCRIPTION) {
+      return await this.createSubscriptionPayment(order);
+    }
+    return await this.createOneTimePayment(order);
   }
 
   /**
@@ -302,92 +294,88 @@ export class PayPalProvider implements PaymentProvider {
   }: {
     sessionId: string;
   }): Promise<PaymentSession> {
+    if (!sessionId) {
+      throw new Error('sessionId is required');
+    }
+
+    await this.ensureAccessToken();
+
+    // Try to get as order first
     try {
-      if (!sessionId) {
-        throw new Error('sessionId is required');
+      let orderResult = await this.makeRequest(
+        `/v2/checkout/orders/${sessionId}`,
+        'GET'
+      );
+
+      // If order status is APPROVED, auto-capture the payment
+      // APPROVED means user has authorized but payment not yet captured
+      if (orderResult.status === 'APPROVED') {
+        console.log(
+          'PayPal order is APPROVED, auto-capturing payment...',
+          sessionId
+        );
+        orderResult = await this.makeRequest(
+          `/v2/checkout/orders/${sessionId}/capture`,
+          'POST'
+        );
+        console.log(
+          'PayPal payment captured, new status:',
+          orderResult.status
+        );
       }
 
-      await this.ensureAccessToken();
-
-      // Try to get as order first
-      try {
-        let orderResult = await this.makeRequest(
-          `/v2/checkout/orders/${sessionId}`,
+      return await this.buildPaymentSessionFromOrder(orderResult);
+    } catch (orderError: any) {
+      // If not found as order, try as subscription
+      if (
+        orderError.message?.includes('RESOURCE_NOT_FOUND') ||
+        orderError.message?.includes('INVALID_RESOURCE_ID')
+      ) {
+        let subscriptionResult = await this.makeRequest(
+          `/v1/billing/subscriptions/${sessionId}`,
           'GET'
         );
 
-        // If order status is APPROVED, auto-capture the payment
-        // APPROVED means user has authorized but payment not yet captured
-        if (orderResult.status === 'APPROVED') {
+        // If subscription status is APPROVED, wait for it to become ACTIVE
+        // PayPal automatically activates subscription after user approval
+        if (subscriptionResult.status === 'APPROVED') {
           console.log(
-            'PayPal order is APPROVED, auto-capturing payment...',
+            'PayPal subscription is APPROVED, waiting for activation...',
             sessionId
           );
-          orderResult = await this.makeRequest(
-            `/v2/checkout/orders/${sessionId}/capture`,
-            'POST'
-          );
-          console.log(
-            'PayPal payment captured, new status:',
-            orderResult.status
-          );
-        }
 
-        return await this.buildPaymentSessionFromOrder(orderResult);
-      } catch (orderError: any) {
-        // If not found as order, try as subscription
-        if (
-          orderError.message?.includes('RESOURCE_NOT_FOUND') ||
-          orderError.message?.includes('INVALID_RESOURCE_ID')
-        ) {
-          let subscriptionResult = await this.makeRequest(
-            `/v1/billing/subscriptions/${sessionId}`,
-            'GET'
-          );
-
-          // If subscription status is APPROVED, wait for it to become ACTIVE
-          // PayPal automatically activates subscription after user approval
-          if (subscriptionResult.status === 'APPROVED') {
+          // Poll for up to 10 seconds (5 attempts, 2 seconds apart)
+          for (let i = 0; i < 5; i++) {
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            subscriptionResult = await this.makeRequest(
+              `/v1/billing/subscriptions/${sessionId}`,
+              'GET'
+            );
             console.log(
-              'PayPal subscription is APPROVED, waiting for activation...',
-              sessionId
+              `PayPal subscription poll ${i + 1}/5, status:`,
+              subscriptionResult.status
             );
 
-            // Poll for up to 10 seconds (5 attempts, 2 seconds apart)
-            for (let i = 0; i < 5; i++) {
-              await new Promise((resolve) => setTimeout(resolve, 2000));
-              subscriptionResult = await this.makeRequest(
-                `/v1/billing/subscriptions/${sessionId}`,
-                'GET'
-              );
-              console.log(
-                `PayPal subscription poll ${i + 1}/5, status:`,
-                subscriptionResult.status
-              );
-
-              if (subscriptionResult.status === 'ACTIVE') {
-                console.log('PayPal subscription activated successfully');
-                break;
-              }
-            }
-
-            // If still APPROVED after polling, treat it as success
-            // PayPal will activate it shortly
-            if (subscriptionResult.status === 'APPROVED') {
-              console.log(
-                'PayPal subscription still APPROVED after polling, treating as success'
-              );
+            if (subscriptionResult.status === 'ACTIVE') {
+              console.log('PayPal subscription activated successfully');
+              break;
             }
           }
 
-          return await this.buildPaymentSessionFromSubscription(
-            subscriptionResult
-          );
+          // If still APPROVED after polling, treat it as success
+          // PayPal will activate it shortly
+          if (subscriptionResult.status === 'APPROVED') {
+            console.log(
+              'PayPal subscription still APPROVED after polling, treating as success'
+            );
+          }
         }
-        throw orderError;
+
+        return await this.buildPaymentSessionFromSubscription(
+          subscriptionResult
+        );
       }
-    } catch (error) {
-      throw error;
+      throw orderError;
     }
   }
 
@@ -486,7 +474,7 @@ export class PayPalProvider implements PaymentProvider {
 
       // Map PayPal event type to internal event type
       const eventType = this.mapPayPalEventType(event.event_type);
-      let paymentSession: PaymentSession | undefined = undefined;
+      let paymentSession: PaymentSession | undefined;
 
       // Build payment session based on event type
       if (eventType === PaymentEventType.CHECKOUT_SUCCESS) {
@@ -534,9 +522,9 @@ export class PayPalProvider implements PaymentProvider {
       }
 
       return {
-        eventType: eventType,
+        eventType,
         eventResult: event,
-        paymentSession: paymentSession,
+        paymentSession,
       };
     } catch (error) {
       throw error;
@@ -554,39 +542,32 @@ export class PayPalProvider implements PaymentProvider {
   }: {
     invoiceId: string;
   }): Promise<PaymentInvoice> {
+    await this.ensureAccessToken();
+
+    const activityUrl =
+      this.configs.environment === 'production'
+        ? 'https://www.paypal.com/myaccount/transactions'
+        : 'https://www.sandbox.paypal.com/myaccount/transactions';
+
     try {
-      await this.ensureAccessToken();
+      const capture = await this.makeRequest(
+        `/v2/payments/captures/${invoiceId}`,
+        'GET'
+      );
 
-      // PayPal activity page URL (users need to log in to view their transactions)
-      const activityUrl =
-        this.configs.environment === 'production'
-          ? 'https://www.paypal.com/myaccount/transactions'
-          : 'https://www.sandbox.paypal.com/myaccount/transactions';
-
-      // Try to get capture details for amount info (for one-time payments)
-      try {
-        const capture = await this.makeRequest(
-          `/v2/payments/captures/${invoiceId}`,
-          'GET'
-        );
-
-        return {
-          invoiceId: capture.id,
-          invoiceUrl: activityUrl,
-          amount: capture.amount?.value
-            ? parseFloat(capture.amount.value) * 100
-            : undefined,
-          currency: capture.amount?.currency_code,
-        };
-      } catch (captureError: any) {
-        // If not a capture (subscription sale), just return the activity URL
-        return {
-          invoiceId: invoiceId,
-          invoiceUrl: activityUrl,
-        };
-      }
-    } catch (error) {
-      throw error;
+      return {
+        invoiceId: capture.id,
+        invoiceUrl: activityUrl,
+        amount: capture.amount?.value
+          ? parseFloat(capture.amount.value) * 100
+          : undefined,
+        currency: capture.amount?.currency_code,
+      };
+    } catch {
+      return {
+        invoiceId,
+        invoiceUrl: activityUrl,
+      };
     }
   }
 
@@ -600,21 +581,12 @@ export class PayPalProvider implements PaymentProvider {
     customerId: string;
     returnUrl?: string;
   }): Promise<PaymentBilling> {
-    try {
-      // PayPal doesn't have a direct billing portal like Stripe
-      // We return the PayPal subscription management URL
-      // Note: customerId and returnUrl are not used in PayPal's implementation
-      const billingUrl =
-        this.configs.environment === 'production'
-          ? `https://www.paypal.com/myaccount/autopay`
-          : `https://www.sandbox.paypal.com/myaccount/autopay`;
+    const billingUrl =
+      this.configs.environment === 'production'
+        ? 'https://www.paypal.com/myaccount/autopay'
+        : 'https://www.sandbox.paypal.com/myaccount/autopay';
 
-      return {
-        billingUrl: billingUrl,
-      };
-    } catch (error) {
-      throw error;
-    }
+    return { billingUrl };
   }
 
   /**
@@ -625,50 +597,38 @@ export class PayPalProvider implements PaymentProvider {
   }: {
     subscriptionId: string;
   }): Promise<PaymentSession> {
-    try {
-      if (!subscriptionId) {
-        throw new Error('subscriptionId is required');
-      }
-
-      await this.ensureAccessToken();
-
-      // Cancel the subscription
-      await this.makeRequest(
-        `/v1/billing/subscriptions/${subscriptionId}/cancel`,
-        'POST',
-        {
-          reason: 'Customer requested cancellation',
-        }
-      );
-
-      // Get updated subscription details
-      const subscription = await this.makeRequest(
-        `/v1/billing/subscriptions/${subscriptionId}`,
-        'GET'
-      );
-
-      return await this.buildPaymentSessionFromSubscription(subscription);
-    } catch (error) {
-      throw error;
+    if (!subscriptionId) {
+      throw new Error('subscriptionId is required');
     }
+
+    await this.ensureAccessToken();
+
+    await this.makeRequest(
+      `/v1/billing/subscriptions/${subscriptionId}/cancel`,
+      'POST',
+      { reason: 'Customer requested cancellation' }
+    );
+
+    const subscription = await this.makeRequest(
+      `/v1/billing/subscriptions/${subscriptionId}`,
+      'GET'
+    );
+
+    return await this.buildPaymentSessionFromSubscription(subscription);
   }
 
   /**
    * Capture an authorized payment
    */
   async capturePayment(orderId: string): Promise<PaymentSession> {
-    try {
-      await this.ensureAccessToken();
+    await this.ensureAccessToken();
 
-      const result = await this.makeRequest(
-        `/v2/checkout/orders/${orderId}/capture`,
-        'POST'
-      );
+    const result = await this.makeRequest(
+      `/v2/checkout/orders/${orderId}/capture`,
+      'POST'
+    );
 
-      return await this.buildPaymentSessionFromOrder(result);
-    } catch (error) {
-      throw error;
-    }
+    return await this.buildPaymentSessionFromOrder(result);
   }
 
   // ============ Private Helper Methods ============
