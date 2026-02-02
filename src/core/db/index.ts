@@ -2,7 +2,9 @@ import { envConfigs } from '@/config';
 
 import { closeMysqlDb, getMysqlDb } from './mysql';
 import { closePostgresDb, getPostgresDb } from './postgres';
+import { getD1DbSync } from './d1';
 import { getSqliteDb } from './sqlite';
+import { isCloudflareWorker } from '@/shared/lib/env';
 
 const mysqlCompatProxyCache = new WeakMap<object, any>();
 const sqliteCompatProxyCache = new WeakMap<object, any>();
@@ -184,6 +186,20 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
  * So we intentionally return `any` to keep call sites stable.
  */
 export function db(): any {
+  if (envConfigs.database_provider === 'd1') {
+    if (isCloudflareWorker) {
+      return withSqliteCompat(getD1DbSync() as any);
+    }
+
+    if (envConfigs.database_url) {
+      return withSqliteCompat(getSqliteDb() as any);
+    }
+
+    throw new Error(
+      'D1 database provider requires Cloudflare Workers or a DATABASE_URL fallback.'
+    );
+  }
+
   if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
     return withSqliteCompat(getSqliteDb() as any);
   }

@@ -6,6 +6,7 @@ import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { VerifyEmail } from '@/shared/blocks/email/verify-email';
+import { isCloudflareWorker } from '@/shared/lib/env';
 import {
   getCookieFromCtx,
   getHeaderValue,
@@ -106,12 +107,14 @@ export async function getAuthOptions(configs: Record<string, string>) {
   return {
     ...authOptions,
     // Add database connection only when actually needed (runtime)
-    database: envConfigs.database_url
-      ? drizzleAdapter(db(), {
-          provider: getDatabaseProvider(envConfigs.database_provider),
-          schema: schema,
-        })
-      : null,
+    database:
+      envConfigs.database_url ||
+      (envConfigs.database_provider === 'd1' && isCloudflareWorker)
+        ? drizzleAdapter(db(), {
+            provider: getDatabaseProvider(envConfigs.database_provider),
+            schema: schema,
+          })
+        : null,
     databaseHooks: {
       user: {
         create: {
@@ -267,6 +270,8 @@ export function getDatabaseProvider(
     case 'sqlite':
       return 'sqlite';
     case 'turso':
+      return 'sqlite';
+    case 'd1':
       return 'sqlite';
     case 'postgresql':
       return 'pg';
