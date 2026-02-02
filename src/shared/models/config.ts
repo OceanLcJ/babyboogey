@@ -20,19 +20,25 @@ export async function saveConfigs(configs: Record<string, string>) {
   const configEntries = Object.entries(configs);
   const database = db();
 
-  const queries = configEntries.map(([name, configValue]) =>
-    database
-      .insert(config)
-      .values({ name, value: configValue })
-      .onConflictDoUpdate({
-        target: config.name,
-        set: { value: configValue },
-      })
-  );
-
-  // D1 supports batch for atomic multi-statement execution
-  if (envConfigs.database_provider === 'd1' && typeof database.batch === 'function') {
-    await database.batch(queries);
+  // D1: use batch API for atomic execution
+  if (envConfigs.database_provider === 'd1') {
+    const queries = configEntries.map(([name, configValue]) =>
+      database
+        .insert(config)
+        .values({ name, value: configValue })
+        .onConflictDoUpdate({
+          target: config.name,
+          set: { value: configValue },
+        })
+    );
+    // Execute all queries - batch if available, otherwise sequential
+    if (typeof database.batch === 'function') {
+      await database.batch(queries);
+    } else {
+      for (const query of queries) {
+        await query;
+      }
+    }
   } else {
     // Other databases: use transaction
     await database.transaction(async (tx: any) => {
