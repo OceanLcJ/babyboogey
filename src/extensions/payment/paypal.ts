@@ -776,9 +776,6 @@ export class PayPalProvider implements PaymentProvider {
         return PaymentEventType.SUBSCRIBE_CANCELED;
 
       // Subscription payment events
-      case 'PAYMENT.SALE.COMPLETED':
-        return PaymentEventType.PAYMENT_SUCCESS;
-
       default:
         throw new Error(`Unknown PayPal event type: ${eventType}`);
     }

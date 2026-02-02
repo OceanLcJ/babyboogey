@@ -23,18 +23,41 @@ import { grantRoleForNewUser } from '@/shared/services/rbac';
 const recentVerificationEmailSentAt = new Map<string, number>();
 const VERIFICATION_EMAIL_MIN_INTERVAL_MS = 60_000;
 
+function getTrustedOrigins() {
+  const origins = new Set<string>();
+  if (envConfigs.app_url) {
+    origins.add(envConfigs.app_url);
+    try {
+      const url = new URL(envConfigs.app_url);
+      if (url.hostname.startsWith('www.')) {
+        const nonWww = url.hostname.replace(/^www\./, '');
+        origins.add(`${url.protocol}//${nonWww}`);
+      } else {
+        origins.add(`${url.protocol}//www.${url.hostname}`);
+      }
+    } catch {
+      // ignore invalid URL
+    }
+  }
+
+  if (envConfigs.auth_trusted_origins) {
+    for (const origin of envConfigs.auth_trusted_origins
+      .split(',')
+      .filter(Boolean)) {
+      origins.add(origin);
+    }
+  }
+
+  return Array.from(origins);
+}
+
 // Static auth options - NO database connection
 // This ensures zero database calls during build time
 const authOptions = {
   appName: envConfigs.app_name,
   baseURL: envConfigs.auth_url,
   secret: envConfigs.auth_secret,
-  trustedOrigins: [
-    ...(envConfigs.app_url ? [envConfigs.app_url] : []),
-    ...(envConfigs.auth_trusted_origins
-      ? envConfigs.auth_trusted_origins.split(',').filter(Boolean)
-      : []),
-  ],
+  trustedOrigins: getTrustedOrigins(),
   user: {
     // Allow persisting custom columns on user table.
     // Without this, better-auth may ignore extra properties during create/update.
