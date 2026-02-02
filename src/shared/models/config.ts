@@ -20,38 +20,15 @@ export async function saveConfigs(configs: Record<string, string>) {
   const configEntries = Object.entries(configs);
   const database = db();
 
-  // D1: use batch API for atomic execution
-  if (envConfigs.database_provider === 'd1') {
-    const queries = configEntries.map(([name, configValue]) =>
-      database
-        .insert(config)
-        .values({ name, value: configValue })
-        .onConflictDoUpdate({
-          target: config.name,
-          set: { value: configValue },
-        })
-    );
-    // Execute all queries - batch if available, otherwise sequential
-    if (typeof database.batch === 'function') {
-      await database.batch(queries);
-    } else {
-      for (const query of queries) {
-        await query;
-      }
-    }
-  } else {
-    // Other databases: use transaction
-    await database.transaction(async (tx: any) => {
-      for (const [name, configValue] of configEntries) {
-        await tx
-          .insert(config)
-          .values({ name, value: configValue })
-          .onConflictDoUpdate({
-            target: config.name,
-            set: { value: configValue },
-          });
-      }
-    });
+  // Execute upserts - D1 doesn't support transactions, so run sequentially
+  for (const [name, configValue] of configEntries) {
+    await database
+      .insert(config)
+      .values({ name, value: configValue })
+      .onConflictDoUpdate({
+        target: config.name,
+        set: { value: configValue },
+      });
   }
 
   revalidateTag(CACHE_TAG_CONFIGS);
