@@ -119,8 +119,10 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
  * SQLite/Turso/D1 compatibility shim:
  * - SQLite doesn't support row-level locking; Drizzle's select builder may not implement `.for()`.
  *   We polyfill `.for(...)` as a no-op to keep call sites portable.
- * - D1 doesn't support native `.transaction()`. We polyfill it by executing the callback
+ * - Some sqlite-ish drivers may not expose `.transaction()`. We polyfill it by executing the callback
  *   with the db instance directly. Note: this loses true atomicity but maintains API compatibility.
+ * - For drivers that support transaction configs (D1/sqlite-proxy), default to `BEGIN IMMEDIATE`
+ *   when no config is provided to reduce concurrent-write hazards.
  */
 function withSqliteCompat<T extends object>(dbInstance: T): T {
   if (dbInstance && typeof dbInstance === 'object') {
@@ -152,12 +154,18 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
   const proxied = new Proxy(dbInstance, {
     get(target, prop, receiver) {
       // Wrap transaction callback so `tx` is also shimmed.
-      // D1 doesn't have native transaction support, so we polyfill it.
       if (prop === 'transaction') {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original === 'function') {
-          return (fn: any, ...rest: any[]) =>
-            original.call(target, (tx: any) => fn(withSqliteCompat(tx)), ...rest);
+          return (fn: any, ...rest: any[]) => {
+            const args =
+              rest.length === 0 ? [{ behavior: 'immediate' } as any] : rest;
+            return original.call(
+              target,
+              (tx: any) => fn(withSqliteCompat(tx)),
+              ...args
+            );
+          };
         }
         // D1 polyfill: execute callback with the proxied db instance directly
         return async (fn: any) => fn(receiver);

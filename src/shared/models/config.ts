@@ -3,6 +3,7 @@ import { revalidateTag, unstable_cache } from 'next/cache';
 import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import { config } from '@/config/db/schema';
+import { isCloudflareWorker } from '@/shared/lib/env';
 import {
   getAllSettingNames,
   publicSettingNames,
@@ -16,11 +17,18 @@ export type Configs = Record<string, string>;
 
 export const CACHE_TAG_CONFIGS = 'configs';
 
+function hasRuntimeDatabase() {
+  return (
+    !!envConfigs.database_url ||
+    (envConfigs.database_provider === 'd1' && isCloudflareWorker)
+  );
+}
+
 export async function saveConfigs(configs: Record<string, string>) {
   const configEntries = Object.entries(configs);
   const database = db();
 
-  // Execute upserts - D1 doesn't support transactions, so run sequentially
+  // Execute upserts sequentially to keep this portable across providers.
   for (const [name, configValue] of configEntries) {
     await database
       .insert(config)
@@ -47,7 +55,8 @@ export const getConfigs = unstable_cache(
   async (): Promise<Configs> => {
     const configs: Record<string, string> = {};
 
-    if (!envConfigs.database_url) {
+    // D1 (Cloudflare binding) has no DATABASE_URL, but still has a DB at runtime.
+    if (!hasRuntimeDatabase()) {
       return configs;
     }
 
@@ -73,7 +82,7 @@ export async function getAllConfigs(): Promise<Configs> {
   let dbConfigs: Configs = {};
 
   // only get configs from db in server side
-  if (typeof window === 'undefined' && envConfigs.database_url) {
+  if (typeof window === 'undefined' && hasRuntimeDatabase()) {
     try {
       dbConfigs = await getConfigs();
     } catch (e) {

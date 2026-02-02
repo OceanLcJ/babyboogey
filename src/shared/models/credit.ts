@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, gt, isNull, or, sum } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, isNull, or, sql, sum } from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { credit } from '@/config/db/schema';
@@ -194,13 +194,19 @@ export async function consumeCredits({
     // 2. get available credits, FIFO queue with expiresAt, batch query
     let remainingToConsume = credits; // remaining credits to consume
 
-    // only deal with 10000 credit grant records
-    let batchNo = 1; // batch no
-    const maxBatchNo = 10; // max batch no
-    const batchSize = 1000; // batch size
+    // Only deal with 10k grant rows in a single consumption to keep this bounded.
+    let batchNo = 0;
+    const maxBatchNo = 10;
+    const batchSize = 1000;
+    let processedRows = 0;
     const consumedItems: any[] = [];
 
     while (remainingToConsume > 0) {
+      batchNo += 1;
+      if (batchNo > maxBatchNo) {
+        throw new Error(`Too many batches: ${batchNo} > ${maxBatchNo}`);
+      }
+
       // get batch credits
       const batchCredits = await tx
         .select()
@@ -218,12 +224,12 @@ export async function consumeCredits({
           )
         )
         .orderBy(
-          // FIFO queue: expired credits first, then by expiration date
-          // NULL values (never expires) will be ordered last
+          // FIFO queue: expiring credits first, then by expiration date.
+          // Keep NULL (never expires) last across sqlite/pg/mysql.
+          asc(sql`case when ${credit.expiresAt} is null then 1 else 0 end`),
           asc(credit.expiresAt)
         )
         .limit(batchSize) // batch size
-        .offset((batchNo - 1) * batchSize) // offset
         .for('update'); // lock for update
 
       // no more credits
@@ -239,10 +245,20 @@ export async function consumeCredits({
         }
         const toConsume = Math.min(remainingToConsume, item.remainingCredits);
 
+        processedRows += 1;
+        if (processedRows > batchSize * maxBatchNo) {
+          throw new Error(
+            `Too many credit rows processed: ${processedRows} > ${batchSize * maxBatchNo}`
+          );
+        }
+
         // update remaining credits
         await tx
           .update(credit)
-          .set({ remainingCredits: item.remainingCredits - toConsume })
+          .set({
+            // Use a relative update to avoid lost-updates across dialects.
+            remainingCredits: sql`${credit.remainingCredits} - ${toConsume}`,
+          })
           .where(eq(credit.id, item.id));
 
         // update consumed items
@@ -258,14 +274,16 @@ export async function consumeCredits({
           batchNo: batchNo,
         });
 
-        batchNo += 1;
         remainingToConsume -= toConsume;
-
-        // if too many batches, throw error
-        if (batchNo > maxBatchNo) {
-          throw new Error(`Too many batches: ${batchNo} > ${maxBatchNo}`);
-        }
       }
+    }
+
+    // Defensive: if this happens, it likely means concurrent consumption drained credits
+    // between our balance check and row updates.
+    if (remainingToConsume > 0) {
+      throw new Error(
+        `Insufficient credits during consumption (remaining: ${remainingToConsume})`
+      );
     }
 
     // 3. create consumed credit
