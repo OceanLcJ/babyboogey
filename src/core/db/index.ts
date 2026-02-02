@@ -116,9 +116,11 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
 }
 
 /**
- * SQLite/Turso compatibility shim:
+ * SQLite/Turso/D1 compatibility shim:
  * - SQLite doesn't support row-level locking; Drizzle's select builder may not implement `.for()`.
  *   We polyfill `.for(...)` as a no-op to keep call sites portable.
+ * - D1 doesn't support native `.transaction()`. We polyfill it by executing the callback
+ *   with the db instance directly. Note: this loses true atomicity but maintains API compatibility.
  */
 function withSqliteCompat<T extends object>(dbInstance: T): T {
   if (dbInstance && typeof dbInstance === 'object') {
@@ -150,11 +152,15 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
   const proxied = new Proxy(dbInstance, {
     get(target, prop, receiver) {
       // Wrap transaction callback so `tx` is also shimmed.
+      // D1 doesn't have native transaction support, so we polyfill it.
       if (prop === 'transaction') {
         const original = Reflect.get(target, prop, receiver);
-        if (typeof original !== 'function') return original;
-        return (fn: any, ...rest: any[]) =>
-          original.call(target, (tx: any) => fn(withSqliteCompat(tx)), ...rest);
+        if (typeof original === 'function') {
+          return (fn: any, ...rest: any[]) =>
+            original.call(target, (tx: any) => fn(withSqliteCompat(tx)), ...rest);
+        }
+        // D1 polyfill: execute callback with the proxied db instance directly
+        return async (fn: any) => fn(receiver);
       }
 
       const value = Reflect.get(target, prop, receiver);

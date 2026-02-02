@@ -17,29 +17,40 @@ export type Configs = Record<string, string>;
 export const CACHE_TAG_CONFIGS = 'configs';
 
 export async function saveConfigs(configs: Record<string, string>) {
-  const result = await db().transaction(async (tx: any) => {
-    const configEntries = Object.entries(configs);
-    const results: any[] = [];
+  const configEntries = Object.entries(configs);
+  const database = db();
 
-    for (const [name, configValue] of configEntries) {
-      const [upsertResult] = await tx
-        .insert(config)
-        .values({ name, value: configValue })
-        .onConflictDoUpdate({
-          target: config.name,
-          set: { value: configValue },
-        })
-        .returning();
+  const queries = configEntries.map(([name, configValue]) =>
+    database
+      .insert(config)
+      .values({ name, value: configValue })
+      .onConflictDoUpdate({
+        target: config.name,
+        set: { value: configValue },
+      })
+  );
 
-      results.push(upsertResult);
-    }
-
-    return results;
-  });
+  // D1 supports batch for atomic multi-statement execution
+  if (envConfigs.database_provider === 'd1' && typeof database.batch === 'function') {
+    await database.batch(queries);
+  } else {
+    // Other databases: use transaction
+    await database.transaction(async (tx: any) => {
+      for (const [name, configValue] of configEntries) {
+        await tx
+          .insert(config)
+          .values({ name, value: configValue })
+          .onConflictDoUpdate({
+            target: config.name,
+            set: { value: configValue },
+          });
+      }
+    });
+  }
 
   revalidateTag(CACHE_TAG_CONFIGS);
 
-  return result;
+  return configEntries.map(([name, value]) => ({ name, value }));
 }
 
 export async function addConfig(newConfig: NewConfig) {
