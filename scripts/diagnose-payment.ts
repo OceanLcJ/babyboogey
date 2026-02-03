@@ -13,6 +13,11 @@ import { db } from '@/core/db';
 import { order, credit, user } from '@/config/db/schema';
 import { OrderStatus } from '@/shared/models/order';
 
+type CreditRecord = Pick<
+  typeof credit.$inferSelect,
+  'transactionNo' | 'credits' | 'remainingCredits' | 'status' | 'orderNo'
+>;
+
 async function main() {
   console.log('='.repeat(80));
   console.log('PAYMENT DIAGNOSIS REPORT');
@@ -75,7 +80,7 @@ async function main() {
 
       // Check credit records
       if (o.userId) {
-        const creditRecords = await db()
+        const creditRecords: CreditRecord[] = await db()
           .select({
             transactionNo: credit.transactionNo,
             credits: credit.credits,
