@@ -7,6 +7,7 @@ import {
 import { Empty } from '@/shared/blocks/common';
 import { Header, Main, MainHeader } from '@/shared/blocks/dashboard';
 import { FormCard } from '@/shared/blocks/form';
+import { getUuid } from '@/shared/lib/hash';
 import { findUserById } from '@/shared/models/user';
 import {
   assignRolesToUser,
@@ -91,25 +92,34 @@ export default async function UserEditRolesPage({
           throw new Error('no auth');
         }
 
-        const rawRoles = data.get('roles');
-        let roles: string[] = [];
+        const requestId = getUuid();
 
-        if (rawRoles === null) {
-          roles = [];
-        } else if (typeof rawRoles === 'string') {
-          try {
+        try {
+          const rawRoles = data.get('roles');
+          let roles: string[] = [];
+
+          if (rawRoles === null) {
+            roles = [];
+          } else if (typeof rawRoles === 'string') {
             const parsed = JSON.parse(rawRoles);
             roles = Array.isArray(parsed)
               ? parsed.filter((v): v is string => typeof v === 'string')
               : [];
-          } catch {
+          } else {
             throw new Error('invalid roles');
           }
-        } else {
-          throw new Error('invalid roles');
-        }
 
-        await assignRolesToUser(userId as string, Array.from(new Set(roles)));
+          await assignRolesToUser(userId as string, Array.from(new Set(roles)));
+        } catch (error) {
+          console.error(
+            `[admin/edit-roles] requestId=${requestId} userId=${userId}`,
+            error
+          );
+          return {
+            status: 'error',
+            message: `update roles failed (requestId: ${requestId})`,
+          };
+        }
 
         return {
           status: 'success',
