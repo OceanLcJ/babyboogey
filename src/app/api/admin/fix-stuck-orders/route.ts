@@ -146,7 +146,7 @@ export async function POST(req: Request) {
             // Calculate expiration time
             const expiresAt = calculateCreditExpirationTime({
               creditsValidDays: existingOrder.creditsValidDays || 0,
-              currentPeriodEnd: null, // Not a subscription
+              currentPeriodEnd: undefined, // Not a subscription
             });
 
             const newCredit = {

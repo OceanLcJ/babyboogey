@@ -68,7 +68,8 @@ export async function GET() {
     report.summary.totalOrders = paidOrders.length;
 
     // Count by status
-    paidOrders.forEach((o) => {
+    type OrderRow = (typeof paidOrders)[number];
+    paidOrders.forEach((o: OrderRow) => {
       if (o.status === OrderStatus.PAID) report.summary.paidOrders++;
       else if (o.status === OrderStatus.CREATED) report.summary.createdOrders++;
       else if (o.status === OrderStatus.PENDING) report.summary.pendingOrders++;
@@ -147,7 +148,8 @@ export async function GET() {
         }
 
         // Check if credit userId matches order userId
-        creditRecords.forEach((c) => {
+        type CreditRow = (typeof creditRecords)[number];
+        creditRecords.forEach((c: CreditRow) => {
           if (c.userId !== o.userId) {
             orderReport.issues.push(
               `⚠️ Credit userId (${c.userId}) doesn't match order userId (${o.userId})`

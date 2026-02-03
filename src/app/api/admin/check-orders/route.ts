@@ -6,10 +6,9 @@
  */
 
 import { desc } from 'drizzle-orm';
-import { NextResponse } from 'next/server';
 
 import { db } from '@/core/db';
-import { order, credit } from '@/config/db/schema';
+import { order } from '@/config/db/schema';
 import { getUserInfo } from '@/shared/models/user';
 
 export async function GET() {
@@ -42,6 +41,13 @@ export async function GET() {
       .from(order)
       .orderBy(desc(order.createdAt))
       .limit(20);
+
+    // Calculate stats before building HTML
+    type OrderRow = (typeof orders)[number];
+    const paidCount = orders.filter((o: OrderRow) => o.status === 'paid').length;
+    const createdCount = orders.filter((o: OrderRow) => o.status === 'created').length;
+    const pendingCount = orders.filter((o: OrderRow) => o.status === 'pending').length;
+    const failedCount = orders.filter((o: OrderRow) => o.status === 'failed').length;
 
     // Build HTML report
     let html = `
@@ -194,19 +200,19 @@ export async function GET() {
         <div class="stat-label">总订单数</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${orders.filter(o => o.status === 'paid').length}</div>
+        <div class="stat-value">${paidCount}</div>
         <div class="stat-label">已支付</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${orders.filter(o => o.status === 'created').length}</div>
+        <div class="stat-value">${createdCount}</div>
         <div class="stat-label">已创建</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${orders.filter(o => o.status === 'pending').length}</div>
+        <div class="stat-value">${pendingCount}</div>
         <div class="stat-label">待处理</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${orders.filter(o => o.status === 'failed').length}</div>
+        <div class="stat-value">${failedCount}</div>
         <div class="stat-label">失败</div>
       </div>
     </div>
