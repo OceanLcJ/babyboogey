@@ -28,14 +28,14 @@ export default async function CreateApiKeyPage() {
       },
     ],
     passby: {
-      user: user,
+      userId: user.id,
     },
     submit: {
       handler: async (data: FormData, passby: any) => {
         'use server';
 
-        const { user } = passby;
-        if (!user) {
+        const { userId } = passby;
+        if (!userId) {
           throw new Error('no auth');
         }
 
@@ -48,7 +48,7 @@ export default async function CreateApiKeyPage() {
 
         const newApikey: NewApikey = {
           id: getUuid(),
-          userId: user.id,
+          userId: userId,
           title: title.trim(),
           key: key,
           status: ApikeyStatus.ACTIVE,

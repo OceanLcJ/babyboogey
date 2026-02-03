@@ -36,6 +36,13 @@ export default async function RoleEditPage({
     { title: t('edit.crumbs.edit'), is_active: true },
   ];
 
+  const formData = {
+    id: role.id,
+    name: role.name,
+    title: role.title,
+    description: role.description,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -59,9 +66,9 @@ export default async function RoleEditPage({
       },
     ],
     passby: {
-      role: role,
+      roleId: role.id,
     },
-    data: role,
+    data: formData,
     submit: {
       button: {
         title: t('edit.buttons.submit'),
@@ -69,9 +76,9 @@ export default async function RoleEditPage({
       handler: async (data, passby) => {
         'use server';
 
-        const { role } = passby;
+        const { roleId } = passby;
 
-        if (!role) {
+        if (!roleId) {
           throw new Error('no auth');
         }
 
@@ -83,7 +90,7 @@ export default async function RoleEditPage({
           description: description as string,
         };
 
-        const result = await updateRole(role.id as string, newRole);
+        const result = await updateRole(roleId as string, newRole);
 
         if (!result) {
           throw new Error('update role failed');

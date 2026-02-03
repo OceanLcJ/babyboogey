@@ -13,6 +13,12 @@ export default async function ProfilePage() {
 
   const t = await getTranslations('settings.profile');
 
+  const formData = {
+    email: user.email,
+    name: user.name,
+    image: user.image,
+  };
+
   const form: FormType = {
     fields: [
       {
@@ -31,16 +37,16 @@ export default async function ProfilePage() {
         },
       },
     ],
-    data: user,
+    data: formData,
     passby: {
-      user: user,
+      userId: user.id,
     },
     submit: {
       handler: async (data: FormData, passby: any) => {
         'use server';
 
-        const { user } = passby;
-        if (!user) {
+        const { userId } = passby;
+        if (!userId) {
           throw new Error('no auth');
         }
 
@@ -57,7 +63,7 @@ export default async function ProfilePage() {
           image: image as string,
         };
 
-        await updateUser(user.id, updatedUser);
+        await updateUser(userId, updatedUser);
 
         return {
           status: 'success',

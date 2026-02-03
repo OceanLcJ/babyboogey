@@ -72,39 +72,39 @@ export default async function CancelBillingPage({
   const handleCancelSubscription = async (data: FormData, passby: any) => {
     'use server';
 
-    const { subscription, user } = passby;
-    if (!user) {
+    const { subscriptionNo, subscriptionId, subscriptionUserId, subscriptionStatus, subscriptionPaymentProvider, userId } = passby;
+    if (!userId) {
       throw new Error('no auth');
     }
 
-    if (!subscription || !subscription.subscriptionId) {
+    if (!subscriptionNo || !subscriptionId) {
       throw new Error('invalid subscription');
     }
 
-    if (subscription.userId !== user.id) {
+    if (subscriptionUserId !== userId) {
       throw new Error('no permission');
     }
 
     if (
-      subscription.status !== SubscriptionStatus.ACTIVE &&
-      subscription.status !== SubscriptionStatus.TRIALING
+      subscriptionStatus !== SubscriptionStatus.ACTIVE &&
+      subscriptionStatus !== SubscriptionStatus.TRIALING
     ) {
       throw new Error('subscription is not active or trialing');
     }
 
     const paymentService = await getPaymentService();
     const paymentProvider = paymentService.getProvider(
-      subscription.paymentProvider
+      subscriptionPaymentProvider
     );
 
     const result = await paymentProvider?.cancelSubscription?.({
-      subscriptionId: subscription.subscriptionId,
+      subscriptionId: subscriptionId,
     });
     if (!result) {
       throw new Error('cancel subscription failed');
     }
 
-    await updateSubscriptionBySubscriptionNo(subscription.subscriptionNo, {
+    await updateSubscriptionBySubscriptionNo(subscriptionNo, {
       status: SubscriptionStatus.CANCELED,
     });
 
@@ -113,6 +113,10 @@ export default async function CancelBillingPage({
       message: 'Subscription canceled',
       redirect_url: '/settings/billing',
     };
+  };
+
+  const formData = {
+    subscriptionNo: subscription.subscriptionNo,
   };
 
   const form: Form = {
@@ -148,10 +152,14 @@ export default async function CancelBillingPage({
         attributes: { disabled: true },
       },
     ],
-    data: subscription,
+    data: formData,
     passby: {
-      subscription: subscription,
-      user: user,
+      subscriptionNo: subscription.subscriptionNo,
+      subscriptionId: subscription.subscriptionId,
+      subscriptionUserId: subscription.userId,
+      subscriptionStatus: subscription.status,
+      subscriptionPaymentProvider: subscription.paymentProvider,
+      userId: user.id,
     },
     submit: {
       handler: handleCancelSubscription,

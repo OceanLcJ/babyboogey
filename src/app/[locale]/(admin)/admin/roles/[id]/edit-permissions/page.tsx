@@ -51,6 +51,12 @@ export default async function RoleEditPermissionsPage({
   const rolePermissions = await getRolePermissions(role.id as string);
   const rolePermissionIds = rolePermissions.map((permission) => permission.id);
 
+  const formData = {
+    name: role.name,
+    title: role.title,
+    permissions: rolePermissionIds,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -76,12 +82,9 @@ export default async function RoleEditPermissionsPage({
       },
     ],
     passby: {
-      role: role,
+      roleId: role.id,
     },
-    data: {
-      ...role,
-      permissions: rolePermissionIds,
-    },
+    data: formData,
     submit: {
       button: {
         title: t('edit_permissions.buttons.submit'),
@@ -89,9 +92,9 @@ export default async function RoleEditPermissionsPage({
       handler: async (data, passby) => {
         'use server';
 
-        const { role } = passby;
+        const { roleId } = passby;
 
-        if (!role) {
+        if (!roleId) {
           throw new Error('no auth');
         }
 
@@ -104,7 +107,7 @@ export default async function RoleEditPermissionsPage({
           }
         }
 
-        await assignPermissionsToRole(role.id as string, permissions);
+        await assignPermissionsToRole(roleId as string, permissions);
 
         return {
           status: 'success',

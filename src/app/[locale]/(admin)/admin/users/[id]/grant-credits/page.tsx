@@ -37,6 +37,11 @@ export default async function UserGrantCreditsPage({
     { title: t('grant_credits.crumbs.grant_credits'), is_active: true },
   ];
 
+  const formData = {
+    name: user.name,
+    email: user.email,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -75,9 +80,10 @@ export default async function UserGrantCreditsPage({
       },
     ],
     passby: {
-      user: user,
+      userId: user.id,
+      userEmail: user.email,
     },
-    data: user,
+    data: formData,
     submit: {
       button: {
         title: t('grant_credits.buttons.submit'),
@@ -85,9 +91,9 @@ export default async function UserGrantCreditsPage({
       handler: async (data, passby) => {
         'use server';
 
-        const { user } = passby;
+        const { userId, userEmail } = passby;
 
-        if (!user) {
+        if (!userId || !userEmail) {
           throw new Error('no auth');
         }
 
@@ -100,7 +106,7 @@ export default async function UserGrantCreditsPage({
         }
 
         await grantCreditsForUser({
-          user: user,
+          user: { id: userId, email: userEmail } as any,
           credits: credits,
           validDays: validDays > 0 ? validDays : 0,
           description: description,
@@ -109,7 +115,7 @@ export default async function UserGrantCreditsPage({
         return {
           status: 'success',
           message: 'credits granted successfully',
-          redirect_url: `/admin/users?email=${user.email}`,
+          redirect_url: `/admin/users?email=${userEmail}`,
         };
       },
     },

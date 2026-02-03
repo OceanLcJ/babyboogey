@@ -42,6 +42,12 @@ export default async function CategoryEditPage({
     { title: t('edit.crumbs.edit'), is_active: true },
   ];
 
+  const formData = {
+    slug: category.slug,
+    title: category.title,
+    description: category.description,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -65,9 +71,10 @@ export default async function CategoryEditPage({
     ],
     passby: {
       type: 'category',
-      category: category,
+      categoryId: category.id,
+      categoryUserId: category.userId,
     },
-    data: category,
+    data: formData,
     submit: {
       button: {
         title: t('edit.buttons.submit'),
@@ -80,8 +87,8 @@ export default async function CategoryEditPage({
           throw new Error('no auth');
         }
 
-        const { category } = passby;
-        if (!user || !category || category.userId !== user.id) {
+        const { categoryId, categoryUserId } = passby;
+        if (!categoryId || categoryUserId !== user.id) {
           throw new Error('access denied');
         }
 
@@ -103,7 +110,7 @@ export default async function CategoryEditPage({
           status: TaxonomyStatus.PUBLISHED,
         };
 
-        const result = await updateTaxonomy(category.id, updateCategory);
+        const result = await updateTaxonomy(categoryId as string, updateCategory);
 
         if (!result) {
           throw new Error('update category failed');

@@ -59,6 +59,17 @@ export default async function PostEditPage({
     })),
   ];
 
+  const formData = {
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    categories: post.categories,
+    image: post.image,
+    authorName: post.authorName,
+    authorImage: post.authorImage,
+    content: post.content,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -111,9 +122,9 @@ export default async function PostEditPage({
     ],
     passby: {
       type: 'post',
-      post: post,
+      postId: post.id,
     },
-    data: post,
+    data: formData,
     submit: {
       button: {
         title: t('edit.buttons.submit'),
@@ -126,9 +137,9 @@ export default async function PostEditPage({
           throw new Error('no auth');
         }
 
-        const { post } = passby;
+        const { postId } = passby;
 
-        if (!user || !post) {
+        if (!postId) {
           throw new Error('no auth');
         }
 
@@ -160,7 +171,7 @@ export default async function PostEditPage({
           status: PostStatus.PUBLISHED,
         };
 
-        const result = await updatePost(post.id, newPost);
+        const result = await updatePost(postId as string, newPost);
 
         if (!result) {
           throw new Error('update post failed');

@@ -34,6 +34,11 @@ export default async function DeleteApiKeyPage({
 
   const t = await getTranslations('settings.apikeys');
 
+  const formData = {
+    title: apikey.title,
+    key: apikey.key,
+  };
+
   const form: FormType = {
     title: t('delete.title'),
     fields: [
@@ -59,25 +64,26 @@ export default async function DeleteApiKeyPage({
       },
     ],
     passby: {
-      user: user,
-      apikey: apikey,
+      userId: user.id,
+      apikeyId: apikey.id,
+      apikeyUserId: apikey.userId,
     },
-    data: apikey,
+    data: formData,
     submit: {
       handler: async (data: FormData, passby: any) => {
         'use server';
 
-        const { user, apikey } = passby;
+        const { userId, apikeyId, apikeyUserId } = passby;
 
-        if (!apikey) {
+        if (!apikeyId) {
           throw new Error('apikey not found');
         }
 
-        if (!user) {
+        if (!userId) {
           throw new Error('no auth');
         }
 
-        if (apikey.userId !== user.id) {
+        if (apikeyUserId !== userId) {
           throw new Error('no permission');
         }
 
@@ -91,7 +97,7 @@ export default async function DeleteApiKeyPage({
           deletedAt: new Date(),
         };
 
-        await updateApikey(apikey.id, updatedApikey);
+        await updateApikey(apikeyId, updatedApikey);
 
         return {
           status: 'success',

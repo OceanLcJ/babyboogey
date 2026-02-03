@@ -14,6 +14,10 @@ export default async function SecurityPage() {
 
   const t = await getTranslations('settings.security');
 
+  const formData = {
+    email: user.email,
+  };
+
   const form: FormType = {
     fields: [
       {
@@ -42,16 +46,16 @@ export default async function SecurityPage() {
         validation: { required: true },
       },
     ],
-    data: user,
+    data: formData,
     passby: {
-      user: user,
+      userId: user.id,
     },
     submit: {
       handler: async (data: FormData, passby: any) => {
         'use server';
 
-        const { user } = passby;
-        if (!user) {
+        const { userId } = passby;
+        if (!userId) {
           throw new Error('no auth');
         }
 
@@ -66,7 +70,7 @@ export default async function SecurityPage() {
           // confirm_password: confirm_password.trim(),
         };
 
-        await updateUser(user.id, updatedUser);
+        await updateUser(userId, updatedUser);
 
         return {
           status: 'success',

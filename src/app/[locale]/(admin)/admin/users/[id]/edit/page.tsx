@@ -36,6 +36,12 @@ export default async function UserEditPage({
     { title: t('edit.crumbs.edit'), is_active: true },
   ];
 
+  const formData = {
+    email: user.email,
+    name: user.name,
+    image: user.image,
+  };
+
   const form: Form = {
     fields: [
       {
@@ -58,9 +64,9 @@ export default async function UserEditPage({
       },
     ],
     passby: {
-      user: user,
+      userId: user.id,
     },
-    data: user,
+    data: formData,
     submit: {
       button: {
         title: t('edit.buttons.submit'),
@@ -68,9 +74,9 @@ export default async function UserEditPage({
       handler: async (data, passby) => {
         'use server';
 
-        const { user } = passby;
+        const { userId } = passby;
 
-        if (!user) {
+        if (!userId) {
           throw new Error('no auth');
         }
 
@@ -82,7 +88,7 @@ export default async function UserEditPage({
           image: image as string,
         };
 
-        const result = await updateUser(user.id as string, newUser);
+        const result = await updateUser(userId as string, newUser);
 
         if (!result) {
           throw new Error('update user failed');
