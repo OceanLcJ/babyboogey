@@ -75,7 +75,7 @@ export default async function UserEditRolesPage({
       userId: user.id,
     },
     data: {
-      ...user,
+      email: user.email,
       roles: userRoleIds,
     },
     submit: {
