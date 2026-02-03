@@ -2,7 +2,7 @@
  * Fix Stuck Orders API
  * POST /api/admin/fix-stuck-orders
  *
- * Fixes orders that are stuck in CREATED status but payment was actually successful.
+ * Fixes orders that are stuck in non-PAID status but payment was actually successful.
  * This happens when webhook notification failed or was not processed.
  *
  * Request body:
@@ -12,17 +12,17 @@
  * }
  */
 
-import { eq, and } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
+import { PERMISSIONS } from '@/core/rbac';
 import { db } from '@/core/db';
 import { order, credit } from '@/config/db/schema';
 import { OrderStatus } from '@/shared/models/order';
-import { CreditStatus, CreditTransactionType, CreditTransactionScene } from '@/shared/models/credit';
-import { PaymentType } from '@/extensions/payment/types';
 import { getUserInfo } from '@/shared/models/user';
-import { getUuid, getSnowId } from '@/shared/lib/hash';
-import { calculateCreditExpirationTime } from '@/shared/models/credit';
+import { hasPermission } from '@/shared/services/rbac';
+import { getPaymentService, handleCheckoutSuccess } from '@/shared/services/payment';
+import { PaymentStatus } from '@/extensions/payment/types';
 
 export async function POST(req: Request) {
   try {
@@ -32,6 +32,14 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    const isAdmin = await hasPermission(currentUser.id, PERMISSIONS.ADMIN_ACCESS);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403 }
       );
     }
 
@@ -51,6 +59,8 @@ export async function POST(req: Request) {
       orders: [] as any[],
     };
 
+    const paymentService = await getPaymentService();
+
     for (const orderNo of orderNos) {
       const result: any = {
         orderNo,
@@ -60,11 +70,11 @@ export async function POST(req: Request) {
       };
 
       try {
-        // Get the order
         const [existingOrder] = await db()
           .select()
           .from(order)
-          .where(eq(order.orderNo, orderNo));
+          .where(eq(order.orderNo, orderNo))
+          .limit(1);
 
         if (!existingOrder) {
           result.status = 'error';
@@ -79,104 +89,99 @@ export async function POST(req: Request) {
         result.amount = existingOrder.amount;
         result.currency = existingOrder.currency;
         result.creditsAmount = existingOrder.creditsAmount;
+        result.paymentProvider = existingOrder.paymentProvider;
+        result.paymentSessionId = existingOrder.paymentSessionId;
+        result.transactionId = existingOrder.transactionId;
 
-        // Check if already paid
-        if (existingOrder.status === OrderStatus.PAID) {
-          result.status = 'skipped';
-          result.actions.push('Order is already PAID, no action needed');
-          results.orders.push(result);
-          continue;
-        }
-
-        // Check if order is in CREATED status
-        if (existingOrder.status !== OrderStatus.CREATED) {
+        if (!existingOrder.paymentProvider) {
           result.status = 'error';
-          result.errors.push(`Order status is ${existingOrder.status}, expected CREATED`);
+          result.errors.push('Order has no paymentProvider');
           results.orders.push(result);
           continue;
         }
 
-        // Check if userId exists
-        if (!existingOrder.userId) {
+        if (!existingOrder.paymentSessionId) {
           result.status = 'error';
-          result.errors.push('Order has no userId, cannot fix');
+          result.errors.push('Order has no paymentSessionId');
           results.orders.push(result);
           continue;
         }
 
-        // Check if credit already exists
+        const provider = paymentService.getProvider(existingOrder.paymentProvider);
+        if (!provider) {
+          result.status = 'error';
+          result.errors.push(
+            `Payment provider not found: ${existingOrder.paymentProvider}`
+          );
+          results.orders.push(result);
+          continue;
+        }
+
+        const session = await provider.getPaymentSession({
+          sessionId: existingOrder.paymentSessionId,
+        });
+        result.remotePaymentStatus = session.paymentStatus;
+
         const [existingCredit] = await db()
           .select()
           .from(credit)
           .where(eq(credit.orderNo, orderNo));
 
         if (existingCredit) {
-          result.warnings = [`Credit already exists for this order: ${existingCredit.transactionNo}`];
+          result.warnings = [
+            `Credit already exists for this order: ${existingCredit.transactionNo}`,
+          ];
         }
 
         if (dryRun) {
-          // Dry run mode - just report what would be done
+          // Dry run mode - just report what would be done (and show provider status)
           result.status = 'dry-run';
-          result.actions.push(`Would update order status from ${existingOrder.status} to PAID`);
-          result.actions.push(`Would set paidAt to current time`);
-
-          if (existingOrder.creditsAmount && existingOrder.creditsAmount > 0 && !existingCredit) {
-            result.actions.push(`Would create credit record: ${existingOrder.creditsAmount} credits`);
+          result.actions.push(
+            `Would check provider session: ${existingOrder.paymentProvider} / ${existingOrder.paymentSessionId}`
+          );
+          result.actions.push(
+            `Provider reports paymentStatus=${session.paymentStatus}`
+          );
+          if (session.paymentStatus === PaymentStatus.SUCCESS) {
+            result.actions.push(
+              `Would process order via handleCheckoutSuccess (current status: ${existingOrder.status})`
+            );
+          } else {
+            result.actions.push('Would NOT update order because paymentStatus != success');
           }
         } else {
-          // Actually fix the order
-          const currentTime = new Date();
-
-          // Update order status to PAID
-          await db()
-            .update(order)
-            .set({
-              status: OrderStatus.PAID,
-              paidAt: currentTime,
-            })
-            .where(eq(order.orderNo, orderNo));
-
-          result.actions.push(`✓ Updated order status to PAID`);
-          result.actions.push(`✓ Set paidAt to ${currentTime.toISOString()}`);
-
-          // Create credit if needed and doesn't already exist
-          if (existingOrder.creditsAmount && existingOrder.creditsAmount > 0 && !existingCredit) {
-            const credits = existingOrder.creditsAmount;
-
-            // Calculate expiration time
-            const expiresAt = calculateCreditExpirationTime({
-              creditsValidDays: existingOrder.creditsValidDays || 0,
-              currentPeriodEnd: undefined, // Not a subscription
-            });
-
-            const newCredit = {
-              id: getUuid(),
-              userId: existingOrder.userId,
-              userEmail: existingOrder.userEmail,
-              orderNo: existingOrder.orderNo,
-              subscriptionNo: existingOrder.subscriptionNo || null,
-              transactionNo: getSnowId(),
-              transactionType: CreditTransactionType.GRANT,
-              transactionScene:
-                existingOrder.paymentType === PaymentType.SUBSCRIPTION
-                  ? CreditTransactionScene.SUBSCRIPTION
-                  : CreditTransactionScene.PAYMENT,
-              credits: credits,
-              remainingCredits: credits,
-              description: `Grant credit (manual fix for order ${orderNo})`,
-              expiresAt: expiresAt,
-              status: CreditStatus.ACTIVE,
-            };
-
-            await db()
-              .insert(credit)
-              .values(newCredit);
-
-            result.actions.push(`✓ Created credit record: ${credits} credits (transaction: ${newCredit.transactionNo})`);
-            result.creditTransactionNo = newCredit.transactionNo;
+          if (session.paymentStatus !== PaymentStatus.SUCCESS) {
+            result.status = 'skipped';
+            result.actions.push(
+              `Skipped: provider paymentStatus=${session.paymentStatus} (expected success)`
+            );
+            results.orders.push(result);
+            continue;
           }
 
-          result.status = 'fixed';
+          await handleCheckoutSuccess({
+            order: existingOrder,
+            session,
+          });
+
+          const [updatedOrder] = await db()
+            .select()
+            .from(order)
+            .where(eq(order.orderNo, orderNo))
+            .limit(1);
+
+          result.newStatus = updatedOrder?.status;
+
+          const [updatedCredit] = await db()
+            .select()
+            .from(credit)
+            .where(eq(credit.orderNo, orderNo))
+            .limit(1);
+
+          result.creditTransactionNo = updatedCredit?.transactionNo;
+          result.actions.push('✓ Processed via handleCheckoutSuccess');
+          result.status =
+            updatedOrder?.status === OrderStatus.PAID ? 'fixed' : 'partial';
         }
       } catch (error: any) {
         result.status = 'error';
