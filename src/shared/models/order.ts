@@ -243,6 +243,40 @@ export async function updateOrderInTransaction({
       credit: null,
     };
 
+    // CRITICAL FIX: Update order FIRST with optimistic lock
+    // Only create subscription/credit if order update succeeds
+    const [orderResult] = await tx
+      .update(order)
+      .set(updateOrder)
+      .where(
+        and(
+          eq(order.orderNo, orderNo),
+          // Only update if not already paid (optimistic lock)
+          updateOrder.status === OrderStatus.PAID
+            ? or(
+                eq(order.status, OrderStatus.CREATED),
+                eq(order.status, OrderStatus.PENDING)
+              )
+            : undefined
+        )
+      )
+      .returning();
+
+    // If no order was updated and we're trying to set status to PAID,
+    // it means the order was already processed - abort the transaction
+    if (!orderResult && updateOrder.status === OrderStatus.PAID) {
+      console.log(`Order ${orderNo} already paid or not in CREATED/PENDING status, aborting transaction`);
+      throw new Error(`Order ${orderNo} already processed or not in correct status`);
+    }
+
+    result.order = orderResult;
+
+    // Only proceed with subscription/credit creation if order update succeeded
+    if (!orderResult) {
+      console.log(`Order ${orderNo} not updated, skipping subscription and credit creation`);
+      return result;
+    }
+
     // deal with subscription
     if (newSubscription) {
       let existingSubscription: any = null;
@@ -295,33 +329,6 @@ export async function updateOrderInTransaction({
       result.credit = existingCredit;
     }
 
-    // update order with optimistic lock
-    // only update if status is not PAID (prevent duplicate processing)
-    const [orderResult] = await tx
-      .update(order)
-      .set(updateOrder)
-      .where(
-        and(
-          eq(order.orderNo, orderNo),
-          // Only update if not already paid (optimistic lock)
-          updateOrder.status === OrderStatus.PAID
-            ? or(
-                eq(order.status, OrderStatus.CREATED),
-                eq(order.status, OrderStatus.PENDING)
-              )
-            : undefined
-        )
-      )
-      .returning();
-
-    // If no order was updated and we're trying to set status to PAID,
-    // it means the order was already processed
-    if (!orderResult && updateOrder.status === OrderStatus.PAID) {
-      console.log(`Order ${orderNo} already paid or not in CREATED status, skipping update`);
-    }
-
-    result.order = orderResult;
-
     return result;
   });
 
@@ -358,6 +365,21 @@ export async function updateSubscriptionInTransaction({
       subscription: null,
       credit: null,
     };
+
+    // CRITICAL FIX: Update subscription FIRST
+    // Only create order/credit if subscription update succeeds
+    const [subscriptionResult] = await tx
+      .update(subscription)
+      .set(updateSubscription)
+      .where(eq(subscription.subscriptionNo, subscriptionNo))
+      .returning();
+
+    if (!subscriptionResult) {
+      console.error(`Failed to update subscription ${subscriptionNo}`);
+      throw new Error(`Failed to update subscription ${subscriptionNo}`);
+    }
+
+    result.subscription = subscriptionResult;
 
     // deal with order
     if (newOrder) {
@@ -415,15 +437,6 @@ export async function updateSubscriptionInTransaction({
 
       result.credit = existingCredit;
     }
-
-    // update subscription
-    const [subscriptionResult] = await tx
-      .update(subscription)
-      .set(updateSubscription)
-      .where(eq(subscription.subscriptionNo, subscriptionNo))
-      .returning();
-
-    result.subscription = subscriptionResult;
 
     return result;
   });
