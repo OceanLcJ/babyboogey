@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   PERMISSIONS,
   requireAllPermissions,
-  requirePermission,
 } from '@/core/rbac';
 import { Empty } from '@/shared/blocks/common';
 import { Header, Main, MainHeader } from '@/shared/blocks/dashboard';
@@ -73,7 +72,7 @@ export default async function UserEditRolesPage({
       },
     ],
     passby: {
-      user,
+      userId: user.id,
     },
     data: {
       ...user,
@@ -86,22 +85,31 @@ export default async function UserEditRolesPage({
       handler: async (data, passby) => {
         'use server';
 
-        const { user } = passby;
+        const { userId } = passby;
 
-        if (!user) {
+        if (!userId) {
           throw new Error('no auth');
         }
 
-        let roles = data.get('roles') as unknown as string[];
-        if (typeof roles === 'string') {
+        const rawRoles = data.get('roles');
+        let roles: string[] = [];
+
+        if (rawRoles === null) {
+          roles = [];
+        } else if (typeof rawRoles === 'string') {
           try {
-            roles = JSON.parse(roles);
-          } catch (error) {
+            const parsed = JSON.parse(rawRoles);
+            roles = Array.isArray(parsed)
+              ? parsed.filter((v): v is string => typeof v === 'string')
+              : [];
+          } catch {
             throw new Error('invalid roles');
           }
+        } else {
+          throw new Error('invalid roles');
         }
 
-        await assignRolesToUser(user.id as string, roles);
+        await assignRolesToUser(userId as string, Array.from(new Set(roles)));
 
         return {
           status: 'success',
