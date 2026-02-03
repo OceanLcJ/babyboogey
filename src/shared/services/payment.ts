@@ -246,12 +246,37 @@ export async function handleCheckoutSuccess({
       };
     }
 
-    await updateOrderInTransaction({
-      orderNo,
-      updateOrder,
-      newSubscription,
-      newCredit,
-    });
+    try {
+      const result = await updateOrderInTransaction({
+        orderNo,
+        updateOrder,
+        newSubscription,
+        newCredit,
+      });
+
+      // Verify that the order was actually updated
+      if (!result.order) {
+        console.error(`[handleCheckoutSuccess] Failed to update order ${orderNo} - order result is null`);
+        throw new Error(`Failed to update order ${orderNo}`);
+      }
+
+      // Verify subscription was created if expected
+      if (newSubscription && !result.subscription) {
+        console.error(`[handleCheckoutSuccess] Failed to create subscription for order ${orderNo}`);
+        throw new Error(`Failed to create subscription for order ${orderNo}`);
+      }
+
+      // Verify credit was created if expected
+      if (newCredit && !result.credit) {
+        console.error(`[handleCheckoutSuccess] Failed to create credit for order ${orderNo}`);
+        throw new Error(`Failed to create credit for order ${orderNo}`);
+      }
+
+      console.log(`[handleCheckoutSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+    } catch (error) {
+      console.error(`[handleCheckoutSuccess] Error processing order ${orderNo}:`, error);
+      throw error; // Re-throw to ensure the webhook/callback knows it failed
+    }
   } else if (
     session.paymentStatus === PaymentStatus.FAILED ||
     session.paymentStatus === PaymentStatus.CANCELED
@@ -383,12 +408,37 @@ export async function handlePaymentSuccess({
       };
     }
 
-    await updateOrderInTransaction({
-      orderNo,
-      updateOrder,
-      newSubscription,
-      newCredit,
-    });
+    try {
+      const result = await updateOrderInTransaction({
+        orderNo,
+        updateOrder,
+        newSubscription,
+        newCredit,
+      });
+
+      // Verify that the order was actually updated
+      if (!result.order) {
+        console.error(`[handlePaymentSuccess] Failed to update order ${orderNo} - order result is null`);
+        throw new Error(`Failed to update order ${orderNo}`);
+      }
+
+      // Verify subscription was created if expected
+      if (newSubscription && !result.subscription) {
+        console.error(`[handlePaymentSuccess] Failed to create subscription for order ${orderNo}`);
+        throw new Error(`Failed to create subscription for order ${orderNo}`);
+      }
+
+      // Verify credit was created if expected
+      if (newCredit && !result.credit) {
+        console.error(`[handlePaymentSuccess] Failed to create credit for order ${orderNo}`);
+        throw new Error(`Failed to create credit for order ${orderNo}`);
+      }
+
+      console.log(`[handlePaymentSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+    } catch (error) {
+      console.error(`[handlePaymentSuccess] Error processing order ${orderNo}:`, error);
+      throw error; // Re-throw to ensure the webhook/callback knows it failed
+    }
   } else {
     throw new Error('unknown payment status');
   }
@@ -505,12 +555,37 @@ export async function handleSubscriptionRenewal({
       };
     }
 
-    await updateSubscriptionInTransaction({
-      subscriptionNo,
-      updateSubscription,
-      newOrder: order,
-      newCredit,
-    });
+    try {
+      const result = await updateSubscriptionInTransaction({
+        subscriptionNo,
+        updateSubscription,
+        newOrder: order,
+        newCredit,
+      });
+
+      // Verify that the subscription was actually updated
+      if (!result.subscription) {
+        console.error(`[handleSubscriptionRenewal] Failed to update subscription ${subscriptionNo} - subscription result is null`);
+        throw new Error(`Failed to update subscription ${subscriptionNo}`);
+      }
+
+      // Verify order was created if expected
+      if (order && !result.order) {
+        console.error(`[handleSubscriptionRenewal] Failed to create order for subscription ${subscriptionNo}`);
+        throw new Error(`Failed to create order for subscription ${subscriptionNo}`);
+      }
+
+      // Verify credit was created if expected
+      if (newCredit && !result.credit) {
+        console.error(`[handleSubscriptionRenewal] Failed to create credit for subscription ${subscriptionNo}`);
+        throw new Error(`Failed to create credit for subscription ${subscriptionNo}`);
+      }
+
+      console.log(`[handleSubscriptionRenewal] Subscription ${subscriptionNo} processed successfully: subscription=${result.subscription?.status}, order=${result.order?.orderNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+    } catch (error) {
+      console.error(`[handleSubscriptionRenewal] Error processing subscription ${subscriptionNo}:`, error);
+      throw error; // Re-throw to ensure the webhook/callback knows it failed
+    }
   } else {
     throw new Error('unknown payment status');
   }
