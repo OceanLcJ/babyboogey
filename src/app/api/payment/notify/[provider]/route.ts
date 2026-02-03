@@ -10,6 +10,7 @@ import { findSubscriptionByProviderSubscriptionId } from '@/shared/models/subscr
 import {
   getPaymentService,
   handleCheckoutSuccess,
+  ensureCreditForOrder,
   handleSubscriptionCanceled,
   handleSubscriptionRenewal,
   handleSubscriptionUpdated,
@@ -105,6 +106,7 @@ export async function POST(
                   console.log(
                     `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
                   );
+                  await ensureCreditForOrder({ order: existingOrder, session });
                   return Response.json({ message: 'success' });
                 }
               }
@@ -132,6 +134,7 @@ export async function POST(
               console.log(
                 `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
               );
+              await ensureCreditForOrder({ order: existingOrder, session });
               return Response.json({ message: 'success' });
             }
 

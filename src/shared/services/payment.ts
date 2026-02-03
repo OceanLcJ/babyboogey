@@ -17,6 +17,8 @@ import {
   CreditStatus,
   CreditTransactionScene,
   CreditTransactionType,
+  createCredit,
+  findCreditByOrderNo,
   NewCredit,
 } from '../models/credit';
 import {
@@ -134,9 +136,10 @@ export async function handleCheckoutSuccess({
     throw new Error('invalid order');
   }
 
-  // Idempotency check: if order is already paid, skip processing
+  // Idempotency/repair: if order is already paid, ensure side-effects exist (e.g. credits).
   if (order.status === OrderStatus.PAID) {
-    console.log(`Order ${orderNo} is already paid, skipping`);
+    console.log(`Order ${orderNo} is already paid, ensuring side-effects`);
+    await ensureCreditForOrder({ order, session });
     return;
   }
 
@@ -226,13 +229,17 @@ export async function handleCheckoutSuccess({
             })
           : null;
 
+      const provider = session.provider || order.paymentProvider || 'payment';
+      const stableTxn =
+        session.paymentInfo?.transactionId || order.transactionId || orderNo;
+
       newCredit = {
         id: getUuid(),
         userId: order.userId,
         userEmail: order.userEmail,
         orderNo: order.orderNo,
         subscriptionNo: newSubscription?.subscriptionNo,
-        transactionNo: getSnowId(),
+        transactionNo: `${provider}:${stableTxn}`,
         transactionType: CreditTransactionType.GRANT,
         transactionScene:
           order.paymentType === PaymentType.SUBSCRIPTION
@@ -293,6 +300,60 @@ export async function handleCheckoutSuccess({
     });
   } else {
     throw new Error('unknown payment status');
+  }
+}
+
+export async function ensureCreditForOrder({
+  order,
+  session,
+}: {
+  order: Order;
+  session?: PaymentSession;
+}) {
+  const orderNo = String(order.orderNo || '').trim();
+  if (!orderNo) return;
+
+  if (!order.creditsAmount || order.creditsAmount <= 0) return;
+
+  const existing = await findCreditByOrderNo(orderNo);
+  if (existing) return existing;
+
+  const provider = session?.provider || order.paymentProvider || 'payment';
+  const stableTxn =
+    session?.paymentInfo?.transactionId || order.transactionId || orderNo;
+
+  const expiresAt = calculateCreditExpirationTime({
+    creditsValidDays: order.creditsValidDays || 0,
+    currentPeriodEnd: session?.subscriptionInfo?.currentPeriodEnd,
+  });
+
+  const newCredit: NewCredit = {
+    id: getUuid(),
+    userId: order.userId,
+    userEmail: order.userEmail,
+    orderNo,
+    subscriptionNo: order.subscriptionNo || '',
+    transactionNo: `${provider}:${stableTxn}`,
+    transactionType: CreditTransactionType.GRANT,
+    transactionScene:
+      order.paymentType === PaymentType.RENEW
+        ? CreditTransactionScene.RENEWAL
+        : order.paymentType === PaymentType.SUBSCRIPTION
+          ? CreditTransactionScene.SUBSCRIPTION
+          : CreditTransactionScene.PAYMENT,
+    credits: order.creditsAmount,
+    remainingCredits: order.creditsAmount,
+    description: 'Grant credit',
+    expiresAt,
+    status: CreditStatus.ACTIVE,
+  };
+
+  try {
+    return await createCredit(newCredit);
+  } catch (error) {
+    const after = await findCreditByOrderNo(orderNo);
+    if (after) return after;
+    throw error;
   }
 }
 

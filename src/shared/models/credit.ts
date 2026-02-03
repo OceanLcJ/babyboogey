@@ -76,6 +76,19 @@ export async function createCredit(newCredit: NewCredit) {
   return result;
 }
 
+export async function findCreditByOrderNo(orderNo: string) {
+  const normalized = String(orderNo || '').trim();
+  if (!normalized) return;
+
+  const [result] = await db()
+    .select()
+    .from(credit)
+    .where(eq(credit.orderNo, normalized))
+    .limit(1);
+
+  return result;
+}
+
 // get credits
 export async function getCredits({
   userId,
