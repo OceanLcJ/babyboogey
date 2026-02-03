@@ -157,8 +157,29 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
       if (prop === 'transaction') {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original === 'function') {
-          return (fn: any, ...rest: any[]) => {
+          return async (fn: any, ...rest: any[]) => {
             const callback = (tx: any) => fn(withSqliteCompat(tx));
+
+            // Cloudflare D1 rejects explicit `BEGIN`/`COMMIT`/`ROLLBACK` in some environments.
+            // If we call Drizzle's D1 transaction implementation, it will run `begin...` and
+            // can throw "Failed query: begin". To keep app behavior consistent, we fall back
+            // to running the callback without a real transaction.
+            if (envConfigs.database_provider === 'd1' && isCloudflareWorker) {
+              if (rest.length === 0) {
+                return callback(receiver);
+              }
+
+              try {
+                return await original.call(target, callback, ...rest);
+              } catch (error) {
+                const message =
+                  error instanceof Error ? error.message : String(error);
+                if (message.toLowerCase().includes('failed query: begin')) {
+                  return callback(receiver);
+                }
+                throw error;
+              }
+            }
 
             if (rest.length > 0) {
               return original.call(target, callback, ...rest);
