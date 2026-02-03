@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { and, eq, gt, inArray, isNull, or } from 'drizzle-orm';
 
 import { db } from '@/core/db';
@@ -214,7 +213,7 @@ export async function assignPermissionsToRole(
 /**
  * Get user's roles
  */
-export const getUserRoles = cache(async (userId: string): Promise<Role[]> => {
+export async function getUserRoles(userId: string): Promise<Role[]> {
   const now = new Date();
   const result = await db()
     .select({
@@ -240,69 +239,68 @@ export const getUserRoles = cache(async (userId: string): Promise<Role[]> => {
     );
 
   return result;
-});
+}
 
 /**
  * Get user's permissions (through roles)
  */
-export const getUserPermissions = cache(
-  async (userId: string): Promise<Permission[]> => {
-    const roles = await getUserRoles(userId);
-    if (roles.length === 0) return [];
+export async function getUserPermissions(userId: string): Promise<Permission[]> {
+  const roles = await getUserRoles(userId);
+  if (roles.length === 0) return [];
 
-    const roleIds = roles.map((r) => r.id);
+  const roleIds = roles.map((r) => r.id);
 
-    const result = await db()
-      .selectDistinct({
-        id: permission.id,
-        code: permission.code,
-        resource: permission.resource,
-        action: permission.action,
-        title: permission.title,
-        description: permission.description,
-        createdAt: permission.createdAt,
-        updatedAt: permission.updatedAt,
-      })
-      .from(rolePermission)
-      .innerJoin(permission, eq(rolePermission.permissionId, permission.id))
-      .where(inArray(rolePermission.roleId, roleIds));
+  const result = await db()
+    .selectDistinct({
+      id: permission.id,
+      code: permission.code,
+      resource: permission.resource,
+      action: permission.action,
+      title: permission.title,
+      description: permission.description,
+      createdAt: permission.createdAt,
+      updatedAt: permission.updatedAt,
+    })
+    .from(rolePermission)
+    .innerJoin(permission, eq(rolePermission.permissionId, permission.id))
+    .where(inArray(rolePermission.roleId, roleIds));
 
-    return result;
-  }
-);
+  return result;
+}
 
 /**
  * Check if user has a specific permission
  * Supports wildcard matching (e.g., "admin.*", "admin.posts.*")
  */
-export const hasPermission = cache(
-  async (userId: string, permissionCode: string): Promise<boolean> => {
-    const permissions = await getUserPermissions(userId);
-    const permissionCodes = permissions.map((p) => p.code);
+export async function hasPermission(
+  userId: string,
+  permissionCode: string
+): Promise<boolean> {
+  const permissions = await getUserPermissions(userId);
+  const permissionCodes = permissions.map((p) => p.code);
 
-    // Check exact match
-    if (permissionCodes.includes(permissionCode)) {
-      return true;
-    }
-
-    // Check wildcard match
-    // If user has "admin.*", they have all "admin.xxx" permissions
-    const parts = permissionCode.split('.');
-    for (let i = parts.length - 1; i > 0; i--) {
-      const wildcard = parts.slice(0, i).join('.') + '.*';
-      if (permissionCodes.includes(wildcard)) {
-        return true;
-      }
-    }
-
-    // Check if user has "*" (super admin)
-    if (permissionCodes.includes('*')) {
-      return true;
-    }
-
-    return false;
+  // Check exact match
+  if (permissionCodes.includes(permissionCode)) {
+    return true;
   }
-);
+
+  // Check wildcard match
+  // If user has "admin.*", they have all "admin.xxx" permissions
+  const parts = permissionCode.split('.');
+  for (let i = parts.length - 1; i > 0; i--) {
+    const wildcard = parts.slice(0, i).join('.') + '.*';
+    if (permissionCodes.includes(wildcard)) {
+      return true;
+    }
+  }
+
+  // Check if user has "*" (super admin)
+  if (permissionCodes.includes('*')) {
+    return true;
+  }
+
+  return false;
+}
 
 /**
  * Check if user has any of the specified permissions
@@ -337,12 +335,13 @@ export async function hasAllPermissions(
 /**
  * Check if user has a specific role
  */
-export const hasRole = cache(
-  async (userId: string, roleName: string): Promise<boolean> => {
-    const roles = await getUserRoles(userId);
-    return roles.some((r) => r.name === roleName);
-  }
-);
+export async function hasRole(
+  userId: string,
+  roleName: string
+): Promise<boolean> {
+  const roles = await getUserRoles(userId);
+  return roles.some((r) => r.name === roleName);
+}
 
 /**
  * Check if user has any of the specified roles
