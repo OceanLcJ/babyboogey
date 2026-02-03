@@ -34,10 +34,17 @@ export async function GET() {
         email: currentUser.email,
         name: currentUser.name,
       },
+      summary: {
+        totalOrders: 0,
+        paidOrders: 0,
+        createdOrders: 0,
+        pendingOrders: 0,
+        failedOrders: 0,
+      },
       orders: [],
     };
 
-    // Get recent PAID orders
+    // Get ALL recent orders (not just PAID) to diagnose the issue
     const paidOrders = await db()
       .select({
         orderNo: order.orderNo,
@@ -48,13 +55,25 @@ export async function GET() {
         currency: order.currency,
         creditsAmount: order.creditsAmount,
         paymentType: order.paymentType,
+        paymentProvider: order.paymentProvider,
+        paymentSessionId: order.paymentSessionId,
+        transactionId: order.transactionId,
         createdAt: order.createdAt,
         paidAt: order.paidAt,
       })
       .from(order)
-      .where(eq(order.status, OrderStatus.PAID))
       .orderBy(desc(order.createdAt))
-      .limit(10);
+      .limit(20);  // Increased to 20 to see more orders
+
+    report.summary.totalOrders = paidOrders.length;
+
+    // Count by status
+    paidOrders.forEach((o) => {
+      if (o.status === OrderStatus.PAID) report.summary.paidOrders++;
+      else if (o.status === OrderStatus.CREATED) report.summary.createdOrders++;
+      else if (o.status === OrderStatus.PENDING) report.summary.pendingOrders++;
+      else if (o.status === OrderStatus.FAILED) report.summary.failedOrders++;
+    });
 
     for (const o of paidOrders) {
       const orderReport: any = {
@@ -66,6 +85,9 @@ export async function GET() {
         currency: o.currency,
         creditsAmount: o.creditsAmount,
         paymentType: o.paymentType,
+        paymentProvider: o.paymentProvider,
+        paymentSessionId: o.paymentSessionId,
+        transactionId: o.transactionId,
         createdAt: o.createdAt,
         paidAt: o.paidAt,
         issues: [],
@@ -76,6 +98,13 @@ export async function GET() {
       // Check issues
       if (!o.userId) {
         orderReport.issues.push('❌ CRITICAL: Order has no userId!');
+      }
+
+      // Check if order should be PAID but isn't
+      if (o.status !== OrderStatus.PAID && o.paymentSessionId) {
+        orderReport.issues.push(
+          `⚠️ Order has payment session but status is ${o.status}, should check payment provider`
+        );
       }
 
       // Check if user exists
