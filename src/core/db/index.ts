@@ -158,16 +158,28 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original === 'function') {
           return (fn: any, ...rest: any[]) => {
-            const args = rest;
-            const wantsConfigArg =
-              rest.length === 0 && typeof original.length === 'number'
-                ? original.length >= 2
-                : false;
-            return original.call(
-              target,
-              (tx: any) => fn(withSqliteCompat(tx)),
-              ...(wantsConfigArg ? [{ behavior: 'immediate' } as any] : args)
+            const callback = (tx: any) => fn(withSqliteCompat(tx));
+
+            if (rest.length > 0) {
+              return original.call(target, callback, ...rest);
+            }
+
+            const supportsConfigArg =
+              typeof original.length === 'number' ? original.length >= 2 : false;
+
+            // Cloudflare D1 is sqlite-like but has a more limited transaction surface.
+            // Avoid forcing `BEGIN IMMEDIATE` on Workers/D1 unless explicitly requested.
+            const shouldDefaultImmediate = !(
+              envConfigs.database_provider === 'd1' && isCloudflareWorker
             );
+
+            if (supportsConfigArg && shouldDefaultImmediate) {
+              return original.call(target, callback, {
+                behavior: 'immediate',
+              } as any);
+            }
+
+            return original.call(target, callback);
           };
         }
         // D1 polyfill: execute callback with the proxied db instance directly
