@@ -158,12 +158,15 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original === 'function') {
           return (fn: any, ...rest: any[]) => {
-            const args =
-              rest.length === 0 ? [{ behavior: 'immediate' } as any] : rest;
+            const args = rest;
+            const wantsConfigArg =
+              rest.length === 0 && typeof original.length === 'number'
+                ? original.length >= 2
+                : false;
             return original.call(
               target,
               (tx: any) => fn(withSqliteCompat(tx)),
-              ...args
+              ...(wantsConfigArg ? [{ behavior: 'immediate' } as any] : args)
             );
           };
         }
