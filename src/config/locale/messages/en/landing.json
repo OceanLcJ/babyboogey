@@ -27,6 +27,24 @@
           "title": "Pricing",
           "url": "/#pricing",
           "icon": "CreditCard"
+        },
+        {
+          "title": "Content",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "Blog",
+              "description": "Tips, guides, and product updates",
+              "url": "/blog",
+              "icon": "Newspaper"
+            },
+            {
+              "title": "Updates",
+              "description": "Release notes and changelogs",
+              "url": "/updates",
+              "icon": "Clock"
+            }
+          ]
         }
       ]
     },
@@ -86,6 +104,16 @@
             {
               "title": "Pricing",
               "url": "/#pricing",
+              "target": "_self"
+            },
+            {
+              "title": "Blog",
+              "url": "/blog",
+              "target": "_self"
+            },
+            {
+              "title": "Updates",
+              "url": "/updates",
               "target": "_self"
             }
           ]
