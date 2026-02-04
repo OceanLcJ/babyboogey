@@ -1,15 +1,15 @@
 {
   "metadata": {
-    "title": "Blog",
-    "description": "Read latest product features, solutions, and updates."
+    "title": "BabyBoogey Blog",
+    "description": "Tips, guides, and updates for making AI baby dance videos with BabyBoogey."
   },
   "page": {
-    "title": "ShipAny Blog",
+    "title": "BabyBoogey Blog",
     "sections": {
       "blog": {
         "id": "blog",
         "title": "Blog",
-        "description": "Read latest product features, solutions, and updates."
+        "description": "Tips, guides, and product updates for BabyBoogey."
       }
     }
   },

@@ -1,15 +1,15 @@
 {
   "metadata": {
     "title": "博客",
-    "description": "阅读我们最新的产品功能、解决方案和更新内容。"
+    "description": "BabyBoogey 的教程、技巧与产品更新，帮助你生成更自然的宝宝跳舞视频。"
   },
   "page": {
-    "title": "ShipAny 博客",
+    "title": "BabyBoogey 博客",
     "sections": {
       "blog": {
         "id": "blog",
         "title": "博客",
-        "description": "阅读我们最新的产品功能、解决方案和更新内容。"
+        "description": "阅读 BabyBoogey 的教程、技巧与产品更新。"
       }
     }
   },
