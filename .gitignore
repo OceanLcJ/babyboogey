@@ -51,11 +51,12 @@ data*
 
 .open-next
 .wrangler
+.codex/
 src/shared/types/cloudflare.d.ts
 
 src/config/db/migrations*
 
-.debug 
+.debug
 .test
 
 *.sql
