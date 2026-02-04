@@ -44,7 +44,7 @@ export const postsSource = loader({
 
 // Logs source
 export const logsSource = loader({
-  baseUrl: '/logs',
+  baseUrl: '/updates',
   source: logs.toFumadocsSource(),
   i18n,
   icon: iconHelper,

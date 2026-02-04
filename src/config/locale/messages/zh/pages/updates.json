@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "title": "更新日志",
-    "description": "查看产品更新日志，了解产品最新功能和改进。"
+    "title": "BabyBoogey 更新日志",
+    "description": "BabyBoogey（AI 宝宝跳舞生成器）的功能更新与改进记录。"
   },
   "page": {
     "sections": {
       "updates": {
         "id": "updates",
         "title": "更新日志",
-        "description": "查看产品更新日志，了解产品最新功能和改进。"
+        "description": "记录 BabyBoogey 的功能更新与改进。"
       }
     }
   }

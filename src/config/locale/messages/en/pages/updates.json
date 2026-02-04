@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "title": "Update Logs",
-    "description": "View product update logs, including latest features and improvements."
+    "title": "BabyBoogey Updates",
+    "description": "Release notes and improvements for BabyBoogey (AI baby dance generator)."
   },
   "page": {
     "sections": {
       "updates": {
         "id": "updates",
-        "title": "Update Logs",
-        "description": "View product update logs, including latest features and improvements."
+        "title": "Updates",
+        "description": "Release notes and improvements for BabyBoogey."
       }
     }
   }
