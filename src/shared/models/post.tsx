@@ -174,6 +174,7 @@ export async function getPost({
         content: '',
         body: body,
         toc: toc,
+        date: postData.createdAt.toISOString(),
         created_at:
           getPostDate({
             created_at: postData.createdAt.toISOString(),
@@ -231,6 +232,12 @@ export async function getLocalPost({
     content: '',
     body: body,
     toc: localPost.data.toc, // Use fumadocs auto-generated TOC
+    date:
+      frontmatter.date ||
+      frontmatter.created_at ||
+      (typeof (localPost.data as any).lastModified === 'string'
+        ? (localPost.data as any).lastModified
+        : ''),
     created_at: frontmatter.created_at
       ? getPostDate({
           created_at: frontmatter.created_at,
@@ -279,6 +286,12 @@ export async function getLocalPage({
     content: '',
     body: body,
     toc: localPage.data.toc, // Use fumadocs auto-generated TOC
+    date:
+      frontmatter.date ||
+      frontmatter.created_at ||
+      (typeof (localPage.data as any).lastModified === 'string'
+        ? (localPage.data as any).lastModified
+        : ''),
     created_at: frontmatter.created_at
       ? getPostDate({
           created_at: frontmatter.created_at,
@@ -355,11 +368,12 @@ export async function getPostsAndCategories({
     }
   });
 
-  // Convert map to array and sort by created_at desc
+  // Convert map to array and sort by date desc.
+  // `created_at` is display-formatted (locale-dependent), so prefer `date` for ordering.
   posts = Array.from(postsMap.values()).sort((a, b) => {
-    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-    return dateB - dateA;
+    const timeA = a.date ? Date.parse(a.date) : 0;
+    const timeB = b.date ? Date.parse(b.date) : 0;
+    return (Number.isFinite(timeB) ? timeB : 0) - (Number.isFinite(timeA) ? timeA : 0);
   });
 
   return {
@@ -413,6 +427,7 @@ export async function getRemotePostsAndCategories({
         description: post.description || '',
         author_name: post.authorName || '',
         author_image: post.authorImage || '',
+        date: post.createdAt.toISOString(),
         created_at:
           getPostDate({
             created_at: post.createdAt.toISOString(),
@@ -501,6 +516,11 @@ export async function getLocalPostsAndCategories({
             locale,
           })
         : '';
+      const lastModified = (post.data as any).lastModified;
+      const date =
+        frontmatter.date ||
+        frontmatter.created_at ||
+        (typeof lastModified === 'string' ? lastModified : '');
 
       return {
         id: post.path,
@@ -510,7 +530,7 @@ export async function getLocalPostsAndCategories({
         author_name: frontmatter.author_name || '',
         author_image: frontmatter.author_image || '',
         created_at: createdAt,
-        date: frontmatter.date || createdAt,
+        date,
         image: frontmatter.image || '',
         url: `${postPrefix}${slug}`,
         version: frontmatter.version || '',
