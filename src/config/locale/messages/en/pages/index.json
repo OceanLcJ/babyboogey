@@ -152,7 +152,7 @@
             "description": "Turn photo into dancing baby in seconds — no choreography needed, just pure AI magic that looks amazingly real.",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "/imgs/features/dance.png",
+              "src": "https://r2.babyboogey.com/uploads/web/toddler-dancing-neon-studio-4x3.webp",
               "alt": "Turn Photo Into Dancing Baby"
             }
           },
@@ -162,7 +162,7 @@
             "description": "Our face animator online ensures faces stay recognizable, safe, and adorable. No weird distortions — just pure cuteness.",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "/imgs/features/safe.png",
+              "src": "https://r2.babyboogey.com/uploads/web/baby-face-animation-split-screen-ai-demo.webp",
               "alt": "Face Animator Online"
             }
           }
