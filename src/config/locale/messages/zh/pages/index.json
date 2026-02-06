@@ -118,6 +118,7 @@
           "src": "/imgs/features/baby-party.png",
           "alt": "宝宝跳舞使用场景"
         },
+        "image_position": "right",
         "items": [
           {
             "title": "🎄 节日贺卡",

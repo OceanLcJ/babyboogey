@@ -118,6 +118,7 @@
           "src": "/imgs/features/baby-party.png",
           "alt": "Baby Dance Video Use Cases"
         },
+        "image_position": "right",
         "items": [
           {
             "title": "🎄 Holiday Cards",
