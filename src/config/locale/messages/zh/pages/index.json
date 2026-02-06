@@ -569,6 +569,24 @@
               "src": "/imgs/avatars/5.png",
               "alt": "Chris"
             }
+          },
+          {
+            "name": "Sarah K.",
+            "role": "新手妈妈",
+            "quote": "发了一个宝宝跳舞视频到家庭群，现在全家人都想要一个。花得最值的 5 美元！",
+            "image": {
+              "src": "/imgs/avatars/6.png",
+              "alt": "Sarah"
+            }
+          },
+          {
+            "name": "David W.",
+            "role": "骄傲的爷爷",
+            "quote": "孙女的周岁视频大受欢迎！AI 保持了她的面部表情非常自然——大家都以为是真的。",
+            "image": {
+              "src": "/imgs/avatars/7.png",
+              "alt": "David"
+            }
           }
         ]
       },

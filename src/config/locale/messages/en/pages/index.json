@@ -569,6 +569,24 @@
               "src": "/imgs/avatars/5.png",
               "alt": "Chris"
             }
+          },
+          {
+            "name": "Sarah K.",
+            "role": "New Mom",
+            "quote": "Sent a dancing baby video to the family group chat and now everyone wants one. Best $5 I ever spent!",
+            "image": {
+              "src": "/imgs/avatars/6.png",
+              "alt": "Sarah"
+            }
+          },
+          {
+            "name": "David W.",
+            "role": "Proud Grandpa",
+            "quote": "My granddaughter's first birthday video was a hit! The AI kept her face so natural — everyone thought it was real.",
+            "image": {
+              "src": "/imgs/avatars/7.png",
+              "alt": "David"
+            }
           }
         ]
       },
