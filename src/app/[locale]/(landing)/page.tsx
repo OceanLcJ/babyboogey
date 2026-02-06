@@ -1,10 +1,18 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
+import { envConfigs } from '@/config';
 import { getThemePage } from '@/core/theme';
+import { getMetadata } from '@/shared/lib/seo';
 import { VideoGenerator } from '@/shared/blocks/generator';
 import type { DynamicPage } from '@/shared/types/blocks/landing';
+
+export const generateMetadata = getMetadata({
+  metadataKey: 'common.metadata',
+  canonicalUrl: '/',
+});
 
 export const revalidate = 3600;
 
@@ -18,6 +26,7 @@ export default async function LandingPage({
 
   const t = await getTranslations('landing');
   const tIndex = await getTranslations('pages.index');
+  const tMeta = await getTranslations('common.metadata');
   const customHero = tIndex.raw('custom_hero') as {
     title_line1: string;
     title_line2: string;
@@ -38,8 +47,104 @@ export default async function LandingPage({
   // load dynamic page component
   const Page = await getThemePage('dynamic-page');
 
+  // Build FAQ items for JSON-LD
+  const faqSection = page.sections?.faq as any;
+  const faqItems = faqSection?.items || [];
+
+  // Build HowTo steps for JSON-LD
+  const usageSection = page.sections?.usage as any;
+  const howToSteps = usageSection?.items || [];
+
+  const appUrl = envConfigs.app_url || '';
+  const appName = envConfigs.app_name || 'BabyBoogey';
+
+  // JSON-LD structured data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${appUrl}/#website`,
+        url: appUrl,
+        name: appName,
+        description: tMeta('description'),
+        inLanguage: locale === 'zh' ? 'zh-CN' : 'en-US',
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${appUrl}/#organization`,
+        name: appName,
+        url: appUrl,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${appUrl}${envConfigs.app_logo || '/logo.png'}`,
+        },
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: appName,
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Web',
+        url: appUrl,
+        description: tMeta('description'),
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+      },
+      ...(faqItems.length > 0
+        ? [
+            {
+              '@type': 'FAQPage',
+              '@id': `${appUrl}/#faq`,
+              mainEntity: faqItems.map(
+                (item: { question: string; answer: string }) => ({
+                  '@type': 'Question',
+                  name: item.question,
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: item.answer,
+                  },
+                })
+              ),
+            },
+          ]
+        : []),
+      ...(howToSteps.length > 0
+        ? [
+            {
+              '@type': 'HowTo',
+              '@id': `${appUrl}/#howto`,
+              name: usageSection?.title || 'How to Animate Baby Photos',
+              description:
+                usageSection?.description ||
+                'Make baby dance videos in three simple steps',
+              step: howToSteps.map(
+                (
+                  item: { title: string; description: string },
+                  index: number
+                ) => ({
+                  '@type': 'HowToStep',
+                  position: index + 1,
+                  name: item.title,
+                  text: item.description,
+                })
+              ),
+            },
+          ]
+        : []),
+    ],
+  };
+
   return (
     <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-7xl py-12 sm:py-24 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -68,11 +173,14 @@ export default async function LandingPage({
 
               {/* Card 1: Static Photo */}
               <div className="absolute left-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-gray-100">
-                <div className="w-full h-full rounded-2xl overflow-hidden">
-                  <img
+                <div className="w-full h-full rounded-2xl overflow-hidden relative">
+                  <Image
                     src="https://img.aibabydance.org/assets/imgs/example/image-1.png"
-                    alt="Static baby photo"
-                    className="w-full h-full object-cover"
+                    alt="Baby photo before AI dance animation - BabyBoogey"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 224px, 256px"
+                    priority
                   />
                 </div>
                 <p className="mt-3 font-bold text-gray-400 text-sm">{customHero.card_static}</p>
@@ -105,6 +213,7 @@ export default async function LandingPage({
                 <div className="w-full h-full rounded-2xl overflow-hidden relative">
                   <video
                     src="https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4"
+                    poster="https://img.aibabydance.org/assets/imgs/example/image-1.png"
                     className="w-full h-full object-cover"
                     autoPlay
                     loop

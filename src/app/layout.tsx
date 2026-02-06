@@ -100,6 +100,11 @@ export default async function RootLayout({
         {/* inject locales */}
         {locales ? (
           <>
+            <link
+              rel="alternate"
+              hrefLang="x-default"
+              href={appUrl}
+            />
             {locales.map((loc) => (
               <link
                 key={loc}

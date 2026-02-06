@@ -14,6 +14,7 @@
       "benefits",
       "usage",
       "features",
+      "testimonials",
       "pricing",
       "faq",
       "cta"
@@ -41,7 +42,7 @@
           {
             "title": "View Templates",
             "icon": "BookOpenText",
-            "url": "/templates",
+            "url": "/showcases",
             "target": "_self",
             "variant": "outline"
           }
@@ -579,7 +580,6 @@
             "question": "Is the AI baby dance generator free to use?",
             "answer": "Yes! You can make baby dance videos free with our basic plan. We offer premium templates for advanced baby dance video maker features and higher resolution exports."
           },
-
           {
             "question": "How does the face animator online work?",
             "answer": "Upload any photo and our AI will animate baby photo faces with natural-looking movements. The face animator online preserves facial features while adding fun dance moves and expressions."
@@ -591,6 +591,22 @@
           {
             "question": "Do I need professional photos to animate baby photos?",
             "answer": "Not at all! Any clear snapshot works with our baby dance video maker. Even casual selfies become amazing baby photo masterpieces with our AI technology."
+          },
+          {
+            "question": "Is it safe to use my baby's photos?",
+            "answer": "Absolutely. Your photos are processed securely and never shared with third parties. All uploaded images are stored privately and you can delete them anytime from your account."
+          },
+          {
+            "question": "What photo formats and sizes are supported?",
+            "answer": "We support JPG, PNG, and WebP formats. For best results, use a clear front-facing photo with good lighting. The minimum recommended size is 512x512 pixels."
+          },
+          {
+            "question": "Can I use BabyBoogey for adults or pets?",
+            "answer": "Yes! While BabyBoogey is designed for baby photos, our AI face animator works great with any clear face photo — adults, kids, and even pets with visible faces."
+          },
+          {
+            "question": "How do I share my baby dance video on TikTok or Instagram?",
+            "answer": "After generating your video, click the download button to save it to your device. Then simply upload it to TikTok, Instagram Reels, or any social media platform directly from your gallery."
           }
         ]
       },
