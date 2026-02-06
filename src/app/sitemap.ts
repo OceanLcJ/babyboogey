@@ -45,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const appUrl = envConfigs.app_url;
       const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
       entries.push({
-        url: `${appUrl}${localePrefix}/blog/${post.slug}`,
+        url: `${appUrl}${localePrefix}${post.url}`,
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
