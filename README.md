@@ -82,6 +82,26 @@ pnpm cf:typegen     # 生成 Cloudflare Env 类型（可选）
 
 配置参考 `wrangler.toml.example`，生产配置可见 `wrangler.toml`。
 
+### R2 Incremental Cache（性能优化）
+
+项目已启用 R2 作为 ISR/SSG 缓存存储，优势如下：
+- ✅ 减小 Worker 包体积（缓存数据存储在 R2，不打包到 Worker）
+- ✅ 提升部署速度（Worker 包更小，上传和启动更快）
+- ✅ 突破缓存限制（R2 无限存储 vs Worker 10MB 限制）
+- ✅ 多实例共享缓存
+
+**配置要求**：
+1. 在 Cloudflare Dashboard 创建 R2 bucket（如 `babyboogey-cache`）
+2. 在 `wrangler.toml` 中配置 R2 绑定（已配置）：
+   ```toml
+   [[r2_buckets]]
+   binding = "NEXT_CACHE_BUCKET"
+   bucket_name = "babyboogey-cache"
+   ```
+3. `open-next.config.ts` 已启用 `r2IncrementalCache`
+
+参考：[OpenNext Cloudflare Caching 文档](https://opennext.js.org/cloudflare/caching)
+
 ## 内容系统（Docs / Blog / Updates）
 
 本项目使用 Fumadocs + MDX，内容目录如下：
