@@ -1,7 +1,7 @@
 'use client';
 
 import { Link } from '@/core/i18n/navigation';
-import { SmartIcon } from '@/shared/blocks/common';
+import { LazyImage, SmartIcon } from '@/shared/blocks/common';
 import { Button } from '@/shared/components/ui/button';
 import { ScrollAnimation } from '@/shared/components/ui/scroll-animation';
 import { cn } from '@/shared/lib/utils';
@@ -14,6 +14,9 @@ export function FeaturesList({
   section: Section;
   className?: string;
 }) {
+  const hasImage = !!section.image?.src;
+  const imagePosition = (section as any).image_position || 'left';
+
   return (
     <section
       className={cn(
@@ -65,25 +68,80 @@ export function FeaturesList({
           </div>
         </ScrollAnimation>
 
-        <ScrollAnimation delay={0.1}>
-          <div className="relative grid min-w-0 grid-cols-1 gap-x-3 gap-y-6 border-t pt-12 break-words sm:grid-cols-2 lg:grid-cols-4">
-            {section.items?.map((item, idx) => (
-              <div className="min-w-0 space-y-3 break-words" key={idx}>
-                <div className="flex min-w-0 items-center gap-2">
-                  {item.icon && (
-                    <SmartIcon name={item.icon as string} size={16} />
-                  )}
-                  <h3 className="min-w-0 text-sm font-medium break-words">
-                    {item.title}
-                  </h3>
-                </div>
-                <p className="text-muted-foreground min-w-0 text-sm break-words">
-                  {item.description ?? ''}
-                </p>
+        {hasImage ? (
+          <ScrollAnimation delay={0.1}>
+            <div
+              className={cn(
+                'grid min-w-0 gap-8 border-t pt-12 md:grid-cols-2 md:gap-12 lg:gap-16 items-center',
+              )}
+            >
+              {/* Image */}
+              <div
+                className={cn(
+                  'overflow-hidden rounded-2xl',
+                  imagePosition === 'right' ? 'md:order-2' : 'md:order-1'
+                )}
+              >
+                <LazyImage
+                  src={section.image!.src}
+                  alt={section.image!.alt || section.title || ''}
+                  className="w-full h-auto rounded-2xl"
+                />
               </div>
-            ))}
-          </div>
-        </ScrollAnimation>
+
+              {/* Feature items */}
+              <div
+                className={cn(
+                  'space-y-6',
+                  imagePosition === 'right' ? 'md:order-1' : 'md:order-2'
+                )}
+              >
+                {section.items?.map((item, idx) => (
+                  <div className="min-w-0 space-y-2 break-words" key={idx}>
+                    <div className="flex min-w-0 items-center gap-2">
+                      {item.icon && (
+                        <SmartIcon name={item.icon as string} size={18} />
+                      )}
+                      <h3 className="min-w-0 text-base font-semibold break-words">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <p className="text-muted-foreground min-w-0 text-sm break-words">
+                      {item.description ?? ''}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ScrollAnimation>
+        ) : (
+          <ScrollAnimation delay={0.1}>
+            <div
+              className={cn(
+                'relative grid min-w-0 grid-cols-1 gap-x-3 gap-y-6 border-t pt-12 break-words sm:grid-cols-2',
+                section.items && section.items.length <= 3
+                  ? 'lg:grid-cols-3'
+                  : 'lg:grid-cols-4'
+              )}
+            >
+              {section.items?.map((item, idx) => (
+                <div className="min-w-0 space-y-3 break-words" key={idx}>
+                  <div className="flex min-w-0 items-center gap-2">
+                    {item.icon && (
+                      <SmartIcon name={item.icon as string} size={16} />
+                    )}
+                    <h3 className="min-w-0 text-sm font-medium break-words">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p className="text-muted-foreground min-w-0 text-sm break-words">
+                    {item.description ?? ''}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </ScrollAnimation>
+        )}
       </div>
     </section>
   );
