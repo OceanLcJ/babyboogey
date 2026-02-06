@@ -32,9 +32,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/showcases',
     '/blog',
     '/updates',
-    '/ai-image-generator',
-    '/ai-video-generator',
-    '/ai-music-generator',
   ];
 
   for (const path of staticPaths) {
