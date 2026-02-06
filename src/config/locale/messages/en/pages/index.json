@@ -73,10 +73,6 @@
         "title": "The Easiest Baby Dance Video Maker Online",
         "label": "What is BabyBoogey",
         "description": "BabyBoogey is the simplest way to animate baby photos into hilarious singing & dancing videos. No editing skills required.",
-        "image": {
-          "src": "/imgs/features/baby-party.png",
-          "alt": "Baby Dance Video Maker"
-        },
         "items": [
           {
             "title": "Animate Baby Photos",
@@ -114,11 +110,6 @@
         "title": "Perfect for Every Occasion",
         "label": "Use Cases",
         "description": "Create unforgettable moments with our baby dance video maker.",
-        "image": {
-          "src": "/imgs/features/baby-party.png",
-          "alt": "Baby Dance Video Use Cases"
-        },
-        "image_position": "right",
         "items": [
           {
             "title": "🎄 Holiday Cards",
