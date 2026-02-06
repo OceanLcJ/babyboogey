@@ -2,6 +2,8 @@
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
+import { getStaticUrl } from '@/shared/lib/utils';
+
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 export function LazyImage({
@@ -29,7 +31,7 @@ export function LazyImage({
 }) {
   return (
     <LazyLoadImage
-      src={src}
+      src={getStaticUrl(src)}
       alt={alt}
       width={width}
       height={height}

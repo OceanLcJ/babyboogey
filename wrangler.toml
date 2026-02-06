@@ -33,6 +33,9 @@ NEXT_PUBLIC_APPEARANCE = "system"
 NEXT_PUBLIC_APP_LOGO = "/logo.png"
 NEXT_PUBLIC_APP_PREVIEW_IMAGE = "/preview.png"
 
+# cdn for static images (set after uploading public/imgs/ to R2)
+# NEXT_PUBLIC_CDN_URL = "https://img.aibabydance.org"
+
 # database
 DATABASE_PROVIDER = "d1"
 DB_SINGLETON_ENABLED = "true"

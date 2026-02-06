@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 
 import { Avatar } from '@/shared/components/ui/avatar';
+import { getStaticUrl } from '@/shared/lib/utils';
 
 const userImgUrls = [
   '/imgs/avatars/1.png',
@@ -18,7 +19,7 @@ export function SocialAvatars({ tip }: { tip: string }) {
       <span className="mx-4 inline-flex items-center -space-x-2">
         {userImgUrls.map((url, index) => (
           <Avatar className="size-10 border" key={index}>
-            <Image width={40} height={40} src={url} alt="placeholder" />
+            <Image width={40} height={40} src={getStaticUrl(url)} alt="placeholder" unoptimized={getStaticUrl(url).startsWith('http')} />
           </Avatar>
         ))}
       </span>

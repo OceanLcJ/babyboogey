@@ -8,7 +8,7 @@ import { Link } from '@/core/i18n/navigation';
 import { SmartIcon } from '@/shared/blocks/common/smart-icon';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent } from '@/shared/components/ui/card';
-import { cn } from '@/shared/lib/utils';
+import { cn, getStaticUrl } from '@/shared/lib/utils';
 import { Section } from '@/shared/types/blocks/landing';
 
 export function Showcases({
@@ -144,11 +144,12 @@ export function Showcases({
                         />
                       ) : (
                         <Image
-                          src={item.image?.src ?? ''}
+                          src={getStaticUrl(item.image?.src ?? '')}
                           alt={item.image?.alt ?? ''}
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="rounded-t-lg object-cover transition-transform duration-300"
+                          unoptimized={getStaticUrl(item.image?.src ?? '').startsWith('http')}
                         />
                       )}
                     </motion.div>

@@ -5,7 +5,7 @@ import { Link } from '@/core/i18n/navigation';
 import { SmartIcon } from '@/shared/blocks/common';
 import { Button } from '@/shared/components/ui/button';
 import { Highlighter } from '@/shared/components/ui/highlighter';
-import { cn } from '@/shared/lib/utils';
+import { cn, getStaticUrl } from '@/shared/lib/utils';
 import { Section } from '@/shared/types/blocks/landing';
 
 import { SocialAvatars } from './social-avatars';
@@ -118,7 +118,7 @@ export function Hero({
               {section.image_invert?.src && (
                 <Image
                   className="border-border/25 relative z-2 hidden w-full border dark:block"
-                  src={section.image_invert.src}
+                  src={getStaticUrl(section.image_invert.src)}
                   alt={section.image_invert.alt || section.image?.alt || ''}
                   width={
                     section.image_invert.width || section.image?.width || 1200
@@ -130,13 +130,13 @@ export function Hero({
                   loading="lazy"
                   fetchPriority="high"
                   quality={75}
-                  unoptimized={section.image_invert.src.startsWith('http')}
+                  unoptimized={getStaticUrl(section.image_invert.src).startsWith('http')}
                 />
               )}
               {section.image?.src && (
                 <Image
                   className="border-border/25 relative z-2 block w-full border dark:hidden"
-                  src={section.image.src}
+                  src={getStaticUrl(section.image.src)}
                   alt={section.image.alt || section.image_invert?.alt || ''}
                   width={
                     section.image.width || section.image_invert?.width || 1200
@@ -148,7 +148,7 @@ export function Hero({
                   loading="lazy"
                   fetchPriority="high"
                   quality={75}
-                  unoptimized={section.image.src.startsWith('http')}
+                  unoptimized={getStaticUrl(section.image.src).startsWith('http')}
                 />
               )}
             </div>
@@ -160,14 +160,14 @@ export function Hero({
         <div className="absolute inset-0 -z-10 hidden h-full w-full overflow-hidden md:block">
           <div className="from-background/80 via-background/80 to-background absolute inset-0 z-10 bg-gradient-to-b" />
           <Image
-            src={section.background_image.src}
+            src={getStaticUrl(section.background_image.src)}
             alt={section.background_image.alt || ''}
             className="object-cover opacity-60 blur-[0px]"
             fill
             loading="lazy"
             sizes="(max-width: 768px) 0vw, 100vw"
             quality={70}
-            unoptimized={section.background_image.src.startsWith('http')}
+            unoptimized={getStaticUrl(section.background_image.src).startsWith('http')}
           />
         </div>
       )}

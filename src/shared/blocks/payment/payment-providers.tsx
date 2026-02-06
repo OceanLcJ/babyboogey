@@ -12,7 +12,7 @@ import { useRouter } from '@/core/i18n/navigation';
 import { defaultLocale } from '@/config/locale';
 import { Button } from '@/shared/components/ui/button';
 import { useAppContext } from '@/shared/contexts/app';
-import { cn } from '@/shared/lib/utils';
+import { cn, getStaticUrl } from '@/shared/lib/utils';
 import { Button as ButtonType } from '@/shared/types/blocks/common';
 import { PricingItem } from '@/shared/types/blocks/pricing';
 
@@ -133,11 +133,12 @@ export function PaymentProviders({
         >
           {provider.icon_url && (
             <Image
-              src={provider.icon_url}
+              src={getStaticUrl(provider.icon_url)}
               alt={provider.title || provider.name || ''}
               width={24}
               height={24}
               className="rounded-full"
+              unoptimized={getStaticUrl(provider.icon_url).startsWith('http')}
             />
           )}
           <h3>{provider.title}</h3>
