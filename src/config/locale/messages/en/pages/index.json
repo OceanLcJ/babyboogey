@@ -79,7 +79,7 @@
             "description": "Upload any baby photo and watch our AI bring it to life with adorable dance moves and expressions.",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "/imgs/features/1.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
               "alt": "Animate Baby Photo"
             }
           },
@@ -89,7 +89,7 @@
             "description": "Advanced face animator online technology keeps faces natural while adding fun dance expressions.",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "/imgs/features/3.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
               "alt": "Face Animator Online"
             }
           },
@@ -98,7 +98,7 @@
             "description": "Make baby dance videos free — no credit card required, no watermark on basic videos.",
             "icon": "RiGiftLine",
             "image": {
-              "src": "/imgs/features/4.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
               "alt": "Make Baby Dance Video Free"
             }
           }

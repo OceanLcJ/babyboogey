@@ -79,7 +79,7 @@
             "description": "上传任意宝宝照片，AI 即刻赋予可爱的舞蹈动作和丰富表情。",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "/imgs/features/1.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
               "alt": "照片动画"
             }
           },
@@ -89,7 +89,7 @@
             "description": "先进的人脸动画技术保持面部自然，同时添加有趣的舞蹈表情。",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "/imgs/features/3.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
               "alt": "在线人脸动画"
             }
           },
@@ -98,7 +98,7 @@
             "description": "免费制作宝宝跳舞视频 — 无需信用卡，基础视频无水印。",
             "icon": "RiGiftLine",
             "image": {
-              "src": "/imgs/features/4.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
               "alt": "免费制作"
             }
           }

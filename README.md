@@ -75,12 +75,28 @@ ENV_FILE=.env.production pnpm db:generate
 本项目集成了 `@opennextjs/cloudflare`：
 
 ```bash
-pnpm cf:preview     # Cloudflare 本地预览（OpenNext）
-pnpm -s cf:deploy   # 部署到 Cloudflare
-pnpm cf:typegen     # 生成 Cloudflare Env 类型（可选）
+pnpm run check:deploy      # 部署前校验（lint + typecheck）
+pnpm run cf:build          # 仅构建 Next + OpenNext worker
+pnpm -s cf:deploy          # 快路径部署（默认，含 minify）
+pnpm -s cf:deploy:strict   # 严格部署（先校验再部署）
+pnpm -s cf:deploy:reuse    # 复用已有构建产物直接部署
+pnpm -s cf:upload          # 上传版本（含构建）
+pnpm -s cf:upload:reuse    # 复用已有构建产物上传版本
+pnpm cf:preview            # Cloudflare 本地预览（OpenNext）
+pnpm cf:typegen            # 生成 Cloudflare Env 类型（可选）
 ```
 
 配置参考 `wrangler.toml.example`，生产配置可见 `wrangler.toml`。
+
+### 部署模式说明
+
+- **快路径（推荐）**：`cf:deploy`
+  - 包含 `cf:build + deploy --minify`
+  - 不执行 lint/typecheck，追求更快部署
+- **严格模式**：`cf:deploy:strict`
+  - 先跑 `check:deploy` 再部署，适合发布前闸门
+- **复用模式**：`cf:deploy:reuse` / `cf:upload:reuse`
+  - 仅在你确认 `.next` 与 `.open-next` 产物已是最新时使用
 
 ### R2 Incremental Cache（性能优化）
 
@@ -95,12 +111,54 @@ pnpm cf:typegen     # 生成 Cloudflare Env 类型（可选）
 2. 在 `wrangler.toml` 中配置 R2 绑定（已配置）：
    ```toml
    [[r2_buckets]]
-   binding = "NEXT_CACHE_BUCKET"
+   binding = "NEXT_INC_CACHE_R2_BUCKET"
    bucket_name = "babyboogey-cache"
    ```
 3. `open-next.config.ts` 已启用 `r2IncrementalCache`
 
 参考：[OpenNext Cloudflare Caching 文档](https://opennext.js.org/cloudflare/caching)
+
+## 图片瘦身与 R2 迁移
+
+本仓库支持“先迁移、后删除”的双阶段流程：先把大图转 `webp`、上传到 R2、改引用；验证稳定后再删本地原图。
+
+### 阶段一：优化、上传、改引用（不删本地）
+
+```bash
+# 1) 生成 webp 与迁移清单（默认 quality=78）
+pnpm images:optimize
+
+# 2) 上传到 R2（需要 bucket）
+R2_PUBLIC_BUCKET=<bucket> \
+R2_PUBLIC_DOMAIN=https://img.aibabydance.org \
+R2_KEY_PREFIX=assets/imgs \
+pnpm images:upload:r2
+
+# 3) 仅重写已上传条目的 src/content 引用
+pnpm images:rewrite:refs
+```
+
+迁移清单默认写入：`docs/image-migration-manifest.json`。
+
+### 阶段二：清理本地原图（第二步）
+
+```bash
+# 先预览将被删除的文件
+pnpm images:prune:local --dry-run
+
+# 执行删除（仅删除满足条件条目）
+pnpm images:prune:local
+```
+
+删除条件：
+- `uploaded=true && rewritten=true`
+- 或“仓库内无引用的大图”且 `uploaded=true && reversible=true`
+
+### 回滚说明
+
+- 引用回滚：回退 `src/`、`content/` 相关改动（例如使用 `git restore` 或回滚提交）
+- 本地图回滚：按 `docs/image-migration-manifest.json` 中 `sourcePath` 恢复文件
+- 线上资源保持不变：R2 资源可继续保留，不影响回滚到本地路径
 
 ## 内容系统（Docs / Blog / Updates）
 

@@ -30,7 +30,7 @@ export default async function AiImageGeneratorPage({
         title: t.raw('page.title'),
         description: t.raw('page.description'),
         background_image: {
-          src: '/imgs/bg/tree.jpg',
+          src: 'https://r2.babyboogey.com/assets/imgs/bg/tree.webp',
           alt: 'hero background',
         },
       },

@@ -13,7 +13,7 @@ id = ""
 localConnectionString = ""
 
 [[r2_buckets]]
-binding = "NEXT_CACHE_BUCKET"
+binding = "NEXT_INC_CACHE_R2_BUCKET"
 bucket_name = "your-cache-bucket-name"
 
 [observability]

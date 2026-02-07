@@ -15,7 +15,7 @@ database_id = "400a1494-f1dd-41fc-86d4-81c4c51e3948"
 migrations_dir = "src/config/db/migrations-d1"
 
 [[r2_buckets]]
-binding = "NEXT_CACHE_BUCKET"
+binding = "NEXT_INC_CACHE_R2_BUCKET"
 bucket_name = "babyboogey-cache"
 
 [observability]
