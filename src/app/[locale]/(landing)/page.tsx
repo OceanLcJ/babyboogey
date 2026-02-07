@@ -212,7 +212,7 @@ export default async function LandingPage({
               <div className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-gray-100">
                 <div className="w-full h-full rounded-2xl overflow-hidden relative">
                   <video
-                    src="https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4"
+                    src="https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4"
                     poster="https://img.aibabydance.org/assets/imgs/example/image-1.png"
                     className="w-full h-full object-cover"
                     autoPlay

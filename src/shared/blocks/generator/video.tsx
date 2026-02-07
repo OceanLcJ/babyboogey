@@ -142,7 +142,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Rhythm Beat',
     nameZh: '节奏感舞步',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-05.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4',
     duration: '0:04',
   },
   {
@@ -150,7 +150,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Viral Dance',
     nameZh: '热门舞蹈',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/effects_video_shortform_viral_dance.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/effects_video_shortform_viral_dance.mp4',
     duration: '0:05',
     isHot: true,
   },
@@ -159,7 +159,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Cool Moves',
     nameZh: '酷炫街舞',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-01.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-01.mp4',
     duration: '0:15',
     isPro: true,
   },
@@ -168,7 +168,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Fun Groove',
     nameZh: '趣味律动',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-02.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -177,7 +177,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Happy Bounce',
     nameZh: '欢乐蹦跳',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-03.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -186,7 +186,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Smooth Sway',
     nameZh: '柔和摇摆',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-04.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-04.mp4',
     duration: '0:21',
     isPro: true,
   },
@@ -195,7 +195,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Cute Wiggle',
     nameZh: '可爱扭动',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-06.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4',
     duration: '0:08',
     isPro: true,
   },
@@ -204,7 +204,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Quick Steps',
     nameZh: '快速小步',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-07.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-07.mp4',
     duration: '0:15',
     isPro: true,
   },
@@ -213,7 +213,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Gentle Wave',
     nameZh: '温柔波浪',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-08.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-08.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -222,7 +222,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Energy Burst',
     nameZh: '活力四射',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-09.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-09.mp4',
     duration: '0:19',
     isPro: true,
   },
@@ -231,7 +231,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Playful Steps',
     nameZh: '俏皮舞步',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-10.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-10.mp4',
     duration: '0:17',
     isPro: true,
   },
@@ -240,7 +240,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Sweet Moves',
     nameZh: '甜美律动',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-11.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-11.mp4',
     duration: '0:16',
     isPro: true,
   },
@@ -249,7 +249,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Dynamic Dance',
     nameZh: '动感舞蹈',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/temp-12.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/temp-12.mp4',
     duration: '0:14',
     isPro: true,
   },
@@ -258,17 +258,17 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     name: 'Cute Boy',
     nameZh: '默认模板',
     videoUrl:
-      'https://img.aibabydance.org/uploads/assets/imgs/templates/hd/template-0.mp4',
+      'https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4',
     duration: '0:14',
     isPro: true,
   },
 ];
 
 const EXAMPLE_IMAGES = [
-  'https://img.aibabydance.org/assets/imgs/example/image-1.png',
-  'https://img.aibabydance.org/assets/imgs/example/image-2.png',
-  'https://img.aibabydance.org/assets/imgs/example/image-3.jpg',
-  'https://img.aibabydance.org/assets/imgs/example/image-4.jpg',
+  'https://r2.babyboogey.com/assets/imgs/blog/image-1.png',
+  'https://r2.babyboogey.com/assets/imgs/blog/image-2.png',
+  'https://r2.babyboogey.com/assets/imgs/blog/image-3.jpg',
+  'https://r2.babyboogey.com/assets/imgs/blog/image-4.jpg',
 ];
 
 const RESOLUTION_OPTIONS = [
