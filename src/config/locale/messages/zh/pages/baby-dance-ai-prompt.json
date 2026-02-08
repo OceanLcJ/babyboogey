@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "title": "宝宝跳舞AI提示词指南 — AI宝宝舞蹈视频最佳提示词大全",
+    "description": "发现最好用的宝宝跳舞AI提示词，轻松创建可爱的宝宝舞蹈视频。按分类整理的即用型提示词，或使用BabyBoogey免提示词一键生成。"
+  },
+  "page": {
+    "title": "宝宝跳舞AI提示词指南 — AI宝宝舞蹈视频最佳提示词大全",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "终极宝宝跳舞AI提示词指南",
+        "description": "正在寻找完美的宝宝跳舞AI提示词？我们精心收集了最佳提示词，帮你创建搞笑、温馨、刷屏级的AI宝宝舞蹈视频。浏览下方分类提示词，一键复制即可使用——或者让BabyBoogey帮你搞定一切，完全不需要写提示词。",
+        "buttons": [
+          {
+            "title": "免费试用 BabyBoogey",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "浏览提示词库",
+            "url": "#features",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-hero/1200/800",
+          "alt": "宝宝跳舞AI提示词指南展示各种可爱的舞蹈宝宝视频示例",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-bg/1600/900",
+          "alt": "彩色背景配跳舞宝宝剪影"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "为什么需要好的提示词（以及何时完全不需要）",
+        "description": "一条精心编写的宝宝跳舞AI提示词是获得出色AI视频效果的关键。合适的描述词可以设定舞蹈风格、情绪氛围、服装造型和背景场景——将一张普通的宝宝照片变成惊艳的舞蹈视频。但最棒的是：使用BabyBoogey，你可以完全跳过提示词。只需上传照片、选择舞蹈模板，剩下的交给AI处理。",
+        "image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-introduce/1200/800",
+          "alt": "BabyBoogey界面展示无需提示词的宝宝舞蹈视频创建流程"
+        },
+        "items": [
+          {
+            "title": "即复即用的提示词",
+            "description": "本指南中的每条宝宝跳舞AI提示词都可以直接使用。只需复制粘贴到你喜欢的AI视频工具（Seedance、Kling、Sora、Runway等），即刻生成视频。无需摸索，无需反复试错。",
+            "icon": "ClipboardCopy",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-0/800/600",
+              "alt": "即复即用的AI宝宝舞蹈提示词示例"
+            }
+          },
+          {
+            "title": "BabyBoogey 免提示词创作",
+            "description": "完全不想写提示词？BabyBoogey让你无需输入任何文字就能创建精彩的宝宝舞蹈视频。上传宝宝照片，从50多个舞蹈模板中选择，几秒钟就能获得专业级视频。最好的AI宝宝舞蹈提示词已经内置在我们的模板中。",
+            "icon": "Wand2",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-1/800/600",
+              "alt": "BabyBoogey免提示词舞蹈模板选择界面"
+            }
+          },
+          {
+            "title": "按分类整理",
+            "description": "我们将所有AI宝宝舞蹈提示词按主题分类——经典舞蹈、节日特辑、搞笑动作、音乐风格和热门趋势。无论你想要萨尔萨宝宝还是霹雳舞小达人，都能在几秒内找到完美的提示词。",
+            "icon": "LayoutGrid",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-2/800/600",
+              "alt": "按舞蹈风格和主题分类整理的提示词"
+            }
+          },
+          {
+            "title": "经过测试验证",
+            "description": "每条宝宝舞蹈AI提示词都在多个AI视频生成器上经过测试，确保输出质量稳定。我们优化了用词、添加了细节建议，让你第一次尝试就能获得最佳效果。",
+            "icon": "CheckCircle",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-3/800/600",
+              "alt": "AI宝宝舞蹈视频效果前后对比"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "宝宝跳舞AI提示词库 — 复制、粘贴、创建",
+        "description": "浏览我们按分类整理的完整宝宝跳舞AI提示词合集。每条提示词都针对主流AI视频生成器优化，可直接使用。点击任意分类展开查看完整提示词列表和使用技巧。",
+        "items": [
+          {
+            "title": "经典舞蹈提示词",
+            "description": "这些经典提示词在所有AI视频生成器上都表现出色，非常适合初次尝试AI宝宝舞蹈提示词的用户。\n\n- \"Adorable baby doing hip-hop dance moves, cheerful expression, colorful confetti background, HD quality\"（可爱宝宝跳嘻哈舞，开心表情，五彩纸屑背景，高清画质）\n- \"Cute baby performing ballet twirls in a pink tutu, soft studio lighting, graceful movements\"（可爱宝宝穿粉色芭蕾裙旋转，柔和灯光，优雅动作）\n- \"Happy toddler doing the twist dance, retro 1960s living room, bright smile, smooth motion\"（开心宝宝跳扭扭舞，60年代复古客厅，灿烂笑容，流畅动作）\n- \"Baby doing a classic waltz, tiny formal outfit, ballroom background, elegant and adorable\"（宝宝跳经典华尔兹，迷你正装，舞厅背景，优雅可爱）\n- \"Cheerful baby tap dancing, shiny black shoes, wooden stage floor, spotlight lighting\"（欢快宝宝跳踢踏舞，亮黑皮鞋，木质舞台，聚光灯照明）\n\n技巧：加入表情（开心、惊讶、咯咯笑）、服装和背景的细节描述，可以获得更逼真、更有魅力的效果。",
+            "icon": "Music",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-classic/800/600",
+              "alt": "AI生成的宝宝表演经典舞蹈动作"
+            }
+          },
+          {
+            "title": "节日主题舞蹈提示词",
+            "description": "用最佳宝宝舞蹈视频提示词庆祝每一个节日和季节。\n\n- \"Baby dancing in a Santa outfit, snowy background, jingle bells, Christmas tree with twinkling lights\"（宝宝穿圣诞老人装跳舞，雪景背景，铃儿响叮当，闪烁灯光圣诞树）\n- \"Toddler doing a Halloween dance, tiny pumpkin costume, spooky but cute background, candy scattered around\"（宝宝穿迷你南瓜装跳万圣节舞，可爱诡异背景，散落的糖果）\n- \"Baby doing a Spring Festival celebration dance, red traditional outfit, lanterns and fireworks, festive background\"（宝宝穿红色传统服装跳春节庆祝舞，灯笼烟花，喜庆背景）\n- \"Baby doing a Mid-Autumn Festival dance, bunny costume, full moon background, mooncakes on table\"（宝宝穿兔子装跳中秋节舞，满月背景，桌上摆着月饼）\n- \"Adorable baby dancing at a New Year countdown party, sparkly hat, confetti falling, midnight celebration vibes\"（可爱宝宝在新年倒计时派对跳舞，闪亮帽子，纸屑飘落，午夜庆祝氛围）\n\n技巧：节日提示词在社交媒体上容易走红。提前一周制作节日宝宝舞蹈视频，可获得最大曝光量。",
+            "icon": "CalendarHeart",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-holiday/800/600",
+              "alt": "AI生成的宝宝穿节日服装跳舞"
+            }
+          },
+          {
+            "title": "搞笑病毒式传播提示词",
+            "description": "想要最大程度的笑点？这些搞笑宝宝跳舞AI提示词专为分享和欢笑而设计。\n\n- \"Baby breakdancing with sunglasses, cool pose, boombox in background, urban street setting, hip-hop vibes\"（宝宝戴墨镜霹雳舞，酷炫姿势，音响背景，街头风格）\n- \"Baby doing an exaggerated robot dance, stiff arms, LED lights background, futuristic setting\"（宝宝跳夸张的机器人舞，僵硬手臂，LED灯背景，未来风格）\n- \"Toddler attempting moonwalk, oversized sneakers, spotlight on stage, audience of stuffed animals\"（宝宝尝试太空步，超大运动鞋，舞台聚光灯，毛绒玩具观众）\n- \"Baby doing a dramatic flamenco dance, tiny rose in mouth, Spanish guitar vibes, passionate expression\"（宝宝跳夸张弗拉明戈舞，嘴含小玫瑰，西班牙吉他风，激情表情）\n- \"Baby flexing and doing a bodybuilder pose dance, tiny gym outfit, motivational poster background, comedic energy\"（宝宝秀肌肉跳健美操，迷你运动装，励志海报背景，喜剧效果）\n\n技巧：最搞笑的效果来自反差——让小小宝宝配上成人舞蹈动作或戏剧性场景，喜剧效果最佳。",
+            "icon": "Laugh",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-funny/800/600",
+              "alt": "AI生成的搞笑宝宝戴墨镜霹雳舞"
+            }
+          },
+          {
+            "title": "音乐风格舞蹈提示词",
+            "description": "用这些按音乐风格分类的提示词，让宝宝的舞蹈匹配特定的音乐类型。\n\n- \"Baby salsa dancing, Latin music vibes, colorful ruffled outfit, tropical background, rhythmic movements\"（宝宝跳萨尔萨舞，拉丁音乐氛围，彩色荷叶边服装，热带背景，节奏感强）\n- \"Baby doing K-pop idol choreography, stylish outfit, neon stage lighting, backup dancers blurred behind\"（宝宝跳K-pop偶像编舞，时尚穿搭，霓虹舞台灯光，背后模糊的伴舞）\n- \"Toddler headbanging to rock music, tiny leather jacket, electric guitar on floor, concert stage background\"（宝宝跟着摇滚乐甩头，迷你皮夹克，地上的电吉他，演唱会舞台背景）\n- \"Baby doing smooth jazz dance, miniature suit and fedora, dimly lit lounge, saxophone silhouette background\"（宝宝跳爵士舞，迷你西装礼帽，昏暗的休息室，萨克斯管剪影背景）\n- \"Baby performing Bollywood dance, colorful traditional outfit, ornate background, joyful hand gestures\"（宝宝跳宝莱坞舞蹈，彩色传统服装，华丽背景，欢快的手势）\n- \"Baby doing Chinese classical dance, red silk outfit, ink painting background, graceful flowing movements\"（宝宝跳中国古典舞，红色丝绸服装，水墨画背景，优雅流畅的动作）\n\n技巧：提及具体的音乐相关视觉元素（乐器、舞台灯光、服装）有助于AI准确呈现音乐风格氛围。",
+            "icon": "Headphones",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-music/800/600",
+              "alt": "AI生成的宝宝穿彩色服装跳萨尔萨舞"
+            }
+          },
+          {
+            "title": "社交媒体热门舞蹈提示词",
+            "description": "这些提示词专为抖音、小红书、Instagram Reels和YouTube Shorts优化，适合想让宝宝内容走红的家长。\n\n- \"Baby doing trending TikTok dance, modern living room, ring light visible, phone recording angle, viral energy\"（宝宝跳抖音热门舞蹈，现代客厅，环形灯，手机拍摄角度，走红气质）\n- \"Baby hitting the griddy dance, stadium background, celebration after scoring, sports jersey outfit\"（宝宝跳griddy舞，体育场背景，进球后庆祝，运动球衣穿搭）\n- \"Toddler doing the Macarena, birthday party setting, balloons and streamers, group of baby friends watching\"（宝宝跳Macarena，生日派对场景，气球和彩带，一群宝宝朋友观看）\n- \"Baby doing a smooth transitions dance challenge, outfit changes with each move, colorful backgrounds shifting\"（宝宝跳丝滑转场舞蹈挑战，每个动作换一套衣服，背景色彩变换）\n- \"Baby doing popular Chinese social media dance, cute outfit, pastel colored room, adorable expressions\"（宝宝跳国内社交平台热门舞蹈，可爱穿搭，马卡龙色房间，萌萌表情）\n\n技巧：社交媒体推荐使用正方形（1:1）或竖屏（9:16）格式，视频控制在15秒以内可获得最高重播率。",
+            "icon": "Share2",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-viral/800/600",
+              "alt": "适合抖音和社交媒体的热门宝宝舞蹈视频"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "宝宝跳舞AI提示词常见问题",
+        "description": "关于编写和使用AI宝宝舞蹈视频提示词，你需要知道的一切。",
+        "items": [
+          {
+            "question": "什么样的宝宝跳舞AI提示词效果最好？",
+            "answer": "优秀的宝宝跳舞AI提示词包含四个关键要素：主体（宝宝或幼儿）、舞蹈风格（嘻哈、芭蕾、霹雳舞）、视觉细节（服装、表情、背景）和质量修饰词（高清、流畅动作、明亮灯光）。例如，不要只写\"宝宝跳舞\"，而是写\"adorable baby doing hip-hop moves, cheerful smile, colorful party background, HD quality, smooth motion\"。描述越具体，AI就越能理解你的想法。当然，如果你使用BabyBoogey，这一切都会自动完成——只需选择模板即可。"
+          },
+          {
+            "question": "如何为宝宝舞蹈视频编写提示词？",
+            "answer": "从基础开始：描述你的宝宝、舞蹈动作和场景设置。然后添加细节层次——宝宝穿什么？什么表情？背景是什么？灯光如何？保持句子清晰，避免矛盾描述（不要写\"平静的宝宝跳疯狂霹雳舞\"）。用逗号分隔各个描述词。上面的提示词库提供了数十个即用型示例供你参考和定制。或者，使用BabyBoogey的模板系统完全跳过提示词——上传照片，选择风格，就这么简单。"
+          },
+          {
+            "question": "使用BabyBoogey需要写提示词吗？",
+            "answer": "完全不需要！这正是BabyBoogey的特别之处。虽然本指南为需要文本输入的工具提供了最佳宝宝跳舞AI提示词，但BabyBoogey的工作方式完全不同。你只需上传宝宝照片，从50多个专业设计的舞蹈模板中选择，AI就会自动生成完美的舞蹈视频。无需写提示词，无需反复试错，不会浪费积分在失败的结果上。这是创建宝宝舞蹈视频最快的方式。"
+          },
+          {
+            "question": "这些宝宝舞蹈提示词可以用在哪些AI工具上？",
+            "answer": "本指南中的提示词针对主流AI视频生成器优化，包括字节跳动的Seedance 2.0、Kling AI、OpenAI的Sora、Runway Gen-3和Pika Labs。每个工具对提示词的理解可能略有不同，可能需要微调。如果想获得最稳定的效果而无需调整提示词，我们推荐使用BabyBoogey——它专为宝宝舞蹈视频设计，每次都能提供可靠的高质量输出。"
+          },
+          {
+            "question": "通常需要尝试多少次提示词才能获得满意的结果？",
+            "answer": "使用通用AI视频工具时，通常需要3-5次提示词迭代才能获得满意的效果。每次尝试都会消耗积分或处理时间。这就是为什么使用我们提示词库中经过验证的宝宝舞蹈AI提示词可以节省时间和金钱——这些提示词已经经过测试和优化。使用BabyBoogey，你通常第一次就能获得出色的效果，因为我们的模板已经为宝宝舞蹈内容预先优化。"
+          },
+          {
+            "question": "可以把多个提示词创意组合在一起吗？",
+            "answer": "当然可以！混合搭配不同分类是创建独特视频的好方法。例如，将节日主题和音乐风格结合：\"Baby doing salsa dance in a Santa outfit, tropical Christmas party, palm trees with string lights\"。或者把搞笑和热门趋势混搭：\"Baby doing the griddy in a tutu, hilarious determined expression, confetti explosion\"。只需确保组合后的提示词不超过200个单词即可获得最佳效果。最好的宝宝舞蹈视频提示词往往是创意混搭。"
+          },
+          {
+            "question": "AI宝宝舞蹈视频安全合适吗？",
+            "answer": "是的。本指南中所有提示词都旨在产出健康、适合家庭观看的内容。AI宝宝舞蹈视频使用你的照片作为视觉参考——没有真实的宝宝被要求跳舞。AI以数字方式生成动作，创建的是可爱且无害的动画效果。BabyBoogey特别对所有输出进行家庭友好内容过滤，让你可以放心分享创作成果。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "跳过提示词 — 让BabyBoogey施展魔法",
+        "description": "何必花时间打磨完美的提示词？BabyBoogey自动创建精彩的宝宝舞蹈视频。上传照片，选择模板，30秒内获得可分享的视频。无需提示词，无需学习成本，只有纯粹的乐趣。",
+        "buttons": [
+          {
+            "title": "免费创建第一个视频",
+            "url": "/create",
+            "icon": "Zap"
+          },
+          {
+            "title": "了解使用方法",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

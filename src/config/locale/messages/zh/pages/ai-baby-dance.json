@@ -1,0 +1,366 @@
+{
+  "metadata": {
+    "title": "AI 宝宝跳舞 — 让任何宝宝照片随 AI 起舞",
+    "description": "几秒钟即可创建超萌的 AI 宝宝跳舞视频。上传任意宝宝照片，看它活灵活现地跳起来。免费开始，无需任何编辑技能。"
+  },
+  "page": {
+    "title": "AI 宝宝跳舞 — 让任何宝宝照片随 AI 起舞",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "testimonials",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI 宝宝跳舞 — 将任意照片变成<strong>跳舞小明星</strong>",
+        "description": "BabyBoogey 的 AI 宝宝跳舞生成器，将静态宝宝照片变成搞笑又暖心的跳舞视频。只需上传照片、选个舞蹈动作，就能开始摇摆。无需编辑技能 — 100% 免费开始！",
+        "buttons": [
+          {
+            "title": "免费制作宝宝跳舞",
+            "url": "/create",
+            "icon": "Zap",
+            "variant": "default"
+          },
+          {
+            "title": "查看示例",
+            "url": "/showcases",
+            "icon": "BookOpenText",
+            "variant": "outline"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-hero/1200/800",
+          "alt": "AI 宝宝跳舞 — 看宝宝照片活灵活现地舞动起来",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-bg/1600/900",
+          "alt": "背景"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "最受家庭喜爱的 AI 宝宝跳舞生成器",
+        "label": "BabyBoogey 是什么",
+        "description": "BabyBoogey 让制作宝宝跳舞视频变得超级简单。AI 负责编舞 — 你只管享受欢笑。",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-introduce/1200/800",
+          "alt": "AI 宝宝跳舞生成器概览"
+        },
+        "items": [
+          {
+            "title": "一键宝宝照片跳舞",
+            "description": "上传任意宝宝照片，AI 立刻为它添加可爱逼真的舞蹈动作。无需安装 App，无需剪辑 — 宝宝照片跳舞视频几秒钟就能生成。",
+            "icon": "RiImageAddLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-0/800/600",
+              "alt": "宝宝照片跳舞动画"
+            }
+          },
+          {
+            "title": "AI 驱动的舞蹈动作",
+            "description": "我们的宝宝跳舞 AI 引擎采用先进的动作合成技术，创建流畅逼真的动态效果。每一个摇摆、弹跳和扭动都自然生动 — 毕竟没人想要一个机器人宝宝。",
+            "icon": "RiRobot2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-1/800/600",
+              "alt": "宝宝跳舞 AI 引擎"
+            }
+          },
+          {
+            "title": "安全又隐私",
+            "description": "您的宝宝照片会被加密处理，绝不外泄。使用 AI 宝宝跳舞功能时完全放心 — 我们对隐私的重视程度和您一样。",
+            "icon": "RiShieldCheckLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-2/800/600",
+              "alt": "安全的 AI 宝宝跳舞视频创作"
+            }
+          },
+          {
+            "title": "50+ 爆款舞蹈模板",
+            "description": "从抖音热门舞蹈到经典摇摆风格 — 数十种模板任你选择，制作出的宝宝跳舞视频保证让人笑到停不下来。",
+            "icon": "RiMusic2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-3/800/600",
+              "alt": "宝宝跳舞视频模板"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "为什么全家人都爱 AI 宝宝跳舞视频",
+        "label": "使用场景",
+        "description": "无论是生日惊喜、节日贺卡还是普通一天的开心时刻 — AI 宝宝跳舞视频总能带来满满的笑容。",
+        "items": [
+          {
+            "title": "生日和成长纪念",
+            "description": "将宝宝照片变成跳舞小明星，为第一个生日、学会走路或任何值得庆祝的时刻增添欢乐。AI 宝宝跳舞视频让每个瞬间都难以忘怀。",
+            "icon": "RiCake2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-0/800/600",
+              "alt": "AI 宝宝跳舞生日视频"
+            }
+          },
+          {
+            "title": "让人眼前一亮的节日祝福",
+            "description": "告别千篇一律的节日贺卡。制作宝宝跳舞视频来送上圣诞、新年或任何节日祝福，让全家人反复回看。",
+            "icon": "RiGiftLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-1/800/600",
+              "alt": "宝宝跳舞节日贺卡"
+            }
+          },
+          {
+            "title": "社交媒体爆款",
+            "description": "宝宝跳舞视频 AI 内容在社交平台上人气爆棚。轻松制作可分享的爆款短视频，发到抖音、小红书、微信 — 无需任何专业设备。",
+            "icon": "RiShareLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-2/800/600",
+              "alt": "社交媒体宝宝跳舞视频"
+            }
+          },
+          {
+            "title": "爷爷奶奶最爱的礼物",
+            "description": "没有什么比看到孙子孙女跳舞更让老人家开心了。制作一个宝宝照片跳舞视频，送上一份永远看不腻的暖心礼物。",
+            "icon": "RiHeartLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-3/800/600",
+              "alt": "送给爷爷奶奶的宝宝跳舞礼物"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "3 步制作 AI 宝宝跳舞视频",
+        "description": "制作你的 AI 宝宝跳舞杰作只需不到 30 秒：",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-steps/1200/800",
+          "alt": "如何制作宝宝跳舞视频"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "上传任意宝宝照片",
+            "description": "随手拍一张或从相册选一张。可爱的、臭脸的、打哈欠的都行 — 我们的 AI 宝宝跳舞生成器支持任何清晰照片。支持 JPG、PNG 和 WebP 格式。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-1/800/600",
+              "alt": "上传宝宝照片制作 AI 跳舞视频"
+            }
+          },
+          {
+            "title": "选择舞蹈风格",
+            "description": "浏览 50+ 种热门舞蹈模板 — 从嘻哈甩头到搞笑全身扭动。预览每个动作，选一个最符合宝宝气质的。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-2/800/600",
+              "alt": "选择宝宝跳舞模板"
+            }
+          },
+          {
+            "title": "下载并分享欢笑",
+            "description": "宝宝跳舞视频几秒即成！下载高清视频，分享到抖音、小红书、微信朋友圈，或任何需要一个笑容的地方。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-3/800/600",
+              "alt": "下载 AI 宝宝跳舞视频"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "每个 AI 宝宝跳舞视频背后的强大功能",
+        "label": "核心功能",
+        "description": "BabyBoogey 将顶尖 AI 技术融入最简单、最有趣的宝宝跳舞视频制作器中。",
+        "items": [
+          {
+            "title": "逼真动作合成",
+            "description": "我们的 AI 宝宝跳舞引擎采用最先进的动作生成技术，创建流畅、自然的运动效果。每一个歪头、挥手和身体弹跳都经过精心合成，看起来真实自然 — 绝不生硬。",
+            "icon": "RiBodyScanLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-0/800/600",
+              "alt": "AI 宝宝跳舞动作合成"
+            }
+          },
+          {
+            "title": "面部保真技术",
+            "description": "使用宝宝跳舞 AI 工具时最担心面部变形。BabyBoogey 的面部锁定技术确保宝宝面部在整个动画中清晰可辨 — 绝无恐怖谷效应。",
+            "icon": "RiEyeLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-1/800/600",
+              "alt": "面部保真宝宝跳舞 AI"
+            }
+          },
+          {
+            "title": "高清和 4K 视频导出",
+            "description": "每个 AI 宝宝跳舞视频都支持 720p 或 1080p 高清导出。宝宝的首秀值得最清晰的画质，不管是在手机屏幕还是客厅电视上。",
+            "icon": "RiHdLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-2/800/600",
+              "alt": "高清宝宝跳舞视频导出"
+            }
+          },
+          {
+            "title": "音乐节拍同步",
+            "description": "每个舞蹈模板都配有完美同步的背景音乐。AI 将宝宝的动作与节拍精准匹配，制作出的宝宝跳舞视频 AI 内容看起来像专业制作的一样。",
+            "icon": "RiMusic4Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-3/800/600",
+              "alt": "音乐同步宝宝跳舞视频"
+            }
+          },
+          {
+            "title": "支持各种照片",
+            "description": "专业写真还是随手自拍都没问题。任何清晰的照片都能让宝宝跳舞。我们的 AI 能处理不同角度、光线条件，甚至合照。",
+            "icon": "RiImageLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-4/800/600",
+              "alt": "任意照片制作宝宝跳舞"
+            }
+          },
+          {
+            "title": "闪电般的生成速度",
+            "description": "大多数宝宝照片跳舞视频 30 秒内即可完成。优化的 AI 流水线意味着更少的等待、更多的欢笑 — 毕竟有舞要跳，谁想干等着呢？",
+            "icon": "RiFlashlightLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-5/800/600",
+              "alt": "快速生成宝宝照片跳舞视频"
+            }
+          }
+        ]
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "家长们都在说什么",
+        "description": "真实的家庭、真实的欢笑、真实的五星好评。",
+        "items": [
+          {
+            "name": "小丽",
+            "role": "双胞胎妈妈",
+            "quote": "我给两个双胞胎分别做了 AI 宝宝跳舞视频，发给爷爷奶奶看。5 分钟后他们就打来电话，激动得不行！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-1/100/100",
+              "alt": "小丽"
+            }
+          },
+          {
+            "name": "大伟",
+            "role": "欢乐舅舅",
+            "quote": "外甥女的周岁生日派对多亏了我做的宝宝跳舞 AI 视频。投到大屏幕上，全家人都笑疯了。下次还要做！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-2/100/100",
+              "alt": "大伟"
+            }
+          },
+          {
+            "name": "小美",
+            "role": "新手妈妈",
+            "quote": "一开始对 AI 宝宝跳舞工具半信半疑，但 BabyBoogey 真的惊艳到我了。女儿的脸非常自然，舞蹈动作又搞笑。已经做了 12 个视频了！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-3/100/100",
+              "alt": "小美"
+            }
+          },
+          {
+            "name": "阿杰",
+            "role": "抖音爸爸",
+            "quote": "发了个宝宝照片跳舞视频到抖音，第二天早上一看——5 万播放！BabyBoogey 一夜之间把我儿子变成了网红！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-4/100/100",
+              "alt": "阿杰"
+            }
+          },
+          {
+            "name": "王奶奶",
+            "role": "骄傲的奶奶",
+            "quote": "女儿教我怎么制作宝宝跳舞视频，现在我根本停不下来。通讯录里的每个人都被我发了一遍。这是互联网上最好的东西！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-5/100/100",
+              "alt": "王奶奶"
+            }
+          },
+          {
+            "name": "小陈",
+            "role": "短视频博主",
+            "quote": "宝宝跳舞视频 AI 的质量太惊人了。动作流畅、面部保真、音乐节拍完美同步。我内容创作工具箱里的王牌！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-6/100/100",
+              "alt": "小陈"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "常见问题",
+        "description": "关于使用 BabyBoogey 创建 AI 宝宝跳舞视频的一切。",
+        "items": [
+          {
+            "question": "什么是 AI 宝宝跳舞？它是怎么工作的？",
+            "answer": "AI 宝宝跳舞是一种利用人工智能将静态宝宝照片变成逼真跳舞视频的技术。BabyBoogey 的 AI 会分析您上传的照片，映射面部和身体，并应用动作合成技术来创建流畅、自然的舞蹈动作 — 全程不到 30 秒。"
+          },
+          {
+            "question": "制作宝宝跳舞视频免费吗？",
+            "answer": "是的！BabyBoogey 的入门方案完全免费，让您免费制作宝宝跳舞视频。您可以获得免费积分来创建首批视频，无需信用卡，基础导出无水印。高级方案可解锁高清导出、更多模板和额外积分。"
+          },
+          {
+            "question": "什么样的照片最适合制作 AI 宝宝跳舞视频？",
+            "answer": "任何清晰的正面照片都很好用。我们支持 JPG、PNG 和 WebP 格式，最低推荐尺寸为 512x512 像素。为了获得最佳的宝宝照片跳舞效果，请使用光线良好、面部清晰可见的照片。随手拍的照片和专业写真一样好用！"
+          },
+          {
+            "question": "使用宝宝照片安全吗？隐私有保障吗？",
+            "answer": "绝对安全。隐私是我们的首要原则。所有上传的照片在传输和处理过程中都经过加密。我们绝不与第三方共享您的图片，您可以随时从服务器删除照片。您的宝宝跳舞 AI 视频会在账户中私密存储。"
+          },
+          {
+            "question": "用 AI 制作宝宝跳舞视频需要多长时间？",
+            "answer": "大多数 AI 宝宝跳舞视频在 15-30 秒内即可生成，具体取决于模板复杂度和视频时长。我们优化的流水线确保您花更少的时间等待，更多的时间欣赏宝宝的精彩舞姿。"
+          },
+          {
+            "question": "AI 宝宝跳舞可以用大人或宠物照片吗？",
+            "answer": "可以！虽然 BabyBoogey 针对宝宝照片做了专门优化，但我们的 AI 支持任何清晰的人脸照片 — 幼儿、儿童、成人，甚至面部清晰的宠物照片。宝宝跳舞 AI 动作引擎会自适应检测到的任何面部。"
+          },
+          {
+            "question": "如何将宝宝跳舞视频分享到社交媒体？",
+            "answer": "AI 宝宝跳舞视频生成后，点击下载按钮即可保存 MP4 格式的视频。然后直接上传到抖音、小红书、微信朋友圈、微博，或通过微信发送给亲朋好友。视频已针对各大社交平台进行优化。"
+          },
+          {
+            "question": "BabyBoogey 和其他宝宝跳舞 AI 工具有什么不同？",
+            "answer": "BabyBoogey 以面部保真技术（让宝宝面部始终自然，无恐怖变形）、50+ 精选配乐同步舞蹈模板、闪电般的生成速度以及隐私优先的理念脱颖而出。我们专为追求有趣、安全、高品质宝宝跳舞视频 AI 内容的家庭而打造。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "准备好让宝宝摇摆起来了吗？",
+        "description": "加入数千个家庭的行列，制作令人难忘的 AI 宝宝跳舞视频。上传一张照片，几秒即可开始 — 完全免费！",
+        "buttons": [
+          {
+            "title": "免费制作宝宝跳舞",
+            "url": "/create",
+            "icon": "Zap",
+            "variant": "default"
+          },
+          {
+            "title": "浏览模板",
+            "url": "/showcases",
+            "icon": "BookOpenText",
+            "variant": "outline"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

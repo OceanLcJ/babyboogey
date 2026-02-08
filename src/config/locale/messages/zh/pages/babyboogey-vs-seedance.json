@@ -1,0 +1,199 @@
+{
+  "metadata": {
+    "title": "BabyBoogey 对比 Seedance 2.0 — 哪个更适合制作宝宝跳舞视频？",
+    "description": "BabyBoogey 与 Seedance 2.0 全面对比：易用性、宝宝专属模板、价格、视频质量、生成速度和隐私安全。找到最适合您家庭的 AI 宝宝跳舞工具。"
+  },
+  "page": {
+    "title": "BabyBoogey 对比 Seedance 2.0 — 哪个更适合制作宝宝跳舞视频？",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "BabyBoogey 对比 Seedance 2.0 — 哪个更适合制作宝宝跳舞视频？",
+        "description": "正在纠结选 BabyBoogey 还是 Seedance 2.0 来制作宝宝跳舞视频？我们将两款 AI 工具进行了详细对比，帮您看清哪个能用最少的操作做出最可爱、最值得分享的宝宝舞蹈视频。",
+        "buttons": [
+          {
+            "title": "免费试用 BabyBoogey",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/babyboogey-vs-seedance-hero/1200/800",
+          "alt": "BabyBoogey 与 Seedance 2.0 宝宝跳舞视频 AI 对比",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/babyboogey-vs-seedance-bg/1600/900",
+          "alt": "背景图"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "BabyBoogey 与 Seedance — 两种截然不同的 AI 宝宝跳舞方案",
+        "description": "两款工具都能生成 AI 视频，但它们面向的用户群体完全不同。以下是在制作宝宝跳舞视频方面，它们各自的优势对比。",
+        "image": {
+          "src": "https://picsum.photos/seed/babyboogey-vs-seedance-introduce/1200/800",
+          "alt": "BabyBoogey 与 Seedance 功能概览对比"
+        },
+        "items": [
+          {
+            "title": "BabyBoogey — 专为宝宝跳舞视频打造",
+            "description": "BabyBoogey 是一款专注于宝宝跳舞视频的 AI 生成器，从底层设计就只为做好一件事：将宝宝照片变成可爱又搞笑的跳舞视频。上传照片、选择模板，大约 30 秒即可生成视频。无需编写提示词、无需调参、零学习成本。如果您只想快速制作一段有趣的宝宝跳舞短片分享给家人，BabyBoogey 是最好的 Seedance 替代方案。",
+            "icon": "RiHeart3Fill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-item-0/800/600",
+              "alt": "BabyBoogey AI 宝宝跳舞生成器界面"
+            }
+          },
+          {
+            "title": "Seedance 2.0 — 强大的通用 AI 视频模型",
+            "description": "Seedance 2.0 是字节跳动推出的旗舰 AI 视频生成模型，能够制作多种风格的高质量 2K 视频，涵盖电影场景到角色动画等广泛领域。但它是一个通用工具——没有宝宝专属模板，没有一键生成流程，您需要编写详细的提示词才能获得想要的效果。对于专业人士来说很强大，但用来做宝宝跳舞视频就大材小用了。",
+            "icon": "RiRobot2Fill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-item-1/800/600",
+              "alt": "Seedance 2.0 通用 AI 视频生成"
+            }
+          },
+          {
+            "title": "结论 — 制作宝宝跳舞视频，BabyBoogey 胜出",
+            "description": "如果您在寻找最好的 AI 宝宝跳舞工具，BabyBoogey 是毫无争议的赢家。它专为此场景而生，拥有 50 多个宝宝跳舞模板、儿童安全处理机制，以及简单到爷爷奶奶都能操作的流程。Seedance 2.0 技术确实出色，但在宝宝跳舞视频这个细分领域，BabyBoogey 速度更快、价格更低、效果更好，而且完全不需要学习提示词工程。",
+            "icon": "RiTrophyFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-item-2/800/600",
+              "alt": "BabyBoogey 在 AI 宝宝跳舞对比中胜出"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "逐项功能对比：BabyBoogey vs Seedance",
+        "description": "我们从制作宝宝跳舞视频最重要的每个维度，对 BabyBoogey 和 Seedance 2.0 进行了详细对比，以下是结果。",
+        "items": [
+          {
+            "title": "易用性",
+            "description": "BabyBoogey：上传宝宝照片、选择跳舞模板、点击生成，整个过程只需三步。无需编写提示词、无需调参、无需任何技术基础。Seedance 2.0：您需要撰写详细的文本提示词来描述动作、风格和画面构图，还可能需要配置分辨率、时长和种子参数。对于只想做个有趣宝宝跳舞视频的普通用户来说，学习成本很高。优胜者：BabyBoogey，遥遥领先。",
+            "icon": "RiMouseFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-ease/800/600",
+              "alt": "BabyBoogey 与 Seedance 易用性对比"
+            }
+          },
+          {
+            "title": "宝宝专属模板",
+            "description": "BabyBoogey：超过 50 个专业设计的宝宝跳舞模板，包括抖音热门舞蹈、节日主题舞蹈、搞笑扭动动作和经典摇摆风格。每个模板都针对宝宝的身体比例和自然面部动画进行了优化。Seedance 2.0：零宝宝专属模板。每个视频都必须通过文本提示词从头创建，您需要详细描述舞蹈风格、宝宝外观、背景和动作，而且效果难以预测。优胜者：BabyBoogey。模板不仅节省时间，还能保证每次都生成可爱的效果。",
+            "icon": "RiLayoutGridFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-templates/800/600",
+              "alt": "宝宝跳舞模板对比"
+            }
+          },
+          {
+            "title": "价格与性价比",
+            "description": "BabyBoogey：提供免费套餐，无需信用卡即可试用。付费方案低至 4.99 美元的积分包，月订阅从 6.99 美元/月起。专注于宝宝跳舞功能，价格亲民。Seedance 2.0：主要通过 API 接口或字节跳动平台提供，按使用量计费。对于只想做几个宝宝跳舞视频的普通用户来说，费用会快速累积，而且您在为很多用不到的通用视频功能买单。优胜者：BabyBoogey。制作宝宝跳舞视频更实惠，还有免费入门选项。",
+            "icon": "RiPriceTag3Fill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-pricing/800/600",
+              "alt": "BabyBoogey 与 Seedance 价格对比"
+            }
+          },
+          {
+            "title": "视频质量",
+            "description": "两款工具都能输出高质量视频。Seedance 2.0 支持最高 2K 分辨率，在电影级、写实风格的视频制作方面表现出色。BabyBoogey 支持最高 1080p 高清输出，专注于宝宝视频最重要的指标：自然的面部动画、流畅的身体动作，以及真正可爱而非诡异的表情。在宝宝跳舞视频这个特定场景下，BabyBoogey 的专用 AI 模型能产出更稳定、更自然的效果，因为它就是针对这个场景训练的。优胜者：原始画质打平。宝宝视频真实感 BabyBoogey 胜出。",
+            "icon": "RiHdFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-quality/800/600",
+              "alt": "宝宝跳舞 AI 视频质量对比"
+            }
+          },
+          {
+            "title": "生成速度",
+            "description": "BabyBoogey：大多数宝宝跳舞视频约 30 秒即可生成。处理流程针对单一场景深度优化，不会在您用不到的功能上浪费算力。Seedance 2.0：生成时间取决于分辨率、时长和服务器负载，高画质设置每个视频可能需要几分钟，高峰期还需排队等待。优胜者：BabyBoogey。更快的生成速度意味着更多时间享受宝宝的跳舞视频，更少时间盯着进度条。",
+            "icon": "RiFlashlightFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-speed/800/600",
+              "alt": "BabyBoogey 与 Seedance 生成速度对比"
+            }
+          },
+          {
+            "title": "隐私与儿童安全",
+            "description": "BabyBoogey：以儿童安全为核心设计原则。所有上传的宝宝照片在传输和存储时均经过加密，保存在用户私有账户中，并可在设定时间后自动删除。BabyBoogey 绝不会使用您宝宝的照片来训练 AI 模型，平台严格遵守儿童隐私保护最佳实践。Seedance 2.0：作为通用 AI 平台，Seedance 没有针对宝宝的专项隐私保护功能。通过 API 提交的照片可能受到更宽泛的数据使用政策约束，没有内置的自动删除或儿童专属数据处理机制。优胜者：BabyBoogey。涉及宝宝照片时，专门构建的隐私保护机制至关重要。",
+            "icon": "RiShieldCheckFill",
+            "image": {
+              "src": "https://picsum.photos/seed/babyboogey-vs-seedance-privacy/800/600",
+              "alt": "隐私与儿童安全对比"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "常见问题",
+        "description": "关于 BabyBoogey 与 Seedance 在 AI 宝宝跳舞视频方面对比的常见疑问。",
+        "items": [
+          {
+            "question": "制作宝宝跳舞视频，BabyBoogey 真的比 Seedance 好吗？",
+            "answer": "在宝宝跳舞视频这个特定场景下，是的。BabyBoogey 专为此场景打造，拥有 50 多个宝宝跳舞模板、针对婴幼儿优化的面部动画技术，以及一键生成的便捷流程。Seedance 2.0 是更强大的通用视频模型，但需要编写提示词，且没有宝宝专属功能。如果您的目标是制作可爱的宝宝跳舞短片，BabyBoogey 是更好的选择。"
+          },
+          {
+            "question": "Seedance 2.0 能制作宝宝跳舞视频吗？",
+            "answer": "从技术上说可以。Seedance 2.0 能生成几乎任何主题的视频，包括宝宝跳舞。但您需要编写详细的提示词、反复调试设置，而且效果可能不够稳定。它没有宝宝跳舞模板，也没有儿童安全相关的默认设置。BabyBoogey 能以极少的操作步骤达到同样的效果。"
+          },
+          {
+            "question": "BabyBoogey 是好的 Seedance 替代方案吗？",
+            "answer": "如果您专门需要制作宝宝跳舞视频，BabyBoogey 是目前最好的 Seedance 替代方案。它更易用、对普通用户更实惠，而且开箱即用就能生成更自然、更可爱的宝宝跳舞视频。如果您需要其他类型的 AI 视频生成，Seedance 仍然是一个强大的通用选项。"
+          },
+          {
+            "question": "BabyBoogey 和 Seedance 哪个更便宜？",
+            "answer": "在制作宝宝跳舞视频方面，BabyBoogey 的价格明显更低。它提供免费套餐，无需信用卡，付费方案低至 4.99 美元起。Seedance 2.0 采用 API 按量计费，对于只想做几个有趣视频的普通用户来说费用会较高。对于家庭用户和休闲创作者，BabyBoogey 的性价比要高得多。"
+          },
+          {
+            "question": "使用 BabyBoogey 需要写提示词吗？",
+            "answer": "完全不需要。与 Seedance 2.0 不同，BabyBoogey 不要求您编写任何文本提示词。只需上传宝宝照片，从 50 多个跳舞模板中选择一个，AI 就会自动完成所有工作。无论是父母、祖父母还是任何想要快速出片的人，都能轻松上手。"
+          },
+          {
+            "question": "我宝宝的照片在 BabyBoogey 上安全吗？",
+            "answer": "完全安全。BabyBoogey 从设计之初就将儿童安全作为首要原则。所有照片均经过加密处理，存储在您的私有账户中，处理完成后可自动删除。您宝宝的照片绝不会被用于 AI 模型训练。这种专为儿童设计的隐私保护机制，是 Seedance 等通用平台所不具备的。"
+          },
+          {
+            "question": "BabyBoogey 比 Seedance 快多少？",
+            "answer": "BabyBoogey 生成大多数宝宝跳舞视频只需约 30 秒。Seedance 2.0 的生成时间从一分钟到几分钟不等，取决于分辨率、视频时长和服务器负载。如果您追求快速生成可分享的宝宝跳舞短片，BabyBoogey 的速度优势非常明显。"
+          },
+          {
+            "question": "BabyBoogey 能用于非宝宝照片吗？",
+            "answer": "可以！虽然 BabyBoogey 针对宝宝和幼儿照片进行了专门优化，但其 AI 面部动画技术同样适用于任何清晰的人脸照片，包括成人、儿童甚至宠物。不过，由于跳舞模板是按宝宝的身体比例设计的，使用小宝宝的照片效果会最好。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "准备好体验为什么家长们都选择 BabyBoogey 了吗？",
+        "description": "告别复杂的提示词和昂贵的 API 调用。上传宝宝照片、选择跳舞模板，30 秒即可获得可分享的视频。立即免费开始——无需信用卡。",
+        "buttons": [
+          {
+            "title": "免费试用 BabyBoogey",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "浏览模板",
+            "url": "/create",
+            "icon": "BookOpenText"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "metadata": {
+    "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
+    "description": "Use the best ai baby dance video generator free online. Turn any baby photo into a hilarious dancing video — 100% free, no watermark, no credit card, no sign-up required."
+  },
+  "page": {
+    "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
+        "description": "The best ai baby dance video generator free online. Upload any baby photo and create an adorable dancing video in seconds — completely free, no watermark, no credit card required.",
+        "buttons": [
+          {
+            "title": "Make a Free Video Now",
+            "url": "/create",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-free-hero/1200/800",
+          "alt": "Create free dancing baby videos online with BabyBoogey",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-free-bg/1600/900",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "The Free Baby Dance Video Maker Every Parent Loves",
+        "description": "BabyBoogey is the easiest ai baby dance video generator free to use online. No downloads, no accounts, no hidden fees — just upload a photo and watch the magic happen.",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-free-introduce/1200/800",
+          "alt": "Free baby dance video maker overview"
+        },
+        "items": [
+          {
+            "title": "100% Free to Use",
+            "description": "BabyBoogey's free tier gives you real, usable dancing baby videos with no strings attached. No trial limits, no surprise paywalls — just pure joy from the moment you upload your first photo.",
+            "icon": "Gift",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-1/800/600",
+              "alt": "Completely free baby dance video creation"
+            }
+          },
+          {
+            "title": "No Watermark on Any Video",
+            "description": "Unlike other tools that slap logos all over your video, BabyBoogey's free baby dance video maker delivers clean, watermark-free results you'll actually want to share with the whole family.",
+            "icon": "CheckCircle",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-2/800/600",
+              "alt": "No watermark on free baby dance videos"
+            }
+          },
+          {
+            "title": "No Sign-Up Required",
+            "description": "Want to make baby dance video free without creating yet another online account? Just visit BabyBoogey, upload your photo, and start creating instantly. It's that simple.",
+            "icon": "UserX",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-3/800/600",
+              "alt": "No sign-up needed for free baby dance videos"
+            }
+          },
+          {
+            "title": "Works on Any Device",
+            "description": "Create a baby dance video free online from your phone, tablet, or computer. Our browser-based tool works everywhere with no app download needed — just open and go.",
+            "icon": "Monitor",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-4/800/600",
+              "alt": "Baby dance video free online on any device"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "Why Families Choose Our Free AI Baby Video Generator",
+        "description": "Thousands of parents use BabyBoogey as their go-to free ai baby video generator. Here's why they keep coming back for more adorable dance videos.",
+        "items": [
+          {
+            "title": "Zero Cost, Maximum Fun",
+            "description": "No credit card, no subscription traps, no bait-and-switch. Our free tier lets you create delightful baby dance videos without spending a penny. Perfect for trying out new dance templates anytime you want.",
+            "icon": "DollarSign",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-benefit-1/800/600",
+              "alt": "Free AI baby dance video creation with zero cost"
+            }
+          },
+          {
+            "title": "Share-Ready Video Quality",
+            "description": "Every video from our free baby dance video maker is social-media ready. High enough quality to post on TikTok, Instagram Reels, or send in the family group chat — no one will believe it was free.",
+            "icon": "Share2",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-benefit-2/800/600",
+              "alt": "Share-ready free baby dance videos"
+            }
+          },
+          {
+            "title": "Safe & Private by Design",
+            "description": "Your baby's photos are processed securely and never stored longer than needed. No account means no data tracking or profiling. We take your family's privacy as seriously as you do.",
+            "icon": "Shield",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-benefit-3/800/600",
+              "alt": "Safe and private baby dance video maker"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "How to Make Baby Dance Video Free in 3 Easy Steps",
+        "description": "Creating a baby dance video free online with BabyBoogey takes less than a minute. No learning curve, no complicated settings — anyone can do it.",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-free-usage/1200/800",
+          "alt": "How to make baby dance video free in 3 steps"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "Upload Any Baby Photo",
+            "description": "Pick your favorite snapshot — smiling, sleeping, or mid-tantrum. Our AI works with any clear baby photo. JPG, PNG, and WebP are all supported.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-step-1/800/600",
+              "alt": "Step 1: Upload baby photo for free dance video"
+            }
+          },
+          {
+            "title": "Pick a Dance Template",
+            "description": "Browse dozens of fun dance moves and music styles. From hip-hop to ballet, from silly wiggles to viral TikTok trends — find the perfect groove for your little one.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-step-2/800/600",
+              "alt": "Step 2: Choose a dance template"
+            }
+          },
+          {
+            "title": "Download & Share for Free",
+            "description": "Hit generate and your dancing baby video is ready in seconds. Download it instantly — no watermark, no fees, no catches. Share the giggles with everyone you love!",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-step-3/800/600",
+              "alt": "Step 3: Download free baby dance video"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Everything You Get with Our AI Baby Dance Video Generator Free Tier",
+        "description": "BabyBoogey packs serious features into the free plan. Here's what makes our ai baby dance video generator free stand out from every other tool.",
+        "items": [
+          {
+            "title": "AI-Powered Dance Animation",
+            "description": "Our advanced AI analyzes your baby's photo and creates natural, fluid dance movements that look incredibly realistic. The technology maps facial features and body proportions to generate smooth, adorable animations — all available through our free ai baby video generator.",
+            "icon": "Sparkles",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-1/800/600",
+              "alt": "AI-powered baby dance animation"
+            }
+          },
+          {
+            "title": "50+ Dance Templates",
+            "description": "Choose from a huge library of dance styles and music. Whether you want your baby doing the cha-cha, a funky hip-hop routine, or a gentle waltz, there's a template for every mood and occasion — many available completely free.",
+            "icon": "Music",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-2/800/600",
+              "alt": "50+ free dance templates for baby videos"
+            }
+          },
+          {
+            "title": "Natural Face Preservation",
+            "description": "The worst thing about other tools is the creepy, distorted faces. BabyBoogey keeps your baby's face looking 100% natural while adding fun expressions that match the dance moves perfectly. Your baby always looks like your baby.",
+            "icon": "Smile",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-3/800/600",
+              "alt": "Natural face preservation in baby dance videos"
+            }
+          },
+          {
+            "title": "Lightning-Fast Generation",
+            "description": "Most baby dance videos are ready in under 30 seconds. Our optimized AI pipeline means you spend less time waiting and more time laughing at your little one's hilarious dance moves.",
+            "icon": "Zap",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-4/800/600",
+              "alt": "Fast free baby dance video generation"
+            }
+          },
+          {
+            "title": "HD Video Export",
+            "description": "Free doesn't mean low quality. Download your baby dance videos in crisp resolution, perfect for sharing on social media or displaying on the big screen during family gatherings. No ugly compression artifacts here.",
+            "icon": "Film",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-5/800/600",
+              "alt": "HD free baby dance video export"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Frequently Asked Questions",
+        "description": "Got questions about our ai baby dance video generator free tool? We've got answers for everything you need to know.",
+        "items": [
+          {
+            "question": "Is BabyBoogey's AI baby dance video generator really 100% free?",
+            "answer": "Yes, genuinely free! BabyBoogey offers a free tier that lets you create baby dance videos with no watermark, no credit card, and no sign-up required. You can start making adorable dancing baby videos right now without paying a single penny."
+          },
+          {
+            "question": "Do I need to create an account to make baby dance video free?",
+            "answer": "No account needed! Simply visit BabyBoogey, upload your baby's photo, choose a dance template, and download your video. We designed our free baby dance video maker to be as frictionless as possible — open the site and start creating."
+          },
+          {
+            "question": "Will there be a watermark on my free baby dance video?",
+            "answer": "No watermark at all. Unlike many other free tools that plaster their logos across your video, BabyBoogey does not add any watermark to videos created on the free tier. What you create is what you keep — clean, shareable videos every time."
+          },
+          {
+            "question": "What photo formats work with the free AI baby video generator?",
+            "answer": "We support JPG, PNG, and WebP formats. For the best results, use a clear, front-facing photo with good lighting. The minimum recommended size is 512x512 pixels, but most modern smartphone photos work perfectly right out of the camera."
+          },
+          {
+            "question": "How long does it take to generate a baby dance video for free?",
+            "answer": "Most videos are ready in under 30 seconds! Our AI is optimized for speed, so you can create and share baby dance videos almost instantly. No lengthy processing queues or waiting around — the free tier gets the same fast generation as paid plans."
+          },
+          {
+            "question": "Is it safe to upload my baby's photo to BabyBoogey?",
+            "answer": "Absolutely. Your photos are processed securely using encrypted connections and are never shared with third parties. Since no account is required for the free tier, we collect minimal data about you. You can trust BabyBoogey with your family's precious moments."
+          },
+          {
+            "question": "Can I use the free baby dance video maker for adults or pets too?",
+            "answer": "Yes! While BabyBoogey is optimized for baby photos, our AI face animation technology works great with any clear face photo — toddlers, kids, adults, and even pets with visible faces. Give it a try with the whole family and see who has the best dance moves!"
+          },
+          {
+            "question": "What's the difference between the free tier and paid plans?",
+            "answer": "The free tier gives you access to core dance templates, watermark-free video exports, and standard resolution output. Paid plans unlock premium templates, full 1080p HD exports, longer video durations, and priority processing. But honestly, the free tier is genuinely powerful on its own — most families love it without ever upgrading."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Ready to Make Your Baby Boogie — for Free?",
+        "description": "Join thousands of happy families using BabyBoogey's ai baby dance video generator free. No watermark, no sign-up, no credit card. Just upload a photo and let the fun begin!",
+        "buttons": [
+          {
+            "title": "Create Free Baby Dance Video",
+            "url": "/create",
+            "icon": "Zap"
+          },
+          {
+            "title": "Browse Dance Templates",
+            "url": "/ai-video-generator",
+            "variant": "outline",
+            "icon": "BookOpenText"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

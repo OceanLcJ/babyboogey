@@ -1,0 +1,226 @@
+{
+  "metadata": {
+    "title": "Seedance Baby Dance — Make Baby Dance Videos with Seedance 2.0 AI",
+    "description": "Learn how to create baby dance videos using Seedance 2.0 by ByteDance. Discover what Seedance can do, then try BabyBoogey — the easier, specialized alternative for baby dance videos."
+  },
+  "page": {
+    "title": "Seedance Baby Dance — Make Baby Dance Videos with Seedance 2.0 AI",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "Make Baby Dance Videos with Seedance 2.0 AI",
+        "description": "Seedance 2.0 by ByteDance is one of the most powerful AI video generators available today. But is it the best way to make baby dance videos? Learn how Seedance works for baby content, and discover why thousands of parents choose BabyBoogey instead.",
+        "buttons": [
+          {
+            "title": "Try BabyBoogey Free",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/seedance-baby-dance-hero/1200/800",
+          "alt": "Seedance Baby Dance — AI-powered baby dance video creation",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/seedance-baby-dance-bg/1600/900",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "What Is Seedance 2.0? ByteDance's AI Video Powerhouse",
+        "description": "Seedance 2.0 is ByteDance's latest AI video generation model, widely praised for its realistic motion and dance capabilities. Here's what makes it stand out as a general-purpose AI video tool.",
+        "image": {
+          "src": "https://picsum.photos/seed/seedance-baby-dance-introduce/1200/800",
+          "alt": "Seedance 2.0 AI video generation overview"
+        },
+        "items": [
+          {
+            "title": "Built by ByteDance for Dance & Motion",
+            "description": "Seedance 2.0 is developed by ByteDance (the company behind TikTok) and is specifically known for generating realistic dance movements. It uses advanced motion transfer technology to animate subjects with fluid, natural-looking choreography — making it a popular choice for AI dance video creation.",
+            "icon": "Sparkles",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-0/800/600",
+              "alt": "Seedance 2.0 by ByteDance — AI dance motion technology"
+            }
+          },
+          {
+            "title": "Up to 2K Resolution & Multi-Shot Support",
+            "description": "Seedance 2.0 can generate videos in up to 2K resolution with support for multi-shot sequences. This means you can create longer, higher-quality AI videos with scene transitions — a significant upgrade over earlier AI video models that were limited to short, single-shot clips.",
+            "icon": "Monitor",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-1/800/600",
+              "alt": "Seedance 2.0 high-resolution video output"
+            }
+          },
+          {
+            "title": "Text-to-Video & Image-to-Video Modes",
+            "description": "Seedance supports both text-to-video (describe what you want in a prompt) and image-to-video (upload a reference image to animate). For seedance baby dance videos, you would typically upload a baby photo and write a detailed prompt describing the dance movements you want.",
+            "icon": "FileText",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-2/800/600",
+              "alt": "Seedance text-to-video and image-to-video modes"
+            }
+          },
+          {
+            "title": "General-Purpose — Not Baby-Specific",
+            "description": "While Seedance 2.0 is incredibly powerful, it's a general-purpose AI video tool. It can generate any type of video content — from cinematic landscapes to product demos. It's not specifically designed or optimized for baby dance videos, which means results can vary and require careful prompt engineering.",
+            "icon": "Settings",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-3/800/600",
+              "alt": "Seedance general-purpose AI video generation"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "What Seedance 2.0 Can Do for Baby Dance Videos",
+        "description": "Seedance 2.0 has genuine strengths when it comes to creating dance content. Here's what the seedance baby dance workflow looks like and what you can expect.",
+        "items": [
+          {
+            "title": "Advanced Motion Capture for Dance Moves",
+            "description": "Seedance 2.0 excels at replicating real dance choreography through its motion capture AI. When creating a seedance baby dance video, the model can transfer complex dance patterns onto subjects with impressive fluidity. However, these motions are designed for adult proportions — baby-specific movements like wobbly toddler steps or bouncy baby wiggles require very precise prompting.",
+            "icon": "Activity",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-10/800/600",
+              "alt": "Seedance motion capture for baby dance"
+            }
+          },
+          {
+            "title": "Natural Movement & Physics Simulation",
+            "description": "One of Seedance 2.0's best features is its physics-aware motion system. Clothing sways, hair bounces, and body weight shifts realistically. For seedance baby video creation, this means the generated movements look physically plausible. The challenge is that baby movements are uniquely different from adult movements — babies have different center of gravity and movement patterns that generic AI may not fully capture.",
+            "icon": "Wind",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-11/800/600",
+              "alt": "Seedance natural movement physics for baby video"
+            }
+          },
+          {
+            "title": "Audio-Synced Dance Generation",
+            "description": "Seedance 2.0 can synchronize dance movements to music beats, creating videos where the subject appears to dance in rhythm. For seedance dance video content, this audio sync capability is a standout feature. When applied to baby content, you can theoretically match baby movements to nursery rhymes or fun songs — though getting the timing just right often requires multiple generations and prompt tweaks.",
+            "icon": "Music",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-baby-dance-item-12/800/600",
+              "alt": "Seedance audio-synced baby dance video"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Seedance vs BabyBoogey: Which Is Better for Baby Dance Videos?",
+        "description": "Seedance 2.0 is a powerful general-purpose AI video tool. BabyBoogey is built from the ground up specifically for baby dance videos. Here's how they compare for your baby dance needs.",
+        "items": [
+          {
+            "title": "Seedance 2.0: General-Purpose AI Video Power",
+            "description": "Seedance 2.0 is an impressive, general-purpose AI video generator capable of creating cinematic content across many categories. For seedance baby dance use cases, you get access to powerful motion transfer and high-resolution output. However, because it's designed for everything — from product ads to film clips — it doesn't come with baby-specific templates, presets, or optimized workflows. You'll need to write detailed prompts, experiment with settings, and iterate through multiple generations to get the baby dance result you want. The learning curve is real, and results are inconsistent when the tool isn't specialized for your specific use case.",
+            "icon": "Cpu",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-vs-babyboogey-1/800/600",
+              "alt": "Seedance 2.0 general-purpose AI video generation"
+            }
+          },
+          {
+            "title": "BabyBoogey: Built Specifically for Baby Dance Videos",
+            "description": "BabyBoogey is designed to do one thing incredibly well: make baby dance videos. Instead of wrestling with complex prompts, you simply upload a baby photo and pick from 50+ pre-designed baby dance templates. Each template is hand-crafted with age-appropriate movements — from wobbly first-steps dances to energetic toddler boogies. The AI is specifically trained on baby proportions and movements, so every video looks natural and adorable. No prompt engineering, no guesswork, no wasted generations. Just upload, pick a template, and get a perfect baby dance video in seconds.",
+            "icon": "Heart",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-vs-babyboogey-2/800/600",
+              "alt": "BabyBoogey one-click baby dance video maker"
+            }
+          },
+          {
+            "title": "Seedance Requires Prompt Engineering Skills",
+            "description": "To get good results with Seedance 2.0 for baby dance content, you need to master prompt engineering. This means carefully describing the exact dance style, camera angle, lighting, baby appearance, clothing physics, and movement tempo in text. A typical seedance baby dance prompt might be 50-100 words long, and even then, you may need 5-10 attempts to get a result you're happy with. Each generation costs credits and takes time. For parents who just want a quick, fun baby dance video, this technical barrier can be frustrating and time-consuming.",
+            "icon": "Terminal",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-vs-babyboogey-3/800/600",
+              "alt": "Seedance prompt engineering complexity"
+            }
+          },
+          {
+            "title": "BabyBoogey: Just Upload a Photo & Pick a Template",
+            "description": "BabyBoogey's workflow is radically simpler. Step 1: Upload any baby photo. Step 2: Browse our library of 50+ dance templates and pick one you like. Step 3: Hit generate and get your video in under 30 seconds. That's it — no prompts to write, no settings to configure, no trial and error. Every template is optimized by our team to produce adorable, shareable baby dance videos on the first try. Parents love it because it just works, every single time. It's the seedance alternative built specifically for families who want results without the learning curve.",
+            "icon": "MousePointerClick",
+            "image": {
+              "src": "https://picsum.photos/seed/seedance-vs-babyboogey-4/800/600",
+              "alt": "BabyBoogey simple upload and template workflow"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Seedance Baby Dance — Frequently Asked Questions",
+        "description": "Common questions about using Seedance 2.0 for baby dance videos, and how BabyBoogey compares as a specialized alternative.",
+        "items": [
+          {
+            "question": "Can I use Seedance 2.0 to make baby dance videos?",
+            "answer": "Yes, you can use Seedance 2.0 to create baby dance videos. Seedance is a powerful general-purpose AI video generator by ByteDance that supports image-to-video generation. You would upload a baby photo and write a detailed text prompt describing the dance movements you want. However, because Seedance isn't specifically designed for baby content, you may need to experiment with multiple prompts and generations to get natural-looking results. For a faster, easier approach, BabyBoogey offers one-click baby dance video creation with 50+ pre-made templates."
+          },
+          {
+            "question": "Is BabyBoogey better than Seedance for baby dance videos?",
+            "answer": "For baby dance videos specifically, yes — BabyBoogey is purpose-built for this exact use case. While Seedance 2.0 is a more powerful general-purpose AI video tool, BabyBoogey offers a much simpler workflow optimized for baby content. You don't need to write prompts, the AI is trained on baby proportions, and every template produces consistent, adorable results. Think of it this way: Seedance is like Photoshop (powerful but complex), while BabyBoogey is like a one-click photo filter (fast and reliable for its specific purpose)."
+          },
+          {
+            "question": "Does BabyBoogey use Seedance 2.0 technology?",
+            "answer": "No, BabyBoogey uses its own proprietary AI technology that is specifically trained and optimized for baby dance video generation. While Seedance 2.0 is a general-purpose model, BabyBoogey's AI is fine-tuned on baby movements, proportions, and expressions to deliver the most natural and adorable results possible. This specialization is why BabyBoogey consistently produces better baby dance videos with less effort."
+          },
+          {
+            "question": "What are the main differences between Seedance and BabyBoogey?",
+            "answer": "The main differences are scope and simplicity. Seedance 2.0 is a general-purpose AI video generator that can create any type of video content — it requires prompt writing, supports up to 2K resolution, and offers broad creative control. BabyBoogey is a specialized baby dance video maker with 50+ templates, one-click generation, and AI trained specifically on baby movements. Seedance gives you more creative freedom but requires more effort; BabyBoogey gives you perfect baby dance videos instantly with zero learning curve."
+          },
+          {
+            "question": "Is Seedance 2.0 free to use for baby dance videos?",
+            "answer": "Seedance 2.0 availability and pricing vary depending on the platform you access it through. Some platforms offer limited free trials, while others require credits or subscriptions. Each video generation typically costs credits, and because baby dance content may require multiple attempts to get right, costs can add up. BabyBoogey offers a free tier that lets you create baby dance videos at no cost, with premium plans available for higher resolution and more templates."
+          },
+          {
+            "question": "How do I write a good Seedance prompt for baby dance videos?",
+            "answer": "For seedance baby dance prompts, be specific about the baby's appearance, the dance style, camera angle, and setting. A good prompt might be: 'A cute baby in a colorful onesie doing a happy bouncy dance, front-facing camera, bright nursery background, natural lighting, smooth movements.' Include details about clothing physics and facial expressions. Keep in mind that getting the perfect result often takes several prompt iterations. Alternatively, BabyBoogey lets you skip prompt writing entirely — just upload a photo and pick a template."
+          },
+          {
+            "question": "Can I use Seedance to make my own baby's photo dance?",
+            "answer": "Yes, Seedance 2.0 supports image-to-video generation, which means you can upload your baby's actual photo and animate it with dance movements. However, the quality of face preservation and movement naturalness can vary since the model isn't optimized for baby faces specifically. BabyBoogey is designed exactly for this use case — upload your baby's photo and our baby-specialized AI ensures the face stays recognizable and the movements look age-appropriate and adorable."
+          },
+          {
+            "question": "Which tool is easier for parents with no technical skills?",
+            "answer": "BabyBoogey is significantly easier for non-technical users. It requires zero prompt writing, zero configuration, and zero AI knowledge. The entire process is: upload photo, pick template, download video. Seedance 2.0, while powerful, has a steeper learning curve that involves understanding prompt engineering, video generation settings, and iteration workflows. If you're a parent who just wants a fun baby dance video without the technical hassle, BabyBoogey is the clear choice."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Skip the Complexity — Make Baby Dance Videos the Easy Way",
+        "description": "Seedance 2.0 is powerful, but BabyBoogey is built specifically for baby dance videos. No prompts, no guesswork — just upload a photo, pick a template, and watch your little one boogie. Try it free today!",
+        "buttons": [
+          {
+            "title": "Try BabyBoogey Free",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "Browse Templates",
+            "url": "/create",
+            "icon": "PlayCircle"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}
