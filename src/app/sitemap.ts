@@ -34,8 +34,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/updates',
   ];
 
+  // 1b. Keyword landing pages (SEO inner pages)
+  const keywordPages = [
+    '/ai-baby-dance',
+    '/ai-baby-dance-video-generator-free',
+    '/ai-baby-dance-video',
+    '/baby-dance-ai-prompt',
+    '/ai-baby-dance-video-generator',
+    '/seedance-baby-dance',
+    '/babyboogey-vs-seedance',
+  ];
+
   for (const path of staticPaths) {
     entries.push(...buildLocaleUrls(path));
+  }
+
+  for (const path of keywordPages) {
+    entries.push(
+      ...locales.map((locale) => ({
+        url: `${envConfigs.app_url}${locale === defaultLocale ? '' : `/${locale}`}${path}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      }))
+    );
   }
 
   // 2. Local blog posts (from content/posts/*.mdx)

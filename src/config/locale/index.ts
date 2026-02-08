@@ -54,4 +54,11 @@ export const localeMessagesPaths = [
   'pages/showcases',
   'pages/blog',
   'pages/updates',
+  'pages/ai-baby-dance',
+  'pages/ai-baby-dance-video-generator-free',
+  'pages/ai-baby-dance-video',
+  'pages/baby-dance-ai-prompt',
+  'pages/ai-baby-dance-video-generator',
+  'pages/seedance-baby-dance',
+  'pages/babyboogey-vs-seedance',
 ];

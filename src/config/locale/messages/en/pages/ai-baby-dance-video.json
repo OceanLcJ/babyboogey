@@ -1,0 +1,336 @@
+{
+  "metadata": {
+    "title": "AI Baby Dance Video — Create Adorable Dancing Baby Videos with AI",
+    "description": "Create an amazing AI baby dance video from any photo. Turn still baby pictures into HD dancing videos ready to share on TikTok, Instagram, and more. No editing skills needed."
+  },
+  "page": {
+    "title": "AI Baby Dance Video — Create Adorable Dancing Baby Videos with AI",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "testimonials",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Baby Dance Video — Create Adorable Dancing Baby Videos with AI",
+        "description": "Turn any baby photo into a stunning AI baby dance video in seconds. BabyBoogey uses advanced AI to create HD dancing videos with realistic moves, natural expressions, and viral-worthy results — perfect for social media sharing.",
+        "buttons": [
+          {
+            "title": "Create Your First Video",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-hero/1200/800",
+          "alt": "AI baby dance video example showing a baby dancing with realistic movements",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-bg/1600/900",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "Turn Any Photo into a Dancing Masterpiece",
+        "description": "BabyBoogey is the easiest way to create baby dance video content that looks professionally produced. Upload a photo, pick a dance style, and watch the magic happen.",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-introduce/1200/800",
+          "alt": "AI baby dance video creation process"
+        },
+        "items": [
+          {
+            "title": "HD Video Output",
+            "description": "Every AI baby dance video is rendered in crystal-clear 1080p HD quality. Your baby's adorable expressions and dance moves come through in stunning detail, ready for any screen size.",
+            "icon": "Monitor",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-0/800/600",
+              "alt": "HD quality baby dance video output"
+            }
+          },
+          {
+            "title": "Social Media Ready",
+            "description": "Create baby dance video clips optimized for TikTok, Instagram Reels, YouTube Shorts, and Facebook. Export in the perfect format and aspect ratio for every platform with a single click.",
+            "icon": "Share2",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-1/800/600",
+              "alt": "Baby dance video shared on social media"
+            }
+          },
+          {
+            "title": "Natural Face Animation",
+            "description": "Our AI preserves your baby's unique facial features while adding lifelike dance expressions. The result is a baby dance AI video that looks genuinely adorable — never distorted or uncanny.",
+            "icon": "Smile",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-2/800/600",
+              "alt": "Natural face animation in baby dance video"
+            }
+          },
+          {
+            "title": "50+ Dance Templates",
+            "description": "Choose from a growing library of viral dance moves, trending choreography, and classic grooves. Every template is designed to make your baby dance video maker experience fun and effortless.",
+            "icon": "Music",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-3/800/600",
+              "alt": "Dance template library for baby dance videos"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "Why Families Love These Dancing Baby Videos",
+        "description": "From birthday parties to holiday greetings, a baby AI dance video is the gift that keeps the whole family laughing and sharing.",
+        "items": [
+          {
+            "title": "Go Viral on Social Media",
+            "description": "Baby AI dance video content consistently ranks among the most-shared clips on TikTok and Instagram. Our HD output and smooth animations give your videos the professional edge needed to stand out in crowded feeds.",
+            "icon": "TrendingUp",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-10/800/600",
+              "alt": "Viral baby dance video on social media"
+            }
+          },
+          {
+            "title": "Cherish Every Milestone",
+            "description": "Turn first-year photos, birthday snapshots, and holiday portraits into baby dance AI video keepsakes. Create a growing collection of dancing memories that your family will treasure for years to come.",
+            "icon": "Heart",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-11/800/600",
+              "alt": "Baby dance video milestone memories"
+            }
+          },
+          {
+            "title": "No Skills Required",
+            "description": "You do not need any video editing experience to create baby dance video clips with BabyBoogey. Our AI handles the choreography, timing, and rendering — all you do is upload a photo and pick a dance.",
+            "icon": "ThumbsUp",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-item-12/800/600",
+              "alt": "Easy to use baby dance video maker"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "How to Create an AI Baby Dance Video in 3 Easy Steps",
+        "description": "Making your first dancing baby video takes less than a minute. Here is how it works:",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-video-steps/1200/800",
+          "alt": "Steps to create a baby dance video"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "Upload a Baby Photo",
+            "description": "Pick any clear baby photo from your gallery. JPG, PNG, and WebP formats are all supported. Casual snapshots work just as well as studio portraits.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-step1/800/600",
+              "alt": "Upload baby photo for dance video"
+            }
+          },
+          {
+            "title": "Choose a Dance Style",
+            "description": "Browse our library of 50+ trending dance templates. From hip-hop grooves to silly wiggles, pick the moves that match your baby's personality.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-step2/800/600",
+              "alt": "Choose dance template for baby video"
+            }
+          },
+          {
+            "title": "Download and Share Your Video",
+            "description": "Your HD video is ready in seconds. Download it in MP4 format and share directly to TikTok, Instagram, WhatsApp, or any platform you love.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-step3/800/600",
+              "alt": "Download and share baby dance video"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Powerful Video Features Built for Families",
+        "description": "BabyBoogey packs serious technology into a playful, easy-to-use baby dance video maker.",
+        "items": [
+          {
+            "title": "1080p HD Video Rendering",
+            "description": "Every AI baby dance video is generated in full 1080p HD resolution. Crisp details, vibrant colors, and smooth frame rates ensure your video looks stunning on phones, tablets, and big screens alike.",
+            "icon": "Film",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-0/800/600",
+              "alt": "HD rendering for baby dance video"
+            }
+          },
+          {
+            "title": "Multi-Format Export",
+            "description": "Export your video in MP4, MOV, or GIF format. Optimized presets for TikTok (9:16), Instagram Reels (9:16), YouTube Shorts (9:16), and standard widescreen (16:9) ensure your content fits perfectly everywhere.",
+            "icon": "Download",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-1/800/600",
+              "alt": "Multi-format export for baby dance videos"
+            }
+          },
+          {
+            "title": "AI-Powered Motion Sync",
+            "description": "Our AI maps dance choreography to your baby's body proportions for movements that look natural and hilarious. Every head tilt, arm wave, and body bounce is perfectly synced to the music.",
+            "icon": "Activity",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-2/800/600",
+              "alt": "AI motion sync technology"
+            }
+          },
+          {
+            "title": "Watermark-Free Downloads",
+            "description": "Share your baby dance AI video without any branding or watermarks getting in the way. What you create is yours — clean, polished, and ready for any audience.",
+            "icon": "CheckCircle",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-3/800/600",
+              "alt": "Watermark-free baby dance video downloads"
+            }
+          },
+          {
+            "title": "Fast Cloud Processing",
+            "description": "BabyBoogey renders your video on powerful cloud servers so you do not need a fancy computer. Most dancing baby clips are ready to download in under 30 seconds.",
+            "icon": "Cloud",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-4/800/600",
+              "alt": "Fast cloud processing for baby dance videos"
+            }
+          }
+        ]
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "Parents and Creators Love BabyBoogey",
+        "description": "See what real users are saying about their dancing baby video experience.",
+        "items": [
+          {
+            "name": "Rachel M.",
+            "role": "Mom of Twins",
+            "quote": "I made an AI baby dance video of my twins for their first birthday party. The whole family could not stop laughing — it was the highlight of the entire celebration!",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-1/100/100",
+              "alt": "Rachel"
+            }
+          },
+          {
+            "name": "James K.",
+            "role": "TikTok Creator",
+            "quote": "My dancing baby video hit 50K views overnight on TikTok. The HD quality and smooth animation make these videos look way more polished than anything I could edit manually.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-2/100/100",
+              "alt": "James"
+            }
+          },
+          {
+            "name": "Priya S.",
+            "role": "Proud Aunt",
+            "quote": "I used BabyBoogey to create baby dance video clips for every niece and nephew in the family. The reaction on their parents' faces was absolutely priceless.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-3/100/100",
+              "alt": "Priya"
+            }
+          },
+          {
+            "name": "Carlos D.",
+            "role": "Content Creator",
+            "quote": "The video quality blew me away. I downloaded in 1080p and the baby AI dance video looked professional enough for my YouTube channel. Subscribers love it.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-4/100/100",
+              "alt": "Carlos"
+            }
+          },
+          {
+            "name": "Linda W.",
+            "role": "Grandma",
+            "quote": "My grandson dancing to hip-hop in HD? Best thing I have ever seen on my phone. I share a new video with my friends every week now!",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-5/100/100",
+              "alt": "Linda"
+            }
+          },
+          {
+            "name": "Tom H.",
+            "role": "New Dad",
+            "quote": "Shared a baby dance AI video of my daughter on Instagram Reels and it got more likes than our wedding photos. This app is pure gold.",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-video-test-6/100/100",
+              "alt": "Tom"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Frequently Asked Questions",
+        "description": "Everything you need to know about creating adorable dancing baby videos with BabyBoogey.",
+        "items": [
+          {
+            "question": "What exactly is an AI baby dance video?",
+            "answer": "An AI baby dance video is a short video clip generated by artificial intelligence that takes a still baby photo and animates it with realistic dance movements. BabyBoogey uses advanced AI to make your baby appear to dance, groove, and move to music — all from a single uploaded photo."
+          },
+          {
+            "question": "What video quality and formats can I export?",
+            "answer": "BabyBoogey renders all videos in up to 1080p Full HD resolution. You can export in MP4 format, which is universally compatible with TikTok, Instagram, YouTube, Facebook, WhatsApp, and all major platforms. Videos are optimized for both mobile and desktop viewing."
+          },
+          {
+            "question": "How do I share my video on social media?",
+            "answer": "After your video is generated, click the download button to save the HD MP4 file to your device. From there, open TikTok, Instagram, or any social media app and upload the video directly from your gallery. The output is already optimized for vertical social media formats."
+          },
+          {
+            "question": "Is it free to create baby dance video content?",
+            "answer": "Yes! BabyBoogey offers free credits so you can create your first dancing baby video at no cost. Free videos are rendered without watermarks. For unlimited access and additional premium dance templates, affordable paid plans are available."
+          },
+          {
+            "question": "How long does it take to generate a video?",
+            "answer": "Most videos are generated in under 30 seconds. The entire process — from uploading your photo to downloading the finished HD video — typically takes less than one minute."
+          },
+          {
+            "question": "What kind of photos work best?",
+            "answer": "Any clear, front-facing baby photo works great. We support JPG, PNG, and WebP formats. For the best results, use a well-lit photo where the baby's face is clearly visible. Both casual snapshots and professional portraits produce excellent dancing videos."
+          },
+          {
+            "question": "Are my baby's photos kept private and secure?",
+            "answer": "Absolutely. Your uploaded photos are processed on secure servers and are never shared with third parties. All images and generated videos are stored privately in your account, and you can delete them at any time."
+          },
+          {
+            "question": "Can I use the videos for commercial purposes?",
+            "answer": "Yes. All paid plans include a commercial license, so you can use your baby dance videos for content creation, social media marketing, brand campaigns, or any other commercial purpose without restrictions."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Ready to Create Your First AI Baby Dance Video?",
+        "description": "Join thousands of happy families making adorable, shareable, HD-quality dancing baby videos. Upload a photo and start creating in seconds — it is completely free to try!",
+        "buttons": [
+          {
+            "title": "Create Your Video Now",
+            "url": "/create",
+            "icon": "Zap"
+          },
+          {
+            "title": "Explore the Video Generator",
+            "url": "/ai-video-generator",
+            "icon": "PlayCircle"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

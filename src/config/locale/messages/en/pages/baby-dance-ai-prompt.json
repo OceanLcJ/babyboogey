@@ -1,0 +1,200 @@
+{
+  "metadata": {
+    "title": "Baby Dance AI Prompt Guide — Best Prompts for AI Baby Dance Videos",
+    "description": "Discover the best baby dance AI prompt ideas to create adorable dancing baby videos. Copy-paste ready prompts for every style, mood, and occasion — or skip prompts entirely with BabyBoogey."
+  },
+  "page": {
+    "title": "Baby Dance AI Prompt Guide — Best Prompts for AI Baby Dance Videos",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "The Ultimate Baby Dance AI Prompt Guide",
+        "description": "Looking for the perfect baby dance AI prompt? We collected the best prompts for creating hilarious, heartwarming, and viral-worthy AI baby dance videos. Browse our curated categories below, copy any prompt, and bring your baby photos to life — or let BabyBoogey do the work for you with zero prompts needed.",
+        "buttons": [
+          {
+            "title": "Try BabyBoogey Free",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "Browse Prompts Below",
+            "url": "#features",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-hero/1200/800",
+          "alt": "Baby dance AI prompt guide showing various adorable dancing baby video examples",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-bg/1600/900",
+          "alt": "Colorful background with dancing baby silhouettes"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "Why You Need Great Prompts (And When You Don't)",
+        "description": "A well-crafted baby dance AI prompt is the secret to getting amazing results from any AI video generator. The right words can set the dance style, mood, outfit, and background — turning a simple baby photo into a show-stopping video. But here is the best part: with BabyBoogey, you can skip the prompting altogether. Just upload a photo, pick a dance template, and let our AI handle the rest.",
+        "image": {
+          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-introduce/1200/800",
+          "alt": "BabyBoogey interface showing prompt-free baby dance video creation"
+        },
+        "items": [
+          {
+            "title": "Copy-Paste Ready Prompts",
+            "description": "Every baby dance AI prompt in this guide is ready to use. Simply copy it, paste it into your favorite AI video tool (Seedance, Kling, Sora, Runway, or others), and generate your video instantly. No guesswork, no trial and error.",
+            "icon": "ClipboardCopy",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-0/800/600",
+              "alt": "Copy-paste ready AI baby dance prompt examples"
+            }
+          },
+          {
+            "title": "Prompt-Free with BabyBoogey",
+            "description": "Don't want to write prompts at all? BabyBoogey lets you create stunning baby dance videos without typing a single word. Upload your baby's photo, choose from 50+ dance templates, and get a professional video in seconds. The best prompts baby dance video creators use are already built into our templates.",
+            "icon": "Wand2",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-1/800/600",
+              "alt": "BabyBoogey prompt-free dance template selection"
+            }
+          },
+          {
+            "title": "Organized by Category",
+            "description": "We sorted every ai baby dance prompt by theme — classic dances, holiday specials, funny moves, music genres, and viral trends. Find exactly the vibe you are looking for in seconds, whether you want a salsa baby or a breakdancing toddler.",
+            "icon": "LayoutGrid",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-2/800/600",
+              "alt": "Prompt categories organized by dance style and theme"
+            }
+          },
+          {
+            "title": "Tested and Proven Results",
+            "description": "Every dance prompt baby ai creators love was tested across multiple AI video generators to ensure consistent, high-quality output. We refined wording, added detail tips, and optimized each prompt so you get the best possible result on the first try.",
+            "icon": "CheckCircle",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-3/800/600",
+              "alt": "Before and after comparison of AI baby dance video results"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Baby Dance AI Prompt Library — Copy, Paste, Create",
+        "description": "Browse our complete collection of baby dance AI prompt ideas organized by category. Each prompt is optimized for the best AI video generators and ready to use. Click any category to expand and see the full list of prompts with tips.",
+        "items": [
+          {
+            "title": "Classic Dance Prompts",
+            "description": "These timeless prompts work beautifully across all AI video generators. Start here if you are new to writing an ai baby dance prompt.\n\n- \"Adorable baby doing hip-hop dance moves, cheerful expression, colorful confetti background, HD quality\"\n- \"Cute baby performing ballet twirls in a pink tutu, soft studio lighting, graceful movements\"\n- \"Happy toddler doing the twist dance, retro 1960s living room, bright smile, smooth motion\"\n- \"Baby doing a classic waltz, tiny formal outfit, ballroom background, elegant and adorable\"\n- \"Cheerful baby tap dancing, shiny black shoes, wooden stage floor, spotlight lighting\"\n\nTip: Include details about expression (happy, surprised, giggling), clothing, and background to get the most realistic and charming results.",
+            "icon": "Music",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-classic/800/600",
+              "alt": "Baby performing classic dance moves generated by AI"
+            }
+          },
+          {
+            "title": "Holiday & Seasonal Dance Prompts",
+            "description": "Celebrate every occasion with the best prompts baby dance video creators use for holidays and seasons.\n\n- \"Baby dancing in a Santa outfit, snowy background, jingle bells, Christmas tree with twinkling lights\"\n- \"Toddler doing a Halloween dance, tiny pumpkin costume, spooky but cute background, candy scattered around\"\n- \"Baby bunny-hopping Easter dance, pastel egg background, flower crown, spring garden setting\"\n- \"Baby doing a Fourth of July dance, red white and blue outfit, fireworks in the background, patriotic fun\"\n- \"Adorable baby dancing at a New Year countdown party, sparkly hat, confetti falling, midnight celebration vibes\"\n- \"Baby in a Thanksgiving turkey costume doing a silly waddle dance, autumn leaves background, harvest table setting\"\n\nTip: Seasonal prompts go viral on social media when posted at the right time. Create your holiday baby dance videos a week before the holiday for maximum engagement.",
+            "icon": "CalendarHeart",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-holiday/800/600",
+              "alt": "Baby dancing in festive holiday outfit created with AI"
+            }
+          },
+          {
+            "title": "Funny & Viral Dance Prompts",
+            "description": "Want maximum laughs? These funny prompt ideas are designed for maximum shares and giggles.\n\n- \"Baby breakdancing with sunglasses, cool pose, boombox in background, urban street setting, hip-hop vibes\"\n- \"Baby doing an exaggerated robot dance, stiff arms, LED lights background, futuristic setting\"\n- \"Toddler attempting moonwalk, oversized sneakers, spotlight on stage, audience of stuffed animals\"\n- \"Baby doing a dramatic flamenco dance, tiny rose in mouth, Spanish guitar vibes, passionate expression\"\n- \"Baby flexing and doing a bodybuilder pose dance, tiny gym outfit, motivational poster background, comedic energy\"\n- \"Baby spinning on head like a breakdancer, playground setting, other babies watching in amazement\"\n\nTip: The funniest results come from contrast — pair a tiny baby with adult dance moves or dramatic settings for the best comedic effect.",
+            "icon": "Laugh",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-funny/800/600",
+              "alt": "Hilarious AI-generated baby breakdancing with sunglasses"
+            }
+          },
+          {
+            "title": "Music Genre Dance Prompts",
+            "description": "Match your baby's dance to a specific music style with these genre-focused prompts. A great dance prompt baby ai tools can work with.\n\n- \"Baby salsa dancing, Latin music vibes, colorful ruffled outfit, tropical background, rhythmic movements\"\n- \"Baby doing K-pop idol choreography, stylish outfit, neon stage lighting, backup dancers blurred behind\"\n- \"Toddler headbanging to rock music, tiny leather jacket, electric guitar on floor, concert stage background\"\n- \"Baby doing smooth jazz dance, miniature suit and fedora, dimly lit lounge, saxophone silhouette background\"\n- \"Baby performing Bollywood dance, colorful traditional outfit, ornate background, joyful hand gestures\"\n- \"Baby doing country line dance, cowboy hat and boots, barn background, hay bales and string lights\"\n\nTip: Mention specific music-related visual elements (instruments, stage lighting, outfits) to help the AI nail the genre atmosphere.",
+            "icon": "Headphones",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-music/800/600",
+              "alt": "Baby salsa dancing in colorful outfit generated by AI"
+            }
+          },
+          {
+            "title": "Social Media & Trending Dance Prompts",
+            "description": "These prompts are optimized for TikTok, Instagram Reels, and YouTube Shorts. Perfect for parents who want viral baby content.\n\n- \"Baby doing trending TikTok dance, modern living room, ring light visible, phone recording angle, viral energy\"\n- \"Baby hitting the griddy dance, stadium background, celebration after scoring, sports jersey outfit\"\n- \"Toddler doing the Macarena, birthday party setting, balloons and streamers, group of baby friends watching\"\n- \"Baby doing a smooth transitions dance challenge, outfit changes with each move, colorful backgrounds shifting\"\n- \"Baby doing the renegade dance perfectly, neon bedroom background, LED strip lights, confident expression\"\n\nTip: For social media, square (1:1) or vertical (9:16) formats work best. Keep videos under 15 seconds for maximum replay value.",
+            "icon": "Share2",
+            "image": {
+              "src": "https://picsum.photos/seed/baby-dance-prompt-viral/800/600",
+              "alt": "Trending baby dance video perfect for TikTok and social media"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Frequently Asked Questions About Baby Dance AI Prompts",
+        "description": "Everything you need to know about writing and using prompts for AI baby dance videos.",
+        "items": [
+          {
+            "question": "What makes a good baby dance AI prompt?",
+            "answer": "A great baby dance AI prompt includes four key elements: the subject (baby or toddler), the dance style (hip-hop, ballet, breakdancing), visual details (outfit, expression, background), and quality modifiers (HD, smooth motion, bright lighting). For example, instead of writing \"baby dancing,\" try \"adorable baby doing hip-hop moves, cheerful smile, colorful party background, HD quality, smooth motion.\" The more specific you are, the better the AI can understand your vision. That said, if you use BabyBoogey, all of this is handled automatically — just pick a template and go."
+          },
+          {
+            "question": "How do I write prompts for baby dance videos?",
+            "answer": "Start with the basics: describe your baby, the dance move, and the setting. Then add detail layers — what is the baby wearing? What expression do they have? What is in the background? What is the lighting like? Keep sentences clear and avoid contradictions (do not say \"calm baby doing wild breakdance\"). Use commas to separate descriptors. Our prompt library above gives you dozens of ready-to-use examples you can customize. Or, skip the prompt entirely with BabyBoogey's template-based system where you just upload a photo and choose a style."
+          },
+          {
+            "question": "Do I need to write prompts to use BabyBoogey?",
+            "answer": "No! That is what makes BabyBoogey special. While this guide provides the best prompt ideas for tools that require text input, BabyBoogey works differently. You simply upload a baby photo, pick from over 50 professionally designed dance templates, and our AI generates a perfect dancing video automatically. No prompt writing, no trial and error, no wasted credits on bad results. It is the fastest way to create baby dance videos."
+          },
+          {
+            "question": "Which AI tools can I use these baby dance prompts with?",
+            "answer": "The prompts in this guide are optimized for popular AI video generators including Seedance 2.0 by ByteDance, Kling AI, Sora by OpenAI, Runway Gen-3, and Pika Labs. Each tool may interpret prompts slightly differently, so minor adjustments might be needed. For the most consistent results without any prompt tweaking, we recommend BabyBoogey — it is purpose-built for baby dance videos and delivers reliable, high-quality output every time."
+          },
+          {
+            "question": "How many prompts should I try before getting a good result?",
+            "answer": "With general AI video tools, it typically takes 3-5 prompt iterations to get a result you love. Each attempt costs credits or processing time. That is why having a proven baby dance AI prompt from our library saves you time and money — these prompts have already been tested and refined. With BabyBoogey, you usually get a great result on the very first try because our templates are pre-optimized for baby dance content."
+          },
+          {
+            "question": "Can I combine multiple prompt ideas together?",
+            "answer": "Absolutely! Mixing categories is a great way to create unique videos. For example, combine a holiday theme with a music genre: \"Baby doing salsa dance in a Santa outfit, tropical Christmas party, palm trees with string lights.\" Or mix funny with viral: \"Baby doing the griddy in a tutu, hilarious determined expression, confetti explosion.\" Just keep your combined prompt under 200 words for best results. The best prompts baby dance video creators write are often creative mashups."
+          },
+          {
+            "question": "Are AI baby dance videos safe and appropriate?",
+            "answer": "Yes. All prompts in this guide are designed to produce wholesome, family-friendly content. AI baby dance videos use your photo as a visual reference — no real babies are made to dance. The AI generates movement digitally, creating an animated effect that is cute and harmless. BabyBoogey specifically filters all outputs for family-appropriate content, so you can share your creations with complete confidence."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Skip the Prompts — Let BabyBoogey Do the Magic",
+        "description": "Why spend time crafting the perfect prompt when BabyBoogey creates stunning baby dance videos automatically? Upload a photo, pick a template, and get a shareable video in under 30 seconds. No prompts. No learning curve. Just pure fun.",
+        "buttons": [
+          {
+            "title": "Create Your First Video Free",
+            "url": "/create",
+            "icon": "Zap"
+          },
+          {
+            "title": "See How It Works",
+            "url": "/ai-video-generator",
+            "icon": "Zap"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}
