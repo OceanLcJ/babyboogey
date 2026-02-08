@@ -117,6 +117,51 @@
               "target": "_self"
             }
           ]
+        },
+        {
+          "title": "探索",
+          "children": [
+            {
+              "title": "AI 宝宝跳舞",
+              "url": "/ai-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "免费视频生成器",
+              "url": "/ai-baby-dance-video-generator-free",
+              "target": "_self"
+            },
+            {
+              "title": "AI 跳舞视频",
+              "url": "/ai-baby-dance-video",
+              "target": "_self"
+            },
+            {
+              "title": "跳舞 AI 提示词",
+              "url": "/baby-dance-ai-prompt",
+              "target": "_self"
+            },
+            {
+              "title": "视频生成器",
+              "url": "/ai-baby-dance-video-generator",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "对比",
+          "children": [
+            {
+              "title": "Seedance 宝宝跳舞",
+              "url": "/seedance-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "BabyBoogey vs Seedance",
+              "url": "/babyboogey-vs-seedance",
+              "target": "_self"
+            }
+          ]
         }
       ]
     },

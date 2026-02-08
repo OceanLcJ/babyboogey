@@ -117,6 +117,51 @@
               "target": "_self"
             }
           ]
+        },
+        {
+          "title": "Explore",
+          "children": [
+            {
+              "title": "AI Baby Dance",
+              "url": "/ai-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "Free Video Generator",
+              "url": "/ai-baby-dance-video-generator-free",
+              "target": "_self"
+            },
+            {
+              "title": "AI Dance Video",
+              "url": "/ai-baby-dance-video",
+              "target": "_self"
+            },
+            {
+              "title": "Dance AI Prompts",
+              "url": "/baby-dance-ai-prompt",
+              "target": "_self"
+            },
+            {
+              "title": "Video Generator",
+              "url": "/ai-baby-dance-video-generator",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "Compare",
+          "children": [
+            {
+              "title": "Seedance Baby Dance",
+              "url": "/seedance-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "BabyBoogey vs Seedance",
+              "url": "/babyboogey-vs-seedance",
+              "target": "_self"
+            }
+          ]
         }
       ]
     },
