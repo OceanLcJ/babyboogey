@@ -18,7 +18,7 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "AI 宝宝跳舞 — 将任意照片变成<strong>跳舞小明星</strong>",
+        "title": "AI 宝宝跳舞 — 将任意照片变成跳舞小明星",
         "description": "BabyBoogey 的 AI 宝宝跳舞生成器，将静态宝宝照片变成搞笑又暖心的跳舞视频。只需上传照片、选个舞蹈动作，就能开始摇摆。无需编辑技能 — 100% 免费开始！",
         "buttons": [
           {
