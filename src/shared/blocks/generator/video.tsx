@@ -74,10 +74,25 @@ interface DanceTemplate {
   isHot?: boolean;
 }
 
-const POLL_INTERVAL = 15000;
+type VideoGenerationStage =
+  | 'submitting'
+  | 'queued'
+  | 'processing'
+  | 'rendering'
+  | 'finalizing'
+  | 'success'
+  | 'failed';
+
+const FAST_POLL_INTERVAL = 8000;
+const SLOW_POLL_INTERVAL = 12000;
+const FAST_POLL_PHASE_MS = 60000;
+const FINALIZING_STAGE_MS = 90000;
 const GENERATION_TIMEOUT = 600000;
 const MAX_PROMPT_LENGTH = 500;
 const MAX_IMAGE_ORIENTATION_SECONDS = 10;
+const PROGRESS_ANIMATION_TICK_MS = 250;
+const SUCCESS_HOLD_MS = 1200;
+const PROGRESS_CAP_BEFORE_SUCCESS = 95;
 
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
@@ -367,6 +382,66 @@ const uploadImageFile = async (file: File) => {
   return result.data.urls[0] as string;
 };
 
+function mapVideoErrorToUserMessage(
+  rawMessage: string | undefined,
+  localeContext: {
+    t: (key: string) => string;
+    locale?: string;
+  }
+): string {
+  const message = (rawMessage || '').toLowerCase();
+  const { t } = localeContext;
+
+  if (
+    message.includes('insufficient credits') ||
+    message.includes('not enough credits')
+  ) {
+    return t('errors.insufficient_credits_actionable');
+  }
+
+  if (message.includes('timed out') || message.includes('timeout')) {
+    return t('errors.timeout_actionable');
+  }
+
+  if (
+    message.includes('no videos') ||
+    message.includes('no video') ||
+    message.includes('empty result')
+  ) {
+    return t('errors.empty_result_actionable');
+  }
+
+  if (
+    message.includes('invalid provider') ||
+    message.includes('invalid ai provider')
+  ) {
+    return t('errors.provider_unavailable_actionable');
+  }
+
+  if (message.includes('task not found')) {
+    return t('errors.task_not_found_actionable');
+  }
+
+  if (
+    message.includes('input_urls is required') ||
+    message.includes('video_urls is required') ||
+    message.includes('invalid params') ||
+    message.includes('prompt or options is required')
+  ) {
+    return t('errors.input_missing_actionable');
+  }
+
+  if (
+    message.includes('failed to fetch') ||
+    message.includes('network') ||
+    message.includes('request failed')
+  ) {
+    return t('errors.network_retry_actionable');
+  }
+
+  return t('errors.generic_retry_actionable');
+}
+
 export function VideoGenerator({
   maxSizeMB = 10,
   srOnlyTitle,
@@ -393,15 +468,25 @@ export function VideoGenerator({
   const [generatedVideos, setGeneratedVideos] = useState<GeneratedVideo[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [progressTarget, setProgressTarget] = useState(0);
+  const [generationStage, setGenerationStage] =
+    useState<VideoGenerationStage | null>(null);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [generationStartTime, setGenerationStartTime] = useState<number | null>(
     null
   );
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [taskStatus, setTaskStatus] = useState<AITaskStatus | null>(null);
   const [downloadingVideoId, setDownloadingVideoId] = useState<string | null>(
     null
   );
   const [isMounted, setIsMounted] = useState(false);
+  const isPollingRef = useRef(false);
+  const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const successHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+  const isAliveRef = useRef(true);
 
   const {
     user,
@@ -475,27 +560,66 @@ export function VideoGenerator({
     RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.credits ?? 60;
   const selectedTemplateDurationSeconds =
     parseTemplateDurationSeconds(selectedTemplate.duration) ?? 0;
+  const translateError = useCallback(
+    (key: string) => t(key as any),
+    [t]
+  );
 
-  const taskStatusLabel = useMemo(() => {
-    if (!taskStatus) {
+  const stageLabel = useMemo(() => {
+    if (!generationStage) {
       return '';
     }
 
-    switch (taskStatus) {
-      case AITaskStatus.PENDING:
-        return 'Waiting for the model to start';
-      case AITaskStatus.PROCESSING:
-        return 'Generating your video...';
-      case AITaskStatus.SUCCESS:
-        return 'Video generation completed';
-      case AITaskStatus.FAILED:
-        return 'Generation failed';
+    switch (generationStage) {
+      case 'submitting':
+        return t('status.submitting');
+      case 'queued':
+        return t('status.queued');
+      case 'processing':
+        return t('status.processing');
+      case 'rendering':
+        return t('status.rendering');
+      case 'finalizing':
+        return t('status.finalizing');
+      case 'success':
+        return t('status.success');
+      case 'failed':
       default:
         return '';
     }
-  }, [taskStatus]);
+  }, [generationStage, t]);
+
+  const etaRangeLabel = useMemo(() => {
+    return resolution === '1080p'
+      ? t('status.eta_range_1080p')
+      : t('status.eta_range_720p');
+  }, [resolution, t]);
 
   const maxBytes = maxSizeMB * 1024 * 1024;
+
+  const clearPollingTimer = useCallback(() => {
+    if (pollingTimerRef.current) {
+      clearTimeout(pollingTimerRef.current);
+      pollingTimerRef.current = null;
+    }
+  }, []);
+
+  const clearSuccessHoldTimer = useCallback(() => {
+    if (successHoldTimerRef.current) {
+      clearTimeout(successHoldTimerRef.current);
+      successHoldTimerRef.current = null;
+    }
+  }, []);
+
+  const setGenerationProgressStage = useCallback(
+    (stage: VideoGenerationStage, target: number) => {
+      setGenerationStage(stage);
+      setProgressTarget(
+        Math.min(PROGRESS_CAP_BEFORE_SUCCESS, Math.max(0, target))
+      );
+    },
+    []
+  );
 
   const handleTemplateSelect = (template: DanceTemplate) => {
     if (template.isPro && !canUseProTemplates) {
@@ -527,10 +651,8 @@ export function VideoGenerator({
       return;
     }
     setOrientation('video');
-    toast(
-      'This template is longer than 10 seconds, so orientation was switched to Video.'
-    );
-  }, [orientation, selectedTemplateDurationSeconds]);
+    toast(t('form.orientation_auto_switched_video'));
+  }, [orientation, selectedTemplateDurationSeconds, t]);
 
   const handleFileSelect = async (file: File) => {
     if (!file.type?.startsWith('image/')) {
@@ -579,12 +701,82 @@ export function VideoGenerator({
   };
 
   const resetTaskState = useCallback(() => {
+    clearPollingTimer();
+    clearSuccessHoldTimer();
+    isPollingRef.current = false;
+
     setIsGenerating(false);
     setProgress(0);
+    setProgressTarget(0);
+    setGenerationStage(null);
     setTaskId(null);
     setGenerationStartTime(null);
+    setElapsedSeconds(0);
     setTaskStatus(null);
-  }, []);
+  }, [clearPollingTimer, clearSuccessHoldTimer]);
+
+  const completeWithSuccess = useCallback(() => {
+    setGenerationStage('success');
+    setProgressTarget(100);
+    clearSuccessHoldTimer();
+    successHoldTimerRef.current = setTimeout(() => {
+      if (!isAliveRef.current) {
+        return;
+      }
+      resetTaskState();
+    }, SUCCESS_HOLD_MS);
+  }, [clearSuccessHoldTimer, resetTaskState]);
+
+  useEffect(() => {
+    isAliveRef.current = true;
+    return () => {
+      isAliveRef.current = false;
+      clearPollingTimer();
+      clearSuccessHoldTimer();
+    };
+  }, [clearPollingTimer, clearSuccessHoldTimer]);
+
+  useEffect(() => {
+    if (!isGenerating) {
+      return;
+    }
+    if (progress >= progressTarget) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (!isAliveRef.current) {
+        return;
+      }
+      setProgress((prev) => {
+        if (prev >= progressTarget) {
+          return prev;
+        }
+        const remaining = progressTarget - prev;
+        const delta = Math.max(1, Math.round(remaining * 0.25));
+        return Math.min(progressTarget, prev + delta);
+      });
+    }, PROGRESS_ANIMATION_TICK_MS);
+
+    return () => clearTimeout(timer);
+  }, [isGenerating, progress, progressTarget]);
+
+  useEffect(() => {
+    if (!isGenerating || !generationStartTime) {
+      return;
+    }
+
+    const updateElapsedSeconds = () => {
+      if (!isAliveRef.current) {
+        return;
+      }
+      setElapsedSeconds(Math.max(0, Math.floor((Date.now() - generationStartTime) / 1000)));
+    };
+
+    updateElapsedSeconds();
+    const timer = setInterval(updateElapsedSeconds, 1000);
+    return () => clearInterval(timer);
+  }, [isGenerating, generationStartTime]);
 
   const pollTaskStatus = useCallback(
     async (id: string) => {
@@ -593,8 +785,14 @@ export function VideoGenerator({
           generationStartTime &&
           Date.now() - generationStartTime > GENERATION_TIMEOUT
         ) {
+          setGenerationStage('failed');
+          toast.error(
+            mapVideoErrorToUserMessage('timeout', {
+              t: translateError,
+              locale,
+            })
+          );
           resetTaskState();
-          toast.error('Video generation timed out. Please try again.');
           return true;
         }
 
@@ -614,6 +812,9 @@ export function VideoGenerator({
         if (code !== 0) {
           throw new Error(message || 'Query task failed');
         }
+        if (!isAliveRef.current) {
+          return true;
+        }
 
         const task = data as BackendTask;
         const currentStatus = task.status as AITaskStatus;
@@ -623,7 +824,7 @@ export function VideoGenerator({
         const videoUrls = extractVideoUrls(parsedResult);
 
         if (currentStatus === AITaskStatus.PENDING) {
-          setProgress((prev) => Math.max(prev, 20));
+          setGenerationProgressStage('queued', 35);
           return false;
         }
 
@@ -638,16 +839,30 @@ export function VideoGenerator({
                 prompt: task.prompt ?? undefined,
               }))
             );
-            setProgress((prev) => Math.max(prev, 85));
+            setGenerationProgressStage('rendering', 88);
           } else {
-            setProgress((prev) => Math.min(prev + 5, 80));
+            const elapsedMs = generationStartTime
+              ? Date.now() - generationStartTime
+              : 0;
+            if (elapsedMs > FINALIZING_STAGE_MS) {
+              setGenerationProgressStage('finalizing', PROGRESS_CAP_BEFORE_SUCCESS);
+            } else {
+              setGenerationProgressStage('processing', 72);
+            }
           }
           return false;
         }
 
         if (currentStatus === AITaskStatus.SUCCESS) {
           if (videoUrls.length === 0) {
-            toast.error('The provider returned no videos. Please retry.');
+            setGenerationStage('failed');
+            toast.error(
+              mapVideoErrorToUserMessage('no videos', {
+                t: translateError,
+                locale,
+              })
+            );
+            resetTaskState();
           } else {
             setGeneratedVideos(
               videoUrls.map((url, index) => ({
@@ -658,18 +873,23 @@ export function VideoGenerator({
                 prompt: task.prompt ?? undefined,
               }))
             );
-            toast.success('Video generated successfully');
+            toast.success(t('status.success'));
+            completeWithSuccess();
           }
-
-          setProgress(100);
-          resetTaskState();
+          fetchUserCredits();
           return true;
         }
 
         if (currentStatus === AITaskStatus.FAILED) {
           const errorMessage =
             parsedResult?.errorMessage || 'Generate video failed';
-          toast.error(errorMessage);
+          setGenerationStage('failed');
+          toast.error(
+            mapVideoErrorToUserMessage(errorMessage, {
+              t: translateError,
+              locale,
+            })
+          );
           resetTaskState();
 
           fetchUserCredits();
@@ -677,11 +897,20 @@ export function VideoGenerator({
           return true;
         }
 
-        setProgress((prev) => Math.min(prev + 3, 95));
+        setGenerationProgressStage('finalizing', PROGRESS_CAP_BEFORE_SUCCESS);
         return false;
       } catch (error: any) {
         console.error('Error polling video task:', error);
-        toast.error(`Query task failed: ${error.message}`);
+        if (!isAliveRef.current) {
+          return true;
+        }
+        setGenerationStage('failed');
+        toast.error(
+          mapVideoErrorToUserMessage(error?.message, {
+            t: translateError,
+            locale,
+          })
+        );
         resetTaskState();
 
         fetchUserCredits();
@@ -689,7 +918,52 @@ export function VideoGenerator({
         return true;
       }
     },
-    [generationStartTime, resetTaskState, fetchUserCredits]
+    [
+      completeWithSuccess,
+      fetchUserCredits,
+      generationStartTime,
+      locale,
+      resetTaskState,
+      setGenerationProgressStage,
+      t,
+      translateError,
+    ]
+  );
+
+  const scheduleNextPoll = useCallback(
+    (id: string) => {
+      if (!isAliveRef.current || !isGenerating) {
+        return;
+      }
+
+      const elapsedMs = generationStartTime
+        ? Date.now() - generationStartTime
+        : 0;
+      const delay =
+        elapsedMs < FAST_POLL_PHASE_MS ? FAST_POLL_INTERVAL : SLOW_POLL_INTERVAL;
+
+      clearPollingTimer();
+      pollingTimerRef.current = setTimeout(async () => {
+        if (!isAliveRef.current || !isGenerating) {
+          return;
+        }
+        if (isPollingRef.current) {
+          scheduleNextPoll(id);
+          return;
+        }
+
+        isPollingRef.current = true;
+        try {
+          const completed = await pollTaskStatus(id);
+          if (!completed) {
+            scheduleNextPoll(id);
+          }
+        } finally {
+          isPollingRef.current = false;
+        }
+      }, delay);
+    },
+    [clearPollingTimer, generationStartTime, isGenerating, pollTaskStatus]
   );
 
   useEffect(() => {
@@ -697,36 +971,29 @@ export function VideoGenerator({
       return;
     }
 
-    let cancelled = false;
-
-    const tick = async () => {
-      if (!taskId) {
+    const runInitialPoll = async () => {
+      if (isPollingRef.current) {
         return;
       }
-      const completed = await pollTaskStatus(taskId);
-      if (completed) {
-        cancelled = true;
+
+      isPollingRef.current = true;
+      try {
+        const completed = await pollTaskStatus(taskId);
+        if (!completed) {
+          scheduleNextPoll(taskId);
+        }
+      } finally {
+        isPollingRef.current = false;
       }
     };
 
-    tick();
-
-    const interval = setInterval(async () => {
-      if (cancelled || !taskId) {
-        clearInterval(interval);
-        return;
-      }
-      const completed = await pollTaskStatus(taskId);
-      if (completed) {
-        clearInterval(interval);
-      }
-    }, POLL_INTERVAL);
+    void runInitialPoll();
 
     return () => {
-      cancelled = true;
-      clearInterval(interval);
+      clearPollingTimer();
+      isPollingRef.current = false;
     };
-  }, [taskId, isGenerating, pollTaskStatus]);
+  }, [clearPollingTimer, isGenerating, pollTaskStatus, scheduleNextPoll, taskId]);
 
   const handleGenerate = async () => {
     if (!user) {
@@ -735,12 +1002,22 @@ export function VideoGenerator({
     }
 
     if (remainingCredits < currentCost) {
-      toast.error('Insufficient credits. Please top up to keep creating.');
+      toast.error(
+        mapVideoErrorToUserMessage('insufficient credits', {
+          t: translateError,
+          locale,
+        })
+      );
       return;
     }
 
     if (!uploadedImage?.url) {
-      toast.error('Please upload a baby photo before generating.');
+      toast.error(
+        mapVideoErrorToUserMessage('input missing', {
+          t: translateError,
+          locale,
+        })
+      );
       return;
     }
 
@@ -756,17 +1033,21 @@ export function VideoGenerator({
       orientation === 'image' &&
       selectedTemplateDurationSeconds > MAX_IMAGE_ORIENTATION_SECONDS
     ) {
-      toast.error(
-        'Image orientation supports reference videos up to 10 seconds. Please choose Video orientation.'
-      );
+      toast.error(t('form.orientation_image_max_10s'));
       return;
     }
 
     setIsGenerating(true);
-    setProgress(15);
+    setProgress(0);
+    setProgressTarget(12);
+    setGenerationStage('submitting');
     setTaskStatus(AITaskStatus.PENDING);
     setGeneratedVideos([]);
     setGenerationStartTime(Date.now());
+    setElapsedSeconds(0);
+    clearSuccessHoldTimer();
+    clearPollingTimer();
+    isPollingRef.current = false;
 
     try {
       const resp = await fetch('/api/ai/generate', {
@@ -797,7 +1078,10 @@ export function VideoGenerator({
 
       const { code, message, data } = await resp.json();
       if (code !== 0) {
-        throw new Error(message || 'Failed to create a video task');
+        throw new Error(message || 'create video task failed');
+      }
+      if (!isAliveRef.current) {
+        return;
       }
 
       const newTaskId = data?.id;
@@ -818,21 +1102,35 @@ export function VideoGenerator({
               model: VIDEO_MODEL,
             }))
           );
-          toast.success('Video generated successfully');
-          setProgress(100);
-          resetTaskState();
+          toast.success(t('status.success'));
           await fetchUserCredits();
+          completeWithSuccess();
           return;
         }
+        toast.error(
+          mapVideoErrorToUserMessage('no videos', {
+            t: translateError,
+            locale,
+          })
+        );
+        setGenerationStage('failed');
+        resetTaskState();
+        return;
       }
 
       setTaskId(newTaskId);
-      setProgress(25);
+      setGenerationProgressStage('queued', 25);
 
       await fetchUserCredits();
     } catch (error: any) {
       console.error('Failed to generate video:', error);
-      toast.error(`Failed to generate video: ${error.message}`);
+      setGenerationStage('failed');
+      toast.error(
+        mapVideoErrorToUserMessage(error?.message, {
+          t: translateError,
+          locale,
+        })
+      );
       resetTaskState();
     }
   };
@@ -1202,17 +1500,24 @@ export function VideoGenerator({
 
               {/* Progress */}
               {isGenerating && (
-                <div className="space-y-2 rounded-lg border p-4">
+                <div
+                  className="space-y-2 rounded-lg border p-4"
+                  data-task-status={taskStatus ?? ''}
+                >
                   <div className="flex items-center justify-between text-sm">
                     <span>{t('progress')}</span>
                     <span>{progress}%</span>
                   </div>
                   <Progress value={progress} />
-                  {taskStatusLabel && (
+                  {stageLabel && (
                     <p className="text-muted-foreground text-center text-xs">
-                      {taskStatusLabel}
+                      {stageLabel}
                     </p>
                   )}
+                  <div className="text-muted-foreground flex items-center justify-between text-xs">
+                    <span>{t('status.elapsed_seconds', { seconds: elapsedSeconds })}</span>
+                    <span>{etaRangeLabel}</span>
+                  </div>
                 </div>
               )}
             </CardContent>
