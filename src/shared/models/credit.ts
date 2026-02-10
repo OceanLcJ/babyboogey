@@ -1,4 +1,16 @@
-import { and, asc, count, desc, eq, gt, isNull, or, sql, sum } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  gt,
+  isNull,
+  like,
+  or,
+  sql,
+  sum,
+} from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { credit } from '@/config/db/schema';
@@ -84,6 +96,19 @@ export async function findCreditByOrderNo(orderNo: string) {
     .select()
     .from(credit)
     .where(eq(credit.orderNo, normalized))
+    .limit(1);
+
+  return result;
+}
+
+export async function findCreditByTransactionNo(transactionNo: string) {
+  const normalized = String(transactionNo || '').trim();
+  if (!normalized) return;
+
+  const [result] = await db()
+    .select()
+    .from(credit)
+    .where(eq(credit.transactionNo, normalized))
     .limit(1);
 
   return result;
@@ -380,6 +405,261 @@ export async function grantCreditsForNewUser(user: User) {
   });
 
   return newCredit;
+}
+
+// grant credits for user's first successful login (session creation)
+type FirstLoginRiskContext = {
+  signupIp?: string;
+  claimIp?: string;
+  country?: string;
+};
+
+function parseIso2CountryList(raw: string | undefined | null): Set<string> {
+  const set = new Set<string>();
+  const normalized = String(raw || '').trim();
+  if (!normalized) return set;
+
+  for (const token of normalized.split(/[\s,]+/g)) {
+    const code = token.trim().toUpperCase();
+    if (!code) continue;
+    if (/^[A-Z]{2}$/.test(code)) {
+      set.add(code);
+    }
+  }
+
+  return set;
+}
+
+function normalizeIp(raw: unknown): string {
+  if (typeof raw !== 'string') return '';
+  // Keep compatible with MySQL varchar(45) for IPv6.
+  return raw.trim().slice(0, 45);
+}
+
+function normalizeCountry(raw: unknown): string {
+  if (typeof raw !== 'string') return '';
+  // ISO-2 (best-effort). Keep compatible with MySQL varchar(2).
+  return raw.trim().toUpperCase().slice(0, 2);
+}
+
+async function countRecentFirstLoginGrantsBySignupIp(opts: {
+  signupIp: string;
+  windowStart: Date;
+}) {
+  const ip = normalizeIp(opts.signupIp);
+  if (!ip) return 0;
+
+  const [row] = await db()
+    .select({ count: count() })
+    .from(credit)
+    .where(
+      and(
+        eq(credit.transactionType, CreditTransactionType.GRANT),
+        like(credit.transactionNo, 'first_login:%'),
+        gt(credit.createdAt, opts.windowStart),
+        eq(credit.signupIp, ip)
+      )
+    )
+    .limit(1);
+
+  return Number(row?.count || 0);
+}
+
+async function countRecentFirstLoginGrantsByClaimIp(opts: {
+  claimIp: string;
+  windowStart: Date;
+}) {
+  const ip = normalizeIp(opts.claimIp);
+  if (!ip) return 0;
+
+  const [row] = await db()
+    .select({ count: count() })
+    .from(credit)
+    .where(
+      and(
+        eq(credit.transactionType, CreditTransactionType.GRANT),
+        like(credit.transactionNo, 'first_login:%'),
+        gt(credit.createdAt, opts.windowStart),
+        eq(credit.claimIp, ip)
+      )
+    )
+    .limit(1);
+
+  return Number(row?.count || 0);
+}
+
+export async function grantCreditsForFirstLogin(
+  user: User,
+  ctx: FirstLoginRiskContext = {}
+) {
+  // get configs from db
+  const configs = await getAllConfigs();
+
+  // if initial credits enabled
+  if (configs.initial_credits_enabled !== 'true') {
+    return;
+  }
+
+  // get initial credits amount and valid days
+  const credits = parseInt(configs.initial_credits_amount as string) || 0;
+  if (credits <= 0) {
+    return;
+  }
+
+  const creditsValidDays =
+    parseInt(configs.initial_credits_valid_days as string) || 0;
+
+  const description =
+    configs.initial_credits_description || 'first login bonus';
+
+  // Idempotency: transaction_no is unique across all credits.
+  // Use a deterministic key so we can safely retry across devices/logins.
+  const transactionNo = `first_login:${user.id}`;
+
+  const existing = await findCreditByTransactionNo(transactionNo);
+  if (existing) {
+    return existing;
+  }
+
+  const signupIp = normalizeIp(ctx.signupIp);
+  const claimIp = normalizeIp(ctx.claimIp);
+  const country = normalizeCountry(ctx.country);
+
+  // Country rules (best-effort; never blocks login, only affects the bonus).
+  const countryMode = String(
+    configs.initial_credits_country_mode || 'denylist'
+  )
+    .trim()
+    .toLowerCase();
+  const countryList = parseIso2CountryList(
+    configs.initial_credits_country_list || 'KP,IR,MM,IN'
+  );
+
+  if (countryMode === 'denylist') {
+    if (country && countryList.has(country)) {
+      console.log('initial credits blocked', {
+        reason: 'country_blocked',
+        userId: user.id,
+        signupIp: signupIp || undefined,
+        claimIp: claimIp || undefined,
+        country,
+        countryMode,
+      });
+      return;
+    }
+  } else if (countryMode === 'allowlist') {
+    // If we can't determine a country, fail closed for allowlist mode.
+    if (!country || !countryList.has(country)) {
+      console.log('initial credits blocked', {
+        reason: 'country_not_allowed',
+        userId: user.id,
+        signupIp: signupIp || undefined,
+        claimIp: claimIp || undefined,
+        country: country || undefined,
+        countryMode,
+      });
+      return;
+    }
+  }
+
+  // IP limit rules.
+  const ipLimitEnabled =
+    String(configs.initial_credits_ip_limit_enabled ?? 'true') !== 'false';
+  const ipLimitMax = Math.max(
+    1,
+    parseInt(String(configs.initial_credits_ip_limit_max ?? '1'), 10) || 1
+  );
+  const ipLimitWindowDays = Math.max(
+    1,
+    parseInt(String(configs.initial_credits_ip_limit_window_days ?? '7'), 10) ||
+      7
+  );
+  const ipLimitSource = String(configs.initial_credits_ip_limit_source || 'both')
+    .trim()
+    .toLowerCase();
+
+  if (ipLimitEnabled && ipLimitMax > 0 && ipLimitWindowDays > 0) {
+    const windowStart = new Date(
+      Date.now() - ipLimitWindowDays * 24 * 60 * 60 * 1000
+    );
+
+    if (ipLimitSource === 'signup' || ipLimitSource === 'both') {
+      if (signupIp) {
+        const signupCount = await countRecentFirstLoginGrantsBySignupIp({
+          signupIp,
+          windowStart,
+        });
+        if (signupCount >= ipLimitMax) {
+          console.log('initial credits blocked', {
+            reason: 'ip_limit_signup',
+            userId: user.id,
+            signupIp,
+            claimIp: claimIp || undefined,
+            country: country || undefined,
+            windowDays: ipLimitWindowDays,
+            max: ipLimitMax,
+            count: signupCount,
+          });
+          return;
+        }
+      }
+    }
+
+    if (ipLimitSource === 'claim' || ipLimitSource === 'both') {
+      if (claimIp) {
+        const claimCount = await countRecentFirstLoginGrantsByClaimIp({
+          claimIp,
+          windowStart,
+        });
+        if (claimCount >= ipLimitMax) {
+          console.log('initial credits blocked', {
+            reason: 'ip_limit_claim',
+            userId: user.id,
+            signupIp: signupIp || undefined,
+            claimIp,
+            country: country || undefined,
+            windowDays: ipLimitWindowDays,
+            max: ipLimitMax,
+            count: claimCount,
+          });
+          return;
+        }
+      }
+    }
+  }
+
+  const expiresAt = calculateCreditExpirationTime({
+    creditsValidDays,
+  });
+
+  const newCredit: NewCredit = {
+    id: getUuid(),
+    userId: user.id,
+    userEmail: user.email,
+    orderNo: '',
+    subscriptionNo: '',
+    transactionNo,
+    transactionType: CreditTransactionType.GRANT,
+    transactionScene: CreditTransactionScene.REWARD,
+    signupIp: signupIp || null,
+    claimIp: claimIp || null,
+    claimCountry: country || null,
+    credits,
+    remainingCredits: credits,
+    description,
+    expiresAt,
+    status: CreditStatus.ACTIVE,
+    metadata: JSON.stringify({ type: 'first-login' }),
+  };
+
+  try {
+    return await createCredit(newCredit);
+  } catch (error) {
+    // Race-safe: another session could have inserted it after our existence check.
+    const after = await findCreditByTransactionNo(transactionNo);
+    if (after) return after;
+    throw error;
+  }
 }
 
 // grant credits for user

@@ -53,13 +53,16 @@ export async function POST(request: Request) {
       }
     } else if (mediaType === AIMediaType.VIDEO) {
       // generate video
-      if (scene === 'text-to-video') {
-        costCredits = 6;
-      } else if (scene === 'image-to-video') {
-        costCredits = 8;
-      } else if (scene === 'video-to-video') {
-        costCredits = 10;
-      } else {
+      // Keep backend billing consistent with the UI:
+      // 720p costs 60 credits, 1080p costs 120 credits.
+      const resolution = String(options?.resolution || '').toLowerCase();
+      costCredits = resolution === '1080p' ? 120 : 60;
+
+      if (
+        scene !== 'text-to-video' &&
+        scene !== 'image-to-video' &&
+        scene !== 'video-to-video'
+      ) {
         throw new Error('invalid scene');
       }
     } else if (mediaType === AIMediaType.MUSIC) {

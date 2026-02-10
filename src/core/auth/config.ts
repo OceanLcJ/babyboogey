@@ -12,9 +12,11 @@ import {
   getHeaderValue,
   guessLocaleFromAcceptLanguage,
 } from '@/shared/lib/cookie';
+import { getClientIpFromCtx, getCountryFromCtx } from '@/shared/lib/geo';
 import { getUuid } from '@/shared/lib/hash';
 import { getClientIp } from '@/shared/lib/ip';
-import { grantCreditsForNewUser } from '@/shared/models/credit';
+import { grantCreditsForFirstLogin } from '@/shared/models/credit';
+import { findUserById } from '@/shared/models/user';
 import { getEmailService } from '@/shared/services/email';
 import { grantRoleForNewUser } from '@/shared/services/rbac';
 
@@ -166,13 +168,45 @@ export async function getAuthOptions(configs: Record<string, string>) {
                 throw new Error('user id is required');
               }
 
-              // grant credits for new user
-              await grantCreditsForNewUser(user);
-
               // grant role for new user
               await grantRoleForNewUser(user);
             } catch (e) {
-              console.log('grant credits or role for new user failed', e);
+              console.log('grant role for new user failed', e);
+            }
+          },
+        },
+      },
+      session: {
+        create: {
+          after: async (session: any, ctx: unknown) => {
+            try {
+              const userId =
+                (session?.userId as string | undefined) ||
+                (session?.user_id as string | undefined);
+              if (!userId) {
+                throw new Error('session userId is required');
+              }
+
+              const user = await findUserById(userId);
+              if (!user) {
+                throw new Error(`user not found: ${userId}`);
+              }
+
+              // grant credits for first login (idempotent by transactionNo)
+              const signupIp = typeof user?.ip === 'string' ? user.ip : '';
+              const claimIp =
+                (session?.ipAddress as string | undefined) ||
+                (session?.ip_address as string | undefined) ||
+                getClientIpFromCtx(ctx);
+              const country = getCountryFromCtx(ctx);
+
+              await grantCreditsForFirstLogin(user, {
+                signupIp,
+                claimIp,
+                country,
+              });
+            } catch (e) {
+              console.log('grant credits for first login failed', e);
             }
           },
         },

@@ -301,6 +301,9 @@ export const credit = table(
     transactionNo: varchar191('transaction_no').unique().notNull(), // transaction no
     transactionType: varchar('transaction_type', { length: 50 }).notNull(), // transaction type, grant / consume
     transactionScene: varchar('transaction_scene', { length: 50 }), // transaction scene, payment / subscription / gift / award
+    signupIp: varchar('signup_ip', { length: 45 }), // user.ip (signup time IP) for anti-abuse
+    claimIp: varchar('claim_ip', { length: 45 }), // session/request IP when claiming first login credits
+    claimCountry: varchar('claim_country', { length: 2 }), // best-effort country code when claiming credits
     credits: int('credits').notNull(), // credits amount, n or -n
     remainingCredits: int('remaining_credits').notNull().default(0), // remaining credits amount
     description: text('description'), // transaction description
@@ -328,6 +331,10 @@ export const credit = table(
     index('idx_credit_order_no').on(table.orderNo),
     // Query credits by subscription number
     index('idx_credit_subscription_no').on(table.subscriptionNo),
+    // Anti-abuse: count first-login grants by signup IP in a time window
+    index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
+    // Anti-abuse: count first-login grants by claim IP in a time window
+    index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
   ]
 );
 

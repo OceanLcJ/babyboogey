@@ -323,6 +323,9 @@ export const credit = table(
     transactionNo: text('transaction_no').unique().notNull(), // transaction no
     transactionType: text('transaction_type').notNull(), // transaction type, grant / consume
     transactionScene: text('transaction_scene'), // transaction scene, payment / subscription / gift / award
+    signupIp: text('signup_ip'), // user.ip (signup time IP) for anti-abuse
+    claimIp: text('claim_ip'), // session/request IP when claiming first login credits
+    claimCountry: text('claim_country'), // best-effort country code when claiming credits
     credits: integer('credits').notNull(), // credits amount, n or -n
     remainingCredits: integer('remaining_credits').notNull().default(0), // remaining credits amount
     description: text('description'), // transaction description
@@ -352,6 +355,10 @@ export const credit = table(
     index('idx_credit_order_no').on(table.orderNo),
     // Query credits by subscription number
     index('idx_credit_subscription_no').on(table.subscriptionNo),
+    // Anti-abuse: count first-login grants by signup IP in a time window
+    index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
+    // Anti-abuse: count first-login grants by claim IP in a time window
+    index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
   ]
 );
 
