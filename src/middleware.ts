@@ -5,8 +5,18 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from '@/core/i18n/config';
 
 const intlMiddleware = createIntlMiddleware(routing);
+const APEX_HOST = 'babyboogey.com';
+const CANONICAL_HOST = 'www.babyboogey.com';
 
 export async function middleware(request: NextRequest) {
+  const hostname = request.nextUrl.hostname.toLowerCase();
+  if (hostname === APEX_HOST) {
+    const canonicalUrl = request.nextUrl.clone();
+    canonicalUrl.hostname = CANONICAL_HOST;
+    canonicalUrl.protocol = 'https';
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
+
   const { pathname } = request.nextUrl;
 
   // Handle internationalization first

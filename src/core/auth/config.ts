@@ -25,6 +25,23 @@ import { grantRoleForNewUser } from '@/shared/services/rbac';
 // and to add a server-side throttle beyond any client-side cooldown.
 const recentVerificationEmailSentAt = new Map<string, number>();
 const VERIFICATION_EMAIL_MIN_INTERVAL_MS = 60_000;
+const SESSION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 30; // 30 days
+const SESSION_UPDATE_AGE_SECONDS = 60 * 60 * 24; // 1 day
+const BABYBOOGEY_COOKIE_DOMAIN = '.babyboogey.com';
+
+function shouldEnableCrossSubDomainCookies() {
+  const baseUrl = envConfigs.auth_url || envConfigs.app_url;
+  if (!baseUrl) {
+    return false;
+  }
+
+  try {
+    const hostname = new URL(baseUrl).hostname.toLowerCase();
+    return hostname === 'babyboogey.com' || hostname === 'www.babyboogey.com';
+  } catch {
+    return false;
+  }
+}
 
 function getTrustedOrigins() {
   const origins = new Set<string>();
@@ -61,6 +78,12 @@ const authOptions = {
   baseURL: envConfigs.auth_url,
   secret: envConfigs.auth_secret,
   trustedOrigins: getTrustedOrigins(),
+  session: {
+    // Keep users signed in across browser restarts.
+    expiresIn: SESSION_EXPIRES_IN_SECONDS,
+    // Refresh session at most once per day.
+    updateAge: SESSION_UPDATE_AGE_SECONDS,
+  },
   user: {
     // Allow persisting custom columns on user table.
     // Without this, better-auth may ignore extra properties during create/update.
@@ -87,6 +110,14 @@ const authOptions = {
     },
   },
   advanced: {
+    crossSubDomainCookies: shouldEnableCrossSubDomainCookies()
+      ? {
+          enabled: true,
+          domain: BABYBOOGEY_COOKIE_DOMAIN,
+        }
+      : {
+          enabled: false,
+        },
     database: {
       generateId: () => getUuid(),
     },
