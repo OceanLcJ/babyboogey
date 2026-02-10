@@ -101,9 +101,11 @@ export class ReplicateProvider implements AIProvider {
   async query({
     taskId,
     mediaType,
+    userId,
   }: {
     taskId: string;
     mediaType?: AIMediaType;
+    userId?: string;
   }): Promise<AITaskResult> {
     const data = await this.client.predictions.get(taskId);
 
@@ -151,7 +153,11 @@ export class ReplicateProvider implements AIProvider {
     const taskStatus = this.mapStatus(data.status);
 
     // save files to custom storage
-    if (taskStatus === AITaskStatus.SUCCESS && this.configs.customStorage) {
+    const shouldPersistMedia =
+      taskStatus === AITaskStatus.SUCCESS &&
+      (this.configs.customStorage || Boolean(userId));
+
+    if (shouldPersistMedia) {
       // save images
       if (images && images.length > 0) {
         const filesToSave: AIFile[] = [];
@@ -168,7 +174,11 @@ export class ReplicateProvider implements AIProvider {
         });
 
         if (filesToSave.length > 0) {
-          const uploadedFiles = await saveFiles(filesToSave);
+          const uploadedFiles = await saveFiles(filesToSave, {
+            userId,
+            provider: this.name,
+            linkedTaskId: taskId,
+          });
           if (uploadedFiles) {
             uploadedFiles.forEach((file: AIFile) => {
               if (file && file.url && images && file.index !== undefined) {
@@ -198,7 +208,11 @@ export class ReplicateProvider implements AIProvider {
         });
 
         if (filesToSave.length > 0) {
-          const uploadedFiles = await saveFiles(filesToSave);
+          const uploadedFiles = await saveFiles(filesToSave, {
+            userId,
+            provider: this.name,
+            linkedTaskId: taskId,
+          });
           if (uploadedFiles) {
             uploadedFiles.forEach((file: AIFile) => {
               if (file && file.url && videos && file.index !== undefined) {

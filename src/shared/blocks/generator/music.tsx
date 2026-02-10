@@ -39,6 +39,7 @@ import {
 import { Switch } from '@/shared/components/ui/switch';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
 interface SongData {
@@ -158,6 +159,21 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
       if (errorCode || errorMessage) {
         throw new Error(errorMessage);
       }
+      const normalizedSongs: GeneratedSong[] = Array.isArray(songs)
+        ? (songs as any[]).map((song: AISong, index: number) => ({
+            id: song.id || `song-${index}`,
+            title: song.title || `Song ${index + 1}`,
+            duration: Number(song.duration) || 0,
+            audioUrl: resolveMediaValueToApiPath(song.audioUrl || ''),
+            imageUrl: song.imageUrl
+              ? resolveMediaValueToApiPath(song.imageUrl)
+              : '',
+            artist: song.artist || '',
+            style: song.style || song.tags || '',
+            status: song.audioUrl ? 'ready' : 'processing',
+            prompt: song.prompt,
+          }))
+        : [];
 
       // handle task status
 
@@ -171,20 +187,20 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
       if (status === AITaskStatus.PROCESSING) {
         setProgress(20);
 
-        const isTextSuccess = songs.some((song: AISong) => song.imageUrl);
-        const isFirstSuccess = songs.some((song: AISong) => song.audioUrl);
+        const isTextSuccess = normalizedSongs.some((song) => song.imageUrl);
+        const isFirstSuccess = normalizedSongs.some((song) => song.audioUrl);
 
         // text success
         if (isTextSuccess) {
           setProgress(60);
-          setGeneratedSongs(songs);
+          setGeneratedSongs(normalizedSongs);
           return false;
         }
 
         // first success
         if (isFirstSuccess) {
           setProgress(85);
-          setGeneratedSongs(songs);
+          setGeneratedSongs(normalizedSongs);
           return false;
         }
 
@@ -206,7 +222,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
 
       // task success, final status
       if (status === AITaskStatus.SUCCESS) {
-        setGeneratedSongs(songs);
+        setGeneratedSongs(normalizedSongs);
 
         setProgress(100);
         setIsGenerating(false);
@@ -412,9 +428,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
       toast.info(t('generator.downloading'));
 
       // Fetch the audio file via proxy
-      const response = await fetch(
-        `/api/proxy/file?url=${encodeURIComponent(song.audioUrl)}`
-      );
+      const response = await fetch(song.audioUrl);
       if (!response.ok) {
         throw new Error('Failed to fetch audio file');
       }

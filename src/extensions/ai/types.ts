@@ -53,6 +53,7 @@ export interface AIGenerateParams {
   mediaType: AIMediaType;
   prompt: string;
   model?: string;
+  userId?: string;
   // custom options
   options?: any;
   // receive notify result
@@ -120,9 +121,11 @@ export interface AIProvider {
     taskId,
     mediaType,
     model,
+    userId,
   }: {
     taskId: string;
     mediaType?: string;
     model?: string;
+    userId?: string;
   }): Promise<AITaskResult>;
 }

@@ -1,107 +1,70 @@
-import { md5 } from '@/shared/lib/hash';
-import { respData, respErr } from '@/shared/lib/resp';
-import { getStorageService } from '@/shared/services/storage';
+import { NextRequest, NextResponse } from 'next/server';
 
-const extFromMime = (mimeType: string) => {
-  const map: Record<string, string> = {
-    'image/jpeg': 'jpg',
-    'image/jpg': 'jpg',
-    'image/png': 'png',
-    'image/webp': 'webp',
-    'image/gif': 'gif',
-    'image/svg+xml': 'svg',
-    'image/avif': 'avif',
-    'image/heic': 'heic',
-    'image/heif': 'heif',
-  };
-  return map[mimeType] || '';
-};
-
-export async function POST(req: Request) {
+// Legacy compatibility endpoint.
+// New clients should use /api/storage/upload-media with explicit purpose/source.
+export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const files = formData.getAll('files') as File[];
-
-    console.log('[API] Received files:', files.length);
-    files.forEach((file, i) => {
-      console.log(`[API] File ${i}:`, {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      });
-    });
-
     if (!files || files.length === 0) {
-      return respErr('No files provided');
+      return NextResponse.json({ code: -1, message: 'No files provided' });
     }
 
-    const storageService = await getStorageService();
-    const uploadResults = [];
-
-    for (const file of files) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        return respErr(`File ${file.name} is not an image`);
-      }
-
-      // Convert file to buffer
-      const arrayBuffer = await file.arrayBuffer();
-      const body = new Uint8Array(arrayBuffer);
-
-      const digest = md5(body);
-      const ext = extFromMime(file.type) || file.name.split('.').pop() || 'bin';
-      const key = `${digest}.${ext}`;
-
-      // If the same image already exists, reuse its URL to save storage space.
-      // (Still depends on provider supporting signed HEAD + public url generation.)
-      const exists = await storageService.exists({ key });
-      if (exists) {
-        const publicUrl = storageService.getPublicUrl({ key });
-        if (publicUrl) {
-          uploadResults.push({
-            url: publicUrl,
-            key,
-            filename: file.name,
-            deduped: true,
-          });
-          continue;
-        }
-      }
-
-      // Upload to storage
-      const result = await storageService.uploadFile({
-        body,
-        key: key,
-        contentType: file.type,
-        disposition: 'inline',
-      });
-
-      if (!result.success) {
-        console.error('[API] Upload failed:', result.error);
-        return respErr(result.error || 'Upload failed');
-      }
-
-      console.log('[API] Upload success:', result.url);
-
-      uploadResults.push({
-        url: result.url,
-        key: result.key,
-        filename: file.name,
-        deduped: false,
-      });
+    if (!formData.get('purpose')) {
+      formData.set('purpose', 'reference_image');
+    }
+    if (!formData.get('source')) {
+      formData.set('source', 'upload');
     }
 
-    console.log(
-      '[API] All uploads complete. Returning URLs:',
-      uploadResults.map((r) => r.url)
-    );
-
-    return respData({
-      urls: uploadResults.map((r) => r.url),
-      results: uploadResults,
+    const targetUrl = new URL('/api/storage/upload-media', req.url);
+    const upstream = await fetch(targetUrl, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        cookie: req.headers.get('cookie') || '',
+      },
     });
-  } catch (e) {
-    console.error('upload image failed:', e);
-    return respErr('upload image failed');
+
+    const payload = await upstream.json().catch(() => ({}));
+    if (!upstream.ok || payload?.code !== 0) {
+      return NextResponse.json({
+        code: -1,
+        message: payload?.message || `Upload failed (${upstream.status})`,
+      });
+    }
+
+    const results = Array.isArray(payload?.data?.results)
+      ? payload.data.results
+      : [];
+    const urls = results
+      .map((item: any) =>
+        item?.assetId
+          ? `/api/storage/assets/${encodeURIComponent(item.assetId)}`
+          : item?.previewUrl || ''
+      )
+      .filter(Boolean);
+
+    const response = NextResponse.json({
+      code: 0,
+      message: 'ok',
+      data: {
+        urls,
+        assetRefs: results.map((item: any) => item?.assetRef).filter(Boolean),
+        results,
+      },
+    });
+    const setCookie = upstream.headers.get('set-cookie');
+    if (setCookie) {
+      response.headers.set('set-cookie', setCookie);
+    }
+    response.headers.set('x-deprecated-endpoint', '/api/storage/upload-image');
+    return response;
+  } catch (e: any) {
+    console.error('upload image (legacy) failed:', e);
+    return NextResponse.json({
+      code: -1,
+      message: e?.message || 'upload image failed',
+    });
   }
 }

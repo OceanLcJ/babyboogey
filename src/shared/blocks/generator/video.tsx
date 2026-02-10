@@ -39,6 +39,7 @@ import {
 import { Switch } from '@/shared/components/ui/switch';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
 interface VideoGeneratorProps {
@@ -364,8 +365,10 @@ function extractVideoUrls(result: any): string[] {
 const uploadImageFile = async (file: File) => {
   const formData = new FormData();
   formData.append('files', file);
+  formData.append('purpose', 'reference_image');
+  formData.append('source', 'upload');
 
-  const response = await fetch('/api/storage/upload-image', {
+  const response = await fetch('/api/storage/upload-media', {
     method: 'POST',
     body: formData,
   });
@@ -375,11 +378,16 @@ const uploadImageFile = async (file: File) => {
   }
 
   const result = await response.json();
-  if (result.code !== 0 || !result.data?.urls?.length) {
+  if (result.code !== 0 || !result.data?.assetRef || !result.data?.assetId) {
     throw new Error(result.message || 'Upload failed');
   }
 
-  return result.data.urls[0] as string;
+  return {
+    assetId: result.data.assetId as string,
+    assetRef: result.data.assetRef as string,
+    previewUrl:
+      `/api/storage/assets/${encodeURIComponent(result.data.assetId as string)}`,
+  };
 };
 
 function mapVideoErrorToUserMessage(
@@ -668,8 +676,12 @@ export function VideoGenerator({
     setUploadedImage({ preview, status: 'uploading' });
 
     try {
-      const url = await uploadImageFile(file);
-      setUploadedImage({ preview: url, url, status: 'uploaded' });
+      const uploaded = await uploadImageFile(file);
+      setUploadedImage({
+        preview: uploaded.previewUrl,
+        url: uploaded.assetRef,
+        status: 'uploaded',
+      });
     } catch (error: any) {
       console.error('Upload failed:', error);
       toast.error(error?.message || 'Upload failed');
@@ -833,7 +845,7 @@ export function VideoGenerator({
             setGeneratedVideos(
               videoUrls.map((url, index) => ({
                 id: `${task.id}-${index}`,
-                url,
+                url: resolveMediaValueToApiPath(url),
                 provider: task.provider,
                 model: task.model,
                 prompt: task.prompt ?? undefined,
@@ -867,7 +879,7 @@ export function VideoGenerator({
             setGeneratedVideos(
               videoUrls.map((url, index) => ({
                 id: `${task.id}-${index}`,
-                url,
+                url: resolveMediaValueToApiPath(url),
                 provider: task.provider,
                 model: task.model,
                 prompt: task.prompt ?? undefined,
@@ -1097,7 +1109,7 @@ export function VideoGenerator({
           setGeneratedVideos(
             videoUrls.map((url, index) => ({
               id: `${newTaskId}-${index}`,
-              url,
+              url: resolveMediaValueToApiPath(url),
               provider: VIDEO_PROVIDER,
               model: VIDEO_MODEL,
             }))
@@ -1142,9 +1154,7 @@ export function VideoGenerator({
 
     try {
       setDownloadingVideoId(video.id);
-      const resp = await fetch(
-        `/api/proxy/file?url=${encodeURIComponent(video.url)}`
-      );
+      const resp = await fetch(video.url);
       if (!resp.ok) {
         throw new Error('Failed to fetch video');
       }

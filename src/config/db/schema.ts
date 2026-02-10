@@ -52,5 +52,6 @@ export const permission = schemaModule.permission;
 export const rolePermission = schemaModule.rolePermission;
 export const userRole = schemaModule.userRole;
 export const aiTask = schemaModule.aiTask;
+export const mediaAsset = schemaModule.mediaAsset;
 export const chat = schemaModule.chat;
 export const chatMessage = schemaModule.chatMessage;

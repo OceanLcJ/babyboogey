@@ -54,6 +54,22 @@ export async function findAITaskById(id: string) {
   return result;
 }
 
+export async function findAITaskByProviderTaskId({
+  provider,
+  taskId,
+}: {
+  provider: string;
+  taskId: string;
+}) {
+  const [result] = await db()
+    .select()
+    .from(aiTask)
+    .where(and(eq(aiTask.provider, provider), eq(aiTask.taskId, taskId)))
+    .limit(1);
+
+  return result;
+}
+
 export async function updateAITaskById(id: string, updateAITask: UpdateAITask) {
   const result = await db().transaction(async (tx: any) => {
     // task failed, Revoke credit consumption record
@@ -129,6 +145,45 @@ export async function getAITasksCount({
     );
 
   return result?.count || 0;
+}
+
+export async function getAITaskMediaTypeCounts({
+  userId,
+  status,
+  provider,
+}: {
+  userId?: string;
+  status?: string;
+  provider?: string;
+}): Promise<Record<string, number>> {
+  const result = (await db()
+    .select({
+      mediaType: aiTask.mediaType,
+      count: count(),
+    })
+    .from(aiTask)
+    .where(
+      and(
+        userId ? eq(aiTask.userId, userId) : undefined,
+        provider ? eq(aiTask.provider, provider) : undefined,
+        status ? eq(aiTask.status, status) : undefined
+      )
+    )
+    .groupBy(aiTask.mediaType)) as Array<{
+    mediaType: string | null;
+    count: number | string | bigint;
+  }>;
+
+  const counts: Record<string, number> = {};
+  for (const item of result) {
+    if (!item.mediaType) {
+      continue;
+    }
+
+    counts[item.mediaType] = Number(item.count || 0);
+  }
+
+  return counts;
 }
 
 export async function getAITasks({

@@ -4,6 +4,7 @@ import { count, desc, eq, inArray } from 'drizzle-orm';
 import { getAuth } from '@/core/auth';
 import { db } from '@/core/db';
 import { user } from '@/config/db/schema';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 
 import { Permission, Role } from '../services/rbac';
 import { getRemainingCredits } from './credit';
@@ -35,6 +36,19 @@ export type User = typeof user.$inferSelect & {
 export type NewUser = typeof user.$inferInsert;
 export type UpdateUser = Partial<Omit<NewUser, 'id' | 'createdAt' | 'email'>>;
 
+function normalizeUserMedia(userInfo?: User | null): User | undefined {
+  if (!userInfo) {
+    return undefined;
+  }
+
+  return {
+    ...userInfo,
+    image: userInfo.image
+      ? resolveMediaValueToApiPath(userInfo.image)
+      : userInfo.image,
+  };
+}
+
 export async function updateUser(userId: string, updatedUser: UpdateUser) {
   const [result] = await db()
     .update(user)
@@ -48,7 +62,7 @@ export async function updateUser(userId: string, updatedUser: UpdateUser) {
 export async function findUserById(userId: string) {
   const [result] = await db().select().from(user).where(eq(user.id, userId));
 
-  return result;
+  return normalizeUserMedia(result as User);
 }
 
 export async function getUsers({
@@ -68,7 +82,7 @@ export async function getUsers({
     .limit(limit)
     .offset((page - 1) * limit);
 
-  return result;
+  return result.map((item: any) => normalizeUserMedia(item as User) as User);
 }
 
 export async function getUsersCount({ email }: { email?: string }) {
@@ -85,13 +99,13 @@ export async function getUserByUserIds(userIds: string[]) {
     .from(user)
     .where(inArray(user.id, userIds));
 
-  return result;
+  return result.map((item: any) => normalizeUserMedia(item as User) as User);
 }
 
 export async function getUserInfo() {
   const signUser = await getSignUser();
 
-  return signUser;
+  return normalizeUserMedia(signUser as User);
 }
 
 export async function getUserCredits(userId: string) {
@@ -106,7 +120,7 @@ export async function getSignUser() {
     headers: await headers(),
   });
 
-  return session?.user;
+  return normalizeUserMedia(session?.user as User);
 }
 
 export async function isEmailVerified(email: string): Promise<boolean> {

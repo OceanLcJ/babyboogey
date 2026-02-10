@@ -1,5 +1,6 @@
 import type {
   StorageConfigs,
+  StorageGetObjectOptions,
   StorageDownloadUploadOptions,
   StorageProvider,
   StorageUploadOptions,
@@ -63,6 +64,33 @@ export class S3Provider implements StorageProvider {
       return false;
     }
   };
+
+  async getObject(options: StorageGetObjectOptions): Promise<Response> {
+    const uploadBucket = options.bucket || this.configs.bucket;
+    if (!uploadBucket) {
+      return new Response('Bucket is required', { status: 400 });
+    }
+
+    const url = `${this.configs.endpoint}/${uploadBucket}/${options.key}`;
+    const { AwsClient } = await import('aws4fetch');
+    const client = new AwsClient({
+      accessKeyId: this.configs.accessKeyId,
+      secretAccessKey: this.configs.secretAccessKey,
+      region: this.configs.region,
+    });
+
+    const headers: HeadersInit = {};
+    if (options.range) {
+      headers['Range'] = options.range;
+    }
+
+    return client.fetch(
+      new Request(url, {
+        method: 'GET',
+        headers,
+      })
+    );
+  }
 
   async uploadFile(
     options: StorageUploadOptions

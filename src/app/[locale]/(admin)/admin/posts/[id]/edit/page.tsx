@@ -102,6 +102,7 @@ export default async function PostEditPage({
         title: t('fields.image'),
         metadata: {
           max: 1,
+          purpose: 'post_image',
         },
       },
       {
@@ -113,6 +114,10 @@ export default async function PostEditPage({
         name: 'authorImage',
         type: 'upload_image',
         title: t('fields.author_image'),
+        metadata: {
+          max: 1,
+          purpose: 'post_author_image',
+        },
       },
       {
         name: 'content',

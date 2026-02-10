@@ -8,6 +8,7 @@ import { logsSource, pagesSource, postsSource } from '@/core/docs/source';
 import { generateTOC } from '@/core/docs/toc';
 import { post } from '@/config/db/schema';
 import { MarkdownContent } from '@/shared/blocks/common/markdown-content';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import {
   Category as BlogCategoryType,
   Post as BlogPostType,
@@ -181,7 +182,7 @@ export async function getPost({
             locale,
           }) || '',
         author_name: postData.authorName || '',
-        author_image: postData.authorImage || '',
+        author_image: resolveMediaValueToApiPath(postData.authorImage || ''),
         author_role: '',
         url: `${postPrefix}${postData.slug}`,
       };
@@ -426,14 +427,14 @@ export async function getRemotePostsAndCategories({
         title: post.title || '',
         description: post.description || '',
         author_name: post.authorName || '',
-        author_image: post.authorImage || '',
+        author_image: resolveMediaValueToApiPath(post.authorImage || ''),
         date: post.createdAt.toISOString(),
         created_at:
           getPostDate({
             created_at: post.createdAt.toISOString(),
             locale,
           }) || '',
-        image: post.image || '',
+        image: resolveMediaValueToApiPath(post.image || ''),
         url: `${postPrefix}${post.slug}`,
       }))
     );

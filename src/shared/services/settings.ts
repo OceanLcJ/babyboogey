@@ -16,6 +16,7 @@ export interface Setting {
   group?: string;
   tab?: string;
   attributes?: Record<string, any>;
+  metadata?: Record<string, any>;
 }
 
 export interface SettingGroup {
@@ -298,6 +299,10 @@ export async function getSettings() {
       name: 'app_logo',
       title: 'App Logo',
       type: 'upload_image',
+      metadata: {
+        max: 1,
+        purpose: 'post_image',
+      },
       group: 'appinfo',
       tab: 'general',
     },
@@ -305,6 +310,10 @@ export async function getSettings() {
       name: 'app_preview_image',
       title: 'App Preview Image',
       type: 'upload_image',
+      metadata: {
+        max: 1,
+        purpose: 'post_image',
+      },
       group: 'appinfo',
       tab: 'general',
     },

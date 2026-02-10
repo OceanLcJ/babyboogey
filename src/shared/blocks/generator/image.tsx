@@ -38,6 +38,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
 interface ImageGeneratorProps {
@@ -376,7 +377,7 @@ export function ImageGenerator({
             setGeneratedImages(
               imageUrls.map((url, index) => ({
                 id: `${task.id}-${index}`,
-                url,
+                url: resolveMediaValueToApiPath(url),
                 provider: task.provider,
                 model: task.model,
                 prompt: task.prompt ?? undefined,
@@ -396,7 +397,7 @@ export function ImageGenerator({
             setGeneratedImages(
               imageUrls.map((url, index) => ({
                 id: `${task.id}-${index}`,
-                url,
+                url: resolveMediaValueToApiPath(url),
                 provider: task.provider,
                 model: task.model,
                 prompt: task.prompt ?? undefined,
@@ -549,7 +550,7 @@ export function ImageGenerator({
           setGeneratedImages(
             imageUrls.map((url, index) => ({
               id: `${newTaskId}-${index}`,
-              url,
+              url: resolveMediaValueToApiPath(url),
               provider,
               model,
               prompt: trimmedPrompt,
@@ -582,9 +583,7 @@ export function ImageGenerator({
     try {
       setDownloadingImageId(image.id);
       // fetch image via proxy
-      const resp = await fetch(
-        `/api/proxy/file?url=${encodeURIComponent(image.url)}`
-      );
+      const resp = await fetch(image.url);
       if (!resp.ok) {
         throw new Error('Failed to fetch image');
       }
@@ -679,6 +678,8 @@ export function ImageGenerator({
                       allowMultiple={allowMultipleImages}
                       maxImages={allowMultipleImages ? maxImages : 1}
                       maxSizeMB={maxSizeMB}
+                      purpose="reference_image"
+                      source="upload"
                       onChange={handleReferenceImagesChange}
                       emptyHint={t('form.reference_image_placeholder')}
                     />

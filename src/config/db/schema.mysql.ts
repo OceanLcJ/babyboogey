@@ -478,6 +478,36 @@ export const aiTask = table(
   ]
 );
 
+export const mediaAsset = table(
+  'media_asset',
+  {
+    id: varchar191('id').primaryKey(),
+    ownerType: varchar('owner_type', { length: 20 }).notNull(), // user | guest | system
+    ownerId: varchar191('owner_id').notNull(),
+    purpose: varchar('purpose', { length: 50 }).notNull(),
+    mediaType: varchar('media_type', { length: 50 }).notNull(),
+    provider: varchar('provider', { length: 50 }),
+    bucket: varchar191('bucket'),
+    objectKey: longtext('object_key').notNull(),
+    mimeType: varchar('mime_type', { length: 100 }).notNull(),
+    sizeBytes: int('size_bytes'),
+    checksumSha256: varchar('checksum_sha256', { length: 64 }),
+    status: varchar('status', { length: 20 }).notNull(), // active | temp | deleted
+    source: varchar('source', { length: 20 }).notNull(), // upload | ai_mirror | migration
+    linkedTaskId: varchar191('linked_task_id'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+    expiresAt: timestamp('expires_at'),
+  },
+  (table) => [
+    index('idx_media_asset_owner').on(table.ownerType, table.ownerId),
+    index('idx_media_asset_purpose_created').on(table.purpose, table.createdAt),
+    index('idx_media_asset_status_expires').on(table.status, table.expiresAt),
+    index('idx_media_asset_checksum').on(table.checksumSha256),
+    index('idx_media_asset_linked_task').on(table.linkedTaskId),
+  ]
+);
+
 export const chat = table(
   'chat',
   {

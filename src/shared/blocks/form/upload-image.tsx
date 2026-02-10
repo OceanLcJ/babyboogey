@@ -5,15 +5,18 @@ import { ControllerRenderProps } from 'react-hook-form';
 
 import { FormField } from '@/shared/types/blocks/form';
 
-import { ImageUploader, ImageUploaderValue } from '../common';
+import {
+  ImageUploader,
+  ImageUploaderValue,
+  MediaUploadPurpose,
+  MediaUploadSource,
+} from '../common';
 
 interface UploadImageProps {
   field: FormField;
   formField: ControllerRenderProps<Record<string, unknown>, string>;
   data?: any;
   metadata?: Record<string, any>;
-  uploadUrl?: string;
-  onUpload?: (files: File[]) => Promise<string[]>;
 }
 
 export function UploadImage({
@@ -21,12 +24,12 @@ export function UploadImage({
   formField,
   data,
   metadata,
-  uploadUrl = '/api/storage/upload-image',
-  onUpload,
 }: UploadImageProps) {
   const maxImages = metadata?.max || 1;
   const maxSizeMB = metadata?.maxSizeMB || 10;
   const allowMultiple = maxImages > 1;
+  const purpose = (metadata?.purpose || 'reference_image') as MediaUploadPurpose;
+  const source = (metadata?.source || 'upload') as MediaUploadSource;
 
   const previews = useMemo(() => {
     const value = formField.value;
@@ -65,6 +68,8 @@ export function UploadImage({
       maxSizeMB={maxSizeMB}
       emptyHint={field.placeholder}
       defaultPreviews={previews}
+      purpose={purpose}
+      source={source}
       onChange={handleChange}
     />
   );

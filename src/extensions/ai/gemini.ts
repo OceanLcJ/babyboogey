@@ -1,6 +1,19 @@
+import { createHash } from 'node:crypto';
 import { nanoid } from 'nanoid';
 
 import { getUuid } from '@/shared/lib/hash';
+import { toAssetRef } from '@/shared/lib/asset-ref';
+import {
+  createMediaAsset,
+  MediaAssetOwnerType,
+  MediaAssetPurpose,
+  MediaAssetSource,
+  MediaAssetStatus,
+} from '@/shared/models/media_asset';
+import {
+  buildMediaObjectKey,
+  inferMediaTypeFromMime,
+} from '@/shared/services/media-asset';
 
 import {
   AIConfigs,
@@ -39,7 +52,7 @@ export class GeminiProvider implements AIProvider {
   }: {
     params: AIGenerateParams;
   }): Promise<AITaskResult> {
-    const { mediaType, model, prompt, options } = params;
+    const { mediaType, model, prompt, options, userId } = params;
 
     if (mediaType !== AIMediaType.IMAGE) {
       throw new Error(`mediaType not supported: ${mediaType}`);
@@ -141,7 +154,14 @@ export class GeminiProvider implements AIProvider {
     const storageService = await getStorageService();
     const buffer = Buffer.from(base64Data, 'base64');
     const ext = mimeType.split('/')[1] || 'png';
-    const key = `gemini/image/${getUuid()}.${ext}`;
+    const ownerType = userId ? MediaAssetOwnerType.USER : MediaAssetOwnerType.SYSTEM;
+    const ownerId = userId || 'system';
+    const key = buildMediaObjectKey({
+      ownerType,
+      ownerId,
+      purpose: MediaAssetPurpose.GENERATED_IMAGE,
+      extension: ext,
+    });
 
     const uploadResult = await storageService.uploadFile({
       body: buffer,
@@ -149,19 +169,43 @@ export class GeminiProvider implements AIProvider {
       contentType: mimeType,
     });
 
-    if (!uploadResult || !uploadResult.url) {
+    if (!uploadResult || !uploadResult.key) {
       throw new Error('upload image failed');
+    }
+
+    let imageUrl = uploadResult.url || '';
+
+    if (userId) {
+      const checksumSha256 = createHash('sha256').update(buffer).digest('hex');
+      const asset = await createMediaAsset({
+        id: getUuid(),
+        ownerType: MediaAssetOwnerType.USER,
+        ownerId: userId,
+        purpose: MediaAssetPurpose.GENERATED_IMAGE,
+        mediaType: inferMediaTypeFromMime(mimeType),
+        provider: this.name,
+        bucket: uploadResult.bucket || null,
+        objectKey: uploadResult.key,
+        mimeType,
+        sizeBytes: buffer.length,
+        checksumSha256,
+        status: MediaAssetStatus.ACTIVE,
+        source: MediaAssetSource.AI_MIRROR,
+        linkedTaskId: null,
+        expiresAt: null,
+      });
+      imageUrl = toAssetRef(asset.id);
     }
 
     // replace base64 data with url to save db space
     if (imagePart.inlineData) {
-      imagePart.inlineData.data = uploadResult.url;
+      imagePart.inlineData.data = imageUrl;
       // Ensure the original data object is updated
       const partIndex = parts.findIndex((p: any) => p === imagePart);
       if (partIndex !== -1 && data.candidates?.[0]?.content?.parts) {
         // unset image base64 data
         data.candidates[0].content.parts[partIndex].inlineData.data =
-          uploadResult.url;
+          imageUrl;
         // unset thoughtSignature
         data.candidates[0].content.parts[partIndex].thoughtSignature = '';
       }
@@ -171,7 +215,7 @@ export class GeminiProvider implements AIProvider {
       id: nanoid(),
       createTime: new Date(),
       imageType: mimeType,
-      imageUrl: uploadResult.url,
+      imageUrl,
     };
 
     return {

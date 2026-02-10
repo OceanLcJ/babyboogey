@@ -53,6 +53,7 @@ export const session = table(
     token: text('token').notNull().unique(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')
+      .defaultNow()
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
     ipAddress: text('ip_address'),
@@ -511,6 +512,38 @@ export const aiTask = table(
     // Composite: Query user's AI tasks by media type and provider
     // Can also be used for: WHERE mediaType = ? AND provider = ? (left-prefix)
     index('idx_ai_task_media_type_status').on(table.mediaType, table.status),
+  ]
+);
+
+export const mediaAsset = table(
+  'media_asset',
+  {
+    id: text('id').primaryKey(),
+    ownerType: text('owner_type').notNull(), // user | guest | system
+    ownerId: text('owner_id').notNull(),
+    purpose: text('purpose').notNull(),
+    mediaType: text('media_type').notNull(),
+    provider: text('provider'),
+    bucket: text('bucket'),
+    objectKey: text('object_key').notNull(),
+    mimeType: text('mime_type').notNull(),
+    sizeBytes: integer('size_bytes'),
+    checksumSha256: text('checksum_sha256'),
+    status: text('status').notNull(), // active | temp | deleted
+    source: text('source').notNull(), // upload | ai_mirror | migration
+    linkedTaskId: text('linked_task_id'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    expiresAt: timestamp('expires_at'),
+  },
+  (table) => [
+    index('idx_media_asset_owner').on(table.ownerType, table.ownerId),
+    index('idx_media_asset_purpose_created').on(table.purpose, table.createdAt),
+    index('idx_media_asset_status_expires').on(table.status, table.expiresAt),
+    index('idx_media_asset_checksum').on(table.checksumSha256),
+    index('idx_media_asset_linked_task').on(table.linkedTaskId),
   ]
 );
 

@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import { useAppContext } from '@/shared/contexts/app';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 import { User as UserType } from '@/shared/models/user';
 import { NavItem, UserNav } from '@/shared/types/blocks/common';
@@ -67,6 +68,7 @@ export function SignUser({
   const { data: session, isPending } = useSession();
   const sessionUser = extractSessionUser(session);
   const displayUser = (user as UserType | null) ?? sessionUser;
+  const avatarSrc = resolveMediaValueToApiPath(displayUser?.image || '');
 
   // In dev (React StrictMode) effects can run twice; ensure we don't spam getSession().
   const didFallbackSyncRef = useRef(false);
@@ -150,10 +152,7 @@ export function SignUser({
               className="relative h-10 w-10 rounded-full p-0"
             >
               <Avatar>
-                <AvatarImage
-                  src={displayUser.image || ''}
-                  alt={displayUser.name || ''}
-                />
+                <AvatarImage src={avatarSrc} alt={displayUser.name || ''} />
                 <AvatarFallback>{displayUser.name.charAt(0)}</AvatarFallback>
               </Avatar>
             </Button>

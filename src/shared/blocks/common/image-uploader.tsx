@@ -6,14 +6,26 @@ import { ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/shared/components/ui/button';
+import { getAssetIdFromRef } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
 export type UploadStatus = 'idle' | 'uploading' | 'uploaded' | 'error';
+export type MediaUploadPurpose =
+  | 'avatar'
+  | 'reference_image'
+  | 'post_image'
+  | 'post_author_image'
+  | 'generated_image'
+  | 'generated_video'
+  | 'generated_audio';
+export type MediaUploadSource = 'upload' | 'ai_mirror' | 'migration';
 
 export interface ImageUploaderValue {
   id: string;
   preview: string;
   url?: string;
+  assetId?: string;
+  assetRef?: string;
   status: UploadStatus;
   size?: number;
 }
@@ -26,6 +38,8 @@ interface ImageUploaderProps {
   emptyHint?: string;
   className?: string;
   defaultPreviews?: string[];
+  purpose?: MediaUploadPurpose;
+  source?: MediaUploadSource;
   onChange?: (items: ImageUploaderValue[]) => void;
 }
 
@@ -43,11 +57,21 @@ const formatBytes = (bytes?: number) => {
   return `${mb.toFixed(2)} MB`;
 };
 
-const uploadImageFile = async (file: File) => {
+const uploadImageFile = async ({
+  file,
+  purpose,
+  source,
+}: {
+  file: File;
+  purpose: MediaUploadPurpose;
+  source: MediaUploadSource;
+}) => {
   const formData = new FormData();
   formData.append('files', file);
+  formData.append('purpose', purpose);
+  formData.append('source', source);
 
-  const response = await fetch('/api/storage/upload-image', {
+  const response = await fetch('/api/storage/upload-media', {
     method: 'POST',
     body: formData,
   });
@@ -57,11 +81,23 @@ const uploadImageFile = async (file: File) => {
   }
 
   const result = await response.json();
-  if (result.code !== 0 || !result.data?.urls?.length) {
+  if (result.code !== 0 || !result.data?.assetRef || !result.data?.assetId) {
     throw new Error(result.message || 'Upload failed');
   }
 
-  return result.data.urls[0] as string;
+  return {
+    assetId: result.data.assetId as string,
+    assetRef: result.data.assetRef as string,
+  };
+};
+
+const toPreviewUrl = (value?: string) => {
+  if (!value) return '';
+  const assetId = getAssetIdFromRef(value);
+  if (assetId) {
+    return `/api/storage/assets/${encodeURIComponent(assetId)}`;
+  }
+  return value;
 };
 
 export function ImageUploader({
@@ -72,6 +108,8 @@ export function ImageUploader({
   emptyHint,
   className,
   defaultPreviews,
+  purpose = 'reference_image',
+  source = 'upload',
   onChange,
 }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -85,10 +123,12 @@ export function ImageUploader({
   // 使用 defaultPreviews 初始化 items，只在组件挂载时执行一次
   const [items, setItems] = useState<UploadItem[]>(() => {
     if (defaultPreviews?.length) {
-      return defaultPreviews.map((url, index) => ({
-        id: `preset-${url}-${index}`,
-        preview: url,
-        url,
+      return defaultPreviews.map((value, index) => ({
+        id: `preset-${value}-${index}`,
+        preview: toPreviewUrl(value),
+        url: value,
+        assetRef: getAssetIdFromRef(value) ? value : undefined,
+        assetId: getAssetIdFromRef(value) || undefined,
         status: 'uploaded' as UploadStatus,
       }));
     }
@@ -131,10 +171,12 @@ export function ImageUploader({
 
       // 只有当不一致时才返回新的 items
       if (!isSame) {
-        return defaultUrls.map((url, index) => ({
-          id: `preset-${url}-${index}`,
-          preview: url,
-          url,
+        return defaultUrls.map((value, index) => ({
+          id: `preset-${value}-${index}`,
+          preview: toPreviewUrl(value),
+          url: value,
+          assetRef: getAssetIdFromRef(value) ? value : undefined,
+          assetId: getAssetIdFromRef(value) || undefined,
           status: 'uploaded' as UploadStatus,
         }));
       }
@@ -165,10 +207,12 @@ export function ImageUploader({
     isInternalChangeRef.current = true;
 
     onChangeRef.current?.(
-      items.map(({ id, preview, url, status, size }) => ({
+      items.map(({ id, preview, url, assetId, assetRef, status, size }) => ({
         id,
         preview,
         url,
+        assetId,
+        assetRef,
         status,
         size,
       }))
@@ -198,8 +242,9 @@ export function ImageUploader({
         })
       );
 
-      uploadImageFile(file)
-        .then((url) => {
+      uploadImageFile({ file, purpose, source })
+        .then(({ assetId, assetRef }) => {
+          const previewUrl = `/api/storage/assets/${encodeURIComponent(assetId)}`;
           setItems((prev) =>
             prev.map((item) => {
               if (item.id !== id) return item;
@@ -209,8 +254,10 @@ export function ImageUploader({
               }
               return {
                 ...item,
-                preview: url,
-                url,
+                preview: previewUrl,
+                url: assetRef,
+                assetId,
+                assetRef,
                 status: 'uploaded' as UploadStatus,
                 file: undefined,
               };
@@ -321,7 +368,12 @@ export function ImageUploader({
     Promise.all(
       newItems.map(async (item) => {
         try {
-          const url = await uploadImageFile(item.file as File);
+          const { assetId, assetRef } = await uploadImageFile({
+            file: item.file as File,
+            purpose,
+            source,
+          });
+          const previewUrl = `/api/storage/assets/${encodeURIComponent(assetId)}`;
           setItems((prev) => {
             const next = prev.map((current) => {
               if (current.id === item.id) {
@@ -334,8 +386,10 @@ export function ImageUploader({
                 }
                 return {
                   ...current,
-                  preview: url, // Replace preview with uploaded URL
-                  url,
+                  preview: previewUrl,
+                  url: assetRef,
+                  assetId,
+                  assetRef,
                   status: 'uploaded' as UploadStatus,
                   file: undefined,
                 };

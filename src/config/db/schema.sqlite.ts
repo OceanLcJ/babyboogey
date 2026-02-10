@@ -553,6 +553,41 @@ export const aiTask = table(
   ]
 );
 
+export const mediaAsset = table(
+  'media_asset',
+  {
+    id: text('id').primaryKey(),
+    ownerType: text('owner_type').notNull(), // user | guest | system
+    ownerId: text('owner_id').notNull(),
+    purpose: text('purpose').notNull(),
+    mediaType: text('media_type').notNull(),
+    provider: text('provider'),
+    bucket: text('bucket'),
+    objectKey: text('object_key').notNull(),
+    mimeType: text('mime_type').notNull(),
+    sizeBytes: integer('size_bytes'),
+    checksumSha256: text('checksum_sha256'),
+    status: text('status').notNull(), // active | temp | deleted
+    source: text('source').notNull(), // upload | ai_mirror | migration
+    linkedTaskId: text('linked_task_id'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    expiresAt: integer('expires_at', { mode: 'timestamp_ms' }),
+  },
+  (table) => [
+    index('idx_media_asset_owner').on(table.ownerType, table.ownerId),
+    index('idx_media_asset_purpose_created').on(table.purpose, table.createdAt),
+    index('idx_media_asset_status_expires').on(table.status, table.expiresAt),
+    index('idx_media_asset_checksum').on(table.checksumSha256),
+    index('idx_media_asset_linked_task').on(table.linkedTaskId),
+  ]
+);
+
 export const chat = table(
   'chat',
   {

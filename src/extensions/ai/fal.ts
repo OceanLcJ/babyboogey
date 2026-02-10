@@ -115,10 +115,12 @@ export class FalProvider implements AIProvider {
     taskId,
     model,
     mediaType,
+    userId,
   }: {
     taskId: string;
     model?: string;
     mediaType?: AIMediaType;
+    userId?: string;
   }): Promise<AITaskResult> {
     // extract first two parts of model name for query url
     // e.g. fal-ai/bytedance/seedream/v4/edit -> fal-ai/bytedance
@@ -202,7 +204,11 @@ export class FalProvider implements AIProvider {
     }
 
     // save files to custom storage
-    if (taskStatus === AITaskStatus.SUCCESS && this.configs.customStorage) {
+    const shouldPersistMedia =
+      taskStatus === AITaskStatus.SUCCESS &&
+      (this.configs.customStorage || Boolean(userId));
+
+    if (shouldPersistMedia) {
       // save images
       if (images && images.length > 0) {
         const filesToSave: AIFile[] = [];
@@ -219,7 +225,11 @@ export class FalProvider implements AIProvider {
         });
 
         if (filesToSave.length > 0) {
-          const uploadedFiles = await saveFiles(filesToSave);
+          const uploadedFiles = await saveFiles(filesToSave, {
+            userId,
+            provider: this.name,
+            linkedTaskId: taskId,
+          });
           if (uploadedFiles) {
             uploadedFiles.forEach((file: AIFile) => {
               if (file && file.url && images && file.index !== undefined) {
@@ -249,7 +259,11 @@ export class FalProvider implements AIProvider {
         });
 
         if (filesToSave.length > 0) {
-          const uploadedFiles = await saveFiles(filesToSave);
+          const uploadedFiles = await saveFiles(filesToSave, {
+            userId,
+            provider: this.name,
+            linkedTaskId: taskId,
+          });
           if (uploadedFiles) {
             uploadedFiles.forEach((file: AIFile) => {
               if (file && file.url && videos && file.index !== undefined) {

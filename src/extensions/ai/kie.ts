@@ -334,7 +334,13 @@ export class KieProvider implements AIProvider {
     throw new Error(`mediaType not supported: ${params.mediaType}`);
   }
 
-  async queryImage({ taskId }: { taskId: string }): Promise<AITaskResult> {
+  async queryImage({
+    taskId,
+    userId,
+  }: {
+    taskId: string;
+    userId?: string;
+  }): Promise<AITaskResult> {
     const apiUrl = `${this.baseUrl}/jobs/recordInfo?taskId=${taskId}`;
     const headers = {
       'Content-Type': 'application/json',
@@ -380,7 +386,7 @@ export class KieProvider implements AIProvider {
       taskStatus === AITaskStatus.SUCCESS &&
       images &&
       images.length > 0 &&
-      this.configs.customStorage
+      (this.configs.customStorage || Boolean(userId))
     ) {
       const filesToSave: AIFile[] = [];
       images.forEach((image, index) => {
@@ -396,10 +402,14 @@ export class KieProvider implements AIProvider {
       });
 
       if (filesToSave.length > 0) {
-        const uploadedFiles = await saveFiles(filesToSave);
-        if (uploadedFiles) {
-          uploadedFiles.forEach((file: AIFile) => {
-            if (file && file.url && images && file.index !== undefined) {
+      const uploadedFiles = await saveFiles(filesToSave, {
+        userId,
+        provider: this.name,
+        linkedTaskId: taskId,
+      });
+      if (uploadedFiles) {
+        uploadedFiles.forEach((file: AIFile) => {
+          if (file && file.url && images && file.index !== undefined) {
               const image = images[file.index];
               if (image) {
                 image.imageUrl = file.url;
@@ -424,7 +434,13 @@ export class KieProvider implements AIProvider {
     };
   }
 
-  async queryVideo({ taskId }: { taskId: string }): Promise<AITaskResult> {
+  async queryVideo({
+    taskId,
+    userId,
+  }: {
+    taskId: string;
+    userId?: string;
+  }): Promise<AITaskResult> {
     const apiUrl = `${this.baseUrl}/jobs/recordInfo?taskId=${taskId}`;
     const headers = {
       'Content-Type': 'application/json',
@@ -470,7 +486,7 @@ export class KieProvider implements AIProvider {
       taskStatus === AITaskStatus.SUCCESS &&
       videos &&
       videos.length > 0 &&
-      this.configs.customStorage
+      (this.configs.customStorage || Boolean(userId))
     ) {
       const filesToSave: AIFile[] = [];
       videos.forEach((video, index) => {
@@ -486,10 +502,14 @@ export class KieProvider implements AIProvider {
       });
 
       if (filesToSave.length > 0) {
-        const uploadedFiles = await saveFiles(filesToSave);
-        if (uploadedFiles) {
-          uploadedFiles.forEach((file: AIFile) => {
-            if (file && file.url && videos && file.index !== undefined) {
+      const uploadedFiles = await saveFiles(filesToSave, {
+        userId,
+        provider: this.name,
+        linkedTaskId: taskId,
+      });
+      if (uploadedFiles) {
+        uploadedFiles.forEach((file: AIFile) => {
+          if (file && file.url && videos && file.index !== undefined) {
               const video = videos[file.index];
               if (video) {
                 video.videoUrl = file.url;
@@ -518,16 +538,18 @@ export class KieProvider implements AIProvider {
   async query({
     taskId,
     mediaType,
+    userId,
   }: {
     taskId: string;
     mediaType?: AIMediaType;
+    userId?: string;
   }): Promise<AITaskResult> {
     if (mediaType === AIMediaType.IMAGE) {
-      return this.queryImage({ taskId });
+      return this.queryImage({ taskId, userId });
     }
 
     if (mediaType === AIMediaType.VIDEO) {
-      return this.queryVideo({ taskId });
+      return this.queryVideo({ taskId, userId });
     }
 
     const apiUrl = `${this.baseUrl}/generate/record-info?taskId=${taskId}`;
@@ -572,12 +594,13 @@ export class KieProvider implements AIProvider {
     const taskStatus = this.mapStatus(data.status);
 
     // save files if custom storage is enabled
-    if (
+    const shouldPersistMedia =
       taskStatus === AITaskStatus.SUCCESS &&
       songs &&
       songs.length > 0 &&
-      this.configs.customStorage
-    ) {
+      (this.configs.customStorage || Boolean(userId));
+
+    if (shouldPersistMedia) {
       const audioFilesToSave: AIFile[] = [];
       const imageFilesToSave: AIFile[] = [];
 
@@ -603,7 +626,11 @@ export class KieProvider implements AIProvider {
       });
 
       if (audioFilesToSave.length > 0) {
-        const uploadedFiles = await saveFiles(audioFilesToSave);
+        const uploadedFiles = await saveFiles(audioFilesToSave, {
+          userId,
+          provider: this.name,
+          linkedTaskId: taskId,
+        });
         if (uploadedFiles) {
           uploadedFiles.forEach((file: AIFile) => {
             if (file && file.url && songs && file.index !== undefined) {
@@ -615,7 +642,11 @@ export class KieProvider implements AIProvider {
       }
 
       if (imageFilesToSave.length > 0) {
-        const uploadedFiles = await saveFiles(imageFilesToSave);
+        const uploadedFiles = await saveFiles(imageFilesToSave, {
+          userId,
+          provider: this.name,
+          linkedTaskId: taskId,
+        });
         if (uploadedFiles) {
           uploadedFiles.forEach((file: AIFile) => {
             if (file && file.url && songs && file.index !== undefined) {

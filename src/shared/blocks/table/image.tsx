@@ -1,4 +1,5 @@
 import { LazyImage } from '@/shared/blocks/common';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
 export function Image({
@@ -22,10 +23,11 @@ export function Image({
 
   const width = metadata?.width || 40;
   const height = metadata?.height || 40;
+  const imageSrc = resolveMediaValueToApiPath(value);
 
   return (
     <LazyImage
-      src={value}
+      src={imageSrc}
       alt={value}
       width={width}
       height={height}

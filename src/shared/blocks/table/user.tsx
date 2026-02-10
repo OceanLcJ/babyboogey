@@ -6,6 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/shared/components/ui/avatar';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 import { User as UserType } from '@/shared/models/user';
 
@@ -35,7 +36,10 @@ export function User({
       className={cn('flex items-center gap-2', className)}
     >
       <Avatar className={className}>
-        <AvatarImage src={value.image || ''} alt={value.name} />
+        <AvatarImage
+          src={resolveMediaValueToApiPath(value.image || '')}
+          alt={value.name}
+        />
         <AvatarFallback>{value.name?.charAt(0) || 'U'}</AvatarFallback>
       </Avatar>
       <div className="flex flex-col">{value.name}</div>

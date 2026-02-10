@@ -22,6 +22,15 @@ export interface StorageDownloadUploadOptions {
 }
 
 /**
+ * Storage get object options interface
+ */
+export interface StorageGetObjectOptions {
+  key: string;
+  bucket?: string;
+  range?: string;
+}
+
+/**
  * Storage upload result interface
  */
 export interface StorageUploadResult {
@@ -58,6 +67,9 @@ export interface StorageProvider {
 
   // get public url for key (optional)
   getPublicUrl?: (options: { key: string; bucket?: string }) => string;
+
+  // get object (optional)
+  getObject?: (options: StorageGetObjectOptions) => Promise<Response>;
 
   // upload file
   uploadFile(options: StorageUploadOptions): Promise<StorageUploadResult>;
@@ -140,6 +152,17 @@ export class StorageManager {
     const provider = this.ensureDefaultProvider();
     if (!provider.getPublicUrl) return undefined;
     return provider.getPublicUrl(options);
+  }
+
+  // get object using default provider (if supported)
+  async getObject(options: StorageGetObjectOptions): Promise<Response> {
+    const provider = this.ensureDefaultProvider();
+    if (!provider.getObject) {
+      throw new Error(
+        `Storage provider '${provider.name}' does not support object reads`
+      );
+    }
+    return provider.getObject(options);
   }
 
   // download and upload using specific provider

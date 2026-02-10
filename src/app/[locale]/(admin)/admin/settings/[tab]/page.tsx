@@ -84,6 +84,7 @@ export default async function SettingsPage({
           options: setting.options,
           tip: setting.tip,
           value: setting.value,
+          metadata: setting.metadata,
           attributes: setting.attributes,
         })),
       passby: {

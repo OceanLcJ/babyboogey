@@ -30,6 +30,7 @@ import {
   useSidebar,
 } from '@/shared/components/ui/sidebar';
 import { useAppContext } from '@/shared/contexts/app';
+import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { User as UserType } from '@/shared/models/user';
 import { NavItem } from '@/shared/types/blocks/common';
 import { SidebarUser as SidebarUserType } from '@/shared/types/blocks/dashboard';
@@ -130,6 +131,8 @@ export function SidebarUser({ user }: { user: SidebarUserType }) {
   }
 
   if (authUser) {
+    const avatarSrc = resolveMediaValueToApiPath(authUser.image || '');
+
     return (
       <SidebarMenu className="gap-4 px-3">
         <SidebarMenuItem>
@@ -140,7 +143,7 @@ export function SidebarUser({ user }: { user: SidebarUserType }) {
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={authUser.image || ''} alt={authUser.name} />
+                  <AvatarImage src={avatarSrc} alt={authUser.name} />
                   <AvatarFallback className="rounded-lg">
                     {authUser.name?.charAt(0)}
                   </AvatarFallback>
@@ -165,10 +168,7 @@ export function SidebarUser({ user }: { user: SidebarUserType }) {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={authUser.image || ''}
-                      alt={authUser.name}
-                    />
+                    <AvatarImage src={avatarSrc} alt={authUser.name} />
                     <AvatarFallback className="rounded-lg">
                       {authUser.name?.charAt(0) || 'U'}
                     </AvatarFallback>

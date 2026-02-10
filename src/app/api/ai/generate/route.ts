@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers';
+
 import { envConfigs } from '@/config';
 import { AIMediaType } from '@/extensions/ai';
 import { getUuid } from '@/shared/lib/hash';
@@ -6,6 +8,11 @@ import { createAITask, NewAITask } from '@/shared/models/ai_task';
 import { getRemainingCredits } from '@/shared/models/credit';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
+import {
+  collectAssetIdsFromValue,
+  GUEST_UPLOAD_SESSION_COOKIE,
+  resolveAssetRefsWithSignedUrls,
+} from '@/shared/services/media-asset';
 
 export async function POST(request: Request) {
   try {
@@ -78,6 +85,25 @@ export async function POST(request: Request) {
     if (remainingCredits < costCredits) {
       throw new Error('insufficient credits');
     }
+    const cookieStore = await cookies();
+    const guestSessionId =
+      cookieStore.get(GUEST_UPLOAD_SESSION_COOKIE)?.value || null;
+
+    const resolvedOptions = options
+      ? await resolveAssetRefsWithSignedUrls({
+          value: options,
+          userId: user.id,
+          guestSessionId,
+          expiresInSeconds: 60 * 10,
+          absolute: true,
+        })
+      : options;
+    const unresolvedAssetIds = Array.from(
+      collectAssetIdsFromValue(resolvedOptions)
+    );
+    if (unresolvedAssetIds.length > 0) {
+      throw new Error('invalid or inaccessible media reference');
+    }
 
     const callbackUrl = `${envConfigs.app_url}/api/ai/notify/${provider}`;
 
@@ -86,7 +112,8 @@ export async function POST(request: Request) {
       model,
       prompt,
       callbackUrl,
-      options,
+      options: resolvedOptions,
+      userId: user.id,
     };
 
     // generate content
@@ -106,7 +133,7 @@ export async function POST(request: Request) {
       model,
       prompt,
       scene,
-      options: options ? JSON.stringify(options) : null,
+      options: resolvedOptions ? JSON.stringify(resolvedOptions) : null,
       status: result.taskStatus,
       costCredits,
       taskId: result.taskId,
@@ -115,7 +142,20 @@ export async function POST(request: Request) {
     };
     await createAITask(newAITask);
 
-    return respData(newAITask);
+    const responseTask = {
+      ...newAITask,
+      taskInfo: newAITask.taskInfo,
+    };
+
+    if (result.taskInfo) {
+      const signedTaskInfo = await resolveAssetRefsWithSignedUrls({
+        value: result.taskInfo,
+        userId: user.id,
+      });
+      responseTask.taskInfo = JSON.stringify(signedTaskInfo);
+    }
+
+    return respData(responseTask);
   } catch (e: any) {
     console.log('generate failed', e);
     return respErr(e.message);
