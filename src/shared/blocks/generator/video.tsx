@@ -77,9 +77,13 @@ interface DanceTemplate {
 const POLL_INTERVAL = 15000;
 const GENERATION_TIMEOUT = 600000;
 const MAX_PROMPT_LENGTH = 500;
+const MAX_IMAGE_ORIENTATION_SECONDS = 10;
 
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
+
+const VIDEO_PROVIDER = 'kie';
+const VIDEO_MODEL = 'kling-2.6/motion-control';
 
 const DANCE_TEMPLATE_PROMPTS: Record<string, string> = {
   'temp-05':
@@ -130,10 +134,6 @@ function parseTemplateDurationSeconds(duration: string): number | null {
     return null;
   }
   return minutes * 60 + seconds;
-}
-
-function clampVeoDurationSeconds(seconds: number): number {
-  return Math.min(10, Math.max(4, Math.round(seconds)));
 }
 
 const DANCE_TEMPLATES: DanceTemplate[] = [
@@ -387,7 +387,7 @@ export function VideoGenerator({
   const [prompt, setPrompt] = useState('');
   const [promptTouched, setPromptTouched] = useState(false);
   const [resolution, setResolution] = useState('720p');
-  const [orientation, setOrientation] = useState('image');
+  const [orientation, setOrientation] = useState('video');
   const [isPublic, setIsPublic] = useState(true);
 
   const [generatedVideos, setGeneratedVideos] = useState<GeneratedVideo[]>([]);
@@ -473,6 +473,8 @@ export function VideoGenerator({
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
   const currentCost =
     RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.credits ?? 60;
+  const selectedTemplateDurationSeconds =
+    parseTemplateDurationSeconds(selectedTemplate.duration) ?? 0;
 
   const taskStatusLabel = useMemo(() => {
     if (!taskStatus) {
@@ -516,6 +518,19 @@ export function VideoGenerator({
 
     setSelectedTemplate(template);
   };
+
+  useEffect(() => {
+    if (orientation !== 'image') {
+      return;
+    }
+    if (selectedTemplateDurationSeconds <= MAX_IMAGE_ORIENTATION_SECONDS) {
+      return;
+    }
+    setOrientation('video');
+    toast(
+      'This template is longer than 10 seconds, so orientation was switched to Video.'
+    );
+  }, [orientation, selectedTemplateDurationSeconds]);
 
   const handleFileSelect = async (file: File) => {
     if (!file.type?.startsWith('image/')) {
@@ -737,10 +752,15 @@ export function VideoGenerator({
       return;
     }
 
-    const durationFromTemplate = parseTemplateDurationSeconds(
-      selectedTemplate.duration
-    );
-    const duration = clampVeoDurationSeconds(durationFromTemplate ?? 8);
+    if (
+      orientation === 'image' &&
+      selectedTemplateDurationSeconds > MAX_IMAGE_ORIENTATION_SECONDS
+    ) {
+      toast.error(
+        'Image orientation supports reference videos up to 10 seconds. Please choose Video orientation.'
+      );
+      return;
+    }
 
     setIsGenerating(true);
     setProgress(15);
@@ -757,13 +777,15 @@ export function VideoGenerator({
         body: JSON.stringify({
           mediaType: AIMediaType.VIDEO,
           scene: 'image-to-video',
-          provider: 'replicate',
-          model: 'google/veo-3.1',
+          provider: VIDEO_PROVIDER,
+          model: VIDEO_MODEL,
           prompt: finalPrompt,
           options: {
             image_input: [uploadedImage.url],
+            video_input: [selectedTemplate.videoUrl],
+            character_orientation: orientation,
+            mode: resolution,
             resolution,
-            duration,
             negative_prompt: DEFAULT_NEGATIVE_PROMPT,
           },
         }),
@@ -792,8 +814,8 @@ export function VideoGenerator({
             videoUrls.map((url, index) => ({
               id: `${newTaskId}-${index}`,
               url,
-              provider: 'replicate',
-              model: 'google/veo-3.1',
+              provider: VIDEO_PROVIDER,
+              model: VIDEO_MODEL,
             }))
           );
           toast.success('Video generated successfully');

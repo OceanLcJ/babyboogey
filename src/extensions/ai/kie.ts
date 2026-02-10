@@ -211,23 +211,58 @@ export class KieProvider implements AIProvider {
       throw new Error('model is required');
     }
 
+    const isKlingMotionControl = params.model === 'kling-2.6/motion-control';
+    const options = params.options ?? {};
+
     // build request params
     let payload: any = {
       model: params.model,
       callBackUrl: params.callbackUrl,
-      input: {
+      input: {},
+    };
+
+    if (isKlingMotionControl) {
+      // Motion Control requires image + reference video inputs.
+      const inputUrls = Array.isArray(options.input_urls)
+        ? options.input_urls
+        : Array.isArray(options.image_input)
+          ? options.image_input
+          : [];
+      const videoUrls = Array.isArray(options.video_urls)
+        ? options.video_urls
+        : Array.isArray(options.video_input)
+          ? options.video_input
+          : [];
+
+      if (params.prompt) {
+        payload.input.prompt = params.prompt;
+      }
+      payload.input.input_urls = inputUrls;
+      payload.input.video_urls = videoUrls;
+      payload.input.character_orientation =
+        options.character_orientation === 'image' ? 'image' : 'video';
+      payload.input.mode =
+        options.mode === '1080p' || options.resolution === '1080p'
+          ? '1080p'
+          : '720p';
+
+      if (inputUrls.length === 0) {
+        throw new Error('input_urls is required');
+      }
+      if (videoUrls.length === 0) {
+        throw new Error('video_urls is required');
+      }
+    } else {
+      payload.input = {
         aspect_ratio: 'landscape',
         n_frames: '10',
         size: 'standard',
-      },
-    };
+      };
 
-    if (params.prompt) {
-      payload.input.prompt = params.prompt;
-    }
+      if (params.prompt) {
+        payload.input.prompt = params.prompt;
+      }
 
-    if (params.options) {
-      const options = params.options;
       // text-to-video: use prompt
       // image-to-video: use image_input
       // video-to-video: use video_input
