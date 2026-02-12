@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "Seedance 2.0 宝宝跳舞 — BabyBoogey 由字节跳动 AI 驱动",
-    "description": "BabyBoogey 整合了 Seedance 2.0 — 字节跳动最先进的舞蹈 AI — 并结合 50 多个宝宝专属模板，为您打造终极宝宝跳舞体验。"
+    "title": "Seedance 2.0 在线免费生成 — BabyBoogey (由字节跳动 AI 驱动)",
+    "description": "Seedance 2.0 在线版无需下载！BabyBoogey 接入字节跳动官方 Seedance 2.0 模型，免费提供 AI 宝宝跳舞视频生成服务。一键上传，即刻生成。"
   },
   "page": {
-    "title": "Seedance 2.0 宝宝跳舞 — BabyBoogey 由字节跳动 AI 驱动",
+    "title": "Seedance 2.0 在线免费生成 — BabyBoogey",
     "show_sections": [
       "hero",
       "introduce",
@@ -16,70 +16,71 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "Seedance 2.0 宝宝跳舞 — BabyBoogey 由字节跳动 AI 驱动",
-        "description": "BabyBoogey 整合了 Seedance 2.0 — 字节跳动最先进的舞蹈 AI — 并结合 50 多个宝宝专属模板，为您打造终极宝宝跳舞体验。无需编写提示词，即可获得行业领先的舞蹈动作、2K 画质和音频同步效果。只需上传宝宝照片、选择模板，让 Seedance 2.0 为您完成一切。",
+        "title": "Seedance 2.0 免费在线版 — 一键生成宝宝跳舞视频",
+        "highlight_text": "Seedance 2.0",
+        "description": "无需下载 App，无需配置复杂环境。BabyBoogey 直接接入字节跳动 Seedance 2.0 官方模型接口。结合 50+ 宝宝专属模板，为您打造最顶级的 AI 舞蹈生成体验。上传照片，立等可取。",
         "buttons": [
           {
-            "title": "免费体验 Seedance 2.0 宝宝跳舞",
+            "title": "免费在线试用 Seedance 2.0",
             "url": "/ai-video-generator",
             "icon": "Zap"
           }
         ],
         "image": {
-          "src": "https://picsum.photos/seed/seedance-baby-dance-hero/1200/800",
-          "alt": "BabyBoogey 由 Seedance 2.0 驱动 — AI 宝宝跳舞视频制作",
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
+          "alt": "Seedance 2.0 在线生成器 - BabyBoogey 界面预览",
           "width": 1200,
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/seedance-baby-dance-bg/1600/900",
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
           "alt": "背景"
         }
       },
       "introduce": {
         "block": "features-list",
         "id": "introduce",
-        "title": "Seedance 2.0 为 BabyBoogey 带来了什么",
-        "description": "Seedance 2.0 是字节跳动最先进的 AI 视频生成模型 — 现已成为 BabyBoogey 的核心引擎。以下是这一强大整合对您的 Seedance 2.0 宝宝跳舞视频意味着什么。",
+        "title": "为什么选择在线版 Seedance 2.0？",
+        "description": "相比于寻找下载资源或配置本地环境，使用 BabyBoogey 的 Seedance 2.0 在线版是目前体验这款字节跳动黑科技最快、最稳的方式。",
         "image": {
-          "src": "https://picsum.photos/seed/seedance-baby-dance-introduce/1200/800",
-          "alt": "Seedance 2.0 整合到 BabyBoogey 平台"
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/seedance-ai-processing-photo-to-wireframe.webp",
+          "alt": "Seedance 2.0 在线版优势对比"
         },
         "items": [
           {
-            "title": "Seedance 2.0 — 全球最强舞蹈 AI",
-            "description": "Seedance 2.0 由字节跳动（TikTok/抖音母公司）开发，被公认为全球领先的舞蹈和动作生成 AI 模型。它采用尖端的动作迁移技术，能够生成流畅逼真、堪比专业编舞的舞蹈动作。BabyBoogey 将这一世界顶级的 Seedance 宝宝跳舞技术直接带到您的指尖 — 无需任何技术背景。",
-            "icon": "Sparkles",
+            "title": "免下载，免安装",
+            "description": "Seedance 2.0 模型庞大且对硬件要求极高。BabyBoogey 在云端部署了完整的 Seedance 2.0 引擎，您无需下载任何软件，打开网页即可使用，不占手机/电脑内存。",
+            "icon": "Cloud",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-0/800/600",
-              "alt": "字节跳动 Seedance 2.0 — 全球最强舞蹈 AI 驱动 BabyBoogey"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/cloud-server-to-mobile-web-app.webp",
+              "alt": "云端运行 Seedance 2.0，无需本地安装"
             }
           },
           {
-            "title": "现已整合到 BabyBoogey",
-            "description": "您不再需要在复杂的 AI 平台上摸索或编写详细的提示词来使用 Seedance 2.0 的强大功能。BabyBoogey 将 Seedance 2.0 直接整合到一个简洁、家长友好的界面中。获得字节跳动 BabyBoogey Seedance 整合的完整品质 — 没有任何复杂操作。只需上传照片、选择模板，我们的平台会在后台处理所有技术细节。",
-            "icon": "Layers",
-            "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-1/800/600",
-              "alt": "Seedance 2.0 无缝整合到 BabyBoogey"
-            }
-          },
-          {
-            "title": "宝宝专属优化工作流",
-            "description": "Seedance 2.0 提供强大的原始 AI 能力，而 BabyBoogey 将其包装在专为宝宝跳舞视频设计的工作流中。我们精心打造了 50 多个专业模板，代您向 Seedance 2.0 发送完美优化的提示词和配置参数。每个模板都考虑了宝宝的身体比例、适龄的舞蹈动作和可爱的舞蹈风格 — 您只需上传和选择，Seedance 就能每次都交出完美的成果。",
-            "icon": "Baby",
-            "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-2/800/600",
-              "alt": "由 Seedance 2.0 驱动的宝宝专属优化模板"
-            }
-          },
-          {
-            "title": "2K 画质舞蹈视频",
-            "description": "依托 Seedance 2.0 的高分辨率能力，BabyBoogey 生成的每一个视频都拥有惊艳的 2K 画质。Seedance 先进的渲染引擎确保每一个细节都清晰呈现 — 从宝宝的面部表情到衣服的自然摆动。您将获得专业级的 Seedance 2.0 宝宝跳舞视频品质，可直接分享到任何平台，无论是 Instagram 还是家庭群聊。",
+            "title": "官方同款画质",
+            "description": "担心在线版画质缩水？不存在的。我们直接调用 Seedance 2.0 核心接口，生成的视频与官方演示完全一致。支持 2K 超清分辨率输出，发抖音/TikTok 清晰度满分。",
             "icon": "Monitor",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-3/800/600",
-              "alt": "由 Seedance 2.0 驱动的 2K 画质宝宝跳舞视频"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/2k-video-enhancement-before-after.webp",
+              "alt": "2K 超清画质，与官方 Seedance 2.0 一致"
+            }
+          },
+          {
+            "title": "中文界面，操作简单",
+            "description": "原版 Seedance 因为主要面向开发者或海外用户，操作门槛较高。BabyBoogey 进行了全中文汉化与界面优化，专门针对中国家长使用习惯设计，零门槛上手。",
+            "icon": "UserCheck",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/one-click-generate-on-laptop-ui.webp",
+              "alt": "全中文界面，专为家长优化"
+            }
+          },
+          {
+            "title": "无需魔法，国内直连",
+            "description": "BabyBoogey 优化了网络线路，在国内也能流畅访问并使用 Seedance 2.0 的全部功能，生成速度快，连接稳定。",
+            "icon": "Wifi",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/fast-generation-lightning-play-icon.webp",
+              "alt": "国内高速直连 Seedance 服务"
             }
           }
         ],
@@ -88,34 +89,34 @@
       "benefits": {
         "block": "features-list",
         "id": "benefits",
-        "title": "为什么 Seedance 2.0 + BabyBoogey 是最佳组合",
-        "description": "Seedance 2.0 行业领先的舞蹈 AI 与 BabyBoogey 的宝宝专属模板强强联合，打造终极 Seedance 宝宝跳舞体验。以下是这一组合能交出其他工具无法匹敌的成果的原因。",
+        "title": "Seedance 2.0 + BabyBoogey 核心功能",
+        "description": "结合了字节跳动的顶尖 AI 与 BabyBoogey 的易用性，这是目前市面上最强的宝宝跳舞视频解决方案。",
         "items": [
           {
-            "title": "行业领先的舞蹈动作",
-            "description": "Seedance 2.0 的动作技术让 BabyBoogey 的宝宝跳舞视频看起来无比自然。字节跳动专门为舞蹈打造了 Seedance — 它对重心转移、节奏韵律、身体流动和物理规律的理解远超其他 AI 模型。当您在 BabyBoogey 上创建视频时，您获得的正是登顶 Video Arena 排行榜的同款 BabyBoogey Seedance 动作品质，专门应用于您宝宝的跳舞视频。",
-            "icon": "Activity",
+            "title": "全球第一的舞蹈 AI",
+            "description": "Seedance 2.0 在 Video Arena 评分中长期霸榜，动作流畅度吊打 RunWay 和 Pika。特别是在处理舞蹈这种大幅度肢体动作时，Seedance 2.0 是目前唯一的“不崩”选择。",
+            "icon": "Trophy",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-10/800/600",
-              "alt": "BabyBoogey 中行业领先的 Seedance 舞蹈动作"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/ai-skeleton-joint-tracking-baby-dance.webp",
+              "alt": "Video Arena 排名第一的 AI 模型"
             }
           },
           {
-            "title": "无需编写提示词",
-            "description": "Seedance 2.0 功能强大，但直接使用需要编写详细的提示词 — 描述拍摄角度、动作细节、灯光效果、服装物理等等。BabyBoogey 为您处理了这一切。我们的模板包含由专家精心编写的提示词，在后台自动发送给 Seedance，您无需输入任何文字。只需上传宝宝照片、选择舞蹈风格，让 BabyBoogey + Seedance 2.0 为您完成剩下的工作。",
-            "icon": "PenOff",
+            "title": "完全免费试用",
+            "description": "为了让更多人体验到 Seedance 2.0 的强大，BabyBoogey 提供免费试用额度。每天都有机会免费生成视频，无需绑定信用卡，注册即用。",
+            "icon": "Gift",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-11/800/600",
-              "alt": "无需编写提示词 — BabyBoogey 代您处理 Seedance 提示词"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
+              "alt": "注册即可免费试用 Seedance 2.0"
             }
           },
           {
-            "title": "音频同步宝宝跳舞",
-            "description": "音频同步舞蹈生成是 Seedance 2.0 的标志性能力之一 — BabyBoogey 充分利用了这一优势。当您选择带有音乐的模板时，Seedance 的音频同步功能确保宝宝的每一个舞蹈动作都精准踩点。每一次点头、挥手和身体弹跳都完美契合节拍，创造出宝宝仿佛真的在随着音乐翩翩起舞的 Seedance 宝宝跳舞视频。",
+            "title": "音乐卡点自动同步",
+            "description": "Seedance 2.0 独家的 Audio-Driven（音频驱动）技术，让宝宝的舞步能自动卡上音乐节拍。无论是科目三还是恐龙抗狼，都能完美踩点。",
             "icon": "Music",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-baby-dance-item-12/800/600",
-              "alt": "由 Seedance 2.0 驱动的音频同步宝宝跳舞"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/realistic-fabric-simulation-closeup.webp",
+              "alt": "AI 自动识别音乐节拍"
             }
           }
         ]
@@ -123,86 +124,86 @@
       "features": {
         "block": "features-accordion",
         "id": "features",
-        "title": "深度解析：BabyBoogey 如何整合 Seedance 2.0",
-        "description": "想了解 BabyBoogey 如何在底层运用 Seedance 2.0？以下是 BabyBoogey Seedance 整合背后的技术详解，以及它为何能产出市面上最好的宝宝跳舞视频。",
+        "title": "深度测评：Seedance 2.0 强在哪里？",
+        "description": "为什么全网都在找 Seedance 2.0？作为字节跳动的大杀器，它在三个维度上实现了对传统 AI 视频工具的降维打击。",
         "items": [
           {
-            "title": "什么是 Seedance 2.0？",
-            "description": "Seedance 2.0 是字节跳动最先进的 AI 舞蹈和视频生成模型。它凭借生成逼真流畅、堪比专业编舞的舞蹈动作，在 Video Arena 排行榜上位列第一。该模型擅长动作迁移 — 将参考图片转化为具有自然、符合物理规律的舞蹈动作的动画。它支持最高 2K 分辨率、多镜头序列和音频同步。BabyBoogey 选择整合 Seedance 2.0，是因为没有其他 AI 模型能在舞蹈品质上与之媲美 — 而舞蹈品质正是宝宝跳舞视频的核心。",
-            "icon": "Cpu",
+            "title": "肢体一致性 (Consistency)",
+            "description": "大多数 AI 生成跳舞视频时，人物的手脚容易变形或消失。Seedance 2.0 采用了最新的骨骼绑定技术，能够完美锁定宝宝的身体结构，无论动作多大，手脚始终保持自然，不会出现“恐怖谷”效应。",
+            "icon": "Activity",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-deep-dive-1/800/600",
-              "alt": "什么是 Seedance 2.0 — 字节跳动排名第一的 AI 舞蹈模型"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/ai-skeleton-joint-tracking-baby-dance.webp",
+              "alt": "完美保持肢体结构，拒绝 AI 变形"
             }
           },
           {
-            "title": "BabyBoogey 如何使用 Seedance 2.0",
-            "description": "当您在 BabyBoogey 上创建视频时，背后发生的事情是这样的：您上传宝宝照片并选择一个模板。BabyBoogey 随后向 Seedance 2.0 发送一个由我们的 AI 专家精心编写的优化提示词（专为宝宝内容调优），以及精细调校的配置参数。模型处理您的请求并生成一段高质量的跳舞视频。BabyBoogey 再进行最终的后期处理（画幅调整、水印等），将成品视频交付给您。您获得完整的 Seedance 2.0 品质，无需接触任何提示词或设置。",
-            "icon": "Workflow",
+            "title": "物理模拟 (Physics)",
+            "description": "Seedance 2.0 懂物理！宝宝裙子的摆动、头发的飘动，都能遵循真实的物理重力规则。这让生成的视频看起来不像是一个“动画片”，而像是真实拍摄的实拍视频。",
+            "icon": "Wind",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-deep-dive-2/800/600",
-              "alt": "BabyBoogey 如何向 Seedance 2.0 发送优化提示词"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/realistic-fabric-simulation-closeup.webp",
+              "alt": "真实的物理模拟引擎"
             }
           },
           {
-            "title": "Seedance 2.0 的舞蹈专精",
-            "description": "与通用视频 AI 模型不同，Seedance 2.0 从底层就是为舞蹈动作而生的。字节跳动用海量的真实舞蹈表演数据对其进行训练，使其对节奏韵律、身体力学和编舞流畅性有着无与伦比的理解。这种专精化正是 BabyBoogey 选择 Seedance 作为 AI 核心引擎的原因 — 要让宝宝跳舞，就应该选最懂舞蹈的模型。最终呈现的 Seedance 宝宝跳舞视频中，每一个动作都自然、欢快且节奏精准。",
-            "icon": "Star",
+            "title": "表情生动 (Expression)",
+            "description": "不仅仅是跳舞，Seedance 2.0 还能让宝宝的表情动起来。它会根据舞蹈的氛围（开心、搞怪、酷帅）自动匹配相应的微表情，让视频充满感染力。",
+            "icon": "Smile",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-deep-dive-3/800/600",
-              "alt": "Seedance 2.0 的舞蹈专精应用于宝宝视频"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/baby-face-expressions-grid-3d.webp",
+              "alt": "生动的面部微表情生成"
             }
           },
           {
-            "title": "一键使用专业级 AI",
-            "description": "通常，使用像 Seedance 2.0 这样的模型需要 API 密钥、开发者账号、提示词工程知识和技术配置。BabyBoogey 将这些全部省去。我们的平台让您一键获得与互联网上最火舞蹈视频背后相同的专业级 AI。无需 API 密钥，无需开发者设置，无需编写提示词 — 只需 BabyBoogey 的简洁界面，背后是 Seedance 2.0 的全部实力。这是体验全球最强舞蹈 AI 为您宝宝照片赋予生命的最简单方式。",
-            "icon": "MousePointerClick",
+            "title": "极速生成 (Speed)",
+            "description": "得益于字节跳动强大的算力支持，Seedance 2.0 的生成速度是同类模型的 3 倍以上。在 BabyBoogey 上，一段 15 秒的高清舞蹈视频，平均只需 30-60 秒即可完成。",
+            "icon": "Zap",
             "image": {
-              "src": "https://picsum.photos/seed/seedance-deep-dive-4/800/600",
-              "alt": "通过 BabyBoogey 一键使用 Seedance 2.0"
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
+              "alt": "3倍于竞品的生成速度"
             }
           }
         ]
       },
       "faq": {
         "id": "faq",
-        "title": "Seedance 2.0 + BabyBoogey — 常见问题",
-        "description": "关于 BabyBoogey 整合 Seedance 2.0 的一切：工作原理、使用方式，以及它为何能带来最佳的 Seedance 宝宝跳舞体验。",
+        "title": "Seedance 2.0 在线使用常见问题",
+        "description": "关于下载、收费与使用限制的解答。",
         "items": [
           {
-            "question": "BabyBoogey 使用 Seedance 2.0 吗？",
-            "answer": "是的！BabyBoogey 整合了 Seedance 2.0 — 字节跳动最先进的 AI 舞蹈模型 — 作为所有宝宝跳舞视频生成的核心引擎。当您在 BabyBoogey 上创建视频时，Seedance 2.0 负责 AI 动作生成，交付行业领先的舞蹈品质。BabyBoogey 将这一强大技术包装在简洁的家长友好界面中，配备 50 多个宝宝专属优化模板，让您无需任何技术知识即可使用 Seedance 的全部实力。"
+            "question": "Seedance 2.0 提供官方 APP 下载吗？",
+            "answer": "目前 Seedance 2.0 尚未推出独立的官方 APP。它主要以 API 和网页服务的形式存在。BabyBoogey 是目前最方便在手机上使用的网页端入口，体验与原生 APP 无异，且无需占用手机空间。"
           },
           {
-            "question": "使用 BabyBoogey 需要 Seedance 账号吗？",
-            "answer": "不需要，BabyBoogey 为您处理了一切。您无需注册 Seedance 账号、申请 API 密钥或进行任何技术配置。当您注册 BabyBoogey 后，即可通过我们的整合平台自动获得 Seedance 2.0 的 AI 能力。我们在后台管理与 Seedance 的连接，您只需上传照片、选择模板，享受您的宝宝跳舞视频即可。"
+            "question": "在这里使用 Seedance 2.0 是免费的吗？",
+            "answer": "BabyBoogey 提供免费试用计划。所有新用户注册后都会获得免费积分，可以用于生成 Seedance 2.0 视频。如果需要生成更多或更高清的视频，我们也有非常实惠的套餐可供选择。"
           },
           {
-            "question": "为什么不直接使用 Seedance 2.0？",
-            "answer": "您完全可以直接使用 Seedance 2.0 — 它是一个出色的 AI 模型。不过，BabyBoogey 在此基础上增加了显著价值：50 多个宝宝专属舞蹈模板、针对宝宝身体比例和动作优化的提示词、简化的一键操作界面，以及无需提示词工程。直接使用 Seedance 意味着编写详细提示词、配置参数和多次迭代生成。BabyBoogey 让您获得同样的 Seedance 2.0 品质，所有宝宝优化都已为您处理完毕。"
+            "question": "生成的视频有水印吗？能否去除？",
+            "answer": "免费用户生成的视频右下角会有小的 BabyBoogey 标识。升级到任意付费会员（即便是最低档）即可一键去除所有水印，并获得商业使用授权。"
           },
           {
-            "question": "BabyBoogey 的视频品质和 Seedance 2.0 一样吗？",
-            "answer": "是的，每一个 BabyBoogey 视频都具备完整的 Seedance 2.0 品质。由于 BabyBoogey 使用 Seedance 2.0 作为 AI 引擎，舞蹈动作、分辨率（最高 2K）、物理模拟和音频同步都由相同的技术驱动。实际上，BabyBoogey 的视频效果往往比直接使用 Seedance 更好，因为我们的模板发送的是由专家精心优化的提示词，专门针对宝宝跳舞内容进行了调优 — 省去了手动编写提示词的反复试错过程。"
+            "question": "Seedance 2.0 支持哪些照片格式？",
+            "answer": "支持 JPG, PNG, WEBP 等主流格式。建议上传清晰的全身照或半身照，避免面部遮挡，这样 Seedance 2.0 能更准确地识别骨骼点，生成效果更好。"
           },
           {
-            "question": "BabyBoogey + Seedance 2.0 在宝宝跳舞方面有什么特别之处？",
-            "answer": "这是全球最强舞蹈 AI 与宝宝专属优化的完美结合。Seedance 2.0 带来行业领先的舞蹈动作、符合物理规律的运动和音频同步能力。BabyBoogey 在此基础上添加了 50 多个宝宝专属模板（包含适龄的舞蹈风格）、针对宝宝身体比例调优的提示词，以及任何家长都能轻松上手的一键工作流。两者结合交出自然、可爱、品质始终如一的 Seedance 宝宝跳舞成果 — 这是任何单一工具都无法独自实现的。"
+            "question": "这真的是字节跳动的技术吗？",
+            "answer": "是的。BabyBoogey 是基于字节跳动开源的 Seedance 2.0 模型构建的。我们不做底层模型的修改，只做应用层的优化，确保您体验到的是原汁原味的大厂技术。"
           }
         ]
       },
       "cta": {
         "id": "cta",
-        "title": "体验 Seedance 2.0 的强大 — 用最简单的方式",
-        "description": "BabyBoogey 将 Seedance 2.0 世界级的舞蹈 AI 直接带到您身边 — 配备宝宝专属优化模板、一键生成功能，零复杂操作。上传宝宝照片、选择模板，让 Seedance 2.0 为您创造奇迹。今天就免费体验！",
+        "title": "立即免费体验 Seedance 2.0",
+        "description": "不要再去到处找下载包了。BabyBoogey 就是您使用 Seedance 2.0 最好的选择。无需等待，现在就开始。",
         "buttons": [
           {
-            "title": "免费体验 Seedance 2.0 宝宝跳舞",
+            "title": "在线生成 (免下载)",
             "url": "/ai-video-generator",
             "icon": "Zap"
           },
           {
-            "title": "浏览舞蹈模板",
+            "title": "查看热门模板",
             "url": "/create",
             "icon": "PlayCircle"
           }
