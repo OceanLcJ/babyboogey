@@ -1,3 +1,4 @@
+import { AIMediaType } from '@/extensions/ai/types';
 import { respData, respErr } from '@/shared/lib/resp';
 import {
   findAITaskById,
@@ -18,6 +19,139 @@ function safeParseJson(value?: string | null) {
   } catch {
     return null;
   }
+}
+
+function normalizeWatermarkType(value?: string | null): 'none' | 'dynamic_overlay' {
+  return String(value || '').trim().toLowerCase() === 'dynamic_overlay'
+    ? 'dynamic_overlay'
+    : 'none';
+}
+
+function getTaskWatermarkPolicy(task: {
+  watermarkApplied?: boolean | null;
+  watermarkMode?: string | null;
+  options?: string | null;
+}) {
+  const watermarkType = normalizeWatermarkType(task.watermarkMode);
+  const applied = Boolean(task.watermarkApplied) && watermarkType !== 'none';
+  const parsedOptions = safeParseJson(task.options);
+  const parsedRecord =
+    parsedOptions &&
+    typeof parsedOptions === 'object' &&
+    !Array.isArray(parsedOptions)
+      ? (parsedOptions as Record<string, unknown>)
+      : null;
+  const policyRaw = parsedRecord?.watermarkPolicy;
+  const policy =
+    policyRaw && typeof policyRaw === 'object' && !Array.isArray(policyRaw)
+      ? (policyRaw as Record<string, unknown>)
+      : {};
+
+  return {
+    watermarkApplied: applied,
+    watermarkType: applied ? watermarkType : 'none',
+    watermarkOpacity:
+      Number.isFinite(Number(policy?.watermarkOpacity))
+        ? Number(policy?.watermarkOpacity)
+        : 0.28,
+    watermarkIntervalSeconds:
+      Number.isFinite(Number(policy?.watermarkIntervalSeconds))
+        ? Number(policy?.watermarkIntervalSeconds)
+        : 3,
+    watermarkText: String(policy?.watermarkText || 'BabyBoogey'),
+  } as const;
+}
+
+function decorateTaskInfoVideosWithWatermark(
+  taskInfo: unknown,
+  watermarkPolicy: ReturnType<typeof getTaskWatermarkPolicy>
+) {
+  if (!taskInfo || typeof taskInfo !== 'object') {
+    return taskInfo;
+  }
+
+  const info = taskInfo as Record<string, unknown>;
+  const decorateOne = (videoItem: unknown) => {
+    if (typeof videoItem === 'string') {
+      return {
+        videoUrl: videoItem,
+        watermarkApplied: watermarkPolicy.watermarkApplied,
+        watermarkType: watermarkPolicy.watermarkType,
+        watermarkOpacity: watermarkPolicy.watermarkOpacity,
+        watermarkIntervalSeconds: watermarkPolicy.watermarkIntervalSeconds,
+        watermarkText: watermarkPolicy.watermarkText,
+      };
+    }
+
+    if (videoItem && typeof videoItem === 'object') {
+      const record = videoItem as Record<string, unknown>;
+      return {
+        ...record,
+        watermarkApplied:
+          typeof record.watermarkApplied === 'boolean'
+            ? record.watermarkApplied
+            : watermarkPolicy.watermarkApplied,
+        watermarkType: normalizeWatermarkType(
+          String(record.watermarkType || watermarkPolicy.watermarkType)
+        ),
+        watermarkOpacity:
+          Number.isFinite(Number(record.watermarkOpacity))
+            ? Number(record.watermarkOpacity)
+            : watermarkPolicy.watermarkOpacity,
+        watermarkIntervalSeconds:
+          Number.isFinite(Number(record.watermarkIntervalSeconds))
+            ? Number(record.watermarkIntervalSeconds)
+            : watermarkPolicy.watermarkIntervalSeconds,
+        watermarkText:
+          typeof record.watermarkText === 'string' && record.watermarkText
+            ? record.watermarkText
+            : watermarkPolicy.watermarkText,
+      };
+    }
+
+    return videoItem;
+  };
+
+  const existingVideos = Array.isArray(info.videos) ? (info.videos as unknown[]) : [];
+  if (existingVideos.length > 0) {
+    return {
+      ...info,
+      videos: existingVideos.map(decorateOne),
+    };
+  }
+
+  const output = info.output ?? info.video ?? info.data;
+  if (!output) {
+    return taskInfo;
+  }
+
+  const normalizedList = Array.isArray(output) ? output : [output];
+  const derivedVideos = normalizedList
+    .map((item) => {
+      if (!item) {
+        return null;
+      }
+      if (typeof item === 'string') {
+        return item;
+      }
+      if (typeof item === 'object') {
+        const record = item as Record<string, unknown>;
+        const candidate =
+          record.url ?? record.uri ?? record.video ?? record.src ?? record.videoUrl;
+        return typeof candidate === 'string' && candidate ? candidate : null;
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  if (!derivedVideos.length) {
+    return taskInfo;
+  }
+
+  return {
+    ...info,
+    videos: derivedVideos.map(decorateOne),
+  };
 }
 
 export async function POST(req: Request) {
@@ -82,16 +216,26 @@ export async function POST(req: Request) {
 
     const parsedTaskInfo = safeParseJson(resolvedTask.taskInfo);
     if (parsedTaskInfo) {
+      let taskInfoForResponse = parsedTaskInfo;
+      if (resolvedTask.mediaType === AIMediaType.VIDEO) {
+        const watermarkPolicy = getTaskWatermarkPolicy(resolvedTask);
+        taskInfoForResponse = decorateTaskInfoVideosWithWatermark(
+          parsedTaskInfo,
+          watermarkPolicy
+        );
+      }
+
       const signedTaskInfo = await resolveAssetRefsWithSignedUrls({
-        value: parsedTaskInfo,
+        value: taskInfoForResponse,
         userId: user.id,
       });
       resolvedTask.taskInfo = JSON.stringify(signedTaskInfo);
     }
 
     return respData(resolvedTask);
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log('ai query failed', e);
-    return respErr(e.message);
+    const message = e instanceof Error ? e.message : 'ai query failed';
+    return respErr(message);
   }
 }
