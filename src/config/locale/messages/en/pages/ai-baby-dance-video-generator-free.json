@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
-    "description": "Use the best ai baby dance video generator free online. Turn any baby photo into a hilarious dancing video — 100% free, no watermark, no credit card, no sign-up required."
+    "title": "AI Baby Dance Video Generator Free Trial — No Sign-Up, Small Watermark on Free Exports",
+    "description": "Use the best ai baby dance video generator free online. Turn any baby photo into a hilarious dancing video — 100% free trial, small watermark on free exports, no credit card, no sign-up required."
   },
   "page": {
-    "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
+    "title": "AI Baby Dance Video Generator Free Trial — No Sign-Up, Small Watermark on Free Exports",
     "show_sections": [
       "hero",
       "introduce",
@@ -17,8 +17,8 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "AI Baby Dance Video Generator Free — No Watermark, No Sign-Up",
-        "description": "The best ai baby dance video generator free online. Upload any baby photo and create an adorable dancing video in seconds — completely free, no watermark, no credit card required.",
+        "title": "AI Baby Dance Video Generator Free Trial — No Sign-Up, Small Watermark on Free Exports",
+        "description": "The best ai baby dance video generator free online. Upload any baby photo and create an adorable dancing video in seconds — completely free trial, small watermark on free exports, no credit card required.",
         "buttons": [
           {
             "title": "Make a Free Video Now",
@@ -57,12 +57,12 @@
             }
           },
           {
-            "title": "No Watermark on Any Video",
-            "description": "Unlike other tools that slap logos all over your video, BabyBoogey's free baby dance video maker delivers clean, watermark-free results you'll actually want to share with the whole family.",
+            "title": "Small Watermark on Free Exports",
+            "description": "Free exports include a subtle BabyBoogey watermark. Upgrade to any paid plan to remove all watermarks and get clean, professional downloads.",
             "icon": "CheckCircle",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-2/800/600",
-              "alt": "No watermark on free baby dance videos"
+              "alt": "Small watermark on free baby dance videos"
             }
           },
           {
@@ -151,7 +151,7 @@
           },
           {
             "title": "Download & Share for Free",
-            "description": "Hit generate and your dancing baby video is ready in seconds. Download it instantly — no watermark, no fees, no catches. Share the giggles with everyone you love!",
+            "description": "Hit generate and your dancing baby video is ready in seconds. Download it instantly — free exports include a small watermark, no hidden fees, no catches. Share the giggles with everyone you love!",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-step-3/800/600",
               "alt": "Step 3: Download free baby dance video"
@@ -219,7 +219,7 @@
         "items": [
           {
             "question": "Is BabyBoogey's AI baby dance video generator really 100% free?",
-            "answer": "Yes, genuinely free! BabyBoogey offers a free tier that lets you create baby dance videos with no watermark, no credit card, and no sign-up required. You can start making adorable dancing baby videos right now without paying a single penny."
+            "answer": "Yes, genuinely free! BabyBoogey offers a free tier that lets you create baby dance videos with no credit card and no sign-up required. Free exports include a small BabyBoogey watermark, and paid plans remove it."
           },
           {
             "question": "Do I need to create an account to make baby dance video free?",
@@ -227,7 +227,7 @@
           },
           {
             "question": "Will there be a watermark on my free baby dance video?",
-            "answer": "No watermark at all. Unlike many other free tools that plaster their logos across your video, BabyBoogey does not add any watermark to videos created on the free tier. What you create is what you keep — clean, shareable videos every time."
+            "answer": "Yes, free exports include a small BabyBoogey watermark. This keeps the free tier sustainable and helps us continue offering free credits. Upgrade to any paid plan to remove all watermarks instantly."
           },
           {
             "question": "What photo formats work with the free AI baby video generator?",
@@ -247,14 +247,14 @@
           },
           {
             "question": "What's the difference between the free tier and paid plans?",
-            "answer": "The free tier gives you access to core dance templates, watermark-free video exports, and standard resolution output. Paid plans unlock premium templates, full 1080p HD exports, longer video durations, and priority processing. But honestly, the free tier is genuinely powerful on its own — most families love it without ever upgrading."
+            "answer": "The free tier gives you access to core dance templates, watermarked video exports, and standard resolution output. Paid plans unlock premium templates, full 1080p HD exports, longer video durations, priority processing, and watermark-free downloads."
           }
         ]
       },
       "cta": {
         "id": "cta",
         "title": "Ready to Make Your Baby Boogie — for Free?",
-        "description": "Join thousands of happy families using BabyBoogey's ai baby dance video generator free. No watermark, no sign-up, no credit card. Just upload a photo and let the fun begin!",
+        "description": "Join thousands of happy families using BabyBoogey's ai baby dance video generator free. Small watermark on free exports, no sign-up, no credit card. Just upload a photo and let the fun begin!",
         "buttons": [
           {
             "title": "Create Free Baby Dance Video",

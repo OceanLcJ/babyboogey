@@ -95,7 +95,7 @@
           },
           {
             "title": "免费使用",
-            "description": "免费制作宝宝跳舞视频 — 无需信用卡，基础视频无水印。",
+            "description": "免费制作宝宝跳舞视频 — 无需信用卡，免费导出含小水印。",
             "icon": "RiGiftLine",
             "image": {
               "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
@@ -259,9 +259,9 @@
               "私有存储"
             ],
             "interval": "one-time",
-            "amount": 499,
+            "amount": 990,
             "currency": "USD",
-            "price": "$4.99",
+            "price": "$9.9",
             "original_price": "$9.9",
             "unit": "",
             "is_featured": false,
@@ -344,9 +344,9 @@
               "私有存储"
             ],
             "interval": "month",
-            "amount": 699,
+            "amount": 990,
             "currency": "USD",
-            "price": "$6.99",
+            "price": "$9.9",
             "original_price": "$9.99",
             "unit": "/ 月",
             "is_featured": false,
@@ -437,10 +437,10 @@
               "私有存储"
             ],
             "interval": "year",
-            "amount": 5900,
+            "amount": 11880,
             "currency": "USD",
-            "price": "$4.90",
-            "original_price": "$6.99",
+            "price": "$9.9",
+            "original_price": "$9.9",
             "unit": "/ 月",
             "is_featured": false,
             "button": {
@@ -469,9 +469,9 @@
               "优先客服支持"
             ],
             "interval": "year",
-            "amount": 10900,
+            "amount": 11880,
             "currency": "USD",
-            "price": "$9.10",
+            "price": "$9.9",
             "original_price": "$12.99",
             "unit": "/ 月",
             "is_featured": true,

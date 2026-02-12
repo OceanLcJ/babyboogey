@@ -95,7 +95,7 @@
           },
           {
             "title": "Free to Start",
-            "description": "Make baby dance videos free — no credit card required, no watermark on basic videos.",
+            "description": "Make baby dance videos free — no credit card required, with a small watermark on free exports.",
             "icon": "RiGiftLine",
             "image": {
               "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
@@ -259,9 +259,9 @@
               "Private storage"
             ],
             "interval": "one-time",
-            "amount": 499,
+            "amount": 990,
             "currency": "USD",
-            "price": "$4.99",
+            "price": "$9.9",
             "original_price": "$9.9",
             "unit": "",
             "is_featured": false,
@@ -344,9 +344,9 @@
               "Private storage"
             ],
             "interval": "month",
-            "amount": 699,
+            "amount": 990,
             "currency": "USD",
-            "price": "$6.99",
+            "price": "$9.9",
             "original_price": "$9.99",
             "unit": "/ month",
             "is_featured": false,
@@ -437,10 +437,10 @@
               "Private storage"
             ],
             "interval": "year",
-            "amount": 5900,
+            "amount": 11880,
             "currency": "USD",
-            "price": "$4.90",
-            "original_price": "$6.99",
+            "price": "$9.9",
+            "original_price": "$9.9",
             "unit": "/ month",
             "is_featured": false,
             "button": {
@@ -469,9 +469,9 @@
               "Priority support"
             ],
             "interval": "year",
-            "amount": 10900,
+            "amount": 11880,
             "currency": "USD",
-            "price": "$9.10",
+            "price": "$9.9",
             "original_price": "$12.99",
             "unit": "/ month",
             "is_featured": true,

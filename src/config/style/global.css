@@ -3,6 +3,42 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes bb-watermark-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(28px, 14px);
+  }
+  50% {
+    transform: translate(12px, 32px);
+  }
+  75% {
+    transform: translate(32px, 18px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes bb-watermark-drift-reverse {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-22px, -12px);
+  }
+  50% {
+    transform: translate(-10px, -30px);
+  }
+  75% {
+    transform: translate(-30px, -16px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 @plugin 'tailwindcss-animate';
 
 @layer base {

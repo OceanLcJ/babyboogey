@@ -504,6 +504,9 @@ export const aiTask = table(
     costCredits: integer('cost_credits').notNull().default(0),
     scene: text('scene').notNull().default(''),
     creditId: text('credit_id'), // credit consumption record id
+    watermarkApplied: boolean('watermark_applied').notNull().default(false),
+    watermarkMode: text('watermark_mode').notNull().default('dynamic_overlay'),
+    watermarkedAssetId: text('watermarked_asset_id'),
   },
   (table) => [
     // Composite: Query user's AI tasks by status

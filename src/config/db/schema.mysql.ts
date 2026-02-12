@@ -467,6 +467,11 @@ export const aiTask = table(
     costCredits: int('cost_credits').notNull().default(0),
     scene: varchar('scene', { length: 100 }).notNull().default(''),
     creditId: varchar191('credit_id'), // credit consumption record id
+    watermarkApplied: boolean('watermark_applied').notNull().default(false),
+    watermarkMode: varchar('watermark_mode', { length: 50 })
+      .notNull()
+      .default('dynamic_overlay'),
+    watermarkedAssetId: varchar191('watermarked_asset_id'),
   },
   (table) => [
     // Composite: Query user's AI tasks by status

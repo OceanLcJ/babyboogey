@@ -194,12 +194,12 @@
             }
           },
           {
-            "title": "Watermark-Free Downloads",
-            "description": "Share your baby dance AI video without any branding or watermarks getting in the way. What you create is yours — clean, polished, and ready for any audience.",
+            "title": "Watermark-Free Downloads (Paid Plans)",
+            "description": "Paid plans remove all BabyBoogey branding and watermarks, so your exported videos stay clean, polished, and ready for any audience.",
             "icon": "CheckCircle",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-feat-3/800/600",
-              "alt": "Watermark-free baby dance video downloads"
+              "alt": "Watermark-free downloads on paid plans"
             }
           },
           {
@@ -293,7 +293,7 @@
           },
           {
             "question": "Is it free to create baby dance video content?",
-            "answer": "Yes! BabyBoogey offers free credits so you can create your first dancing baby video at no cost. Free videos are rendered without watermarks. For unlimited access and additional premium dance templates, affordable paid plans are available."
+            "answer": "Yes! BabyBoogey offers free credits so you can create your first dancing baby video at no cost. Free exports include a small BabyBoogey watermark. Paid plans remove all watermarks and unlock unlimited access plus additional premium dance templates."
           },
           {
             "question": "How long does it take to generate a video?",
