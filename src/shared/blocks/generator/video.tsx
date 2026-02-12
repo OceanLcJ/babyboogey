@@ -4,11 +4,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import {
   Check,
+  Copy,
   CreditCard,
   Download,
+  ExternalLink,
   Image as ImageIcon,
+  Link2,
   Loader2,
   Lock,
+  Share2,
   User,
   Video,
 } from 'lucide-react';
@@ -36,8 +40,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 import { Switch } from '@/shared/components/ui/switch';
-import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
 import {
   markWatermarkCtaClick,
@@ -112,6 +123,17 @@ type VideoGenerationStage =
   | 'success'
   | 'failed';
 
+type ShareTarget = 'video' | 'page';
+type ShareChannel = 'system' | 'copy' | 'platform';
+type SharePlatform = 'x' | 'facebook' | 'whatsapp' | 'weibo';
+
+interface SharePayload {
+  url: string;
+  title: string;
+  text: string;
+  isSignedVideoLink: boolean;
+}
+
 const FAST_POLL_INTERVAL = 8000;
 const SLOW_POLL_INTERVAL = 12000;
 const FAST_POLL_PHASE_MS = 60000;
@@ -122,6 +144,8 @@ const MAX_IMAGE_ORIENTATION_SECONDS = 10;
 const PROGRESS_ANIMATION_TICK_MS = 250;
 const SUCCESS_HOLD_MS = 1200;
 const PROGRESS_CAP_BEFORE_SUCCESS = 95;
+const SHARE_LINK_EXPIRES_SECONDS = 60 * 60 * 24;
+const SHARE_LINK_CACHE_BUFFER_MS = 30 * 1000;
 
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
@@ -178,6 +202,77 @@ function parseTemplateDurationSeconds(duration: string): number | null {
     return null;
   }
   return minutes * 60 + seconds;
+}
+
+function getAbsoluteUrl(url: string): string {
+  if (!url) {
+    return '';
+  }
+
+  if (typeof window === 'undefined') {
+    return url;
+  }
+
+  try {
+    return new URL(url, window.location.origin).toString();
+  } catch {
+    return url;
+  }
+}
+
+function extractAssetIdFromMediaUrl(url: string): string | null {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(
+      url,
+      typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+    );
+    const matched = parsed.pathname.match(/\/api\/storage\/assets\/([^/?#]+)/);
+    if (!matched?.[1]) {
+      return null;
+    }
+    return decodeURIComponent(matched[1]);
+  } catch {
+    const matched = url.match(/\/api\/storage\/assets\/([^/?#]+)/);
+    if (!matched?.[1]) {
+      return null;
+    }
+    return decodeURIComponent(matched[1]);
+  }
+}
+
+function buildPageShareUrl(templateId: string): string {
+  if (typeof window === 'undefined') {
+    return '';
+  }
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('template', templateId);
+  return url.toString();
+}
+
+function buildPlatformIntentUrl(
+  platform: SharePlatform,
+  payload: { url: string; text: string }
+): string {
+  const { url, text } = payload;
+
+  if (platform === 'x') {
+    return `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+  }
+
+  if (platform === 'facebook') {
+    return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  }
+
+  if (platform === 'whatsapp') {
+    return `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`.trim())}`;
+  }
+
+  return `https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`;
 }
 
 const DANCE_TEMPLATES: DanceTemplate[] = [
@@ -857,6 +952,7 @@ export function VideoGenerator({
   const [downloadingVideoId, setDownloadingVideoId] = useState<string | null>(
     null
   );
+  const [sharingActionKey, setSharingActionKey] = useState<string | null>(null);
   const [watermarkedPlaybackByVideoId, setWatermarkedPlaybackByVideoId] =
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
@@ -871,6 +967,9 @@ export function VideoGenerator({
     Record<string, WatermarkedPlaybackState>
   >({});
   const watermarkedRenderInFlightIdsRef = useRef<Set<string>>(new Set());
+  const shareUrlCacheRef = useRef<
+    Record<string, { url: string; expiresAtMs: number }>
+  >({});
 
   const {
     user,
@@ -881,6 +980,7 @@ export function VideoGenerator({
   } =
     useAppContext();
   const searchParams = useSearchParams();
+  const isZhLocale = locale.toLowerCase().startsWith('zh');
 
   useEffect(() => {
     watermarkedPlaybackByVideoIdRef.current = watermarkedPlaybackByVideoId;
@@ -1112,6 +1212,15 @@ export function VideoGenerator({
     });
   }, [generatedVideos, prepareWatermarkedPlayback]);
 
+  useEffect(() => {
+    const activeVideoIds = new Set(generatedVideos.map((video) => video.id));
+    for (const videoId of Object.keys(shareUrlCacheRef.current)) {
+      if (!activeVideoIds.has(videoId)) {
+        delete shareUrlCacheRef.current[videoId];
+      }
+    }
+  }, [generatedVideos]);
+
   const mapTaskVideos = useCallback(
     (task: BackendTask, videos: TaskVideoMetadata[]): GeneratedVideo[] =>
       videos.map((video, index) => ({
@@ -1163,6 +1272,371 @@ export function VideoGenerator({
       router.push('/pricing');
     },
     [router]
+  );
+
+  const sharePlatforms = useMemo<SharePlatform[]>(
+    () => (isZhLocale ? ['weibo'] : ['x', 'facebook', 'whatsapp']),
+    [isZhLocale]
+  );
+
+  const getSharePlatformLabel = useCallback(
+    (platform: SharePlatform) => {
+      if (platform === 'x') {
+        return t('share.platform_x');
+      }
+      if (platform === 'facebook') {
+        return t('share.platform_facebook');
+      }
+      if (platform === 'whatsapp') {
+        return t('share.platform_whatsapp');
+      }
+      return t('share.platform_weibo');
+    },
+    [t]
+  );
+
+  const makeShareActionKey = useCallback(
+    (
+      videoId: string,
+      target: ShareTarget,
+      channel: ShareChannel,
+      platform?: SharePlatform
+    ) => `${videoId}:${target}:${channel}:${platform || 'none'}`,
+    []
+  );
+
+  const trackShareAction = useCallback(
+    ({
+      target,
+      channel,
+      platform,
+      video,
+      isSignedVideoLink,
+    }: {
+      target: ShareTarget;
+      channel: ShareChannel;
+      platform?: SharePlatform;
+      video?: GeneratedVideo;
+      isSignedVideoLink?: boolean;
+    }) => {
+      trackAnalyticsEvent('video_share_action', {
+        target,
+        channel,
+        platform: platform || '',
+        locale,
+        template_id: selectedTemplate.id,
+        is_watermarked: Boolean(video && isDynamicWatermarkedVideo(video)),
+        is_signed_video_link: Boolean(isSignedVideoLink),
+      });
+    },
+    [locale, selectedTemplate.id]
+  );
+
+  const copyToClipboard = useCallback(async (value: string) => {
+    if (!value || typeof window === 'undefined') {
+      return false;
+    }
+
+    if (window.isSecureContext && navigator?.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return true;
+      } catch {
+        // fallback to legacy copy below
+      }
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = value;
+    textArea.setAttribute('readonly', 'true');
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    textArea.style.top = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    let copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch {
+      copied = false;
+    }
+    document.body.removeChild(textArea);
+    return copied;
+  }, []);
+
+  const getShareableVideoUrl = useCallback(
+    async (
+      video: GeneratedVideo
+    ): Promise<{ url: string; isSignedVideoLink: boolean }> => {
+      const fallbackUrl = getAbsoluteUrl(video.url);
+      const now = Date.now();
+      const cached = shareUrlCacheRef.current[video.id];
+      if (cached && cached.expiresAtMs - SHARE_LINK_CACHE_BUFFER_MS > now) {
+        return {
+          url: cached.url,
+          isSignedVideoLink: true,
+        };
+      }
+
+      const assetId = extractAssetIdFromMediaUrl(video.url);
+      if (!assetId) {
+        return {
+          url: fallbackUrl,
+          isSignedVideoLink: false,
+        };
+      }
+
+      try {
+        const resp = await fetch('/api/storage/assets/sign', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            assetIds: [assetId],
+            expiresInSeconds: SHARE_LINK_EXPIRES_SECONDS,
+          }),
+        });
+        if (!resp.ok) {
+          throw new Error(`request failed with status: ${resp.status}`);
+        }
+
+        const { code, data, message } = await resp.json();
+        if (code !== 0) {
+          throw new Error(message || 'sign assets failed');
+        }
+
+        const signedItem = Array.isArray(data?.results)
+          ? data.results.find(
+              (item: Record<string, unknown>) =>
+                item?.assetId === assetId && typeof item?.url === 'string'
+            )
+          : null;
+
+        const signedUrl =
+          signedItem && typeof signedItem.url === 'string' ? signedItem.url : '';
+        if (!signedUrl) {
+          throw new Error('signed url is empty');
+        }
+
+        const absoluteSignedUrl = getAbsoluteUrl(signedUrl);
+        const expiresAtMsCandidate =
+          signedItem && typeof signedItem.expiresAt === 'string'
+            ? Date.parse(signedItem.expiresAt)
+            : NaN;
+        const expiresAtMs = Number.isFinite(expiresAtMsCandidate)
+          ? expiresAtMsCandidate
+          : now + SHARE_LINK_EXPIRES_SECONDS * 1000;
+
+        shareUrlCacheRef.current[video.id] = {
+          url: absoluteSignedUrl,
+          expiresAtMs,
+        };
+
+        return {
+          url: absoluteSignedUrl,
+          isSignedVideoLink: true,
+        };
+      } catch (error) {
+        console.warn('sign share url failed:', error);
+        toast.error(t('share.video_link_may_expire_soon'));
+        return {
+          url: fallbackUrl,
+          isSignedVideoLink: false,
+        };
+      }
+    },
+    [t]
+  );
+
+  const resolveSharePayload = useCallback(
+    async ({
+      target,
+      video,
+    }: {
+      target: ShareTarget;
+      video?: GeneratedVideo;
+    }): Promise<SharePayload> => {
+      const effectiveTarget =
+        target === 'video' && video && isDynamicWatermarkedVideo(video)
+          ? 'page'
+          : target;
+      const text = t('share.default_text', {
+        template: locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name,
+      });
+      const title = t('page.title');
+
+      if (effectiveTarget === 'page') {
+        return {
+          url: buildPageShareUrl(selectedTemplate.id),
+          title,
+          text,
+          isSignedVideoLink: false,
+        };
+      }
+
+      if (!video) {
+        throw new Error('video is required for video sharing');
+      }
+
+      const { url, isSignedVideoLink } = await getShareableVideoUrl(video);
+      return {
+        url,
+        title,
+        text,
+        isSignedVideoLink,
+      };
+    },
+    [getShareableVideoUrl, locale, selectedTemplate.id, selectedTemplate.name, selectedTemplate.nameZh, t]
+  );
+
+  const copyShareLink = useCallback(
+    async ({
+      target,
+      video,
+      platform,
+    }: {
+      target: ShareTarget;
+      video?: GeneratedVideo;
+      platform?: SharePlatform;
+    }) => {
+      const payload = await resolveSharePayload({ target, video });
+      const copied = await copyToClipboard(payload.url);
+      if (!copied) {
+        toast.error(t('share.copy_failed'));
+        return false;
+      }
+
+      toast.success(t('share.copy_success'));
+      trackShareAction({
+        target,
+        channel: 'copy',
+        platform,
+        video,
+        isSignedVideoLink: payload.isSignedVideoLink,
+      });
+      return true;
+    },
+    [copyToClipboard, resolveSharePayload, t, trackShareAction]
+  );
+
+  const shareViaSystem = useCallback(
+    async ({ target, video }: { target: ShareTarget; video?: GeneratedVideo }) => {
+      const payload = await resolveSharePayload({ target, video });
+
+      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+        try {
+          await navigator.share({
+            title: payload.title,
+            text: payload.text,
+            url: payload.url,
+          });
+          trackShareAction({
+            target,
+            channel: 'system',
+            video,
+            isSignedVideoLink: payload.isSignedVideoLink,
+          });
+          return;
+        } catch (error) {
+          if (error instanceof Error && error.name === 'AbortError') {
+            return;
+          }
+        }
+      }
+
+      const copied = await copyToClipboard(payload.url);
+      if (!copied) {
+        toast.error(t('share.share_failed'));
+        return;
+      }
+
+      toast.success(t('share.copy_success'));
+      trackShareAction({
+        target,
+        channel: 'copy',
+        video,
+        isSignedVideoLink: payload.isSignedVideoLink,
+      });
+    },
+    [copyToClipboard, resolveSharePayload, t, trackShareAction]
+  );
+
+  const shareToPlatform = useCallback(
+    async ({
+      target,
+      platform,
+      video,
+    }: {
+      target: ShareTarget;
+      platform: SharePlatform;
+      video?: GeneratedVideo;
+    }) => {
+      const popup =
+        typeof window !== 'undefined'
+          ? window.open('about:blank', '_blank')
+          : null;
+      if (popup) {
+        popup.opener = null;
+      }
+
+      try {
+        const payload = await resolveSharePayload({ target, video });
+        const intentUrl = buildPlatformIntentUrl(platform, {
+          url: payload.url,
+          text: payload.text,
+        });
+
+        if (popup && !popup.closed) {
+          popup.location.href = intentUrl;
+          trackShareAction({
+            target,
+            channel: 'platform',
+            platform,
+            video,
+            isSignedVideoLink: payload.isSignedVideoLink,
+          });
+          return;
+        }
+
+        const copied = await copyToClipboard(payload.url);
+        if (!copied) {
+          toast.error(t('share.share_failed'));
+          return;
+        }
+
+        toast.success(t('share.copy_success'));
+        trackShareAction({
+          target,
+          channel: 'copy',
+          platform,
+          video,
+          isSignedVideoLink: payload.isSignedVideoLink,
+        });
+      } catch (error) {
+        if (popup && !popup.closed) {
+          popup.close();
+        }
+        throw error;
+      }
+    },
+    [copyToClipboard, resolveSharePayload, t, trackShareAction]
+  );
+
+  const runShareAction = useCallback(
+    async (actionKey: string, action: () => Promise<void>) => {
+      setSharingActionKey(actionKey);
+      try {
+        await action();
+      } catch (error) {
+        console.error('share action failed:', error);
+        toast.error(t('share.share_failed'));
+      } finally {
+        setSharingActionKey((current) => (current === actionKey ? null : current));
+      }
+    },
+    [t]
   );
 
   const clearPollingTimer = useCallback(() => {
@@ -2159,6 +2633,30 @@ export function VideoGenerator({
                       ? playbackState?.blobUrl || ''
                       : video.url;
                     const canRenderVideo = Boolean(playbackUrl);
+                    const canShareVideoDirectly = !isWatermarked;
+                    const activeSharePrefix = `${video.id}:`;
+                    const isSharingCurrentVideo =
+                      sharingActionKey?.startsWith(activeSharePrefix) || false;
+                    const shareVideoSystemActionKey = makeShareActionKey(
+                      video.id,
+                      'video',
+                      'system'
+                    );
+                    const shareVideoCopyActionKey = makeShareActionKey(
+                      video.id,
+                      'video',
+                      'copy'
+                    );
+                    const sharePageSystemActionKey = makeShareActionKey(
+                      video.id,
+                      'page',
+                      'system'
+                    );
+                    const sharePageCopyActionKey = makeShareActionKey(
+                      video.id,
+                      'page',
+                      'copy'
+                    );
 
                     return (
                       <div key={video.id} className="space-y-3">
@@ -2247,20 +2745,211 @@ export function VideoGenerator({
                             </Button>
                           </div>
                         )}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full"
-                          onClick={() => handleDownloadVideo(video)}
-                          disabled={downloadingVideoId === video.id}
-                        >
-                          {downloadingVideoId === video.id ? (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          ) : (
-                            <Download className="mr-2 h-4 w-4" />
-                          )}
-                          Download
-                        </Button>
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="w-full"
+                                disabled={isSharingCurrentVideo}
+                              >
+                                {isSharingCurrentVideo ? (
+                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Share2 className="mr-2 h-4 w-4" />
+                                )}
+                                {isSharingCurrentVideo
+                                  ? t('share.sharing')
+                                  : t('share.share')}
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              align="end"
+                              className="w-64"
+                            >
+                              <DropdownMenuLabel>
+                                {t('share.share_video')}
+                              </DropdownMenuLabel>
+                              <DropdownMenuLabel className="text-muted-foreground -mt-2 pb-1 text-[11px] leading-relaxed font-normal">
+                                {t('share.share_video_link_expire_24h')}
+                              </DropdownMenuLabel>
+                              <DropdownMenuItem
+                                disabled={
+                                  isSharingCurrentVideo || !canShareVideoDirectly
+                                }
+                                onSelect={(event) => {
+                                  event.preventDefault();
+                                  void runShareAction(
+                                    shareVideoSystemActionKey,
+                                    () =>
+                                      shareViaSystem({
+                                        target: 'video',
+                                        video,
+                                      })
+                                  );
+                                }}
+                              >
+                                {sharingActionKey ===
+                                shareVideoSystemActionKey ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Share2 className="h-4 w-4" />
+                                )}
+                                <span>{t('share.system_share')}</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                disabled={
+                                  isSharingCurrentVideo || !canShareVideoDirectly
+                                }
+                                onSelect={(event) => {
+                                  event.preventDefault();
+                                  void runShareAction(
+                                    shareVideoCopyActionKey,
+                                    () =>
+                                      copyShareLink({
+                                        target: 'video',
+                                        video,
+                                      }).then(() => undefined)
+                                  );
+                                }}
+                              >
+                                {sharingActionKey === shareVideoCopyActionKey ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Copy className="h-4 w-4" />
+                                )}
+                                <span>{t('share.copy_link')}</span>
+                              </DropdownMenuItem>
+                              {sharePlatforms.map((platform) => {
+                                const actionKey = makeShareActionKey(
+                                  video.id,
+                                  'video',
+                                  'platform',
+                                  platform
+                                );
+
+                                return (
+                                  <DropdownMenuItem
+                                    key={`video-${video.id}-${platform}`}
+                                    disabled={
+                                      isSharingCurrentVideo || !canShareVideoDirectly
+                                    }
+                                    onSelect={(event) => {
+                                      event.preventDefault();
+                                      void runShareAction(actionKey, () =>
+                                        shareToPlatform({
+                                          target: 'video',
+                                          platform,
+                                          video,
+                                        })
+                                      );
+                                    }}
+                                  >
+                                    {sharingActionKey === actionKey ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <ExternalLink className="h-4 w-4" />
+                                    )}
+                                    <span>{getSharePlatformLabel(platform)}</span>
+                                  </DropdownMenuItem>
+                                );
+                              })}
+                              <DropdownMenuSeparator />
+                              <DropdownMenuLabel>
+                                {t('share.share_page')}
+                              </DropdownMenuLabel>
+                              <DropdownMenuItem
+                                disabled={isSharingCurrentVideo}
+                                onSelect={(event) => {
+                                  event.preventDefault();
+                                  void runShareAction(
+                                    sharePageSystemActionKey,
+                                    () =>
+                                      shareViaSystem({
+                                        target: 'page',
+                                        video,
+                                      })
+                                  );
+                                }}
+                              >
+                                {sharingActionKey === sharePageSystemActionKey ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Share2 className="h-4 w-4" />
+                                )}
+                                <span>{t('share.system_share')}</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                disabled={isSharingCurrentVideo}
+                                onSelect={(event) => {
+                                  event.preventDefault();
+                                  void runShareAction(
+                                    sharePageCopyActionKey,
+                                    () =>
+                                      copyShareLink({
+                                        target: 'page',
+                                        video,
+                                      }).then(() => undefined)
+                                  );
+                                }}
+                              >
+                                {sharingActionKey === sharePageCopyActionKey ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Link2 className="h-4 w-4" />
+                                )}
+                                <span>{t('share.copy_link')}</span>
+                              </DropdownMenuItem>
+                              {sharePlatforms.map((platform) => {
+                                const actionKey = makeShareActionKey(
+                                  video.id,
+                                  'page',
+                                  'platform',
+                                  platform
+                                );
+
+                                return (
+                                  <DropdownMenuItem
+                                    key={`page-${video.id}-${platform}`}
+                                    disabled={isSharingCurrentVideo}
+                                    onSelect={(event) => {
+                                      event.preventDefault();
+                                      void runShareAction(actionKey, () =>
+                                        shareToPlatform({
+                                          target: 'page',
+                                          platform,
+                                          video,
+                                        })
+                                      );
+                                    }}
+                                  >
+                                    {sharingActionKey === actionKey ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <ExternalLink className="h-4 w-4" />
+                                    )}
+                                    <span>{getSharePlatformLabel(platform)}</span>
+                                  </DropdownMenuItem>
+                                );
+                              })}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                            onClick={() => handleDownloadVideo(video)}
+                            disabled={downloadingVideoId === video.id}
+                          >
+                            {downloadingVideoId === video.id ? (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : (
+                              <Download className="mr-2 h-4 w-4" />
+                            )}
+                            {t('download')}
+                          </Button>
+                        </div>
                       </div>
                     );
                   })}
