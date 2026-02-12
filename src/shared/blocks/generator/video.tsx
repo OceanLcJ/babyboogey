@@ -39,6 +39,10 @@ import {
 import { Switch } from '@/shared/components/ui/switch';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { useAppContext } from '@/shared/contexts/app';
+import {
+  markWatermarkCtaClick,
+  trackAnalyticsEvent,
+} from '@/shared/lib/analytics-events';
 import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 
@@ -53,16 +57,40 @@ interface GeneratedVideo {
   provider?: string;
   model?: string;
   prompt?: string;
+  watermarkApplied?: boolean;
+  watermarkType?: 'none' | 'dynamic_overlay';
+  watermarkOpacity?: number;
+  watermarkIntervalSeconds?: number;
+  watermarkText?: string;
 }
 
 interface BackendTask {
   id: string;
   status: string;
+  mediaType?: string;
   provider: string;
   model: string;
   prompt: string | null;
+  watermarkApplied?: boolean;
+  watermarkMode?: string | null;
+  watermarkedAssetId?: string | null;
   taskInfo: string | null;
   taskResult: string | null;
+}
+
+interface TaskVideoMetadata {
+  url: string;
+  watermarkApplied: boolean;
+  watermarkType: 'none' | 'dynamic_overlay';
+  watermarkOpacity?: number;
+  watermarkIntervalSeconds?: number;
+  watermarkText?: string;
+}
+
+interface WatermarkedPlaybackState {
+  status: 'processing' | 'ready' | 'error';
+  blobUrl?: string;
+  extension?: string;
 }
 
 interface DanceTemplate {
@@ -305,7 +333,82 @@ function parseTaskResult(taskResult: string | null): any {
   }
 }
 
-function extractVideoUrls(result: any): string[] {
+function normalizeWatermarkType(value?: string | null): 'none' | 'dynamic_overlay' {
+  return String(value || '').trim().toLowerCase() === 'dynamic_overlay'
+    ? 'dynamic_overlay'
+    : 'none';
+}
+
+function isDynamicWatermarkedVideo(
+  video?:
+    | Pick<GeneratedVideo, 'watermarkApplied' | 'watermarkType'>
+    | null
+) {
+  return Boolean(video?.watermarkApplied) && video?.watermarkType === 'dynamic_overlay';
+}
+
+function readTaskWatermarkFallback(task?: BackendTask | null) {
+  const watermarkType = normalizeWatermarkType(task?.watermarkMode || 'none');
+  const watermarkApplied = Boolean(task?.watermarkApplied) && watermarkType !== 'none';
+
+  return {
+    watermarkApplied,
+    watermarkType: watermarkApplied ? watermarkType : 'none',
+  } as const;
+}
+
+function toTaskVideoMetadata({
+  candidate,
+  fallback,
+}: {
+  candidate: unknown;
+  fallback: ReturnType<typeof readTaskWatermarkFallback>;
+}): TaskVideoMetadata | null {
+  if (typeof candidate === 'string') {
+    return {
+      url: candidate,
+      watermarkApplied: fallback.watermarkApplied,
+      watermarkType: fallback.watermarkType,
+    };
+  }
+
+  if (!candidate || typeof candidate !== 'object') {
+    return null;
+  }
+
+  const item = candidate as Record<string, unknown>;
+  const urlCandidate =
+    item.url ?? item.uri ?? item.video ?? item.src ?? item.videoUrl;
+  if (typeof urlCandidate !== 'string' || !urlCandidate.trim()) {
+    return null;
+  }
+
+  const watermarkType = normalizeWatermarkType(
+    String(item.watermarkType || fallback.watermarkType)
+  );
+  const watermarkApplied =
+    typeof item.watermarkApplied === 'boolean'
+      ? item.watermarkApplied
+      : fallback.watermarkApplied;
+
+  return {
+    url: urlCandidate,
+    watermarkApplied: watermarkApplied && watermarkType !== 'none',
+    watermarkType: watermarkApplied ? watermarkType : 'none',
+    watermarkOpacity: Number.isFinite(Number(item.watermarkOpacity))
+      ? Number(item.watermarkOpacity)
+      : undefined,
+    watermarkIntervalSeconds: Number.isFinite(Number(item.watermarkIntervalSeconds))
+      ? Number(item.watermarkIntervalSeconds)
+      : undefined,
+    watermarkText:
+      typeof item.watermarkText === 'string' ? item.watermarkText : undefined,
+  };
+}
+
+function extractGeneratedVideos(result: any, task?: BackendTask | null): TaskVideoMetadata[] {
+  const fallback = readTaskWatermarkFallback(task);
+
   if (!result) {
     return [];
   }
@@ -313,17 +416,8 @@ function extractVideoUrls(result: any): string[] {
   const videos = result.videos;
   if (videos && Array.isArray(videos)) {
     return videos
-      .map((item: any) => {
-        if (!item) return null;
-        if (typeof item === 'string') return item;
-        if (typeof item === 'object') {
-          return (
-            item.url ?? item.uri ?? item.video ?? item.src ?? item.videoUrl
-          );
-        }
-        return null;
-      })
-      .filter(Boolean);
+      .map((item: unknown) => toTaskVideoMetadata({ candidate: item, fallback }))
+      .filter(Boolean) as TaskVideoMetadata[];
   }
 
   const output = result.output ?? result.video ?? result.data;
@@ -333,33 +427,308 @@ function extractVideoUrls(result: any): string[] {
   }
 
   if (typeof output === 'string') {
-    return [output];
+    const mapped = toTaskVideoMetadata({ candidate: output, fallback });
+    return mapped ? [mapped] : [];
   }
 
   if (Array.isArray(output)) {
     return output
-      .flatMap((item) => {
-        if (!item) return [];
-        if (typeof item === 'string') return [item];
-        if (typeof item === 'object') {
-          const candidate =
-            item.url ?? item.uri ?? item.video ?? item.src ?? item.videoUrl;
-          return typeof candidate === 'string' ? [candidate] : [];
-        }
-        return [];
-      })
-      .filter(Boolean);
+      .map((item: unknown) => toTaskVideoMetadata({ candidate: item, fallback }))
+      .filter(Boolean) as TaskVideoMetadata[];
   }
 
   if (typeof output === 'object') {
-    const candidate =
-      output.url ?? output.uri ?? output.video ?? output.src ?? output.videoUrl;
-    if (typeof candidate === 'string') {
-      return [candidate];
-    }
+    const mapped = toTaskVideoMetadata({ candidate: output, fallback });
+    return mapped ? [mapped] : [];
   }
 
   return [];
+}
+
+function inferExtensionFromMimeType(mimeType?: string) {
+  const normalized = String(mimeType || '').toLowerCase();
+  if (normalized.includes('mp4')) {
+    return 'mp4';
+  }
+  if (normalized.includes('webm')) {
+    return 'webm';
+  }
+  return 'mp4';
+}
+
+function pickMediaRecorderMimeType() {
+  if (typeof MediaRecorder === 'undefined') {
+    return '';
+  }
+
+  const candidates = [
+    'video/webm;codecs=vp9,opus',
+    'video/webm;codecs=vp8,opus',
+    'video/webm',
+    'video/mp4',
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      if (MediaRecorder.isTypeSupported(candidate)) {
+        return candidate;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return '';
+}
+
+type CaptureStreamVideoElement = HTMLVideoElement & {
+  captureStream?: () => MediaStream;
+  mozCaptureStream?: () => MediaStream;
+};
+
+async function renderWatermarkedVideoBlob({
+  videoUrl,
+  watermarkText,
+  watermarkOpacity,
+  watermarkIntervalSeconds,
+}: {
+  videoUrl: string;
+  watermarkText?: string;
+  watermarkOpacity?: number;
+  watermarkIntervalSeconds?: number;
+}): Promise<{ blob: Blob; extension: string }> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    throw new Error('watermark download is only supported in browser');
+  }
+
+  if (typeof MediaRecorder === 'undefined') {
+    throw new Error('media recorder is not supported');
+  }
+
+  return new Promise((resolve, reject) => {
+    const source = document.createElement('video');
+    source.preload = 'auto';
+    source.playsInline = true;
+    source.crossOrigin = 'anonymous';
+    source.src = videoUrl;
+    source.style.position = 'fixed';
+    source.style.left = '-10000px';
+    source.style.width = '1px';
+    source.style.height = '1px';
+    source.style.opacity = '0';
+    document.body.appendChild(source);
+
+    let rafId: number | null = null;
+    let settled = false;
+    let recorder: MediaRecorder | null = null;
+    let composedStream: MediaStream | null = null;
+    const chunks: BlobPart[] = [];
+
+    const cleanup = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      if (recorder && recorder.state !== 'inactive') {
+        recorder.stop();
+      }
+      if (composedStream) {
+        composedStream.getTracks().forEach((track) => track.stop());
+      }
+      source.pause();
+      source.removeAttribute('src');
+      source.load();
+      source.remove();
+    };
+
+    const fail = (error: unknown) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      cleanup();
+      reject(error instanceof Error ? error : new Error('failed to export video'));
+    };
+
+    const succeed = (blob: Blob, extension: string) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      cleanup();
+      resolve({ blob, extension });
+    };
+
+    source.onerror = () => fail(new Error('failed to load source video'));
+    source.onloadedmetadata = () => {
+      const width = source.videoWidth || 0;
+      const height = source.videoHeight || 0;
+      if (!width || !height) {
+        fail(new Error('invalid source video size'));
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      if (!context) {
+        fail(new Error('canvas 2d context is unavailable'));
+        return;
+      }
+
+      if (typeof canvas.captureStream !== 'function') {
+        fail(new Error('captureStream is not supported'));
+        return;
+      }
+
+      composedStream = canvas.captureStream(30);
+      const captureVideo = source as CaptureStreamVideoElement;
+      const captureFn =
+        typeof captureVideo.captureStream === 'function'
+          ? captureVideo.captureStream.bind(captureVideo)
+          : typeof captureVideo.mozCaptureStream === 'function'
+            ? captureVideo.mozCaptureStream.bind(captureVideo)
+            : null;
+
+      if (captureFn) {
+        try {
+          const sourceStream = captureFn();
+          sourceStream
+            .getAudioTracks()
+            .forEach((track) => composedStream?.addTrack(track));
+        } catch {
+          // Continue without audio track if browser cannot capture it.
+        }
+      }
+
+      const mimeType = pickMediaRecorderMimeType();
+      try {
+        recorder = mimeType
+          ? new MediaRecorder(composedStream, { mimeType })
+          : new MediaRecorder(composedStream);
+      } catch (error) {
+        fail(error);
+        return;
+      }
+
+      recorder.ondataavailable = (event: BlobEvent) => {
+        if (event.data && event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+      recorder.onerror = (event) => {
+        fail((event as ErrorEvent).error || new Error('recording failed'));
+      };
+      recorder.onstop = () => {
+        const finalType = recorder?.mimeType || mimeType || 'video/webm';
+        const blob = new Blob(chunks, { type: finalType });
+        if (!blob.size) {
+          fail(new Error('empty watermark export'));
+          return;
+        }
+        succeed(blob, inferExtensionFromMimeType(finalType));
+      };
+
+      const intervalSeconds = Math.max(1, watermarkIntervalSeconds || 3);
+      const opacity = Math.min(0.9, Math.max(0.08, watermarkOpacity || 0.28));
+      const displayText = (watermarkText || 'BabyBoogey').slice(0, 64);
+
+      const drawOverlay = () => {
+        if (settled) {
+          return;
+        }
+
+        context.clearRect(0, 0, width, height);
+        context.drawImage(source, 0, 0, width, height);
+
+        const fontSize = Math.max(14, Math.round(Math.min(width, height) * 0.04));
+        context.font = `600 ${fontSize}px sans-serif`;
+        const horizontalPadding = Math.round(fontSize * 0.65);
+        const verticalPadding = Math.round(fontSize * 0.45);
+        const metrics = context.measureText(displayText);
+        const boxWidth = Math.round(metrics.width + horizontalPadding * 2);
+        const boxHeight = Math.round(fontSize + verticalPadding * 2);
+        const safeMargin = 10;
+        const cycle = (source.currentTime / intervalSeconds) * Math.PI * 2;
+
+        const drawWatermarkAt = (
+          baseX: number,
+          baseY: number,
+          driftX: number,
+          driftY: number
+        ) => {
+          const x = Math.round(
+            Math.max(
+              safeMargin,
+              Math.min(width - boxWidth - safeMargin, baseX + driftX)
+            )
+          );
+          const yBottom = Math.round(
+            Math.max(
+              boxHeight + safeMargin,
+              Math.min(height - safeMargin, baseY + driftY)
+            )
+          );
+
+          context.save();
+          context.globalAlpha = opacity;
+          context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+          context.fillRect(x, yBottom - boxHeight, boxWidth, boxHeight);
+          context.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          context.textBaseline = 'alphabetic';
+          context.fillText(
+            displayText,
+            x + horizontalPadding,
+            yBottom - verticalPadding
+          );
+          context.restore();
+        };
+
+        drawWatermarkAt(
+          width * 0.07,
+          height * 0.18,
+          Math.sin(cycle) * width * 0.08,
+          Math.cos(cycle * 0.8) * height * 0.06
+        );
+        drawWatermarkAt(
+          width * 0.68,
+          height * 0.88,
+          Math.cos(cycle * 1.1) * width * 0.09,
+          Math.sin(cycle * 0.9) * height * 0.07
+        );
+
+        if (source.ended) {
+          if (recorder && recorder.state !== 'inactive') {
+            recorder.stop();
+          }
+          return;
+        }
+        rafId = requestAnimationFrame(drawOverlay);
+      };
+
+      source.onended = () => {
+        if (recorder && recorder.state !== 'inactive') {
+          recorder.stop();
+        }
+      };
+
+      try {
+        recorder.start(250);
+      } catch (error) {
+        fail(error);
+        return;
+      }
+
+      source
+        .play()
+        .then(() => {
+          rafId = requestAnimationFrame(drawOverlay);
+        })
+        .catch((error) => {
+          fail(error);
+        });
+    };
+  });
 }
 
 const uploadImageFile = async (file: File) => {
@@ -488,6 +857,8 @@ export function VideoGenerator({
   const [downloadingVideoId, setDownloadingVideoId] = useState<string | null>(
     null
   );
+  const [watermarkedPlaybackByVideoId, setWatermarkedPlaybackByVideoId] =
+    useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
   const isPollingRef = useRef(false);
   const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -495,6 +866,11 @@ export function VideoGenerator({
     null
   );
   const isAliveRef = useRef(true);
+  const watermarkShownTaskIdsRef = useRef<Set<string>>(new Set());
+  const watermarkedPlaybackByVideoIdRef = useRef<
+    Record<string, WatermarkedPlaybackState>
+  >({});
+  const watermarkedRenderInFlightIdsRef = useRef<Set<string>>(new Set());
 
   const {
     user,
@@ -505,6 +881,10 @@ export function VideoGenerator({
   } =
     useAppContext();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    watermarkedPlaybackByVideoIdRef.current = watermarkedPlaybackByVideoId;
+  }, [watermarkedPlaybackByVideoId]);
 
   const canUseProTemplates =
     !!user?.isAdmin || !!user?.membership?.canUseProTemplates;
@@ -604,6 +984,186 @@ export function VideoGenerator({
   }, [resolution, t]);
 
   const maxBytes = maxSizeMB * 1024 * 1024;
+
+  const revokeWatermarkedPlaybackBlobUrls = useCallback(
+    (states: Record<string, WatermarkedPlaybackState>) => {
+      Object.values(states).forEach((state) => {
+        if (state.blobUrl) {
+          URL.revokeObjectURL(state.blobUrl);
+        }
+      });
+    },
+    []
+  );
+
+  const prepareWatermarkedPlayback = useCallback(
+    async (
+      video: GeneratedVideo,
+      { forceRetry = false }: { forceRetry?: boolean } = {}
+    ) => {
+      if (!isDynamicWatermarkedVideo(video) || !video.url) {
+        return null;
+      }
+
+      const existing = watermarkedPlaybackByVideoIdRef.current[video.id];
+      if (existing?.status === 'ready' && existing.blobUrl) {
+        return {
+          blobUrl: existing.blobUrl,
+          extension: existing.extension || 'mp4',
+        };
+      }
+      if (existing?.status === 'processing') {
+        return null;
+      }
+      if (existing?.status === 'error' && !forceRetry) {
+        return null;
+      }
+      if (watermarkedRenderInFlightIdsRef.current.has(video.id)) {
+        return null;
+      }
+
+      watermarkedRenderInFlightIdsRef.current.add(video.id);
+      setWatermarkedPlaybackByVideoId((prev) => ({
+        ...prev,
+        [video.id]: { status: 'processing' },
+      }));
+
+      try {
+        const rendered = await renderWatermarkedVideoBlob({
+          videoUrl: video.url,
+          watermarkText: video.watermarkText,
+          watermarkOpacity: video.watermarkOpacity,
+          watermarkIntervalSeconds: video.watermarkIntervalSeconds,
+        });
+        const blobUrl = URL.createObjectURL(rendered.blob);
+
+        if (!isAliveRef.current) {
+          URL.revokeObjectURL(blobUrl);
+          return null;
+        }
+
+        setWatermarkedPlaybackByVideoId((prev) => {
+          const previousBlobUrl = prev[video.id]?.blobUrl;
+          if (previousBlobUrl && previousBlobUrl !== blobUrl) {
+            URL.revokeObjectURL(previousBlobUrl);
+          }
+          return {
+            ...prev,
+            [video.id]: {
+              status: 'ready',
+              blobUrl,
+              extension: rendered.extension,
+            },
+          };
+        });
+
+        return {
+          blobUrl,
+          extension: rendered.extension,
+        };
+      } catch (error) {
+        if (isAliveRef.current) {
+          setWatermarkedPlaybackByVideoId((prev) => ({
+            ...prev,
+            [video.id]: { status: 'error' },
+          }));
+        }
+        throw error;
+      } finally {
+        watermarkedRenderInFlightIdsRef.current.delete(video.id);
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    const activeVideoIds = new Set(generatedVideos.map((video) => video.id));
+    setWatermarkedPlaybackByVideoId((prev) => {
+      let changed = false;
+      const next: Record<string, WatermarkedPlaybackState> = {};
+
+      for (const [videoId, state] of Object.entries(prev)) {
+        if (activeVideoIds.has(videoId)) {
+          next[videoId] = state;
+          continue;
+        }
+
+        if (state.blobUrl) {
+          URL.revokeObjectURL(state.blobUrl);
+        }
+        watermarkedRenderInFlightIdsRef.current.delete(videoId);
+        changed = true;
+      }
+
+      return changed ? next : prev;
+    });
+
+    generatedVideos.forEach((video) => {
+      if (!isDynamicWatermarkedVideo(video)) {
+        return;
+      }
+
+      const existing = watermarkedPlaybackByVideoIdRef.current[video.id];
+      if (existing?.status === 'ready' || existing?.status === 'processing') {
+        return;
+      }
+
+      void prepareWatermarkedPlayback(video).catch(() => {});
+    });
+  }, [generatedVideos, prepareWatermarkedPlayback]);
+
+  const mapTaskVideos = useCallback(
+    (task: BackendTask, videos: TaskVideoMetadata[]): GeneratedVideo[] =>
+      videos.map((video, index) => ({
+        id: `${task.id}-${index}`,
+        url: resolveMediaValueToApiPath(video.url),
+        provider: task.provider,
+        model: task.model,
+        prompt: task.prompt ?? undefined,
+        watermarkApplied: video.watermarkApplied,
+        watermarkType: video.watermarkType,
+        watermarkOpacity: video.watermarkOpacity,
+        watermarkIntervalSeconds: video.watermarkIntervalSeconds,
+        watermarkText: video.watermarkText,
+      })),
+    []
+  );
+
+  const reportWatermarkShown = useCallback(
+    (taskIdentifier: string, videos: GeneratedVideo[]) => {
+      if (!taskIdentifier || watermarkShownTaskIdsRef.current.has(taskIdentifier)) {
+        return;
+      }
+
+      const watermarkedCount = videos.filter(
+        (video) => video.watermarkApplied && video.watermarkType === 'dynamic_overlay'
+      ).length;
+      if (watermarkedCount === 0) {
+        return;
+      }
+
+      watermarkShownTaskIdsRef.current.add(taskIdentifier);
+      trackAnalyticsEvent('video_watermark_shown', {
+        task_id: taskIdentifier,
+        video_count: videos.length,
+        watermarked_count: watermarkedCount,
+      });
+    },
+    []
+  );
+
+  const handleRemoveWatermarkClick = useCallback(
+    (video: GeneratedVideo) => {
+      markWatermarkCtaClick();
+      trackAnalyticsEvent('click_remove_watermark_cta', {
+        provider: video.provider || '',
+        model: video.model || '',
+        watermark_type: video.watermarkType || 'none',
+      });
+      router.push('/pricing');
+    },
+    [router]
+  );
 
   const clearPollingTimer = useCallback(() => {
     if (pollingTimerRef.current) {
@@ -716,6 +1276,7 @@ export function VideoGenerator({
     clearPollingTimer();
     clearSuccessHoldTimer();
     isPollingRef.current = false;
+    watermarkedRenderInFlightIdsRef.current.clear();
 
     setIsGenerating(false);
     setProgress(0);
@@ -725,7 +1286,15 @@ export function VideoGenerator({
     setGenerationStartTime(null);
     setElapsedSeconds(0);
     setTaskStatus(null);
-  }, [clearPollingTimer, clearSuccessHoldTimer]);
+    setWatermarkedPlaybackByVideoId((prev) => {
+      revokeWatermarkedPlaybackBlobUrls(prev);
+      return {};
+    });
+  }, [
+    clearPollingTimer,
+    clearSuccessHoldTimer,
+    revokeWatermarkedPlaybackBlobUrls,
+  ]);
 
   const completeWithSuccess = useCallback(() => {
     setGenerationStage('success');
@@ -745,8 +1314,14 @@ export function VideoGenerator({
       isAliveRef.current = false;
       clearPollingTimer();
       clearSuccessHoldTimer();
+      watermarkedRenderInFlightIdsRef.current.clear();
+      revokeWatermarkedPlaybackBlobUrls(watermarkedPlaybackByVideoIdRef.current);
     };
-  }, [clearPollingTimer, clearSuccessHoldTimer]);
+  }, [
+    clearPollingTimer,
+    clearSuccessHoldTimer,
+    revokeWatermarkedPlaybackBlobUrls,
+  ]);
 
   useEffect(() => {
     if (!isGenerating) {
@@ -833,7 +1408,7 @@ export function VideoGenerator({
         setTaskStatus(currentStatus);
 
         const parsedResult = parseTaskResult(task.taskInfo);
-        const videoUrls = extractVideoUrls(parsedResult);
+        const extractedVideos = extractGeneratedVideos(parsedResult, task);
 
         if (currentStatus === AITaskStatus.PENDING) {
           setGenerationProgressStage('queued', 35);
@@ -841,16 +1416,10 @@ export function VideoGenerator({
         }
 
         if (currentStatus === AITaskStatus.PROCESSING) {
-          if (videoUrls.length > 0) {
-            setGeneratedVideos(
-              videoUrls.map((url, index) => ({
-                id: `${task.id}-${index}`,
-                url: resolveMediaValueToApiPath(url),
-                provider: task.provider,
-                model: task.model,
-                prompt: task.prompt ?? undefined,
-              }))
-            );
+          if (extractedVideos.length > 0) {
+            const mappedVideos = mapTaskVideos(task, extractedVideos);
+            setGeneratedVideos(mappedVideos);
+            reportWatermarkShown(task.id, mappedVideos);
             setGenerationProgressStage('rendering', 88);
           } else {
             const elapsedMs = generationStartTime
@@ -866,7 +1435,7 @@ export function VideoGenerator({
         }
 
         if (currentStatus === AITaskStatus.SUCCESS) {
-          if (videoUrls.length === 0) {
+          if (extractedVideos.length === 0) {
             setGenerationStage('failed');
             toast.error(
               mapVideoErrorToUserMessage('no videos', {
@@ -876,15 +1445,9 @@ export function VideoGenerator({
             );
             resetTaskState();
           } else {
-            setGeneratedVideos(
-              videoUrls.map((url, index) => ({
-                id: `${task.id}-${index}`,
-                url: resolveMediaValueToApiPath(url),
-                provider: task.provider,
-                model: task.model,
-                prompt: task.prompt ?? undefined,
-              }))
-            );
+            const mappedVideos = mapTaskVideos(task, extractedVideos);
+            setGeneratedVideos(mappedVideos);
+            reportWatermarkShown(task.id, mappedVideos);
             toast.success(t('status.success'));
             completeWithSuccess();
           }
@@ -935,6 +1498,8 @@ export function VideoGenerator({
       fetchUserCredits,
       generationStartTime,
       locale,
+      mapTaskVideos,
+      reportWatermarkShown,
       resetTaskState,
       setGenerationProgressStage,
       t,
@@ -1103,17 +1668,26 @@ export function VideoGenerator({
 
       if (data.status === AITaskStatus.SUCCESS && data.taskInfo) {
         const parsedResult = parseTaskResult(data.taskInfo);
-        const videoUrls = extractVideoUrls(parsedResult);
+        const immediateTask = data as BackendTask;
+        const extractedVideos = extractGeneratedVideos(parsedResult, immediateTask);
 
-        if (videoUrls.length > 0) {
-          setGeneratedVideos(
-            videoUrls.map((url, index) => ({
-              id: `${newTaskId}-${index}`,
-              url: resolveMediaValueToApiPath(url),
-              provider: VIDEO_PROVIDER,
-              model: VIDEO_MODEL,
-            }))
+        if (extractedVideos.length > 0) {
+          const mappedVideos = mapTaskVideos(
+            {
+              ...immediateTask,
+              id: newTaskId,
+              status: immediateTask.status || AITaskStatus.SUCCESS,
+              mediaType: immediateTask.mediaType || AIMediaType.VIDEO,
+              provider: immediateTask.provider || VIDEO_PROVIDER,
+              model: immediateTask.model || VIDEO_MODEL,
+              prompt: immediateTask.prompt ?? finalPrompt,
+              taskInfo: immediateTask.taskInfo || null,
+              taskResult: immediateTask.taskResult || null,
+            },
+            extractedVideos
           );
+          setGeneratedVideos(mappedVideos);
+          reportWatermarkShown(newTaskId, mappedVideos);
           toast.success(t('status.success'));
           await fetchUserCredits();
           completeWithSuccess();
@@ -1154,16 +1728,44 @@ export function VideoGenerator({
 
     try {
       setDownloadingVideoId(video.id);
+      if (isDynamicWatermarkedVideo(video)) {
+        const prepared =
+          (await prepareWatermarkedPlayback(video, { forceRetry: true })) ||
+          (() => {
+            const existing = watermarkedPlaybackByVideoIdRef.current[video.id];
+            if (!existing?.blobUrl) {
+              return null;
+            }
+            return {
+              blobUrl: existing.blobUrl,
+              extension: existing.extension || 'mp4',
+            };
+          })();
+
+        if (!prepared?.blobUrl) {
+          throw new Error('Failed to prepare watermarked video');
+        }
+
+        const link = document.createElement('a');
+        link.href = prepared.blobUrl;
+        link.download = `${video.id}.${prepared.extension || 'mp4'}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success('Video downloaded');
+        return;
+      }
+
       const resp = await fetch(video.url);
       if (!resp.ok) {
         throw new Error('Failed to fetch video');
       }
-
       const blob = await resp.blob();
+      const extension = inferExtensionFromMimeType(blob.type) || 'mp4';
       const blobUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = `${video.id}.mp4`;
+      link.download = `${video.id}.${extension}`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1171,7 +1773,11 @@ export function VideoGenerator({
       toast.success('Video downloaded');
     } catch (error) {
       console.error('Failed to download video:', error);
-      toast.error('Failed to download video');
+      if (isDynamicWatermarkedVideo(video)) {
+        toast.error(t('watermark.download_failed'));
+      } else {
+        toast.error('Failed to download video');
+      }
     } finally {
       setDownloadingVideoId(null);
     }
@@ -1546,36 +2152,118 @@ export function VideoGenerator({
             <CardContent className="pb-8">
               {generatedVideos.length > 0 ? (
                 <div className="space-y-4">
-                  {generatedVideos.map((video) => (
-                    <div key={video.id} className="space-y-3">
-                      <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
-                        <video
-                          src={video.url}
-                          controls
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="h-auto max-h-[600px] w-full object-contain"
-                          preload="auto"
-                        />
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => handleDownloadVideo(video)}
-                        disabled={downloadingVideoId === video.id}
-                      >
-                        {downloadingVideoId === video.id ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <Download className="mr-2 h-4 w-4" />
+                  {generatedVideos.map((video) => {
+                    const isWatermarked = isDynamicWatermarkedVideo(video);
+                    const playbackState = watermarkedPlaybackByVideoId[video.id];
+                    const playbackUrl = isWatermarked
+                      ? playbackState?.blobUrl || ''
+                      : video.url;
+                    const canRenderVideo = Boolean(playbackUrl);
+
+                    return (
+                      <div key={video.id} className="space-y-3">
+                        <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
+                          {canRenderVideo ? (
+                            <video
+                              src={playbackUrl}
+                              controls
+                              controlsList={
+                                isWatermarked ? 'nodownload noremoteplayback' : undefined
+                              }
+                              disablePictureInPicture={isWatermarked}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="h-auto max-h-[600px] w-full object-contain"
+                              preload="auto"
+                              onContextMenu={
+                                isWatermarked
+                                  ? (event) => event.preventDefault()
+                                  : undefined
+                              }
+                            />
+                          ) : (
+                            <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                              {playbackState?.status === 'error' ? (
+                                <span>{t('watermark.preview_failed')}</span>
+                              ) : (
+                                <>
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                  <span>{t('watermark.preparing_preview')}</span>
+                                </>
+                              )}
+                            </div>
+                          )}
+                          {isWatermarked && canRenderVideo && (
+                            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                              <div
+                                className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+                                style={{
+                                  position: 'absolute',
+                                  left: '5%',
+                                  top: '10%',
+                                  opacity: video.watermarkOpacity ?? 0.28,
+                                  animation: `bb-watermark-drift ${
+                                    Math.max(
+                                      5,
+                                      (video.watermarkIntervalSeconds ?? 3) * 4
+                                    )
+                                  }s linear infinite`,
+                                }}
+                              >
+                                {video.watermarkText || 'BabyBoogey'}
+                              </div>
+                              <div
+                                className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+                                style={{
+                                  position: 'absolute',
+                                  right: '6%',
+                                  bottom: '10%',
+                                  opacity: video.watermarkOpacity ?? 0.28,
+                                  animation: `bb-watermark-drift-reverse ${
+                                    Math.max(
+                                      6,
+                                      (video.watermarkIntervalSeconds ?? 3) * 5
+                                    )
+                                  }s linear infinite`,
+                                }}
+                              >
+                                {video.watermarkText || 'BabyBoogey'}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        {isWatermarked && (
+                          <div className="flex items-center justify-between gap-2 rounded-lg border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                            <span>{t('watermark.free_notice')}</span>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="h-auto px-0 text-xs font-semibold text-amber-900"
+                              onClick={() => handleRemoveWatermarkClick(video)}
+                            >
+                              {t('watermark.remove_cta')}
+                            </Button>
+                          </div>
                         )}
-                        Download
-                      </Button>
-                    </div>
-                  ))}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => handleDownloadVideo(video)}
+                          disabled={downloadingVideoId === video.id}
+                        >
+                          {downloadingVideoId === video.id ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Download className="mr-2 h-4 w-4" />
+                          )}
+                          Download
+                        </Button>
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="space-y-4">

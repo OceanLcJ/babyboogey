@@ -25,6 +25,12 @@ import {
 } from '@/shared/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { useAppContext } from '@/shared/contexts/app';
+import {
+  clearWatermarkAttribution,
+  getWatermarkAttributionAgeMs,
+  hasRecentWatermarkAttribution,
+  trackAnalyticsEvent,
+} from '@/shared/lib/analytics-events';
 import { getCookie } from '@/shared/lib/cookie';
 import { cn } from '@/shared/lib/utils';
 import { Subscription } from '@/shared/models/subscription';
@@ -272,6 +278,10 @@ export function Pricing({
         payment_provider: paymentProvider || '',
         metadata: affiliateMetadata,
       };
+      const shouldTrackWatermarkAttribution = hasRecentWatermarkAttribution();
+      const watermarkAttributionAgeMs = shouldTrackWatermarkAttribution
+        ? getWatermarkAttributionAgeMs()
+        : null;
 
       setIsLoading(true);
       setProductId(item.product_id);
@@ -304,6 +314,16 @@ export function Pricing({
       const { checkoutUrl } = data;
       if (!checkoutUrl) {
         throw new Error('checkout url not found');
+      }
+
+      if (shouldTrackWatermarkAttribution) {
+        trackAnalyticsEvent('upgrade_from_watermark', {
+          product_id: item.product_id,
+          currency: item.currency,
+          payment_provider: paymentProvider || '',
+          attribution_age_ms: watermarkAttributionAgeMs ?? undefined,
+        });
+        clearWatermarkAttribution();
       }
 
       window.location.href = checkoutUrl;

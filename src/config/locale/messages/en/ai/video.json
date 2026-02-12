@@ -84,6 +84,13 @@
       "task_not_found_actionable": "Task was not found. Please start a new generation.",
       "input_missing_actionable": "Required inputs are missing. Please upload a photo and select a template, then retry.",
       "generic_retry_actionable": "Generation failed. Please retry in a moment."
+    },
+    "watermark": {
+      "free_notice": "Free exports include a dynamic BabyBoogey watermark. Upgrade to remove it.",
+      "remove_cta": "Remove Watermark",
+      "download_failed": "Your browser cannot export a watermarked video. Please try Chrome/Edge, or upgrade to remove the watermark.",
+      "preparing_preview": "Preparing protected preview...",
+      "preview_failed": "Unable to prepare protected preview. Please try downloading or regenerate."
     }
   }
 }
