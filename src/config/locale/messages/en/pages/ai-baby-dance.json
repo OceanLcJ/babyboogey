@@ -23,7 +23,7 @@
         "buttons": [
           {
             "title": "Make Baby Dance Free",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap",
             "variant": "default"
           },
@@ -348,7 +348,7 @@
         "buttons": [
           {
             "title": "Make Baby Dance Free",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap",
             "variant": "default"
           },

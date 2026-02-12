@@ -22,7 +22,7 @@
         "buttons": [
           {
             "title": "Make a Free Video Now",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -258,12 +258,12 @@
         "buttons": [
           {
             "title": "Create Free Baby Dance Video",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "Browse Dance Templates",
-            "url": "/ai-video-generator",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }

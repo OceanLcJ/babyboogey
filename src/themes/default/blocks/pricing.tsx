@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
@@ -82,6 +82,31 @@ function getInitialCurrency(
   return defaultCurrency;
 }
 
+function resolveDefaultGroup({
+  items,
+  groups,
+  currentProductId,
+}: {
+  items: PricingItem[];
+  groups?: PricingType['groups'];
+  currentProductId?: string | null;
+}): string {
+  if (!items.length) return '';
+
+  const currentItem = currentProductId
+    ? items.find((i) => i.product_id === currentProductId)
+    : undefined;
+  const featuredGroup = groups?.find((g) => g.is_featured);
+
+  return (
+    currentItem?.group ||
+    featuredGroup?.name ||
+    groups?.[0]?.name ||
+    items[0]?.group ||
+    ''
+  );
+}
+
 export function Pricing({
   section,
   className,
@@ -102,19 +127,68 @@ export function Pricing({
     configs,
   } = useAppContext();
 
-  const [group, setGroup] = useState(() => {
-    // find current pricing item
-    const currentItem = section.items?.find(
-      (i) => i.product_id === currentSubscription?.productId
-    );
+  const hasSubscriptionAccess = Boolean(
+    currentSubscription || user?.membership?.hasSubscription
+  );
 
-    // First look for a group with is_featured set to true
-    const featuredGroup = section.groups?.find((g) => g.is_featured);
-    // If no featured group exists, fall back to the first group
-    return (
-      currentItem?.group || featuredGroup?.name || section.groups?.[0]?.name
-    );
+  const visibleGroups = useMemo(() => {
+    if (!section.groups) return [];
+    return hasSubscriptionAccess
+      ? section.groups
+      : section.groups.filter((groupItem) => groupItem.name !== 'credits');
+  }, [section.groups, hasSubscriptionAccess]);
+
+  const visibleItems = useMemo(() => {
+    if (!section.items) return [];
+    return hasSubscriptionAccess
+      ? section.items
+      : section.items.filter((item) => item.group !== 'credits');
+  }, [section.items, hasSubscriptionAccess]);
+
+  const [group, setGroup] = useState(() => {
+    return resolveDefaultGroup({
+      items: visibleItems,
+      groups: visibleGroups,
+      currentProductId: currentSubscription?.productId,
+    });
   });
+
+  const visibleGroupNames = useMemo(
+    () =>
+      new Set(
+        visibleGroups
+          .map((groupItem) => groupItem.name)
+          .filter((name): name is string => Boolean(name))
+      ),
+    [visibleGroups]
+  );
+
+  const filteredItems = useMemo(() => {
+    if (!group) return visibleItems;
+    return visibleItems.filter((item) => !item.group || item.group === group);
+  }, [visibleItems, group]);
+
+  useEffect(() => {
+    if (!visibleGroups.length) return;
+
+    if (group && visibleGroupNames.has(group)) {
+      return;
+    }
+
+    setGroup(
+      resolveDefaultGroup({
+        items: visibleItems,
+        groups: visibleGroups,
+        currentProductId: currentSubscription?.productId,
+      })
+    );
+  }, [
+    group,
+    visibleGroupNames,
+    visibleGroups,
+    visibleItems,
+    currentSubscription?.productId,
+  ]);
 
   // current pricing item
   const [pricingItem, setPricingItem] = useState<PricingItem | null>(null);
@@ -337,12 +411,12 @@ export function Pricing({
   };
 
   useEffect(() => {
-    if (section.items) {
-      const featuredItem = section.items.find((i) => i.is_featured);
-      setProductId(featuredItem?.product_id || section.items[0]?.product_id);
+    if (visibleItems.length > 0) {
+      const featuredItem = visibleItems.find((i) => i.is_featured);
+      setProductId(featuredItem?.product_id || visibleItems[0]?.product_id);
       setIsLoading(false);
     }
-  }, [section.items]);
+  }, [visibleItems]);
 
   return (
     <section
@@ -362,11 +436,11 @@ export function Pricing({
       </div>
 
       <div className="container">
-        {section.groups && section.groups.length > 0 && (
+        {visibleGroups.length > 0 && (
           <div className="mx-auto mt-8 mb-16 flex w-full justify-center md:max-w-lg">
             <Tabs value={group} onValueChange={setGroup} className="">
               <TabsList>
-                {section.groups.map((item, i) => {
+                {visibleGroups.map((item, i) => {
                   return (
                     <TabsTrigger key={i} value={item.name || ''}>
                       {item.title}
@@ -383,15 +457,10 @@ export function Pricing({
 
         <div
           className={`mx-auto mt-0 grid w-full gap-6 md:grid-cols-${
-            section.items?.filter((item) => !item.group || item.group === group)
-              ?.length
+            filteredItems.length || 1
           }`}
         >
-          {section.items?.map((item: PricingItem, idx) => {
-            if (item.group && item.group !== group) {
-              return null;
-            }
-
+          {filteredItems.map((item: PricingItem) => {
             let isCurrentPlan = false;
             if (
               currentSubscription &&
@@ -408,7 +477,7 @@ export function Pricing({
             const currencies = getCurrenciesFromItem(item);
 
             return (
-              <Card key={idx} className="relative">
+              <Card key={item.product_id} className="relative">
                 {item.label && (
                   <span className="absolute inset-x-0 -top-3 mx-auto flex h-6 w-fit items-center rounded-full bg-linear-to-br/increasing from-purple-400 to-amber-300 px-3 py-1 text-xs font-medium text-amber-950 ring-1 ring-white/20 ring-offset-1 ring-offset-gray-950/5 ring-inset">
                     {item.label}

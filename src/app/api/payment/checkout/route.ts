@@ -15,6 +15,7 @@ import {
   OrderStatus,
   updateOrderByOrderNo,
 } from '@/shared/models/order';
+import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getPaymentService } from '@/shared/services/payment';
 import { PricingCurrency } from '@/shared/types/blocks/pricing';
@@ -49,6 +50,13 @@ export async function POST(req: Request) {
     const user = await getUserInfo();
     if (!user || !user.email) {
       return respErr('no auth, please sign in');
+    }
+
+    if (pricingItem.group === 'credits') {
+      const currentSubscription = await getCurrentSubscription(user.id);
+      if (!currentSubscription) {
+        return respErr(t('messages.credit_pack_subscribers_only'));
+      }
     }
 
     // get configs

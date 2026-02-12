@@ -22,7 +22,7 @@
         "buttons": [
           {
             "title": "免费在线试用 Seedance 2.0",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -199,12 +199,12 @@
         "buttons": [
           {
             "title": "在线生成 (免下载)",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
-            "title": "查看热门模板",
-            "url": "/create",
+            "title": "查看案例",
+            "url": "/showcases",
             "icon": "PlayCircle"
           }
         ],

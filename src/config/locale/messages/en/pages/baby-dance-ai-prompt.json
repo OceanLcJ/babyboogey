@@ -20,7 +20,7 @@
         "buttons": [
           {
             "title": "Try BabyBoogey Free",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
@@ -184,12 +184,12 @@
         "buttons": [
           {
             "title": "Create Your First Video Free",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "See How It Works",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],

@@ -23,7 +23,7 @@
         "buttons": [
           {
             "title": "免费制作宝宝跳舞",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap",
             "variant": "default"
           },
@@ -348,7 +348,7 @@
         "buttons": [
           {
             "title": "免费制作宝宝跳舞",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap",
             "variant": "default"
           },

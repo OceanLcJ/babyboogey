@@ -23,7 +23,7 @@
         "buttons": [
           {
             "title": "立即制作视频",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -320,12 +320,12 @@
         "buttons": [
           {
             "title": "立即制作视频",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "探索视频生成器",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "PlayCircle"
           }
         ],

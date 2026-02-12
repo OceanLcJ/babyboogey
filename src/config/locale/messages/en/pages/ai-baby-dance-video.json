@@ -23,7 +23,7 @@
         "buttons": [
           {
             "title": "Create Your First Video",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -320,12 +320,12 @@
         "buttons": [
           {
             "title": "Create Your Video Now",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "Explore the Video Generator",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "PlayCircle"
           }
         ],

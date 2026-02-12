@@ -33,17 +33,17 @@
             "description": "Perfect for getting started",
             "features_title": "Includes:",
             "features": [
-              "200 credits (never expire)",
-              "~3 720p videos",
+              "410 credits (never expire)",
+              "~7 720p videos",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
             "interval": "one-time",
-            "amount": 990,
+            "amount": 999,
             "currency": "USD",
-            "price": "$9.9",
-            "original_price": "$9.9",
+            "price": "$9.99",
+            "original_price": "$19.82",
             "unit": "",
             "is_featured": false,
             "button": {
@@ -53,7 +53,7 @@
             },
             "product_id": "starter",
             "product_name": "Starter Credit Pack",
-            "credits": 200,
+            "credits": 410,
             "group": "credits"
           },
           {
@@ -62,17 +62,17 @@
             "label": "Popular",
             "features_title": "Includes:",
             "features": [
-              "650 credits (never expire)",
-              "~10 720p videos",
+              "1170 credits (never expire)",
+              "~20 720p videos",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
             "interval": "one-time",
-            "amount": 999,
+            "amount": 1999,
             "currency": "USD",
-            "price": "$9.99",
-            "original_price": "$19.9",
+            "price": "$19.99",
+            "original_price": "$39.82",
             "unit": "",
             "is_featured": true,
             "button": {
@@ -82,7 +82,7 @@
             },
             "product_id": "standard",
             "product_name": "Standard Credit Pack",
-            "credits": 650,
+            "credits": 1170,
             "group": "credits"
           },
           {
@@ -90,17 +90,17 @@
             "description": "Best choice for bulk creation",
             "features_title": "Includes:",
             "features": [
-              "1600 credits (never expire)",
-              "~25 720p videos",
+              "3040 credits (never expire)",
+              "~51 720p videos",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
             "interval": "one-time",
-            "amount": 1999,
+            "amount": 3999,
             "currency": "USD",
-            "price": "$19.99",
-            "original_price": "$39.9",
+            "price": "$39.99",
+            "original_price": "$79.82",
             "unit": "",
             "is_featured": false,
             "button": {
@@ -110,7 +110,7 @@
             },
             "product_id": "premium",
             "product_name": "Premium Credit Pack",
-            "credits": 1600,
+            "credits": 3040,
             "group": "credits"
           },
           {
@@ -118,17 +118,17 @@
             "description": "Perfect for getting started",
             "features_title": "Includes:",
             "features": [
-              "300 credits/month",
-              "~5 720p videos/month",
+              "430 credits/month",
+              "~7 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
             "interval": "month",
-            "amount": 990,
+            "amount": 999,
             "currency": "USD",
-            "price": "$9.9",
-            "original_price": "$9.99",
+            "price": "$9.99",
+            "original_price": "$14.28",
             "unit": "/ month",
             "is_featured": false,
             "button": {
@@ -138,7 +138,7 @@
             },
             "product_id": "starter-monthly",
             "product_name": "Starter Monthly",
-            "credits": 300,
+            "credits": 430,
             "valid_days": 30,
             "group": "monthly",
             "plan_name": "Starter"
@@ -149,18 +149,18 @@
             "label": "Popular",
             "features_title": "Includes:",
             "features": [
-              "800 credits/month",
-              "~13 720p videos/month",
+              "1170 credits/month",
+              "~20 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
               "Priority support"
             ],
             "interval": "month",
-            "amount": 1299,
+            "amount": 1899,
             "currency": "USD",
-            "price": "$12.99",
-            "original_price": "$19.99",
+            "price": "$18.99",
+            "original_price": "$29.22",
             "unit": "/ month",
             "is_featured": true,
             "button": {
@@ -170,7 +170,7 @@
             },
             "product_id": "standard-monthly",
             "product_name": "Standard Monthly",
-            "credits": 800,
+            "credits": 1170,
             "valid_days": 30,
             "group": "monthly",
             "plan_name": "Standard"
@@ -180,18 +180,18 @@
             "description": "Unlimited creativity",
             "features_title": "Includes:",
             "features": [
-              "2000 credits/month",
-              "~33 720p videos/month",
+              "2880 credits/month",
+              "~48 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
               "Priority support"
             ],
             "interval": "month",
-            "amount": 2499,
+            "amount": 3599,
             "currency": "USD",
-            "price": "$24.99",
-            "original_price": "$39.99",
+            "price": "$35.99",
+            "original_price": "$57.59",
             "unit": "/ month",
             "is_featured": false,
             "button": {
@@ -201,7 +201,7 @@
             },
             "product_id": "premium-monthly",
             "product_name": "Premium Monthly",
-            "credits": 2000,
+            "credits": 2880,
             "valid_days": 30,
             "group": "monthly",
             "plan_name": "Premium"
@@ -211,17 +211,17 @@
             "description": "Perfect for getting started",
             "features_title": "Includes:",
             "features": [
-              "300 credits/month",
-              "~5 720p videos/month",
+              "550 credits/month",
+              "~9 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
             "interval": "year",
-            "amount": 11880,
+            "amount": 10788,
             "currency": "USD",
-            "price": "$9.9",
-            "original_price": "$9.9",
+            "price": "$8.99",
+            "original_price": "$12.82",
             "unit": "/ month",
             "is_featured": false,
             "button": {
@@ -231,7 +231,7 @@
             },
             "product_id": "starter-yearly",
             "product_name": "Starter Yearly",
-            "credits": 3600,
+            "credits": 6580,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Starter"
@@ -242,18 +242,18 @@
             "label": "Popular",
             "features_title": "Includes:",
             "features": [
-              "800 credits/month",
-              "~13 720p videos/month",
+              "1500 credits/month",
+              "~25 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
               "Priority support"
             ],
             "interval": "year",
-            "amount": 11880,
+            "amount": 20388,
             "currency": "USD",
-            "price": "$9.9",
-            "original_price": "$12.99",
+            "price": "$16.99",
+            "original_price": "$24.25",
             "unit": "/ month",
             "is_featured": true,
             "button": {
@@ -263,7 +263,7 @@
             },
             "product_id": "standard-yearly",
             "product_name": "Standard Yearly",
-            "credits": 9600,
+            "credits": 17960,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Standard"
@@ -273,18 +273,18 @@
             "description": "Unlimited creativity",
             "features_title": "Includes:",
             "features": [
-              "2000 credits/month",
-              "~33 720p videos/month",
+              "3670 credits/month",
+              "~61 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
               "Priority support"
             ],
             "interval": "year",
-            "amount": 20900,
+            "amount": 38388,
             "currency": "USD",
-            "price": "$17.40",
-            "original_price": "$24.99",
+            "price": "$31.99",
+            "original_price": "$45.94",
             "unit": "/ month",
             "is_featured": false,
             "button": {
@@ -294,7 +294,7 @@
             },
             "product_id": "premium-yearly",
             "product_name": "Premium Yearly",
-            "credits": 24000,
+            "credits": 44080,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Premium"
@@ -305,6 +305,7 @@
   },
   "messages": {
     "current_plan": "Current Plan",
-    "processing": "Processing"
+    "processing": "Processing",
+    "credit_pack_subscribers_only": "Credit packs are available to subscribers only. Please subscribe first."
   }
 }

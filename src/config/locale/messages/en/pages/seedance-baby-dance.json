@@ -22,7 +22,7 @@
         "buttons": [
           {
             "title": "Try Seedance 2.0 Online Free",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -199,12 +199,12 @@
         "buttons": [
           {
             "title": "Use Online (No Download)",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
-            "title": "Browse Hot Templates",
-            "url": "/create",
+            "title": "View Showcases",
+            "url": "/showcases",
             "icon": "PlayCircle"
           }
         ],

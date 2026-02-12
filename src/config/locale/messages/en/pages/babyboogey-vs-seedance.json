@@ -20,7 +20,7 @@
         "buttons": [
           {
             "title": "Try BabyBoogey Free",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -175,12 +175,12 @@
         "buttons": [
           {
             "title": "Try BabyBoogey Free",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "Browse Templates",
-            "url": "/create",
+            "url": "/showcases",
             "icon": "BookOpenText"
           }
         ],

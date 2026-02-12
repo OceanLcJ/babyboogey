@@ -22,7 +22,7 @@
         "buttons": [
           {
             "title": "立即免费制作",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           }
         ],
@@ -258,12 +258,12 @@
         "buttons": [
           {
             "title": "免费制作宝宝跳舞视频",
-            "url": "/create",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "浏览舞蹈模板",
-            "url": "/ai-video-generator",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }

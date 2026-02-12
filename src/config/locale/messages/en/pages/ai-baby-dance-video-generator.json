@@ -23,12 +23,12 @@
         "buttons": [
           {
             "title": "Create Your First Video",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "Browse Templates",
-            "url": "/create",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }
@@ -335,12 +335,12 @@
         "buttons": [
           {
             "title": "Start Creating Now",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "Explore Templates",
-            "url": "/create",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }

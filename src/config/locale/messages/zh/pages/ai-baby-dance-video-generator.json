@@ -23,12 +23,12 @@
         "buttons": [
           {
             "title": "立即创建视频",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "浏览模板",
-            "url": "/create",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }
@@ -335,12 +335,12 @@
         "buttons": [
           {
             "title": "立即开始创作",
-            "url": "/ai-video-generator",
+            "url": "/#generator",
             "icon": "Zap"
           },
           {
             "title": "探索模板",
-            "url": "/create",
+            "url": "/showcases",
             "variant": "outline",
             "icon": "BookOpenText"
           }
