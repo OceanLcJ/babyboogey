@@ -7,7 +7,7 @@ import { respData, respErr } from '@/shared/lib/resp';
 import { createAITask, NewAITask } from '@/shared/models/ai_task';
 import { getAllConfigs } from '@/shared/models/config';
 import { getRemainingCredits } from '@/shared/models/credit';
-import { hasPaidOrder } from '@/shared/models/order';
+import { hasMonetizedPaidOrder } from '@/shared/models/order';
 import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
@@ -172,11 +172,11 @@ export async function POST(request: Request) {
       const configuredMode = normalizeVideoWatermarkMode(
         configs.free_video_watermark_mode || 'dynamic_overlay'
       );
-      const [paidOrder, currentSubscription] = await Promise.all([
-        hasPaidOrder(user.id),
+      const [hasMonetizedOrder, currentSubscription] = await Promise.all([
+        hasMonetizedPaidOrder(user.id),
         getCurrentSubscription(user.id),
       ]);
-      const hasPaidMembership = paidOrder || Boolean(currentSubscription);
+      const hasPaidMembership = hasMonetizedOrder || Boolean(currentSubscription);
 
       if (freeVideoWatermarkEnabled && configuredMode !== 'none' && !hasPaidMembership) {
         const watermarkOpacity = parseConfigNumber(

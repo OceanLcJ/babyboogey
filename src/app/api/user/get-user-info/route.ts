@@ -1,12 +1,12 @@
 import { PERMISSIONS } from '@/core/rbac';
 import { respData, respErr } from '@/shared/lib/resp';
 import { getRemainingCredits } from '@/shared/models/credit';
-import { hasPaidOrder } from '@/shared/models/order';
+import { hasMonetizedPaidOrder } from '@/shared/models/order';
 import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { hasPermission } from '@/shared/services/rbac';
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     // get sign user info
     const user = await getUserInfo();
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const isAdmin = await hasPermission(user.id, PERMISSIONS.ADMIN_ACCESS);
 
     const [paidOrder, currentSubscription] = await Promise.all([
-      hasPaidOrder(user.id),
+      hasMonetizedPaidOrder(user.id),
       getCurrentSubscription(user.id),
     ]);
 

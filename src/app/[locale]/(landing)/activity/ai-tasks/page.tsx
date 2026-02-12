@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { AITaskStatus } from '@/extensions/ai';
 import { AudioPlayer, Empty, LazyImage } from '@/shared/blocks/common';
+import { WatermarkedVideoResult } from '@/shared/blocks/common/watermarked-video-result';
 import { TableCard } from '@/shared/blocks/table';
 import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
 import {
@@ -13,6 +14,134 @@ import {
 import { getUserInfo } from '@/shared/models/user';
 import { Button, Tab } from '@/shared/types/blocks/common';
 import { type Table } from '@/shared/types/blocks/table';
+
+type VideoWatermarkType = 'none' | 'dynamic_overlay';
+
+type VideoWatermarkConfig = {
+  watermarkApplied: boolean;
+  watermarkType: VideoWatermarkType;
+  watermarkOpacity: number;
+  watermarkIntervalSeconds: number;
+  watermarkText: string;
+};
+
+function safeParseJson(value?: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeWatermarkType(value?: string | null): VideoWatermarkType {
+  return String(value || '').trim().toLowerCase() === 'dynamic_overlay'
+    ? 'dynamic_overlay'
+    : 'none';
+}
+
+function resolveVideoUrlFromTaskInfoItem(video: unknown): string | null {
+  if (typeof video === 'string') {
+    return video;
+  }
+
+  if (!video || typeof video !== 'object' || Array.isArray(video)) {
+    return null;
+  }
+
+  const record = video as Record<string, unknown>;
+  const candidate =
+    record.videoUrl ?? record.url ?? record.uri ?? record.video ?? record.src;
+  return typeof candidate === 'string' && candidate ? candidate : null;
+}
+
+function resolveVideoThumbnailFromTaskInfoItem(video: unknown): string | null {
+  if (!video || typeof video !== 'object' || Array.isArray(video)) {
+    return null;
+  }
+
+  const record = video as Record<string, unknown>;
+  const candidate =
+    record.thumbnailUrl ?? record.thumbnail ?? record.poster ?? record.cover;
+  return typeof candidate === 'string' && candidate ? candidate : null;
+}
+
+function getTaskWatermarkConfig(task: AITask): VideoWatermarkConfig {
+  const watermarkType = normalizeWatermarkType(task.watermarkMode);
+  const watermarkApplied =
+    Boolean(task.watermarkApplied) && watermarkType === 'dynamic_overlay';
+
+  const parsedOptions = safeParseJson(task.options);
+  const parsedRecord =
+    parsedOptions &&
+    typeof parsedOptions === 'object' &&
+    !Array.isArray(parsedOptions)
+      ? (parsedOptions as Record<string, unknown>)
+      : null;
+  const policyRaw = parsedRecord?.watermarkPolicy;
+  const policy =
+    policyRaw && typeof policyRaw === 'object' && !Array.isArray(policyRaw)
+      ? (policyRaw as Record<string, unknown>)
+      : {};
+
+  const opacityRaw = Number(policy.watermarkOpacity);
+  const intervalRaw = Number(policy.watermarkIntervalSeconds);
+
+  return {
+    watermarkApplied,
+    watermarkType: watermarkApplied ? watermarkType : 'none',
+    watermarkOpacity: Number.isFinite(opacityRaw)
+      ? Math.min(0.9, Math.max(0.05, opacityRaw))
+      : 0.28,
+    watermarkIntervalSeconds: Number.isFinite(intervalRaw)
+      ? Math.min(30, Math.max(1, intervalRaw))
+      : 3,
+    watermarkText: String(policy.watermarkText || 'BabyBoogey').slice(0, 64),
+  };
+}
+
+function mergeVideoWatermarkConfig({
+  video,
+  taskWatermark,
+}: {
+  video: unknown;
+  taskWatermark: VideoWatermarkConfig;
+}): VideoWatermarkConfig {
+  if (!video || typeof video !== 'object' || Array.isArray(video)) {
+    return taskWatermark;
+  }
+
+  const record = video as Record<string, unknown>;
+  const appliedFromVideo =
+    typeof record.watermarkApplied === 'boolean'
+      ? record.watermarkApplied
+      : taskWatermark.watermarkApplied;
+  const typeFromVideo = normalizeWatermarkType(
+    String(record.watermarkType || taskWatermark.watermarkType)
+  );
+  const watermarkApplied = appliedFromVideo && typeFromVideo === 'dynamic_overlay';
+
+  const opacityRaw = Number(record.watermarkOpacity);
+  const intervalRaw = Number(record.watermarkIntervalSeconds);
+
+  return {
+    watermarkApplied,
+    watermarkType: watermarkApplied ? typeFromVideo : 'none',
+    watermarkOpacity: Number.isFinite(opacityRaw)
+      ? Math.min(0.9, Math.max(0.05, opacityRaw))
+      : taskWatermark.watermarkOpacity,
+    watermarkIntervalSeconds: Number.isFinite(intervalRaw)
+      ? Math.min(30, Math.max(1, intervalRaw))
+      : taskWatermark.watermarkIntervalSeconds,
+    watermarkText:
+      typeof record.watermarkText === 'string' && record.watermarkText
+        ? record.watermarkText.slice(0, 64)
+        : taskWatermark.watermarkText,
+  };
+}
 
 export default async function AiTasksPage({
   searchParams,
@@ -82,23 +211,50 @@ export default async function AiTasksPage({
             return '-';
           }
 
-          let taskInfo: any;
-          try {
-            taskInfo = JSON.parse(item.taskInfo);
-          } catch {
+          const parsedTaskInfo = safeParseJson(item.taskInfo);
+          if (
+            !parsedTaskInfo ||
+            typeof parsedTaskInfo !== 'object' ||
+            Array.isArray(parsedTaskInfo)
+          ) {
             return '-';
           }
+          const taskInfo = parsedTaskInfo as Record<string, unknown>;
 
-          if (taskInfo.errorMessage) {
-            return <div className="text-red-500">Failed: {taskInfo.errorMessage}</div>;
+          const errorMessage =
+            typeof taskInfo.errorMessage === 'string' ? taskInfo.errorMessage : '';
+          if (errorMessage) {
+            return <div className="text-red-500">Failed: {errorMessage}</div>;
           }
 
-          if (taskInfo.songs && taskInfo.songs.length > 0) {
-            const songs: any[] = taskInfo.songs.filter((song: any) => song.audioUrl);
+          const songsRaw = Array.isArray(taskInfo.songs) ? taskInfo.songs : [];
+          if (songsRaw.length > 0) {
+            const songs = songsRaw
+              .map((song) => {
+                if (!song || typeof song !== 'object' || Array.isArray(song)) {
+                  return null;
+                }
+                const songRecord = song as Record<string, unknown>;
+                if (
+                  typeof songRecord.audioUrl !== 'string' ||
+                  !songRecord.audioUrl
+                ) {
+                  return null;
+                }
+                return {
+                  id: typeof songRecord.id === 'string' ? songRecord.id : '',
+                  audioUrl: songRecord.audioUrl,
+                  title:
+                    typeof songRecord.title === 'string' ? songRecord.title : '',
+                };
+              })
+              .filter((song): song is { id: string; audioUrl: string; title: string } =>
+                Boolean(song)
+              );
             if (songs.length > 0) {
               return (
                 <div className="flex flex-col gap-2">
-                  {songs.map((song: any, index: number) => (
+                  {songs.map((song, index: number) => (
                     <AudioPlayer
                       key={song.id || `${item.id}-song-${index}`}
                       src={resolveMediaValueToApiPath(song.audioUrl)}
@@ -111,46 +267,60 @@ export default async function AiTasksPage({
             }
           }
 
-          if (taskInfo.images && taskInfo.images.length > 0) {
+          const imagesRaw = Array.isArray(taskInfo.images) ? taskInfo.images : [];
+          if (imagesRaw.length > 0) {
             return (
               <div className="flex flex-col gap-2">
-                {taskInfo.images.map((image: any, index: number) => (
-                  <LazyImage
-                    key={index}
-                    src={resolveMediaValueToApiPath(image.imageUrl)}
-                    alt="Generated image"
-                    className="h-32 w-auto"
-                  />
-                ))}
+                {imagesRaw.map((image, index: number) => {
+                  if (!image || typeof image !== 'object' || Array.isArray(image)) {
+                    return null;
+                  }
+                  const imageRecord = image as Record<string, unknown>;
+                  if (
+                    typeof imageRecord.imageUrl !== 'string' ||
+                    !imageRecord.imageUrl
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <LazyImage
+                      key={index}
+                      src={resolveMediaValueToApiPath(imageRecord.imageUrl)}
+                      alt="Generated image"
+                      className="h-32 w-auto"
+                    />
+                  );
+                })}
               </div>
             );
           }
 
-          if (taskInfo.videos && taskInfo.videos.length > 0) {
+          const videosRaw = Array.isArray(taskInfo.videos) ? taskInfo.videos : [];
+          if (videosRaw.length > 0) {
+            const taskWatermark = getTaskWatermarkConfig(item);
             return (
               <div className="flex flex-col gap-3">
-                {taskInfo.videos.map((video: any, index: number) => {
-                  const videoUrl = resolveMediaValueToApiPath(video.videoUrl);
-                  const thumbnailUrl = resolveMediaValueToApiPath(
-                    video.thumbnailUrl
-                  );
+                {videosRaw.map((video, index: number) => {
+                  const videoUrlRaw = resolveVideoUrlFromTaskInfoItem(video);
+                  if (!videoUrlRaw) {
+                    return null;
+                  }
+                  const thumbnailUrlRaw = resolveVideoThumbnailFromTaskInfoItem(video);
+                  const watermark = mergeVideoWatermarkConfig({
+                    video,
+                    taskWatermark,
+                  });
                   return (
-                    <div key={`${item.id}-video-${index}`} className="flex flex-col gap-2">
-                      <video
-                        src={videoUrl}
-                        poster={thumbnailUrl || undefined}
-                        controls
-                        className="h-40 w-72 rounded-md border bg-black/70"
-                        preload="metadata"
-                      />
-                      <a
-                        href={videoUrl}
-                        download
-                        className="w-fit rounded border px-2 py-1 text-xs hover:bg-black/5"
-                      >
-                        Download
-                      </a>
-                    </div>
+                    <WatermarkedVideoResult
+                      key={`${item.id}-video-${index}`}
+                      videoUrl={resolveMediaValueToApiPath(videoUrlRaw)}
+                      thumbnailUrl={
+                        thumbnailUrlRaw
+                          ? resolveMediaValueToApiPath(thumbnailUrlRaw)
+                          : undefined
+                      }
+                      watermark={watermark}
+                    />
                   );
                 })}
               </div>

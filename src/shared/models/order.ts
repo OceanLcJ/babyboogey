@@ -1,4 +1,4 @@
-import { and, count, desc, eq, or } from 'drizzle-orm';
+import { and, count, desc, eq, gt, or } from 'drizzle-orm';
 
 import { db } from '@/core/db';
 import { credit, order, subscription } from '@/config/db/schema';
@@ -37,6 +37,28 @@ export async function hasPaidOrder(userId: string): Promise<boolean> {
     .select({ count: count() })
     .from(order)
     .where(and(eq(order.userId, userId), eq(order.status, OrderStatus.PAID)))
+    .limit(1);
+
+  return (result?.count || 0) > 0;
+}
+
+/**
+ * Returns true only when the user has at least one PAID order with actual
+ * positive payment amount (in cents). This excludes $0 trial/promo orders.
+ */
+export async function hasMonetizedPaidOrder(userId: string): Promise<boolean> {
+  if (!userId) return false;
+
+  const [result] = await db()
+    .select({ count: count() })
+    .from(order)
+    .where(
+      and(
+        eq(order.userId, userId),
+        eq(order.status, OrderStatus.PAID),
+        gt(order.paymentAmount, 0)
+      )
+    )
     .limit(1);
 
   return (result?.count || 0) > 0;
