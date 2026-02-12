@@ -211,8 +211,8 @@
             "description": "完美的入门体验",
             "features_title": "包含内容：",
             "features": [
-              "550积分/月",
-              "~9个720p视频/月",
+              "430积分/月",
+              "~7个720p视频/月",
               "无水印",
               "商业授权",
               "私有存储"
@@ -231,7 +231,7 @@
             },
             "product_id": "starter-yearly",
             "product_name": "入门版年度订阅",
-            "credits": 6580,
+            "credits": 5160,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "入门版"
@@ -242,8 +242,8 @@
             "label": "热门",
             "features_title": "包含内容：",
             "features": [
-              "1500积分/月",
-              "~25个720p视频/月",
+              "1170积分/月",
+              "~20个720p视频/月",
               "无水印",
               "商业授权",
               "私有存储",
@@ -263,7 +263,7 @@
             },
             "product_id": "standard-yearly",
             "product_name": "标准版年度订阅",
-            "credits": 17960,
+            "credits": 14040,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "标准版"
@@ -273,8 +273,8 @@
             "description": "无限创意释放",
             "features_title": "包含内容：",
             "features": [
-              "3670积分/月",
-              "~61个720p视频/月",
+              "2880积分/月",
+              "~48个720p视频/月",
               "无水印",
               "商业授权",
               "私有存储",
@@ -294,7 +294,7 @@
             },
             "product_id": "premium-yearly",
             "product_name": "高级版年度订阅",
-            "credits": 44080,
+            "credits": 34560,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "高级版"

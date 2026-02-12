@@ -428,8 +428,8 @@
             "description": "Perfect for getting started",
             "features_title": "Includes:",
             "features": [
-              "550 credits/month",
-              "~9 720p videos/month",
+              "430 credits/month",
+              "~7 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -448,7 +448,7 @@
             },
             "product_id": "starter-yearly",
             "product_name": "Starter Yearly",
-            "credits": 6580,
+            "credits": 5160,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Starter"
@@ -459,8 +459,8 @@
             "label": "Popular",
             "features_title": "Includes:",
             "features": [
-              "1500 credits/month",
-              "~25 720p videos/month",
+              "1170 credits/month",
+              "~20 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -480,7 +480,7 @@
             },
             "product_id": "standard-yearly",
             "product_name": "Standard Yearly",
-            "credits": 17960,
+            "credits": 14040,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Standard"
@@ -490,8 +490,8 @@
             "description": "Unlimited creativity",
             "features_title": "Includes:",
             "features": [
-              "3670 credits/month",
-              "~61 720p videos/month",
+              "2880 credits/month",
+              "~48 720p videos/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -511,7 +511,7 @@
             },
             "product_id": "premium-yearly",
             "product_name": "Premium Yearly",
-            "credits": 44080,
+            "credits": 34560,
             "valid_days": 365,
             "group": "yearly",
             "plan_name": "Premium"
