@@ -322,8 +322,8 @@ export function Pricing({
       ['stripe'].includes(paymentProvider)
     ) {
       const promotekitReferral =
-        typeof window !== 'undefined' && (window as any).promotekit_referral
-          ? (window as any).promotekit_referral
+        typeof window !== 'undefined' && (window as UnsafeAny).promotekit_referral
+          ? (window as UnsafeAny).promotekit_referral
           : getCookie('promotekit_referral') || '';
       affiliateMetadata.promotekit_referral = promotekitReferral;
     }
@@ -401,7 +401,7 @@ export function Pricing({
       }
 
       window.location.href = checkoutUrl;
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       console.log('checkout failed: ', e);
       toast.error('checkout failed: ' + e.message);
 

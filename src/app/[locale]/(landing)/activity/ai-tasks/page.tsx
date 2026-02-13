@@ -5,6 +5,7 @@ import { AudioPlayer, Empty, LazyImage } from '@/shared/blocks/common';
 import { WatermarkedVideoResult } from '@/shared/blocks/common/watermarked-video-result';
 import { TableCard } from '@/shared/blocks/table';
 import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
+import { normalizeWatermarkType } from '@/shared/lib/watermark';
 import {
   AITask,
   getAITaskMediaTypeCounts,
@@ -14,16 +15,7 @@ import {
 import { getUserInfo } from '@/shared/models/user';
 import { Button, Tab } from '@/shared/types/blocks/common';
 import { type Table } from '@/shared/types/blocks/table';
-
-type VideoWatermarkType = 'none' | 'dynamic_overlay';
-
-type VideoWatermarkConfig = {
-  watermarkApplied: boolean;
-  watermarkType: VideoWatermarkType;
-  watermarkOpacity: number;
-  watermarkIntervalSeconds: number;
-  watermarkText: string;
-};
+import type { VideoWatermarkConfig } from '@/shared/types/watermark';
 
 function safeParseJson(value?: string | null) {
   if (!value) {
@@ -35,12 +27,6 @@ function safeParseJson(value?: string | null) {
   } catch {
     return null;
   }
-}
-
-function normalizeWatermarkType(value?: string | null): VideoWatermarkType {
-  return String(value || '').trim().toLowerCase() === 'dynamic_overlay'
-    ? 'dynamic_overlay'
-    : 'none';
 }
 
 function resolveVideoUrlFromTaskInfoItem(video: unknown): string | null {

@@ -15,8 +15,8 @@ import {
 interface UploadImageProps {
   field: FormField;
   formField: ControllerRenderProps<Record<string, unknown>, string>;
-  data?: any;
-  metadata?: Record<string, any>;
+  data?: UnsafeAny;
+  metadata?: Record<string, UnsafeAny>;
 }
 
 export function UploadImage({

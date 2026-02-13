@@ -6,8 +6,8 @@ import { getD1DbSync } from './d1';
 import { getSqliteDb } from './sqlite';
 import { isCloudflareWorker } from '@/shared/lib/env';
 
-const mysqlCompatProxyCache = new WeakMap<object, any>();
-const sqliteCompatProxyCache = new WeakMap<object, any>();
+const mysqlCompatProxyCache = new WeakMap<object, UnsafeAny>();
+const sqliteCompatProxyCache = new WeakMap<object, UnsafeAny>();
 
 /**
  * Global fallback for Drizzle `.returning()` on dialects that don't support it (notably MySQL).
@@ -27,7 +27,7 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
     if (cached) return cached as T;
   }
 
-  const wrapQuery = (query: any, ctx: { payload?: any }) => {
+  const wrapQuery = (query: UnsafeAny, ctx: { payload?: UnsafeAny }) => {
     if (!query || typeof query !== 'object') return query;
 
     return new Proxy(query, {
@@ -36,11 +36,11 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
         // Polyfill it so call sites can stay dialect-agnostic.
         if (
           prop === 'onConflictDoUpdate' &&
-          typeof (target as any).onConflictDoUpdate !== 'function' &&
-          typeof (target as any).onDuplicateKeyUpdate === 'function'
+          typeof (target as UnsafeAny).onConflictDoUpdate !== 'function' &&
+          typeof (target as UnsafeAny).onDuplicateKeyUpdate === 'function'
         ) {
-          return (cfg: any) => {
-            const res = (target as any).onDuplicateKeyUpdate({
+          return (cfg: UnsafeAny) => {
+            const res = (target as UnsafeAny).onDuplicateKeyUpdate({
               set: cfg?.set,
             });
             return wrapQuery(res, ctx);
@@ -50,11 +50,11 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
         // If this dialect doesn't implement `.returning()`, provide a fallback.
         if (
           prop === 'returning' &&
-          typeof (target as any).returning !== 'function'
+          typeof (target as UnsafeAny).returning !== 'function'
         ) {
-          return async (..._args: any[]) => {
+          return async (..._args: UnsafeAny[]) => {
             // Ensure the query actually runs.
-            await (target as any);
+            await (target as UnsafeAny);
             if (ctx.payload === undefined) return [];
             return Array.isArray(ctx.payload) ? ctx.payload : [ctx.payload];
           };
@@ -63,7 +63,7 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
         const value = Reflect.get(target, prop, receiver);
         if (typeof value !== 'function') return value;
 
-        return (...args: any[]) => {
+        return (...args: UnsafeAny[]) => {
           // Capture best-effort payload for return value fallback.
           if (prop === 'values' || prop === 'set') {
             ctx.payload = args[0];
@@ -84,10 +84,10 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original !== 'function') return original;
 
-        return (fn: any, ...rest: any[]) => {
+        return (fn: UnsafeAny, ...rest: UnsafeAny[]) => {
           return original.call(
             target,
-            (tx: any) => fn(withMysqlCompat(tx)),
+            (tx: UnsafeAny) => fn(withMysqlCompat(tx)),
             ...rest
           );
         };
@@ -101,12 +101,12 @@ function withMysqlCompat<T extends object>(dbInstance: T): T {
         return value.bind(target);
       }
 
-      return (...args: any[]) => {
+      return (...args: UnsafeAny[]) => {
         const res = value.apply(target, args);
         return wrapQuery(res, {});
       };
     },
-  }) as any as T;
+  }) as UnsafeAny as T;
 
   if (dbInstance && typeof dbInstance === 'object') {
     mysqlCompatProxyCache.set(dbInstance, proxied);
@@ -130,20 +130,20 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
     if (cached) return cached as T;
   }
 
-  const wrapQuery = (query: any) => {
+  const wrapQuery = (query: UnsafeAny) => {
     if (!query || typeof query !== 'object') return query;
 
     return new Proxy(query, {
       get(target, prop, receiver) {
         // `.for('update')` is not meaningful in SQLite; treat it as no-op when missing.
-        if (prop === 'for' && typeof (target as any).for !== 'function') {
-          return (..._args: any[]) => receiver;
+        if (prop === 'for' && typeof (target as UnsafeAny).for !== 'function') {
+          return (..._args: UnsafeAny[]) => receiver;
         }
 
         const value = Reflect.get(target, prop, receiver);
         if (typeof value !== 'function') return value;
 
-        return (...args: any[]) => {
+        return (...args: UnsafeAny[]) => {
           const res = value.apply(target, args);
           return wrapQuery(res);
         };
@@ -157,8 +157,8 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
       if (prop === 'transaction') {
         const original = Reflect.get(target, prop, receiver);
         if (typeof original === 'function') {
-          return async (fn: any, ...rest: any[]) => {
-            const callback = (tx: any) => fn(withSqliteCompat(tx));
+          return async (fn: UnsafeAny, ...rest: UnsafeAny[]) => {
+            const callback = (tx: UnsafeAny) => fn(withSqliteCompat(tx));
 
             // Cloudflare D1 rejects explicit `BEGIN`/`COMMIT`/`ROLLBACK` in some environments.
             // If we call Drizzle's D1 transaction implementation, it will run `begin...` and
@@ -197,14 +197,14 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
             if (supportsConfigArg && shouldDefaultImmediate) {
               return original.call(target, callback, {
                 behavior: 'immediate',
-              } as any);
+              } as UnsafeAny);
             }
 
             return original.call(target, callback);
           };
         }
         // D1 polyfill: execute callback with the proxied db instance directly
-        return async (fn: any) => fn(receiver);
+        return async (fn: UnsafeAny) => fn(receiver);
       }
 
       const value = Reflect.get(target, prop, receiver);
@@ -212,12 +212,12 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
 
       // Wrap select builders so `.for()` can be polyfilled on the built query.
       if (typeof prop === 'string' && prop.startsWith('select')) {
-        return (...args: any[]) => wrapQuery(value.apply(target, args));
+        return (...args: UnsafeAny[]) => wrapQuery(value.apply(target, args));
       }
 
       return value.bind(target);
     },
-  }) as any as T;
+  }) as UnsafeAny as T;
 
   if (dbInstance && typeof dbInstance === 'object') {
     sqliteCompatProxyCache.set(dbInstance, proxied);
@@ -235,14 +235,14 @@ function withSqliteCompat<T extends object>(dbInstance: T): T {
  *
  * So we intentionally return `any` to keep call sites stable.
  */
-export function db(): any {
+export function db(): UnsafeAny {
   if (envConfigs.database_provider === 'd1') {
     if (isCloudflareWorker) {
-      return withSqliteCompat(getD1DbSync() as any);
+      return withSqliteCompat(getD1DbSync() as UnsafeAny);
     }
 
     if (envConfigs.database_url) {
-      return withSqliteCompat(getSqliteDb() as any);
+      return withSqliteCompat(getSqliteDb() as UnsafeAny);
     }
 
     throw new Error(
@@ -252,14 +252,14 @@ export function db(): any {
 
   const provider = envConfigs.database_provider;
   if (provider === 'sqlite' || provider === 'turso') {
-    return withSqliteCompat(getSqliteDb() as any);
+    return withSqliteCompat(getSqliteDb() as UnsafeAny);
   }
 
   if (provider === 'mysql') {
-    return withMysqlCompat(getMysqlDb() as any);
+    return withMysqlCompat(getMysqlDb() as UnsafeAny);
   }
 
-  return getPostgresDb() as any;
+  return getPostgresDb() as UnsafeAny;
 }
 
 export function dbPostgres(): ReturnType<typeof getPostgresDb> {

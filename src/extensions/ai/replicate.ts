@@ -67,7 +67,7 @@ export class ReplicateProvider implements AIProvider {
     }
 
     // build request params
-    const input: any = this.formatInput({
+    const input: UnsafeAny = this.formatInput({
       mediaType,
       model,
       prompt,
@@ -116,7 +116,7 @@ export class ReplicateProvider implements AIProvider {
       if (mediaType === AIMediaType.VIDEO) {
         // handle video output
         if (Array.isArray(data.output)) {
-          videos = data.output.map((video: any) => ({
+          videos = data.output.map((video: UnsafeAny) => ({
             id: '',
             createTime: new Date(data.created_at),
             videoUrl: video,
@@ -133,7 +133,7 @@ export class ReplicateProvider implements AIProvider {
       } else {
         // handle image output (default)
         if (Array.isArray(data.output)) {
-          images = data.output.map((image: any) => ({
+          images = data.output.map((image: UnsafeAny) => ({
             id: '',
             createTime: new Date(data.created_at),
             imageUrl: image,
@@ -269,9 +269,9 @@ export class ReplicateProvider implements AIProvider {
     mediaType: AIMediaType;
     model: string;
     prompt: string;
-    options: any;
-  }): any {
-    let input: any = {
+    options: UnsafeAny;
+  }): UnsafeAny {
+    let input: UnsafeAny = {
       prompt,
     };
 

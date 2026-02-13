@@ -6,7 +6,7 @@ export const isCloudflareWorker =
   typeof globalThis !== 'undefined' &&
   // OpenNext (Cloudflare) exposes a per-request context on the global scope.
   // Prefer feature-detection so this remains stable at module init time.
-  (cloudflareContextSymbol in (globalThis as any) ||
-    typeof (globalThis as any).WebSocketPair !== 'undefined' ||
+  (cloudflareContextSymbol in (globalThis as UnsafeAny) ||
+    typeof (globalThis as UnsafeAny).WebSocketPair !== 'undefined' ||
     // Fallback to the legacy `globalThis.Cloudflare` check when available.
     'Cloudflare' in globalThis);

@@ -21,7 +21,7 @@ export function Dropdown({
 }: {
   value: NavItem[];
   placeholder?: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, UnsafeAny>;
   className?: string;
 }) {
   if (!value || value.length === 0) {

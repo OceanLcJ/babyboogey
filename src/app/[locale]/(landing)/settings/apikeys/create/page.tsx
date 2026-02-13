@@ -31,7 +31,7 @@ export default async function CreateApiKeyPage() {
       userId: user.id,
     },
     submit: {
-      handler: async (data: FormData, passby: any) => {
+      handler: async (data: FormData, passby: UnsafeAny) => {
         'use server';
 
         const { userId } = passby;

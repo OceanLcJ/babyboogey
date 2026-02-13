@@ -56,13 +56,13 @@ export async function POST(req: Request) {
     const results = {
       dryRun,
       timestamp: new Date().toISOString(),
-      orders: [] as any[],
+      orders: [] as UnsafeAny[],
     };
 
     const paymentService = await getPaymentService();
 
     for (const orderNo of orderNos) {
-      const result: any = {
+      const result: UnsafeAny = {
         orderNo,
         status: 'pending',
         actions: [],
@@ -183,7 +183,7 @@ export async function POST(req: Request) {
           result.status =
             updatedOrder?.status === OrderStatus.PAID ? 'fixed' : 'partial';
         }
-      } catch (error: any) {
+      } catch (error: UnsafeAny) {
         result.status = 'error';
         result.errors.push(error.message);
       }
@@ -192,7 +192,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(results, { status: 200 });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('Fix stuck orders error:', error);
     return NextResponse.json(
       { error: error.message },

@@ -15,7 +15,7 @@ export function FeaturesList({
   className?: string;
 }) {
   const hasImage = !!section.image?.src;
-  const imagePosition = (section as any).image_position || 'left';
+  const imagePosition = (section as UnsafeAny).image_position || 'left';
 
   return (
     <section

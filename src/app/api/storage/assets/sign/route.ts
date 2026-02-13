@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
         results,
       },
     });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('sign assets failed:', error);
     return NextResponse.json({
       code: -1,

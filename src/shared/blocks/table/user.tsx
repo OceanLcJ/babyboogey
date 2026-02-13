@@ -18,7 +18,7 @@ export function User({
 }: {
   value: UserType;
   placeholder?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, UnsafeAny>;
   className?: string;
 }) {
   if (!value) {

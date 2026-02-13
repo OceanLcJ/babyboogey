@@ -149,7 +149,7 @@ const PROVIDER_OPTIONS = [
   },
 ];
 
-function parseTaskResult(taskResult: string | null): any {
+function parseTaskResult(taskResult: string | null): UnsafeAny {
   if (!taskResult) {
     return null;
   }
@@ -162,7 +162,7 @@ function parseTaskResult(taskResult: string | null): any {
   }
 }
 
-function extractImageUrls(result: any): string[] {
+function extractImageUrls(result: UnsafeAny): string[] {
   if (!result) {
     return [];
   }
@@ -424,7 +424,7 @@ export function ImageGenerator({
 
         setProgress((prev) => Math.min(prev + 5, 95));
         return false;
-      } catch (error: any) {
+      } catch (error: UnsafeAny) {
         console.error('Error polling image task:', error);
         toast.error(`Query task failed: ${error.message}`);
         resetTaskState();
@@ -507,7 +507,7 @@ export function ImageGenerator({
     setGenerationStartTime(Date.now());
 
     try {
-      const options: any = {};
+      const options: UnsafeAny = {};
 
       if (!isTextToImageMode) {
         options.image_input = referenceImageUrls;
@@ -568,7 +568,7 @@ export function ImageGenerator({
       setProgress(25);
 
       await fetchUserCredits();
-    } catch (error: any) {
+    } catch (error: UnsafeAny) {
       console.error('Failed to generate image:', error);
       toast.error(`Failed to generate image: ${error.message}`);
       resetTaskState();

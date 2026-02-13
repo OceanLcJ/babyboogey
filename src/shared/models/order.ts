@@ -30,6 +30,10 @@ export enum OrderStatus {
   FAILED = 'failed', // order paid, but failed
 }
 
+/**
+ * @deprecated Use {@link hasMonetizedPaidOrder} instead.
+ * This only checks whether the user has any `PAID` order, including $0 promo/trial orders.
+ */
 export async function hasPaidOrder(userId: string): Promise<boolean> {
   if (!userId) return false;
 
@@ -258,8 +262,8 @@ export async function updateOrderInTransaction({
   }
 
   // need transaction
-  const result = await db().transaction(async (tx: any) => {
-    let result: any = {
+  const result = await db().transaction(async (tx: UnsafeAny) => {
+    const result: UnsafeAny = {
       order: null,
       subscription: null,
       credit: null,
@@ -301,7 +305,7 @@ export async function updateOrderInTransaction({
 
     // deal with subscription
     if (newSubscription) {
-      let existingSubscription: any = null;
+      let existingSubscription: UnsafeAny = null;
       if (newSubscription.subscriptionId && newSubscription.paymentProvider) {
         // not create subscription with same subscription id and payment provider
         const [existingSubscriptionResult] = await tx
@@ -381,8 +385,8 @@ export async function updateSubscriptionInTransaction({
   }
 
   // need transaction
-  const result = await db().transaction(async (tx: any) => {
-    let result: any = {
+  const result = await db().transaction(async (tx: UnsafeAny) => {
+    const result: UnsafeAny = {
       order: null,
       subscription: null,
       credit: null,
@@ -405,7 +409,7 @@ export async function updateSubscriptionInTransaction({
 
     // deal with order
     if (newOrder) {
-      let existingOrder: any = null;
+      let existingOrder: UnsafeAny = null;
       if (newOrder.transactionId && newOrder.paymentProvider) {
         // not create order with same payment transaction id and payment provider
         const [existingOrderResult] = await tx
@@ -436,7 +440,7 @@ export async function updateSubscriptionInTransaction({
 
     // deal with credit
     if (newCredit) {
-      let existingCredit: any = null;
+      let existingCredit: UnsafeAny = null;
       if (result.order && result.order.orderNo) {
         // not create credit with same order no
         const [existingCreditResult] = await tx

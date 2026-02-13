@@ -9,9 +9,14 @@ export function Time({
 }: {
   value: string | Date;
   placeholder?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, UnsafeAny>;
   className?: string;
 }) {
+  let locale = useLocale();
+  if (locale === 'zh') {
+    locale = 'zh-cn';
+  }
+
   if (!value) {
     if (placeholder) {
       return <div className={className}>{placeholder}</div>;
@@ -19,12 +24,6 @@ export function Time({
 
     return null;
   }
-
-  let locale = useLocale();
-  if (locale === 'zh') {
-    locale = 'zh-cn';
-  }
-
   return (
     <div className={className}>
       {metadata?.format

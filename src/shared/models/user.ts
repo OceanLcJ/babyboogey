@@ -16,7 +16,7 @@ export interface UserCredits {
 
 export interface UserMembership {
   canUseProTemplates: boolean;
-  hasPaidOrder: boolean;
+  hasMonetizedPaidOrder: boolean;
   hasSubscription: boolean;
   subscription: {
     status: string;
@@ -82,7 +82,7 @@ export async function getUsers({
     .limit(limit)
     .offset((page - 1) * limit);
 
-  return result.map((item: any) => normalizeUserMedia(item as User) as User);
+  return result.map((item: UnsafeAny) => normalizeUserMedia(item as User) as User);
 }
 
 export async function getUsersCount({ email }: { email?: string }) {
@@ -99,7 +99,7 @@ export async function getUserByUserIds(userIds: string[]) {
     .from(user)
     .where(inArray(user.id, userIds));
 
-  return result.map((item: any) => normalizeUserMedia(item as User) as User);
+  return result.map((item: UnsafeAny) => normalizeUserMedia(item as User) as User);
 }
 
 export async function getUserInfo() {
@@ -136,15 +136,15 @@ export async function isEmailVerified(email: string): Promise<boolean> {
   return !!row?.emailVerified;
 }
 
-export async function appendUserToResult(result: any) {
+export async function appendUserToResult(result: UnsafeAny) {
   if (!result || !result.length) {
     return result;
   }
 
-  const userIds = result.map((item: any) => item.userId);
+  const userIds = result.map((item: UnsafeAny) => item.userId);
   const users = await getUserByUserIds(userIds);
-  result = result.map((item: any) => {
-    const user = users.find((user: any) => user.id === item.userId);
+  result = result.map((item: UnsafeAny) => {
+    const user = users.find((user: UnsafeAny) => user.id === item.userId);
     return { ...item, user };
   });
 

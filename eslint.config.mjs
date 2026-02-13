@@ -18,6 +18,7 @@ export default [
       'node_modules/**',
       'dist/**',
       'out/**',
+      'next-env.d.ts',
     ],
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),

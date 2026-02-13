@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       limit,
       hasMore: page * limit < total,
     });
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('get chat list failed:', e);
     return respErr(`get chat list failed: ${e.message}`);
   }

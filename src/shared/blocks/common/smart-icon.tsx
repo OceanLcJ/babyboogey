@@ -1,6 +1,6 @@
 import { ComponentType, lazy, Suspense } from 'react';
 
-const iconCache: { [key: string]: ComponentType<any> } = {};
+const iconCache: { [key: string]: ComponentType<UnsafeAny> } = {};
 
 // Function to automatically detect icon library
 function detectIconLibrary(name: string): 'ri' | 'lucide' {
@@ -20,7 +20,7 @@ export function SmartIcon({
   name: string;
   size?: number;
   className?: string;
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }) {
   const library = detectIconLibrary(name);
   const cacheKey = `${library}-${name}`;
@@ -30,21 +30,23 @@ export function SmartIcon({
       // React Icons (Remix Icons)
       iconCache[cacheKey] = lazy(async () => {
         try {
-          const module = await import('react-icons/ri');
-          const IconComponent = module[name as keyof typeof module];
+          const iconLibrary = await import('react-icons/ri');
+          const IconComponent = iconLibrary[name as keyof typeof iconLibrary];
           if (IconComponent) {
-            return { default: IconComponent as ComponentType<any> };
+            return { default: IconComponent as ComponentType<UnsafeAny> };
           } else {
             console.warn(
               `Icon "${name}" not found in react-icons/ri, using fallback`
             );
-            return { default: module.RiQuestionLine as ComponentType<any> };
+            return {
+              default: iconLibrary.RiQuestionLine as ComponentType<UnsafeAny>,
+            };
           }
         } catch (error) {
           console.error(`Failed to load react-icons/ri:`, error);
           const fallbackModule = await import('react-icons/ri');
           return {
-            default: fallbackModule.RiQuestionLine as ComponentType<any>,
+            default: fallbackModule.RiQuestionLine as ComponentType<UnsafeAny>,
           };
         }
       });
@@ -52,20 +54,20 @@ export function SmartIcon({
       // Lucide React (default)
       iconCache[cacheKey] = lazy(async () => {
         try {
-          const module = await import('lucide-react');
-          const IconComponent = module[name as keyof typeof module];
+          const iconLibrary = await import('lucide-react');
+          const IconComponent = iconLibrary[name as keyof typeof iconLibrary];
           if (IconComponent) {
-            return { default: IconComponent as ComponentType<any> };
+            return { default: IconComponent as ComponentType<UnsafeAny> };
           } else {
             console.warn(
               `Icon "${name}" not found in lucide-react, using fallback`
             );
-            return { default: module.HelpCircle as ComponentType<any> };
+            return { default: iconLibrary.HelpCircle as ComponentType<UnsafeAny> };
           }
         } catch (error) {
           console.error(`Failed to load lucide-react:`, error);
           const fallbackModule = await import('lucide-react');
-          return { default: fallbackModule.HelpCircle as ComponentType<any> };
+          return { default: fallbackModule.HelpCircle as ComponentType<UnsafeAny> };
         }
       });
     }

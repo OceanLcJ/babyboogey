@@ -8,16 +8,12 @@ import { getUserInfo } from '@/shared/models/user';
 
 export async function POST(req: Request) {
   try {
-    let { chatId, page, limit } = await req.json();
+    const payload = await req.json();
+    const chatId = payload.chatId;
+    const page = payload.page || 1;
+    const limit = payload.limit || 30;
     if (!chatId) {
       return respErr('chatId is required');
-    }
-
-    if (!page) {
-      page = 1;
-    }
-    if (!limit) {
-      limit = 30;
     }
 
     const user = await getUserInfo();
@@ -41,7 +37,7 @@ export async function POST(req: Request) {
       limit,
       hasMore: page * limit < total,
     });
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('get chat messages failed:', e);
     return respErr(`get chat messages failed: ${e.message}`);
   }

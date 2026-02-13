@@ -26,7 +26,7 @@ export async function POST() {
     const remainingCredits = await getRemainingCredits(user.id);
 
     const membership = {
-      hasPaidOrder: paidOrder,
+      hasMonetizedPaidOrder: paidOrder,
       hasSubscription: !!currentSubscription,
       subscription: currentSubscription
         ? {

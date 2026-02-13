@@ -147,7 +147,7 @@ export async function POST(
       provider,
       providerTaskId,
     });
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('ai notify failed', e);
     return respErr(e.message || 'ai notify failed');
   }

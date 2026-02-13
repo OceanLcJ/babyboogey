@@ -55,7 +55,7 @@ export class CreemProvider implements PaymentProvider {
       }
 
       // build payment payload
-      const payload: any = {
+      const payload: UnsafeAny = {
         product_id: order.productId,
         request_id: order.requestId || undefined,
         units: 1,
@@ -165,19 +165,19 @@ export class CreemProvider implements PaymentProvider {
 
       if (eventType === PaymentEventType.CHECKOUT_SUCCESS) {
         paymentSession = await this.buildPaymentSessionFromCheckoutSession(
-          event.object as any
+          event.object as UnsafeAny
         );
       } else if (eventType === PaymentEventType.PAYMENT_SUCCESS) {
         paymentSession = await this.buildPaymentSessionFromInvoice(
-          event.object as any
+          event.object as UnsafeAny
         );
       } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
         paymentSession = await this.buildPaymentSessionFromSubscription(
-          event.object as any
+          event.object as UnsafeAny
         );
       } else if (eventType === PaymentEventType.SUBSCRIBE_CANCELED) {
         paymentSession = await this.buildPaymentSessionFromSubscription(
-          event.object as any
+          event.object as UnsafeAny
         );
       }
 
@@ -263,12 +263,12 @@ export class CreemProvider implements PaymentProvider {
       return Array.from(signatureArray)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
-    } catch (error: any) {
+    } catch (error: UnsafeAny) {
       throw new Error(`Failed to generate signature: ${error.message}`);
     }
   }
 
-  private async makeRequest(endpoint: string, method: string, data?: any) {
+  private async makeRequest(endpoint: string, method: string, data?: UnsafeAny) {
     const url = `${this.baseUrl}${endpoint}`;
     const headers = {
       'x-api-key': this.configs.apiKey,
@@ -318,7 +318,7 @@ export class CreemProvider implements PaymentProvider {
     }
   }
 
-  private mapCreemStatus(session: any): PaymentStatus {
+  private mapCreemStatus(session: UnsafeAny): PaymentStatus {
     const status = session.status;
     const order = session.order || session.last_transaction;
     const orderStatus = order?.status;
@@ -333,10 +333,10 @@ export class CreemProvider implements PaymentProvider {
 
   // build payment session from checkout session
   private async buildPaymentSessionFromCheckoutSession(
-    session: any
+    session: UnsafeAny
   ): Promise<PaymentSession> {
-    let subscription: any | undefined = undefined;
-    let billingUrl = '';
+    let subscription: UnsafeAny | undefined = undefined;
+    const billingUrl = '';
 
     if (session.subscription) {
       subscription = session.subscription;
@@ -381,7 +381,7 @@ export class CreemProvider implements PaymentProvider {
 
   // build payment session from subscription session
   private async buildPaymentSessionFromInvoice(
-    invoice: any
+    invoice: UnsafeAny
   ): Promise<PaymentSession> {
     const order = invoice.order || invoice.last_transaction;
 
@@ -438,7 +438,7 @@ export class CreemProvider implements PaymentProvider {
 
   // build payment session from subscription
   private async buildPaymentSessionFromSubscription(
-    subscription: any
+    subscription: UnsafeAny
   ): Promise<PaymentSession> {
     const result: PaymentSession = {
       provider: this.name,
@@ -458,8 +458,8 @@ export class CreemProvider implements PaymentProvider {
 
   // build subscription info from subscription
   private async buildSubscriptionInfo(
-    subscription: any,
-    product?: any
+    subscription: UnsafeAny,
+    product?: UnsafeAny
   ): Promise<SubscriptionInfo> {
     const { interval, count: intervalCount } = this.mapCreemInterval(product);
 
@@ -502,7 +502,7 @@ export class CreemProvider implements PaymentProvider {
     return subscriptionInfo;
   }
 
-  private mapCreemInterval(product: any): {
+  private mapCreemInterval(product: UnsafeAny): {
     interval: PaymentInterval;
     count: number;
   } {

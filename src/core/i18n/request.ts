@@ -49,7 +49,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     );
 
     // merge all local messages
-    const messages: any = {};
+    const messages: UnsafeAny = {};
 
     localeMessagesPaths.forEach((path, index) => {
       const localMessages = allMessages[index];

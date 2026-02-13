@@ -119,7 +119,7 @@ function buildFieldSchema(field: FormFieldType) {
   }
 
   if (field.type === 'checkbox') {
-    let schema = z.array(z.string());
+    const schema = z.array(z.string());
 
     return schema;
   }
@@ -171,7 +171,7 @@ function buildFieldSchema(field: FormFieldType) {
 }
 
 const generateFormSchema = (fields: FormFieldType[]) => {
-  const schemaFields: Record<string, any> = {};
+  const schemaFields: Record<string, UnsafeAny> = {};
 
   fields.forEach((field) => {
     if (field.name) {
@@ -193,8 +193,8 @@ export function Form({
   title?: string;
   description?: string;
   fields?: FormFieldType[];
-  data?: any;
-  passby?: any;
+  data?: UnsafeAny;
+  passby?: UnsafeAny;
   submit?: FormSubmit;
 }) {
   if (!fields) {
@@ -205,7 +205,7 @@ export function Form({
 
   const router = useRouter();
   const FormSchema = generateFormSchema(fields);
-  const defaultValues: Record<string, any> = {};
+  const defaultValues: Record<string, UnsafeAny> = {};
 
   fields.forEach((field) => {
     if (field.name) {
@@ -310,11 +310,11 @@ export function Form({
       }
 
       if (res.redirect_url) {
-        router.push(res.redirect_url as any);
+        router.push(res.redirect_url as UnsafeAny);
       }
 
       setLoading(false);
-    } catch (err: any) {
+    } catch (err: UnsafeAny) {
       console.log('submit form error', err);
       toast.error(err.message || 'submit form failed');
       setLoading(false);
@@ -347,7 +347,7 @@ export function Form({
                     <FormControl>
                       {item.type === 'textarea' ? (
                         <Textarea
-                          {...(field as any)}
+                          {...(field as UnsafeAny)}
                           placeholder={item.placeholder}
                           {...item.attributes}
                         />

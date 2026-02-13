@@ -186,7 +186,7 @@ export class FalProvider implements AIProvider {
           },
         ];
       } else if (data.videos && Array.isArray(data.videos)) {
-        videos = data.videos.map((video: any) => ({
+        videos = data.videos.map((video: UnsafeAny) => ({
           id: '',
           createTime: new Date(),
           videoUrl: video.url,
@@ -195,7 +195,7 @@ export class FalProvider implements AIProvider {
     } else {
       // handle image output (default)
       if (data.images && Array.isArray(data.images)) {
-        images = data.images.map((image: any) => ({
+        images = data.images.map((image: UnsafeAny) => ({
           id: '',
           createTime: new Date(),
           imageUrl: image.url,
@@ -332,9 +332,9 @@ export class FalProvider implements AIProvider {
     mediaType: AIMediaType;
     model: string;
     prompt: string;
-    options: any;
-  }): any {
-    let input: any = {
+    options: UnsafeAny;
+  }): UnsafeAny {
+    let input: UnsafeAny = {
       prompt,
     };
 

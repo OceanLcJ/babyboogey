@@ -99,7 +99,7 @@ export default async function BillingPage({
       {
         title: t('fields.current_period'),
         callback: function (item) {
-          let period = (
+          const period = (
             <div>
               {`${moment(item.currentPeriodStart).format('YYYY-MM-DD')}`} ~
               <br />

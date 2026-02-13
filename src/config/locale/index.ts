@@ -1,6 +1,6 @@
 import { envConfigs } from '..';
 
-export const localeNames: any = {
+export const localeNames: UnsafeAny = {
   en: 'English',
   zh: '中文',
 };

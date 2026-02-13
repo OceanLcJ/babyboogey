@@ -123,7 +123,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       const authClient = getAuthClient(configs);
       await authClient.oneTap({
         callbackURL: '/',
-        onPromptNotification: (notification: any) => {
+        onPromptNotification: (notification: UnsafeAny) => {
           // Handle prompt dismissal silently
           // This callback is triggered when the prompt is dismissed or skipped
           if (process.env.NODE_ENV !== 'production') {

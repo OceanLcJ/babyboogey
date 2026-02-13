@@ -62,7 +62,7 @@ export default async function RetrieveInvoicePage({
     await updateOrderByOrderNo(order.orderNo, {
       invoiceUrl: invoiceUrl,
     });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     return <Empty message={error.message || 'get invoice failed'} />;
   }
 

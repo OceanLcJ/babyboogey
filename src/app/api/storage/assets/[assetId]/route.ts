@@ -92,7 +92,7 @@ export async function GET(
       status: objectResp.status,
       headers,
     });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('get asset failed:', error);
     return new NextResponse(error?.message || 'Internal Server Error', {
       status: 500,

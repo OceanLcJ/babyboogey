@@ -49,7 +49,7 @@ export interface StorageUploadResult {
  * Storage configs interface
  */
 export interface StorageConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 /**

@@ -68,7 +68,7 @@ export function getCookieFromHeader(
 }
 
 export function getHeaderValue(
-  ctx: any,
+  ctx: UnsafeAny,
   headerName: string
 ): string | undefined {
   const h = ctx?.headers ?? ctx?.request?.headers;
@@ -86,7 +86,7 @@ export function getHeaderValue(
   return undefined;
 }
 
-export function getCookieFromCtx(ctx: any, name: string): string | undefined {
+export function getCookieFromCtx(ctx: UnsafeAny, name: string): string | undefined {
   if (typeof ctx?.getCookie === 'function') {
     const v = ctx.getCookie(name);
     if (typeof v === 'string') return v;

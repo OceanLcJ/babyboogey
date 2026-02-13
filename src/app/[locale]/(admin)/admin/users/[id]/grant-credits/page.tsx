@@ -106,7 +106,7 @@ export default async function UserGrantCreditsPage({
         }
 
         await grantCreditsForUser({
-          user: { id: userId, email: userEmail } as any,
+          user: { id: userId, email: userEmail } as UnsafeAny,
           credits: credits,
           validDays: validDays > 0 ? validDays : 0,
           description: description,

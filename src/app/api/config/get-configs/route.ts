@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const configs = await getPublicConfigs();
 
     return respData(configs);
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('get configs failed', e);
     return respErr(e.message);
   }

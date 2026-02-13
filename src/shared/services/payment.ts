@@ -669,7 +669,7 @@ export async function handleSubscriptionUpdated({
     throw new Error('invalid subscription info');
   }
 
-  let updateSubscriptionStatus: SubscriptionStatus = subscriptionInfo.status;
+  const updateSubscriptionStatus: SubscriptionStatus = subscriptionInfo.status;
 
   await updateSubscriptionBySubscriptionNo(subscriptionNo, {
     status: updateSubscriptionStatus,

@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from 'react';
  * Ads configs interface
  */
 export interface AdsConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 // Ads provider interface

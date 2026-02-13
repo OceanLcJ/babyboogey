@@ -9,7 +9,7 @@ export function Image({
   className,
 }: {
   value: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, UnsafeAny>;
   placeholder?: string;
   className?: string;
 }) {

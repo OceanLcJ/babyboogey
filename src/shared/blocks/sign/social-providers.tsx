@@ -24,26 +24,23 @@ export function SocialProviders({
   setLoading: (loading: boolean) => void;
 }) {
   const t = useTranslations('common.sign');
+  const locale = useLocale();
   const router = useRouter();
 
   const { setIsShowSignModal } = useAppContext();
-
-  if (callbackUrl) {
-    const locale = useLocale();
-    if (
-      locale !== defaultLocale &&
-      callbackUrl.startsWith('/') &&
-      !callbackUrl.startsWith(`/${locale}`)
-    ) {
-      callbackUrl = `/${locale}${callbackUrl}`;
-    }
-  }
+  const localizedCallbackUrl =
+    callbackUrl &&
+    locale !== defaultLocale &&
+    callbackUrl.startsWith('/') &&
+    !callbackUrl.startsWith(`/${locale}`)
+      ? `/${locale}${callbackUrl}`
+      : callbackUrl;
 
   const handleSignIn = async ({ provider }: { provider: string }) => {
     await signIn.social(
       {
         provider: provider,
-        callbackURL: callbackUrl,
+        callbackURL: localizedCallbackUrl,
       },
       {
         onRequest: (ctx) => {
@@ -56,7 +53,7 @@ export function SocialProviders({
           // Close modal if any; navigation will proceed.
           setIsShowSignModal(false);
         },
-        onError: (e: any) => {
+        onError: (e: UnsafeAny) => {
           toast.error(e?.error?.message || 'sign in failed');
           setLoading(false);
         },

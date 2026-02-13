@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from 'react';
  * Customer service configs interface
  */
 export interface CustomerServiceConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 /**

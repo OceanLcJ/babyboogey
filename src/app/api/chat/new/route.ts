@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     await createChat(chat);
 
     return respData(chat);
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('new chat failed:', e);
     return respErr(`new chat failed: ${e.message}`);
   }

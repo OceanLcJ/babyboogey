@@ -56,7 +56,7 @@ export default async function EditApiKeyPage({
     },
     data: formData,
     submit: {
-      handler: async (data: FormData, passby: any) => {
+      handler: async (data: FormData, passby: UnsafeAny) => {
         'use server';
 
         const { userId, apikeyId, apikeyUserId } = passby;

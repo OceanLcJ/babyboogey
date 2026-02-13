@@ -150,7 +150,7 @@ export async function POST(req: Request) {
         }
       },
     });
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('chat failed:', e);
     return new Response(e.message, { status: 500 });
   }

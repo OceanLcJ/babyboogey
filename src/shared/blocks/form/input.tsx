@@ -10,7 +10,7 @@ export function Input({
 }: {
   field: FormField;
   formField: ControllerRenderProps<Record<string, unknown>, string>;
-  data?: any;
+  data?: UnsafeAny;
 }) {
   return (
     <InputComponent

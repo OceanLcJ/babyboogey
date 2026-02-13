@@ -15,8 +15,8 @@ export interface Setting {
   value?: string | string[] | boolean | number;
   group?: string;
   tab?: string;
-  attributes?: Record<string, any>;
-  metadata?: Record<string, any>;
+  attributes?: Record<string, UnsafeAny>;
+  metadata?: Record<string, UnsafeAny>;
 }
 
 export interface SettingGroup {

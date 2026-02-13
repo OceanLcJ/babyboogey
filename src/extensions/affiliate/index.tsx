@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from 'react';
  * Affiliate configs interface
  */
 export interface AffiliateConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 /**

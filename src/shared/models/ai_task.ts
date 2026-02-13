@@ -14,7 +14,7 @@ export type NewAITask = typeof aiTask.$inferInsert;
 export type UpdateAITask = Partial<Omit<NewAITask, 'id' | 'createdAt'>>;
 
 export async function createAITask(newAITask: NewAITask) {
-  const result = await db().transaction(async (tx: any) => {
+  const result = await db().transaction(async (tx: UnsafeAny) => {
     // 1. create task record
     const [taskResult] = await tx.insert(aiTask).values(newAITask).returning();
 
@@ -71,7 +71,7 @@ export async function findAITaskByProviderTaskId({
 }
 
 export async function updateAITaskById(id: string, updateAITask: UpdateAITask) {
-  const result = await db().transaction(async (tx: any) => {
+  const result = await db().transaction(async (tx: UnsafeAny) => {
     // task failed, Revoke credit consumption record
     if (updateAITask.status === AITaskStatus.FAILED && updateAITask.creditId) {
       // get consumed credit record
@@ -86,7 +86,7 @@ export async function updateAITaskById(id: string, updateAITask: UpdateAITask) {
 
         // add back consumed credits
         await Promise.all(
-          consumedItems.map((item: any) => {
+          consumedItems.map((item: UnsafeAny) => {
             if (item && item.creditId && item.creditsConsumed > 0) {
               return tx
                 .update(credit)

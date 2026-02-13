@@ -29,7 +29,7 @@ import { NavItem, UserNav } from '@/shared/types/blocks/common';
 import { SmartIcon } from '../common/smart-icon';
 import { SignModal } from './sign-modal';
 
-function extractSessionUser(data: any): UserType | null {
+function extractSessionUser(data: UnsafeAny): UserType | null {
   const u = data?.user ?? data?.data?.user ?? null;
   return u && typeof u === 'object' ? (u as UserType) : null;
 }
@@ -103,7 +103,7 @@ export function SignUser({
   // set user
   useEffect(() => {
     const currentUserId = user?.id;
-    const sessionUserId = (sessionUser as any)?.id;
+    const sessionUserId = (sessionUser as UnsafeAny)?.id;
 
     if (sessionUser && sessionUserId !== currentUserId) {
       setUser(sessionUser as UserType);
@@ -112,7 +112,7 @@ export function SignUser({
       setUser(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionUser?.id, (sessionUser as any)?.email, user?.id]);
+  }, [sessionUser?.id, (sessionUser as UnsafeAny)?.email, user?.id]);
 
   // Fallback: if the session cookie is present but useSession lags, do a single refresh.
   useEffect(() => {
@@ -125,7 +125,7 @@ export function SignUser({
     didFallbackSyncRef.current = true;
     void (async () => {
       try {
-        const res: any = await authClient.getSession();
+        const res: UnsafeAny = await authClient.getSession();
         const fresh = extractSessionUser(res?.data ?? res);
         if (fresh?.id) {
           setUser(fresh);

@@ -223,7 +223,7 @@ export async function getLocalPost({
     />
   );
 
-  const frontmatter = localPost.data as any;
+  const frontmatter = localPost.data as UnsafeAny;
 
   const post: BlogPostType = {
     id: localPost.path,
@@ -236,8 +236,8 @@ export async function getLocalPost({
     date:
       frontmatter.date ||
       frontmatter.created_at ||
-      (typeof (localPost.data as any).lastModified === 'string'
-        ? (localPost.data as any).lastModified
+      (typeof (localPost.data as UnsafeAny).lastModified === 'string'
+        ? (localPost.data as UnsafeAny).lastModified
         : ''),
     created_at: frontmatter.created_at
       ? getPostDate({
@@ -277,7 +277,7 @@ export async function getLocalPage({
     />
   );
 
-  const frontmatter = localPage.data as any;
+  const frontmatter = localPage.data as UnsafeAny;
 
   const post: BlogPostType = {
     id: localPage.path,
@@ -290,8 +290,8 @@ export async function getLocalPage({
     date:
       frontmatter.date ||
       frontmatter.created_at ||
-      (typeof (localPage.data as any).lastModified === 'string'
-        ? (localPage.data as any).lastModified
+      (typeof (localPage.data as UnsafeAny).lastModified === 'string'
+        ? (localPage.data as UnsafeAny).lastModified
         : ''),
     created_at: frontmatter.created_at
       ? getPostDate({
@@ -323,7 +323,6 @@ export async function getPostsAndCategories({
   categoryPrefix?: string;
 }) {
   let posts: BlogPostType[] = [];
-  let categories: BlogCategoryType[] = [];
 
   // merge posts from both locale and remote, remove duplicates by slug
   // remote posts have higher priority
@@ -498,7 +497,7 @@ export async function getLocalPostsAndCategories({
   // Build posts data from local content
   localPostsList.push(
     ...localPosts.map((post) => {
-      const frontmatter = post.data as any;
+      const frontmatter = post.data as UnsafeAny;
       const slug = getPostSlug({
         url: post.url,
         locale,
@@ -517,7 +516,7 @@ export async function getLocalPostsAndCategories({
             locale,
           })
         : '';
-      const lastModified = (post.data as any).lastModified;
+      const lastModified = (post.data as UnsafeAny).lastModified;
       const date =
         frontmatter.date ||
         frontmatter.created_at ||

@@ -2,12 +2,12 @@ import { getTimestamp } from './time';
 
 // get data from cache
 export const cacheGet = (key: string): string | null => {
-  let valueWithExpires = localStorage.getItem(key);
+  const valueWithExpires = localStorage.getItem(key);
   if (!valueWithExpires) {
     return null;
   }
 
-  let valueArr = valueWithExpires.split(':');
+  const valueArr = valueWithExpires.split(':');
   if (!valueArr || valueArr.length < 2) {
     return valueWithExpires;
   }

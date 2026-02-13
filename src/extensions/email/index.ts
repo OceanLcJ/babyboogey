@@ -42,7 +42,7 @@ export interface EmailSendResult {
  * Email configs interface
  */
 export interface EmailConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 /**

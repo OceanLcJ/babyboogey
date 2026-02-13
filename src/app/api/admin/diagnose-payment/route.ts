@@ -27,7 +27,7 @@ export async function GET() {
       );
     }
 
-    const report: any = {
+    const report: UnsafeAny = {
       timestamp: new Date().toISOString(),
       currentUser: {
         id: currentUser.id,
@@ -77,7 +77,7 @@ export async function GET() {
     });
 
     for (const o of paidOrders) {
-      const orderReport: any = {
+      const orderReport: UnsafeAny = {
         orderNo: o.orderNo,
         userId: o.userId,
         userEmail: o.userEmail,
@@ -162,7 +162,7 @@ export async function GET() {
     }
 
     return NextResponse.json(report, { status: 200 });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('Diagnosis error:', error);
     return NextResponse.json(
       { error: error.message },

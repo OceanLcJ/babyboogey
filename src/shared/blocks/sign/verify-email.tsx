@@ -247,7 +247,7 @@ export function VerifyEmailPage({
       }
       markSentNow(email);
       setCooldownSeconds(getCooldownRemainingSeconds(email));
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       toast.error(e?.message || 'send verification email failed');
     } finally {
       setLoading(false);

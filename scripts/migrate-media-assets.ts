@@ -375,7 +375,7 @@ async function main() {
         status: 'migrated',
       });
       return assetRef;
-    } catch (error: any) {
+    } catch (error: UnsafeAny) {
       pushEntry({
         entity,
         entityId,
@@ -480,7 +480,7 @@ async function main() {
     const rawTaskInfo = String(row.taskInfo || '').trim();
     if (!rawTaskInfo) continue;
 
-    let parsed: any;
+    let parsed: UnsafeAny;
     try {
       parsed = JSON.parse(rawTaskInfo);
     } catch {

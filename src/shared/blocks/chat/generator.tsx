@@ -28,7 +28,7 @@ export function ChatGenerator() {
 
   const fetchNewChat = async (
     msg: PromptInputMessage,
-    body: Record<string, any>
+    body: Record<string, UnsafeAny>
   ) => {
     setStatus('submitted');
     setError(null);
@@ -59,7 +59,7 @@ export function ChatGenerator() {
       });
       // setStatus(undefined);
       // setError(null);
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       const message =
         e instanceof Error ? e.message : 'request failed, please try again';
       setStatus('error');
@@ -71,7 +71,7 @@ export function ChatGenerator() {
 
   const handleSubmit = async (
     message: PromptInputMessage,
-    body: Record<string, any>
+    body: Record<string, UnsafeAny>
   ) => {
     // check user sign
     if (!user) {

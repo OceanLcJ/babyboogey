@@ -42,7 +42,7 @@ export default async function SettingsPage({
 
   const tabs = await getSettingTabs(tab ?? 'auth');
 
-  const handleSubmit = async (data: FormData, passby: any) => {
+  const handleSubmit = async (data: FormData, passby: UnsafeAny) => {
     'use server';
 
     const user = await getUserInfo();
@@ -63,7 +63,7 @@ export default async function SettingsPage({
     };
   };
 
-  let forms: FormType[] = [];
+  const forms: FormType[] = [];
 
   settingGroups.forEach((group) => {
     if (group.tab !== tab) {
@@ -78,7 +78,7 @@ export default async function SettingsPage({
         .map((setting) => ({
           name: setting.name,
           title: setting.title,
-          type: setting.type as any,
+          type: setting.type as UnsafeAny,
           placeholder: setting.placeholder,
           group: setting.group,
           options: setting.options,
@@ -96,7 +96,7 @@ export default async function SettingsPage({
         button: {
           title: t('edit.buttons.submit'),
         },
-        handler: handleSubmit as any,
+        handler: handleSubmit as UnsafeAny,
       },
     });
   });

@@ -47,9 +47,9 @@ export interface Nav {
   className?: string;
 }
 
-export interface Crumb extends NavItem {}
+export type Crumb = NavItem;
 
-export interface Tab extends NavItem {}
+export type Tab = NavItem;
 
 export interface FilterOption {
   value?: string;
@@ -78,10 +78,10 @@ export interface Button extends NavItem {
 }
 
 // social props for social icon component
-export interface SocialNav extends Nav {}
+export type SocialNav = Nav;
 
 // agreement props for agreement component, contains privacy policy and terms of service
-export interface AgreementNav extends Nav {}
+export type AgreementNav = Nav;
 
 // user props for user menu component
 export interface UserNav extends Nav {

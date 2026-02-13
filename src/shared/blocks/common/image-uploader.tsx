@@ -264,7 +264,7 @@ export function ImageUploader({
             })
           );
         })
-        .catch((error: any) => {
+        .catch((error: UnsafeAny) => {
           console.error('Upload failed:', error);
           toast.error(
             error?.message ? `Upload failed: ${error.message}` : 'Upload failed'
@@ -398,7 +398,7 @@ export function ImageUploader({
             });
             return next;
           });
-        } catch (error: any) {
+        } catch (error: UnsafeAny) {
           console.error('Upload failed:', error);
           toast.error(
             error?.message ? `Upload failed: ${error.message}` : 'Upload failed'

@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public static getDerivedStateFromError(error: any): State {
+  public static getDerivedStateFromError(error: UnsafeAny): State {
     // Ignore NEXT_NOT_FOUND error to let Next.js handle 404
     if (error.digest === 'NEXT_NOT_FOUND') {
       return { hasError: false };

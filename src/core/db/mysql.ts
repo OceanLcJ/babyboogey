@@ -14,7 +14,7 @@ export function getMysqlDb() {
   let isHyperdrive = false;
 
   if (isCloudflareWorker) {
-    const { env }: { env: any } = { env: {} };
+    const { env }: { env: UnsafeAny } = { env: {} };
     // Detect if set Hyperdrive
     isHyperdrive = 'HYPERDRIVE' in env;
 

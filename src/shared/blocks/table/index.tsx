@@ -27,7 +27,7 @@ export function Table({
   pagination,
 }: {
   columns?: TableColumn[];
-  data?: any[];
+  data?: UnsafeAny[];
   emptyMessage?: string;
   pagination?: Pagination;
 }) {
@@ -51,7 +51,7 @@ export function Table({
       </TableHeader>
       <TableBody>
         {data && data.length > 0 ? (
-          data.map((item: any, idx: number) => (
+          data.map((item: UnsafeAny, idx: number) => (
             <TableRow key={idx} className="h-16">
               {columns &&
                 columns.map((column: TableColumn, iidx: number) => {

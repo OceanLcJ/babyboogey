@@ -36,7 +36,7 @@ export function FollowUp({
           last.role === 'assistant' &&
           last.metadata &&
           typeof last.metadata === 'object' &&
-          (last.metadata as Record<string, any>).type === 'error' &&
+          (last.metadata as Record<string, UnsafeAny>).type === 'error' &&
           last.parts?.[0]?.type === 'text' &&
           last.parts[0].text === errorMessage
         ) {
@@ -80,7 +80,7 @@ export function FollowUp({
   const submitMessage = useCallback(
     async (
       message: PromptInputMessage,
-      body: Record<string, any>
+      body: Record<string, UnsafeAny>
     ): Promise<void> => {
       const hasText = Boolean(message.text);
       const hasAttachments = Boolean(message.files?.length);

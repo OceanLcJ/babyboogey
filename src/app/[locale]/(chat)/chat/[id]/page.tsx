@@ -44,7 +44,7 @@ export default function ChatPage() {
       if (data.id) {
         fetchMessages(data.id);
       }
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       console.log('fetch chat failed:', e);
     }
   };
@@ -65,14 +65,14 @@ export default function ChatPage() {
 
       const { list } = data;
       setInitialMessages(
-        list.map((item: any) => ({
+        list.map((item: UnsafeAny) => ({
           id: item.id,
           role: item.role,
           parts: item.parts ? JSON.parse(item.parts) : [],
           metadata: item.metadata ? JSON.parse(item.metadata) : undefined,
         })) as UIMessage[]
       );
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       console.log('fetch messages failed:', e);
     }
   };

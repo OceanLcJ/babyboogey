@@ -311,7 +311,7 @@ export async function GET() {
         'Content-Type': 'text/html; charset=utf-8',
       },
     });
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('Check orders error:', error);
     return new Response(`Error: ${error.message}`, {
       status: 500,

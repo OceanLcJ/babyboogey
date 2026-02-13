@@ -68,7 +68,7 @@ export class GeminiProvider implements AIProvider {
 
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.configs.apiKey}`;
 
-    const requestParts: any[] = [
+    const requestParts: UnsafeAny[] = [
       {
         text: prompt,
       },
@@ -140,7 +140,7 @@ export class GeminiProvider implements AIProvider {
       throw new Error('no parts returned');
     }
 
-    const imagePart = parts.find((p: any) => p.inlineData);
+    const imagePart = parts.find((p: UnsafeAny) => p.inlineData);
 
     if (!imagePart) {
       throw new Error('no image part returned');
@@ -201,7 +201,7 @@ export class GeminiProvider implements AIProvider {
     if (imagePart.inlineData) {
       imagePart.inlineData.data = imageUrl;
       // Ensure the original data object is updated
-      const partIndex = parts.findIndex((p: any) => p === imagePart);
+      const partIndex = parts.findIndex((p: UnsafeAny) => p === imagePart);
       if (partIndex !== -1 && data.candidates?.[0]?.content?.parts) {
         // unset image base64 data
         data.candidates[0].content.parts[partIndex].inlineData.data =

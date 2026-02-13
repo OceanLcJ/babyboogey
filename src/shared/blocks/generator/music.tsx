@@ -160,7 +160,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
         throw new Error(errorMessage);
       }
       const normalizedSongs: GeneratedSong[] = Array.isArray(songs)
-        ? (songs as any[]).map((song: AISong, index: number) => ({
+        ? (songs as UnsafeAny[]).map((song: AISong, index: number) => ({
             id: song.id || `song-${index}`,
             title: song.title || `Song ${index + 1}`,
             duration: Number(song.duration) || 0,
@@ -233,7 +233,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
       // Still processing - update progress
       setProgress((prev) => Math.min(prev + 3, 80));
       return false;
-    } catch (error: any) {
+    } catch (error: UnsafeAny) {
       console.error('Error polling task:', error);
       setIsGenerating(false);
       setProgress(0);
@@ -292,7 +292,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
       }
     }
 
-    const params: any = {
+    const params: UnsafeAny = {
       mediaType: 'music',
       provider: provider,
       model: model,
@@ -362,7 +362,7 @@ export function MusicGenerator({ className, srOnlyTitle }: SongGeneratorProps) {
 
       setTaskId(taskId);
       setProgress(20);
-    } catch (err: any) {
+    } catch (err: UnsafeAny) {
       toast.error('Failed to generate music: ' + err.message);
       setIsGenerating(false);
       setProgress(0);

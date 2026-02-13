@@ -258,7 +258,7 @@ export async function POST(req: NextRequest) {
     }
 
     return response;
-  } catch (error: any) {
+  } catch (error: UnsafeAny) {
     console.error('upload media failed:', error);
     return NextResponse.json({
       code: -1,

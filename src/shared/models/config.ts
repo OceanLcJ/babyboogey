@@ -111,7 +111,7 @@ export async function getAllConfigs(): Promise<Configs> {
 }
 
 export async function getPublicConfigs(): Promise<Configs> {
-  let allConfigs = await getAllConfigs();
+  const allConfigs = await getAllConfigs();
 
   const publicConfigs: Record<string, string> = {};
 

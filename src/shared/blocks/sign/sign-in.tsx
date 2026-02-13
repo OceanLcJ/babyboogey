@@ -95,7 +95,7 @@ export function SignIn({
           onSuccess: (ctx) => {
             // Keep loading=true until navigation completes.
           },
-          onError: (e: any) => {
+          onError: (e: UnsafeAny) => {
             const status = e?.error?.status;
             if (status === 403) {
               const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
@@ -123,7 +123,7 @@ export function SignIn({
           },
         }
       );
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       toast.error(e?.message || 'sign in failed');
       setLoading(false);
     }

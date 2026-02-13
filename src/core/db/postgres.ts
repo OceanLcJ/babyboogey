@@ -20,7 +20,7 @@ export function getPostgresDb() {
       : {};
 
   if (isCloudflareWorker) {
-    const { env }: { env: any } = getCloudflareContext();
+    const { env }: { env: UnsafeAny } = getCloudflareContext();
     // Detect if set Hyperdrive
     isHyperdrive = 'HYPERDRIVE' in env;
 

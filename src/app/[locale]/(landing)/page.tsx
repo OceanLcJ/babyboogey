@@ -48,11 +48,11 @@ export default async function LandingPage({
   const Page = await getThemePage('dynamic-page');
 
   // Build FAQ items for JSON-LD
-  const faqSection = page.sections?.faq as any;
+  const faqSection = page.sections?.faq as UnsafeAny;
   const faqItems = faqSection?.items || [];
 
   // Build HowTo steps for JSON-LD
-  const usageSection = page.sections?.usage as any;
+  const usageSection = page.sections?.usage as UnsafeAny;
   const howToSteps = usageSection?.items || [];
 
   const appUrl = envConfigs.app_url || '';

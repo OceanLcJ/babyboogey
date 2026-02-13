@@ -4,7 +4,7 @@ import { Fragment, ReactNode } from 'react';
  * Analytics configs interface
  */
 export interface AnalyticsConfigs {
-  [key: string]: any;
+  [key: string]: UnsafeAny;
 }
 
 /**

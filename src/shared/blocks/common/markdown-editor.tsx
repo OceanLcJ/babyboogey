@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-// @ts-ignore
+// @ts-expect-error overtype has no exported TS type for this entrypoint.
 import { OverType } from 'overtype';
 
 export function MarkdownEditor({

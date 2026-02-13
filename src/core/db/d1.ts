@@ -4,10 +4,10 @@ import { isCloudflareWorker } from '@/shared/lib/env';
 
 let d1DbInstance: ReturnType<typeof drizzleD1> | null = null;
 
-function getCloudflareEnvSync(): any {
+function getCloudflareEnvSync(): UnsafeAny {
   // OpenNext Cloudflare sets a per-request context on the global scope using this symbol.
   // In production, the value is backed by AsyncLocalStorage, so it is safe for concurrent requests.
-  const ctx = (globalThis as any)[Symbol.for('__cloudflare-context__')];
+  const ctx = (globalThis as UnsafeAny)[Symbol.for('__cloudflare-context__')];
   const env = ctx?.env;
   if (!env) {
     throw new Error(

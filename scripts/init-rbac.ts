@@ -16,17 +16,17 @@ import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import { getUuid } from '@/shared/lib/hash';
 
-async function loadSchemaTables(): Promise<any> {
+async function loadSchemaTables(): Promise<UnsafeAny> {
   if (envConfigs.database_provider === 'mysql') {
-    return (await import('@/config/db/schema.mysql')) as any;
+    return (await import('@/config/db/schema.mysql')) as UnsafeAny;
   }
 
   if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
-    return (await import('@/config/db/schema.sqlite')) as any;
+    return (await import('@/config/db/schema.sqlite')) as UnsafeAny;
   }
 
   // Default: PostgreSQL
-  return (await import('@/config/db/schema')) as any;
+  return (await import('@/config/db/schema')) as UnsafeAny;
 }
 
 // Default permissions
@@ -327,7 +327,7 @@ async function initializeRBAC() {
 
   try {
     const { permission, role, rolePermission, user, userRole } =
-      (await loadSchemaTables()) as any;
+      (await loadSchemaTables()) as UnsafeAny;
 
     // 1. Create permissions
     console.log('📝 Creating permissions...');

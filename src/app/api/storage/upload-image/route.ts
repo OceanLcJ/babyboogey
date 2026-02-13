@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       ? payload.data.results
       : [];
     const urls = results
-      .map((item: any) =>
+      .map((item: UnsafeAny) =>
         item?.assetId
           ? `/api/storage/assets/${encodeURIComponent(item.assetId)}`
           : item?.previewUrl || ''
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       message: 'ok',
       data: {
         urls,
-        assetRefs: results.map((item: any) => item?.assetRef).filter(Boolean),
+        assetRefs: results.map((item: UnsafeAny) => item?.assetRef).filter(Boolean),
         results,
       },
     });
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     }
     response.headers.set('x-deprecated-endpoint', '/api/storage/upload-image');
     return response;
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.error('upload image (legacy) failed:', e);
     return NextResponse.json({
       code: -1,

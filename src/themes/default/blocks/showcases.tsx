@@ -18,7 +18,7 @@ export function Showcases({
   section: Section;
   className?: string;
 }) {
-  const groups = (section as any).groups || [];
+  const groups = (section as UnsafeAny).groups || [];
   const [selectedGroup, setSelectedGroup] = useState<string>(
     groups.length > 0 ? groups[0].name : ''
   );
@@ -114,7 +114,7 @@ export function Showcases({
       <div className="container grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => {
-            const hasButton = !!(item as any).button;
+            const hasButton = !!(item as UnsafeAny).button;
             const cardContent = (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -166,21 +166,21 @@ export function Showcases({
                         <div className="mt-4">
                           <Button
                             asChild
-                            variant={(item as any).button.variant || 'default'}
-                            size={(item as any).button.size || 'sm'}
+                            variant={(item as UnsafeAny).button.variant || 'default'}
+                            size={(item as UnsafeAny).button.size || 'sm'}
                             className="bg-primary hover:bg-primary/90 h-8 w-full border-0 px-3 py-1.5 text-sm font-medium text-white"
                           >
                             <Link
-                              href={(item as any).button.url || ''}
-                              target={(item as any).button.target || '_self'}
+                              href={(item as UnsafeAny).button.url || ''}
+                              target={(item as UnsafeAny).button.target || '_self'}
                             >
-                              {(item as any).button.icon && (
+                              {(item as UnsafeAny).button.icon && (
                                 <SmartIcon
-                                  name={(item as any).button.icon as string}
+                                  name={(item as UnsafeAny).button.icon as string}
                                   className="text-white"
                                 />
                               )}
-                              {(item as any).button.title}
+                              {(item as UnsafeAny).button.title}
                             </Link>
                           </Button>
                         </div>

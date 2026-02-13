@@ -38,7 +38,7 @@ export function getMetadata(
     );
 
     // translated metadata
-    let translatedMetadata: any = {};
+    let translatedMetadata: UnsafeAny = {};
     if (options.metadataKey) {
       translatedMetadata = await getTranslatedMetadata(
         options.metadataKey,

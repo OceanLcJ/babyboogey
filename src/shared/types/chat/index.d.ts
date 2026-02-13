@@ -10,7 +10,7 @@ export interface Chat {
   createdAt: Date;
   model: string;
   provider: string;
-  parts: any;
-  metadata: any;
-  content: any;
+  parts: unknown;
+  metadata: Record<string, unknown>;
+  content: unknown;
 }

@@ -8,7 +8,7 @@ export default async function DynamicPage({
 }: {
   locale?: string;
   page: DynamicPageType;
-  data?: Record<string, any>;
+  data?: Record<string, UnsafeAny>;
 }) {
   return (
     <>

@@ -193,12 +193,12 @@ export async function consumeCredits({
   scene?: string;
   description?: string;
   metadata?: string;
-  tx?: any;
+  tx?: UnsafeAny;
 }) {
   const currentTime = new Date();
 
   // consume credits
-  const execute = async (tx: any) => {
+  const execute = async (tx: UnsafeAny) => {
     // 1. check credits balance
     const [creditsBalance] = await tx
       .select({
@@ -237,7 +237,7 @@ export async function consumeCredits({
     const maxBatchNo = 10;
     const batchSize = 1000;
     let processedRows = 0;
-    const consumedItems: any[] = [];
+    const consumedItems: UnsafeAny[] = [];
 
     while (remainingToConsume > 0) {
       batchNo += 1;

@@ -17,7 +17,7 @@ export function Select({
 }: {
   field: FormField;
   formField: ControllerRenderProps<Record<string, unknown>, string>;
-  data?: any;
+  data?: UnsafeAny;
 }) {
   return (
     <SelectComponent
@@ -30,7 +30,7 @@ export function Select({
         <SelectValue placeholder={field.placeholder} />
       </SelectTrigger>
       <SelectContent className="bg-background rounded-md">
-        {field.options?.map((option: any) => (
+        {field.options?.map((option: UnsafeAny) => (
           <SelectItem key={option.value} value={option.value}>
             {option.title}
           </SelectItem>

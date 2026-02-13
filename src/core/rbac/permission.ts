@@ -303,7 +303,7 @@ export async function checkPageAccess({
 /**
  * Higher-order function for API routes with permission check
  */
-export function withPermission<T extends (...args: any[]) => any>(
+export function withPermission<T extends (...args: UnsafeAny[]) => UnsafeAny>(
   handler: T,
   {
     code,
@@ -322,7 +322,7 @@ export function withPermission<T extends (...args: any[]) => any>(
 /**
  * Higher-order function for API routes with role check
  */
-export function withRole<T extends (...args: any[]) => any>(
+export function withRole<T extends (...args: UnsafeAny[]) => UnsafeAny>(
   handler: T,
   {
     roleName,

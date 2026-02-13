@@ -45,7 +45,7 @@ export function ChatInput({
 }: {
   handleSubmit: (
     message: PromptInputMessage,
-    body: Record<string, any>
+    body: Record<string, UnsafeAny>
   ) => void | Promise<void>;
   status?: UseChatHelpers<UIMessage>['status'];
   error?: string | null;

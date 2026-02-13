@@ -12,7 +12,7 @@ import {
 import { FormSubmit } from './form';
 
 export interface SectionItem extends NavItem {
-  [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  [key: string]: UnsafeAny;
 }
 
 export interface Section {
@@ -32,7 +32,7 @@ export interface Section {
   text_align?: 'left' | 'center' | 'right';
   className?: string;
   component?: ReactNode;
-  [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  [key: string]: UnsafeAny;
 }
 
 // header props for header component
@@ -72,13 +72,13 @@ export interface Hero extends Section {
   highlight_text?: string;
 }
 
-export interface Logos extends Section {}
+export type Logos = Section;
 
-export interface Features extends Section {}
+export type Features = Section;
 
-export interface Stats extends Section {}
+export type Stats = Section;
 
-export interface Showcases extends Section {}
+export type Showcases = Section;
 
 export interface FAQItem extends SectionItem {
   question?: string;
@@ -89,7 +89,7 @@ export interface FAQ extends Section {
   items?: FAQItem[];
 }
 
-export interface CTA extends Section {}
+export type CTA = Section;
 
 export interface Subscribe extends Section {
   submit?: FormSubmit;

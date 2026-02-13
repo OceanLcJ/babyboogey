@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const pricing = t.raw('page.sections.pricing');
 
     const pricingItem = pricing.items.find(
-      (item: any) => item.product_id === product_id
+      (item: UnsafeAny) => item.product_id === product_id
     );
 
     if (!pricingItem) {
@@ -298,7 +298,7 @@ export async function POST(req: Request) {
       });
 
       return respData(result.checkoutInfo);
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       // update order status to completed, means checkout failed
       await updateOrderByOrderNo(orderNo, {
         status: OrderStatus.COMPLETED, // means checkout failed
@@ -307,7 +307,7 @@ export async function POST(req: Request) {
 
       return respErr('checkout failed: ' + e.message);
     }
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('checkout failed:', e);
     return respErr('checkout failed: ' + e.message);
   }
@@ -333,7 +333,7 @@ async function getPaymentProductId(
         productIds[`${productId}_${checkoutCurrency}`] || productIds[productId]
       );
     }
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('get payment product id failed:', e);
     return;
   }
@@ -360,7 +360,7 @@ async function getPromotionCode(
         promotionCodes[productId]
       );
     }
-  } catch (e: any) {
+  } catch (e: UnsafeAny) {
     console.log('get promotion code failed:', e);
     return;
   }

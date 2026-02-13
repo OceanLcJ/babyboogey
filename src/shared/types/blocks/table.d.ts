@@ -12,15 +12,15 @@ export interface TableColumn {
     | 'user'
     | 'json_preview';
   placeholder?: string;
-  metadata?: any;
+  metadata?: UnsafeAny;
   className?: string;
-  callback?: (item: any) => any;
+  callback?: (item: UnsafeAny) => UnsafeAny;
 }
 
 export interface Table {
   title?: string;
   columns: TableColumn[];
-  data: any[];
+  data: UnsafeAny[];
   emptyMessage?: string;
   pagination?: Pagination;
   actions?: Button[];

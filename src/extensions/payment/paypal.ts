@@ -89,7 +89,7 @@ export class PayPalProvider implements PaymentProvider {
       0
     );
 
-    const payload: any = {
+    const payload: UnsafeAny = {
       intent: 'CAPTURE',
       purchase_units: [
         {
@@ -138,7 +138,7 @@ export class PayPalProvider implements PaymentProvider {
     );
 
     const approvalUrl = result.links?.find(
-      (link: any) => link.rel === 'approve'
+      (link: UnsafeAny) => link.rel === 'approve'
     )?.href;
 
     return {
@@ -178,7 +178,7 @@ export class PayPalProvider implements PaymentProvider {
     );
 
     // Create a billing plan
-    const planPayload: any = {
+    const planPayload: UnsafeAny = {
       product_id: productResponse.id,
       name: order.plan.name,
       description: order.plan.description || order.description,
@@ -234,7 +234,7 @@ export class PayPalProvider implements PaymentProvider {
     );
 
     // Create subscription
-    const subscriptionPayload: any = {
+    const subscriptionPayload: UnsafeAny = {
       plan_id: planResponse.id,
       custom_id: order.metadata ? JSON.stringify(order.metadata) : undefined,
       application_context: {
@@ -271,7 +271,7 @@ export class PayPalProvider implements PaymentProvider {
     );
 
     const approvalUrl = subscriptionResponse.links?.find(
-      (link: any) => link.rel === 'approve'
+      (link: UnsafeAny) => link.rel === 'approve'
     )?.href;
 
     return {
@@ -325,7 +325,7 @@ export class PayPalProvider implements PaymentProvider {
       }
 
       return await this.buildPaymentSessionFromOrder(orderResult);
-    } catch (orderError: any) {
+    } catch (orderError: UnsafeAny) {
       // If not found as order, try as subscription
       if (
         orderError.message?.includes('RESOURCE_NOT_FOUND') ||
@@ -663,7 +663,7 @@ export class PayPalProvider implements PaymentProvider {
     this.tokenExpiry = Date.now() + data.expires_in * 1000;
   }
 
-  private async makeRequest(endpoint: string, method: string, data?: any) {
+  private async makeRequest(endpoint: string, method: string, data?: UnsafeAny) {
     const url = `${this.baseUrl}${endpoint}`;
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.accessToken}`,
@@ -691,7 +691,7 @@ export class PayPalProvider implements PaymentProvider {
       let errorMessage = result.name || result.error || 'Unknown error';
       if (result.details) {
         errorMessage += `: ${result.details
-          .map((detail: any) => detail.issue || detail.description)
+          .map((detail: UnsafeAny) => detail.issue || detail.description)
           .join(', ')}`;
       }
       if (result.message) {
@@ -822,7 +822,7 @@ export class PayPalProvider implements PaymentProvider {
 
   // Build payment session from order
   private async buildPaymentSessionFromOrder(
-    order: any
+    order: UnsafeAny
   ): Promise<PaymentSession> {
     const purchaseUnit = order.purchase_units?.[0];
     const payer = order.payer;
@@ -830,7 +830,7 @@ export class PayPalProvider implements PaymentProvider {
     const breakdown = purchaseUnit?.amount?.breakdown;
 
     // Parse metadata from custom_id
-    let metadata: any = {};
+    let metadata: UnsafeAny = {};
     if (purchaseUnit?.custom_id) {
       try {
         metadata = JSON.parse(purchaseUnit.custom_id);
@@ -895,7 +895,7 @@ export class PayPalProvider implements PaymentProvider {
 
   // Build payment session from capture event
   private async buildPaymentSessionFromCapture(
-    capture: any
+    capture: UnsafeAny
   ): Promise<PaymentSession> {
     // Get breakdown info from seller_receivable_breakdown
     const breakdown = capture.seller_receivable_breakdown;
@@ -914,7 +914,7 @@ export class PayPalProvider implements PaymentProvider {
     const paymentCurrency = capture.amount?.currency_code || '';
 
     // Parse metadata from custom_id (set during order creation)
-    let metadata: any = {};
+    let metadata: UnsafeAny = {};
     if (capture.custom_id) {
       try {
         metadata = JSON.parse(capture.custom_id);
@@ -966,11 +966,11 @@ export class PayPalProvider implements PaymentProvider {
 
   // Build payment session from subscription
   private async buildPaymentSessionFromSubscription(
-    subscription: any,
-    saleEvent?: any
+    subscription: UnsafeAny,
+    saleEvent?: UnsafeAny
   ): Promise<PaymentSession> {
     // Parse metadata from custom_id
-    let metadata: any = {};
+    let metadata: UnsafeAny = {};
     if (subscription.custom_id) {
       try {
         metadata = JSON.parse(subscription.custom_id);
@@ -1062,12 +1062,12 @@ export class PayPalProvider implements PaymentProvider {
 
   // Build subscription info from subscription
   private async buildSubscriptionInfo(
-    subscription: any
+    subscription: UnsafeAny
   ): Promise<SubscriptionInfo> {
     const billingInfo = subscription.billing_info;
 
     // Get plan details if available
-    let planDetails: any = null;
+    let planDetails: UnsafeAny = null;
     if (subscription.plan_id) {
       try {
         planDetails = await this.makeRequest(
@@ -1080,7 +1080,7 @@ export class PayPalProvider implements PaymentProvider {
     }
 
     const billingCycle = planDetails?.billing_cycles?.find(
-      (cycle: any) => cycle.tenure_type === 'REGULAR'
+      (cycle: UnsafeAny) => cycle.tenure_type === 'REGULAR'
     );
 
     // Determine interval for period calculation

@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
 
   // Extract locale from pathname
   const locale = pathname.split('/')[1];
-  const isValidLocale = routing.locales.includes(locale as any);
+  const isValidLocale = routing.locales.includes(locale as UnsafeAny);
   const pathWithoutLocale = isValidLocale
     ? pathname.slice(locale.length + 1)
     : pathname;

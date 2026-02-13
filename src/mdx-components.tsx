@@ -47,7 +47,7 @@ export function withNoFollow(
     React.AnchorHTMLAttributes<HTMLAnchorElement>
   >
 ) {
-  return ({
+  const LinkWithNoFollow = ({
     href,
     children,
     ...props
@@ -77,6 +77,12 @@ export function withNoFollow(
       </LinkComponent>
     );
   };
+
+  LinkWithNoFollow.displayName = `withNoFollow(${
+    LinkComponent.displayName || LinkComponent.name || 'Link'
+  })`;
+
+  return LinkWithNoFollow;
 }
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -88,7 +94,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       // If src is an object (imported image), use its src property
       const imageSrc =
         typeof src === 'object' && src !== null && 'src' in src
-          ? (src as any).src
+          ? (src as UnsafeAny).src
           : src;
 
       return (

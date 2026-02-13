@@ -69,7 +69,7 @@ export default async function CancelBillingPage({
     },
   ];
 
-  const handleCancelSubscription = async (data: FormData, passby: any) => {
+  const handleCancelSubscription = async (data: FormData, passby: UnsafeAny) => {
     'use server';
 
     const { subscriptionNo, subscriptionId, subscriptionUserId, subscriptionStatus, subscriptionPaymentProvider, userId } = passby;

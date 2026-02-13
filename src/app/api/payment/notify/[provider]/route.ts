@@ -54,7 +54,10 @@ export async function POST(
 
     if (eventType === PaymentEventType.CHECKOUT_SUCCESS) {
       // one-time payment or subscription first payment
-      const orderNo = session.metadata.order_no;
+      const orderNo =
+        typeof session.metadata?.order_no === 'string'
+          ? session.metadata.order_no
+          : '';
 
       if (!orderNo) {
         throw new Error('order no not found');
@@ -226,7 +229,7 @@ export async function POST(
     return Response.json({
       message: 'success',
     });
-  } catch (err: any) {
+  } catch (err: UnsafeAny) {
     console.log('handle payment notify failed', err);
     return Response.json(
       {

@@ -129,7 +129,7 @@ export class S3Provider implements StorageProvider {
       const request = new Request(url, {
         method: 'PUT',
         headers,
-        body: bodyArray as any,
+        body: bodyArray as UnsafeAny,
       });
 
       const response = await client.fetch(request);

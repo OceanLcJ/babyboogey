@@ -151,7 +151,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
     databaseHooks: {
       user: {
         create: {
-          before: async (user: any, ctx: any) => {
+          before: async (user: UnsafeAny, ctx: UnsafeAny) => {
             try {
               const ip = await getClientIp();
               if (ip) {
@@ -193,7 +193,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
             }
             return user;
           },
-          after: async (user: any) => {
+          after: async (user: UnsafeAny) => {
             try {
               if (!user.id) {
                 throw new Error('user id is required');
@@ -209,7 +209,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
       },
       session: {
         create: {
-          after: async (session: any, ctx: unknown) => {
+          after: async (session: UnsafeAny, ctx: unknown) => {
             try {
               const userId =
                 (session?.userId as string | undefined) ||
@@ -261,7 +261,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
             // 24 hours
             expiresIn: 60 * 60 * 24,
             sendVerificationEmail: async (
-              { user, url }: { user: any; url: string; token: string },
+              { user, url }: { user: UnsafeAny; url: string; token: string },
               _request: Request
             ) => {
               try {
@@ -275,7 +275,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
                   recentVerificationEmailSentAt.set(key, now);
                 }
 
-                const emailService = await getEmailService(configs as any);
+                const emailService = await getEmailService(configs as UnsafeAny);
                 const logoUrl = envConfigs.app_logo?.startsWith('http')
                   ? envConfigs.app_logo
                   : `${envConfigs.app_url}${envConfigs.app_logo?.startsWith('/') ? '' : '/'}${envConfigs.app_logo || ''}`;
@@ -306,7 +306,7 @@ export async function getAuthOptions(configs: Record<string, string>) {
 
 // get social providers with configs
 export async function getSocialProviders(configs: Record<string, string>) {
-  const providers: any = {};
+  const providers: UnsafeAny = {};
 
   // google auth
   if (configs.google_client_id && configs.google_client_secret) {

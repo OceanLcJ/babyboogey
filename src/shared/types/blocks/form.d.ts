@@ -32,11 +32,11 @@ export interface FormField {
     title: string;
     value: string;
   }[];
-  value?: any;
+  value?: UnsafeAny;
   tip?: string;
-  attributes?: Record<string, any>;
+  attributes?: Record<string, UnsafeAny>;
   validation?: ValidationRule;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, UnsafeAny>;
 }
 
 export interface FormSubmit {
@@ -45,7 +45,7 @@ export interface FormSubmit {
   action?: string;
   handler?: (
     data: FormData,
-    passby?: any
+    passby?: UnsafeAny
   ) => Promise<
     | {
         status: 'success' | 'error';
@@ -61,7 +61,7 @@ export interface Form {
   title?: string;
   description?: string;
   fields: FormField[];
-  data?: any;
-  passby?: any;
+  data?: UnsafeAny;
+  passby?: UnsafeAny;
   submit?: FormSubmit;
 }

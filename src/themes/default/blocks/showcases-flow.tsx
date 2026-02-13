@@ -20,7 +20,7 @@ export function ShowcasesFlow({
   className?: string;
 }) {
   const t = useTranslations('pages.showcases.page.sections.showcases');
-  const groups = (section as any).groups || [];
+  const groups = (section as UnsafeAny).groups || [];
   const [selectedGroup, setSelectedGroup] = useState<string>(
     groups.length > 0 ? groups[0].name : ''
   );
@@ -205,27 +205,27 @@ export function ShowcasesFlow({
                     {item.description}
                   </p>
                 )} */}
-                {(item as any).button && (
+                {(item as UnsafeAny).button && (
                   <div
                     className="mt-3 translate-y-4 transition-transform delay-100 duration-300 group-hover:translate-y-0"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Button
                       asChild
-                      variant={(item as any).button.variant || 'default'}
-                      size={(item as any).button.size || 'sm'}
+                      variant={(item as UnsafeAny).button.variant || 'default'}
+                      size={(item as UnsafeAny).button.size || 'sm'}
                       className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 w-full border-0 px-1 py-1.5 text-sm font-medium"
                     >
                       <Link
-                        href={(item as any).button.url || ''}
-                        target={(item as any).button.target || '_self'}
+                        href={(item as UnsafeAny).button.url || ''}
+                        target={(item as UnsafeAny).button.target || '_self'}
                       >
-                        {(item as any).button.icon && (
+                        {(item as UnsafeAny).button.icon && (
                           <SmartIcon
-                            name={(item as any).button.icon as string}
+                            name={(item as UnsafeAny).button.icon as string}
                           />
                         )}
-                        {(item as any).button.title}
+                        {(item as UnsafeAny).button.title}
                       </Link>
                     </Button>
                   </div>
@@ -333,41 +333,41 @@ export function ShowcasesFlow({
                         </Button>
                       </div>
                     )}
-                    {(filteredItems[selectedIndex] as any).button && !filteredItems[selectedIndex].id && (
+                    {(filteredItems[selectedIndex] as UnsafeAny).button && !filteredItems[selectedIndex].id && (
                       <div className="mt-4">
                         <Button
                           asChild
                           variant={
-                            (filteredItems[selectedIndex] as any).button
+                            (filteredItems[selectedIndex] as UnsafeAny).button
                               .variant || 'default'
                           }
                           size={
-                            (filteredItems[selectedIndex] as any).button.size ||
+                            (filteredItems[selectedIndex] as UnsafeAny).button.size ||
                             'default'
                           }
                           className="bg-primary hover:bg-primary/90 h-8 border-0 px-3 py-1.5 text-sm font-medium text-white"
                         >
                           <Link
                             href={
-                              (filteredItems[selectedIndex] as any).button
+                              (filteredItems[selectedIndex] as UnsafeAny).button
                                 .url || ''
                             }
                             target={
-                              (filteredItems[selectedIndex] as any).button
+                              (filteredItems[selectedIndex] as UnsafeAny).button
                                 .target || '_self'
                             }
                           >
-                            {(filteredItems[selectedIndex] as any).button
+                            {(filteredItems[selectedIndex] as UnsafeAny).button
                               .icon && (
                                 <SmartIcon
                                   name={
-                                    (filteredItems[selectedIndex] as any).button
+                                    (filteredItems[selectedIndex] as UnsafeAny).button
                                       .icon as string
                                   }
                                   className="text-white"
                                 />
                               )}
-                            {(filteredItems[selectedIndex] as any).button.title}
+                            {(filteredItems[selectedIndex] as UnsafeAny).button.title}
                           </Link>
                         </Button>
                       </div>

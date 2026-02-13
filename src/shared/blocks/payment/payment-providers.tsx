@@ -34,22 +34,21 @@ export function PaymentProviders({
   className?: string;
 }) {
   const t = useTranslations('common.payment');
+  const locale = useLocale();
   const router = useRouter();
 
   const { setIsShowPaymentModal } = useAppContext();
 
   const [paymentProvider, setPaymentProvider] = useState<string | null>(null);
+  const localizedCallbackUrl =
+    callbackUrl &&
+    locale !== defaultLocale &&
+    callbackUrl.startsWith('/') &&
+    !callbackUrl.startsWith(`/${locale}`)
+      ? `/${locale}${callbackUrl}`
+      : callbackUrl;
 
-  if (callbackUrl) {
-    const locale = useLocale();
-    if (
-      locale !== defaultLocale &&
-      callbackUrl.startsWith('/') &&
-      !callbackUrl.startsWith(`/${locale}`)
-    ) {
-      callbackUrl = `/${locale}${callbackUrl}`;
-    }
-  }
+  void localizedCallbackUrl;
 
   const handlePayment = async ({ provider }: { provider: string }) => {
     if (!provider) {

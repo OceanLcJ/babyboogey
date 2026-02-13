@@ -78,7 +78,7 @@ export function SignInForm({
           callbackURL: callbackUrl,
         },
         {
-          onError: (e: any) => {
+          onError: (e: UnsafeAny) => {
             const status = e?.error?.status;
             if (status === 403) {
               const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
@@ -106,7 +106,7 @@ export function SignInForm({
           },
         }
       );
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       toast.error(e?.message || 'sign in failed');
       setLoading(false);
     }

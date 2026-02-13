@@ -8,7 +8,7 @@ export function Label({
 }: {
   value: string;
   placeholder?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, UnsafeAny>;
   className?: string;
 }) {
   if (!value) {

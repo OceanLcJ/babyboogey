@@ -11,7 +11,7 @@ export function Checkbox({
 }: {
   field: FormField;
   formField: ControllerRenderProps<Record<string, unknown>, string>;
-  data?: any;
+  data?: UnsafeAny;
 }) {
   // initial value
   let value = (formField.value as string[]) || [];
@@ -43,7 +43,7 @@ export function Checkbox({
 
   return (
     <div className="flex flex-col gap-4 py-2">
-      {field.options?.map((option: any) => (
+      {field.options?.map((option: UnsafeAny) => (
         <div key={option.value} className="flex items-start gap-4">
           <CheckboxComponent
             onCheckedChange={(checked) =>

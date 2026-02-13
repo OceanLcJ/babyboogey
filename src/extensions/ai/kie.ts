@@ -60,7 +60,7 @@ export class KieProvider implements AIProvider {
     }
 
     // build request params
-    let payload: any = {
+    const payload: UnsafeAny = {
       prompt: params.prompt,
       model: params.model,
       callBackUrl: params.callbackUrl,
@@ -145,7 +145,7 @@ export class KieProvider implements AIProvider {
     }
 
     // build request params
-    let payload: any = {
+    const payload: UnsafeAny = {
       model: params.model,
       callBackUrl: params.callbackUrl,
       input: {
@@ -215,7 +215,7 @@ export class KieProvider implements AIProvider {
     const options = params.options ?? {};
 
     // build request params
-    let payload: any = {
+    const payload: UnsafeAny = {
       model: params.model,
       callBackUrl: params.callbackUrl,
       input: {},
@@ -371,7 +371,7 @@ export class KieProvider implements AIProvider {
       const resultJson = JSON.parse(data.resultJson);
       const resultUrls = resultJson.resultUrls;
       if (Array.isArray(resultUrls)) {
-        images = resultUrls.map((image: any) => ({
+        images = resultUrls.map((image: UnsafeAny) => ({
           id: '',
           createTime: new Date(data.createTime),
           imageUrl: image,
@@ -471,7 +471,7 @@ export class KieProvider implements AIProvider {
       const resultJson = JSON.parse(data.resultJson);
       const resultUrls = resultJson.resultUrls;
       if (Array.isArray(resultUrls)) {
-        videos = resultUrls.map((video: any) => ({
+        videos = resultUrls.map((video: UnsafeAny) => ({
           id: '',
           createTime: new Date(data.createTime),
           videoUrl: video,
@@ -576,7 +576,7 @@ export class KieProvider implements AIProvider {
       throw new Error(`query failed`);
     }
 
-    const songs: AISong[] = data?.response?.sunoData?.map((song: any) => ({
+    const songs: AISong[] = data?.response?.sunoData?.map((song: UnsafeAny) => ({
       id: song.id,
       createTime: new Date(song.createTime),
       audioUrl: song.audioUrl,

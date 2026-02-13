@@ -15,16 +15,16 @@ import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import { getUuid } from '@/shared/lib/hash';
 
-async function loadSchemaTables(): Promise<any> {
+async function loadSchemaTables(): Promise<UnsafeAny> {
   if (envConfigs.database_provider === 'mysql') {
-    return (await import('@/config/db/schema.mysql')) as any;
+    return (await import('@/config/db/schema.mysql')) as UnsafeAny;
   }
 
   if (['sqlite', 'turso'].includes(envConfigs.database_provider)) {
-    return (await import('@/config/db/schema.sqlite')) as any;
+    return (await import('@/config/db/schema.sqlite')) as UnsafeAny;
   }
 
-  return (await import('@/config/db/schema')) as any;
+  return (await import('@/config/db/schema')) as UnsafeAny;
 }
 
 async function assignRole() {
@@ -55,9 +55,9 @@ async function assignRole() {
   }
 
   try {
-    const { user, role, userRole } = (await loadSchemaTables()) as any;
-    const sqlEq: any = eq;
-    const sqlAnd: any = and;
+    const { user, role, userRole } = (await loadSchemaTables()) as UnsafeAny;
+    const sqlEq: UnsafeAny = eq;
+    const sqlAnd: UnsafeAny = and;
 
     // Find user
     let targetUser;

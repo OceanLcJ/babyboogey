@@ -77,7 +77,7 @@ export function SignUp({
       return;
     }
 
-    const windowObject = window as any;
+    const windowObject = window as UnsafeAny;
 
     if (configs.affonso_enabled === 'true' && windowObject.Affonso) {
       windowObject.Affonso.signup(userEmail);
@@ -142,13 +142,13 @@ export function SignUp({
 
             router.push(callbackUrl);
           },
-          onError: (e: any) => {
+          onError: (e: UnsafeAny) => {
             toast.error(e?.error?.message || 'sign up failed');
             setLoading(false);
           },
         }
       );
-    } catch (e: any) {
+    } catch (e: UnsafeAny) {
       toast.error(e?.message || 'sign up failed');
       setLoading(false);
     }
