@@ -9,13 +9,40 @@ import {
   TaxonomyType,
 } from '@/shared/models/taxonomy';
 
+const appUrl = envConfigs.app_url;
+const resolvedDefaultLocale = locales.includes(defaultLocale)
+  ? defaultLocale
+  : (locales[0] ?? 'en');
+
+function buildAbsoluteUrl(path: string, locale?: string): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  // For static paths, localize from locale argument.
+  if (locale) {
+    const localePrefix =
+      locale === resolvedDefaultLocale ? '' : `/${locale}`;
+    return `${appUrl}${localePrefix}${normalizedPath}`;
+  }
+
+  // For content source URLs (posts/docs/pages/logs), path is already localized.
+  // Normalize default locale paths to "as-needed" style (no locale prefix).
+  const defaultPrefix = `/${resolvedDefaultLocale}`;
+  const normalizedLocalizedPath =
+    normalizedPath === defaultPrefix
+      ? '/'
+      : normalizedPath.startsWith(`${defaultPrefix}/`)
+        ? normalizedPath.slice(defaultPrefix.length)
+        : normalizedPath;
+
+  return `${appUrl}${normalizedLocalizedPath}`;
+}
+
 function buildLocaleUrls(
   path: string,
   lastModified?: Date
 ): MetadataRoute.Sitemap {
-  const appUrl = envConfigs.app_url;
   return locales.map((locale) => ({
-    url: `${appUrl}${locale === defaultLocale ? '' : `/${locale}`}${path}`,
+    url: buildAbsoluteUrl(path, locale),
     lastModified: lastModified || new Date(),
     changeFrequency: 'weekly' as const,
     priority: path === '/' ? 1.0 : 0.8,
@@ -52,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const path of keywordPages) {
     entries.push(
       ...locales.map((locale) => ({
-        url: `${envConfigs.app_url}${locale === defaultLocale ? '' : `/${locale}`}${path}`,
+        url: buildAbsoluteUrl(path, locale),
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.8,
@@ -64,10 +91,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     const localPosts = postsSource.getPages(locale);
     for (const post of localPosts) {
-      const appUrl = envConfigs.app_url;
-      const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
       entries.push({
-        url: `${appUrl}${localePrefix}${post.url}`,
+        url: buildAbsoluteUrl(post.url),
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.7,
@@ -79,10 +104,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     const docPages = docsSource.getPages(locale);
     for (const doc of docPages) {
-      const appUrl = envConfigs.app_url;
-      const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
       entries.push({
-        url: `${appUrl}${localePrefix}${doc.url}`,
+        url: buildAbsoluteUrl(doc.url),
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.6,
@@ -94,10 +117,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     const staticPages = pagesSource.getPages(locale);
     for (const page of staticPages) {
-      const appUrl = envConfigs.app_url;
-      const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
       entries.push({
-        url: `${appUrl}${localePrefix}${page.url}`,
+        url: buildAbsoluteUrl(page.url),
         lastModified: new Date(),
         changeFrequency: 'yearly',
         priority: 0.3,
@@ -109,10 +130,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     const logPages = logsSource.getPages(locale);
     for (const log of logPages) {
-      const appUrl = envConfigs.app_url;
-      const localePrefix = locale === defaultLocale ? '' : `/${locale}`;
       entries.push({
-        url: `${appUrl}${localePrefix}${log.url}`,
+        url: buildAbsoluteUrl(log.url),
         lastModified: new Date(),
         changeFrequency: 'monthly',
         priority: 0.5,
