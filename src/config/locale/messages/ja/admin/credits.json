@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "transaction_no": "取引番号",
+    "user": "ユーザー",
+    "amount": "額",
+    "remaining": "残り",
+    "type": "タイプ",
+    "scene": "シーン",
+    "description": "説明",
+    "created_at": "作成日",
+    "expires_at": "有効期限は次のとおりです",
+    "metadata": "メタデータ",
+    "action": "アクション"
+  },
+  "list": {
+    "title": "クレジット",
+    "crumbs": {
+      "admin": "管理者",
+      "credits": "クレジット"
+    },
+    "tabs": {
+      "all": "全て",
+      "grant": "付与",
+      "consume": "消費する"
+    }
+  }
+}

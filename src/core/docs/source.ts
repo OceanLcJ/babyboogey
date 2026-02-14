@@ -7,7 +7,7 @@ import { icons } from 'lucide-react';
 
 export const i18n: I18nConfig = {
   defaultLanguage: 'en',
-  languages: ['en', 'zh'],
+  languages: ['en', 'zh', 'ja'],
 };
 
 const iconHelper = (icon: string | undefined) => {

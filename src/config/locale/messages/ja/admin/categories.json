@@ -1,0 +1,52 @@
+{
+  "fields": {
+    "slug": "Slug",
+    "title": "タイトル",
+    "description": "説明",
+    "status": "状態",
+    "created_at": "作成日",
+    "updated_at": "更新日"
+  },
+  "list": {
+    "title": "カテゴリー",
+    "crumbs": {
+      "admin": "管理者",
+      "categories": "カテゴリー"
+    },
+    "buttons": {
+      "add": "カテゴリを追加",
+      "edit": "カテゴリの編集",
+      "view": "カテゴリを見る",
+      "delete": "カテゴリの削除"
+    },
+    "tabs": {
+      "all": "全て",
+      "published": "発行済み",
+      "pending": "保留中",
+      "draft": "下書き",
+      "archived": "アーカイブ済み"
+    }
+  },
+  "add": {
+    "title": "カテゴリを追加",
+    "crumbs": {
+      "admin": "管理者",
+      "categories": "カテゴリー",
+      "add": "カテゴリを追加"
+    },
+    "buttons": {
+      "submit": "カテゴリを追加"
+    }
+  },
+  "edit": {
+    "title": "カテゴリの編集",
+    "crumbs": {
+      "admin": "管理者",
+      "categories": "カテゴリー",
+      "edit": "カテゴリの編集"
+    },
+    "buttons": {
+      "submit": "カテゴリの編集"
+    }
+  }
+}

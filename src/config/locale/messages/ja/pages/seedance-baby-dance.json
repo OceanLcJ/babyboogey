@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "title": "Seedance 2.0 オンライン無料ジェネレーター — BabyBoogey (ByteDance AI 搭載)",
+    "description": "Seedance 2.0 をオンラインで無料で使用してください! BabyBoogey は ByteDance の公式 Seedance 2.0 モデルを統合しています。ダウンロードは必要ありません。バイラル AI ベビー ダンス ビデオを即座に生成します。"
+  },
+  "page": {
+    "title": "Seedance 2.0 オンライン無料ジェネレーター — BabyBoogey",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "Seedance 2.0 をオンラインで無料で使用する — ワンクリックのベビー ダンス ビデオ",
+        "highlight_text": "シーダンス 2.0",
+        "description": "アプリのダウンロードは必要ありません。複雑な設定は必要ありません。 BabyBoogey は ByteDance の公式 Seedance 2.0 モデルと直接統合されています。 50 を超える赤ちゃん専用のテンプレートと組み合わせて、究極の AI ダンス生成体験を提供します。写真をアップロードすると、すぐに結果が得られます。",
+        "buttons": [
+          {
+            "title": "Seedance 2.0をオンラインで無料でお試しください",
+            "url": "/#generator",
+            "icon": "Zap"
+          }
+        ],
+        "image": {
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
+          "alt": "Seedance 2.0 オンライン ジェネレーター - BabyBoogey プレビュー",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
+          "alt": "背景"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "Seedance 2.0 オンラインを選ぶ理由?",
+        "description": "巨大なファイルをダウンロードしたり、ローカル環境を構成したりする場合と比較して、BabyBoogey のオンライン Seedance 2.0 を使用するのが、この ByteDance テクノロジーを最も速く、最も安定して体験できる方法です。",
+        "image": {
+          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/seedance-ai-processing-photo-to-wireframe.webp",
+          "alt": "Seedance 2.0 オンラインの利点"
+        },
+        "items": [
+          {
+            "title": "Android/iOS アプリは必要ありません",
+            "description": "Seedance 2.0 は、高いハードウェア要件を備えた大規模な AI モデルです。 BabyBoogey は、完全な Seedance 2.0 エンジンをクラウドに展開します。ソフトウェアをダウンロードする必要はありません。 Web ページを開くだけで、携帯電話やコンピューターのストレージを占有することなく使用できます。",
+            "icon": "Cloud",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/cloud-server-to-mobile-web-app.webp",
+              "alt": "クラウドベースの Seedance 2.0、ローカル インストールなし"
+            }
+          },
+          {
+            "title": "公式品質",
+            "description": "オンラインの品質が心配ですか?そうならないでください。 Seedance 2.0 コア API を直接呼び出しているため、生成されたビデオは公式デモと同じです。 TikTok/Instagramに最適な2K超鮮明解像度出力に対応。",
+            "icon": "Monitor",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/2k-video-enhancement-before-after.webp",
+              "alt": "2K Ultra HD 品質、公式 Seedance 2.0 と同じ"
+            }
+          },
+          {
+            "title": "使いやすいインターフェース",
+            "description": "オリジナルの Seedance は主に開発者向けです。 BabyBoogey は、親向けに最適化されたユーザーフレンドリーなインターフェイスを提供します。コーディングや技術的な知識は必要ありません。数秒で作成を開始できます。",
+            "icon": "UserCheck",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/one-click-generate-on-laptop-ui.webp",
+              "alt": "保護者向けに最適化されたユーザーフレンドリーなインターフェース"
+            }
+          },
+          {
+            "title": "高速生成",
+            "description": "世界中で Seedance 2.0 サービスに高速かつ安定してアクセスできるように、ネットワーク接続を最適化しました。高品質のビデオを数秒で生成します。",
+            "icon": "Zap",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/fast-generation-lightning-play-icon.webp",
+              "alt": "高速シーダンスサービス"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "Seedance 2.0 + BabyBoogey のコア機能",
+        "description": "ByteDance のトップレベル AI と BabyBoogey の使いやすさを組み合わせた、これは市場で最高のベビー ダンス ビデオ ソリューションです。",
+        "items": [
+          {
+            "title": "世界No.1のダンスAI",
+            "description": "Seedance 2.0 は常に Video Arena のリーダーボードのトップにあり、モーションの流動性において Runway や Pika を上回っています。特に複雑なダンスの動きの場合、歪みのない Seedance 2.0 が唯一の選択肢です。",
+            "icon": "Trophy",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/ai-skeleton-joint-tracking-baby-dance.webp",
+              "alt": "Video Arena #1 にランク付けされた AI モデル"
+            }
+          },
+          {
+            "title": "無料でお試しいただけます",
+            "description": "より多くの人に Seedance 2.0 のパワーを体験してもらうために、BabyBoogey は無料トライアル クレジットを提供しています。登録すると毎日無料でビデオを生成します。クレジット カードは必要ありません。",
+            "icon": "Gift",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
+              "alt": "登録して Seedance 2.0 を無料でお試しください"
+            }
+          },
+          {
+            "title": "自動オーディオ同期",
+            "description": "Seedance 2.0 独自のオーディオ駆動テクノロジーにより、赤ちゃんのダンスの動きがビートに完全に一致することが保証されます。すべてのステップと波が完璧にリズムを刻みます。",
+            "icon": "Music",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/realistic-fabric-simulation-closeup.webp",
+              "alt": "AI が音楽のビートに合わせてダンスを自動同期"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "詳細: なぜ Seedance 2.0 が優れているのか?",
+        "description": "なぜ誰もが Seedance 2.0 を探しているのでしょうか? ByteDance の秘密兵器として、3 つの主要な分野で AI ビデオ生成に革命をもたらします。",
+        "items": [
+          {
+            "title": "体の一貫性",
+            "description": "ほとんどの AI ビデオ ジェネレーターは、手足が消えたり変形したりすることに苦労しています。 Seedance 2.0 は、最新のスケルトン バインディング テクノロジーを使用して赤ちゃんの体の構造を完全にロックし、複雑な動作中でも手と足を自然に保ちます。",
+            "icon": "Activity",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/ai-skeleton-joint-tracking-baby-dance.webp",
+              "alt": "完璧な身体構造の保存"
+            }
+          },
+          {
+            "title": "物理シミュレーション",
+            "description": "Seedance 2.0 は物理学を理解しています。ドレスの揺れと髪の動きは、現実世界の重力ルールに従います。これにより、生成されたビデオは漫画ではなく、実際の映像のように見えます。",
+            "icon": "Wind",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/realistic-fabric-simulation-closeup.webp",
+              "alt": "リアルな物理シミュレーションエンジン"
+            }
+          },
+          {
+            "title": "鮮やかな表現",
+            "description": "ダンスだけではありません。Seedance 2.0 は表現に命を吹き込みます。顔の微表情をダンスの雰囲気 (ハッピー、クール、面白い) に自動的に一致させ、非常に魅力的なビデオを作成します。",
+            "icon": "Smile",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/baby-face-expressions-grid-3d.webp",
+              "alt": "鮮やかな表情生成"
+            }
+          },
+          {
+            "title": "驚異的なスピード",
+            "description": "ByteDance の膨大なコンピューティング能力に支えられた Seedance 2.0 は、同等のモデルより 3 倍の速度でビデオを生成します。 BabyBoogey では、15 秒の HD ダンス ビデオがわずか 30 ～ 60 秒で完成します。",
+            "icon": "Zap",
+            "image": {
+              "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
+              "alt": "生成速度が 3 倍高速化"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Seedance 2.0 オンライン FAQ",
+        "description": "ダウンロード、価格、使用制限についての回答。",
+        "items": [
+          {
+            "question": "公式の Seedance 2.0 アプリはありますか?",
+            "answer": "現在、Seedance 2.0 にはスタンドアロンの公式アプリがありません。これは主に API および Web サービスとして存在します。 BabyBoogey はモバイルで使用するのに最も便利な Web インターフェイスであり、ストレージ容量を占有せずにアプリのようなエクスペリエンスを提供します。"
+          },
+          {
+            "question": "ここでの Seedance 2.0 の使用は無料ですか?",
+            "answer": "BabyBoogey では無料お試しプランを提供しています。すべての新規ユーザーは、登録時に Seedance 2.0 ビデオを生成するための無料クレジットを取得します。より多くの、またはより高品質のビデオをご希望の場合は、お手頃なプランをご用意しています。"
+          },
+          {
+            "question": "生成されたビデオにはウォーターマークが含まれていますか?",
+            "answer": "無料のユーザービデオには、BabyBoogey の小さなウォーターマークが付いています。有料プランにアップグレードすると、すべてのウォーターマークが削除され、商用利用権が付与されます。"
+          },
+          {
+            "question": "Seedance 2.0 はどのような写真形式をサポートしていますか?",
+            "answer": "JPG、PNG、WEBP などの主流の形式をサポートします。最良の骨格認識と生成結果を得るには、顔に障害物がない、鮮明な全身写真または半身写真をアップロードすることをお勧めします。"
+          },
+          {
+            "question": "これは本当にByteDanceテクノロジーですか？",
+            "answer": "はい。 BabyBoogey は ByteDance のオープンソース Seedance 2.0 モデルに基づいて構築されています。基盤となるモデルには手を加えずにアプリケーション層を最適化し、本物のビッグテクノロジー AI エクスペリエンスを確実に得られるようにします。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "今すぐ Seedance 2.0 を無料でお試しください",
+        "description": "ダウンロードを検索するのはやめてください。 Seedance 2.0 を使用するには BabyBoogey が最適です。待つ必要はありません。今すぐ始めましょう。",
+        "buttons": [
+          {
+            "title": "オンラインで使用する (ダウンロードなし)",
+            "url": "/#generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "ショーケースを見る",
+            "url": "/showcases",
+            "icon": "PlayCircle"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "title": "AI赤ちゃんダンスジェネレーター | 無料動画 - BabyBoogey",
+    "description": "No.1 AI赤ちゃんダンスジェネレーター — 赤ちゃんの写真をワンクリックで陽気で弾むような動画にアニメーション化します。編集スキルは不要。無料で始められ、無料エクスポートには小さな透かしが入ります。",
+    "keywords": "ai赤ちゃんダンスジェネレーター, 赤ちゃんダンス動画メーカー, 赤ちゃん写真アニメーション, オンライン顔アニメーター, 写真を踊る赤ちゃんに, 赤ちゃん写真から動画へ, オンラインで赤ちゃんダンス作成, 踊る赤ちゃんアプリ, 写真アニメーション無料, 赤ちゃん動画ジェネレーターオンライン無料, AI顔アニメーション"
+  },
+  "sign": {
+    "sign_in_title": "サインイン",
+    "sign_in_description": "アカウントにサインイン",
+    "sign_up_title": "サインアップ",
+    "sign_up_description": "アカウントを作成",
+    "email_title": "メールアドレス",
+    "email_placeholder": "メールアドレスを入力",
+    "password_title": "パスワード",
+    "password_placeholder": "パスワードを入力",
+    "forgot_password": "パスワードをお忘れですか？",
+    "or": "または",
+    "continue": "続ける",
+    "no_account": "アカウントをお持ちでないですか？",
+    "already_have_account": "すでにアカウントをお持ちですか？",
+    "email_sign_in": "メールでサインイン",
+    "google_sign_in_title": "Googleでサインイン",
+    "github_sign_in_title": "GitHubでサインイン",
+    "close_title": "閉じる",
+    "cancel_title": "キャンセル",
+    "sign_out_title": "サインアウト",
+    "billing_title": "請求",
+    "name_title": "名前",
+    "name_placeholder": "名前を入力",
+    "email_verification_hint": "アクセス可能なメールアドレスを使用してください。サインアップ後にメールを確認する必要があります。",
+    "admin_title": "管理システム",
+    "credits_title": "クレジット: {credits}",
+    "verify_email_sent": "確認メールを送信しました。受信トレイを確認してください。",
+    "verify_email_required": "サインインする前にメールアドレスを確認してください。",
+    "resend_verification": "確認メールを再送信",
+    "resend_verification_sent": "確認メールを再送信しました。受信トレイを確認してください。",
+    "verify_email_page_title": "メールを確認してください",
+    "verify_email_page_description": "続けるには、以下に送信されたリンクをクリックしてください",
+    "verify_email_continue": "続ける",
+    "verify_email_tip": "確認後、「続ける」をクリックしてください。",
+    "verify_email_not_verified_yet": "まだ確認されていません。まずメール内のリンクをクリックしてください。",
+    "verify_email_account_mismatch": "{current} としてサインイン中。このページは {expected} を待機しています。",
+    "resend_verification_countdown": "確認メールを再送信 ({seconds}秒)",
+    "resend_verification_wait": "再送信まで {seconds}秒 お待ちください。",
+    "back_to_sign_in": "サインインに戻る"
+  },
+  "payment": {
+    "choose_payment_method": "支払い方法を選択",
+    "choose_payment_method_description": "ご希望のお支払い方法を選択してください。",
+    "cancel_title": "キャンセル"
+  },
+  "locale_detector": {
+    "title": "ブラウザの言語が {locale} であることを検出しました。切り替えますか？",
+    "switch_to": "{locale} に切り替える"
+  }
+}

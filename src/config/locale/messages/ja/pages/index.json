@@ -1,0 +1,666 @@
+{
+  "custom_hero": {
+    "title_line1": "写真を",
+    "title_line2": "ダンス＆ブギさせよう！",
+    "description": "No.1 AI赤ちゃんダンスジェネレーター — 赤ちゃんの写真をワンクリックで陽気で弾むような動画にアニメーション化します。赤ちゃんダンス動画を無料で作成！",
+    "cta_button": "無料で踊りだす",
+    "card_static": "静止画",
+    "card_boogie": "ブギモード！"
+  },
+  "page": {
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "testimonials",
+      "pricing",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "世界で一番キュートな <strong>AI赤ちゃんダンスジェネレーター</strong>！",
+        "highlight_text": "ジェネレーター",
+        "description": "どんな赤ちゃんの静止画も、愉快な<strong>ダンス</strong>センセーションに変身させます。編集スキルは不要 — 純粋な喜びだけ。",
+        "announcement": {
+          "badge": "新しい",
+          "title": "🎉 赤ちゃんダンス動画を無料で作成",
+          "url": "/#generator"
+        },
+        "tip": "⭐️ 10,000人以上の幸せな親御さんと孫に甘いおじいちゃんおばあちゃんから信頼されています",
+        "buttons": [
+          {
+            "title": "無料で踊りだす",
+            "icon": "Zap",
+            "url": "/#generator",
+            "target": "_self",
+            "variant": "default"
+          },
+          {
+            "title": "テンプレートを見る",
+            "icon": "BookOpenText",
+            "url": "/showcases",
+            "target": "_self",
+            "variant": "outline"
+          }
+        ],
+        "show_avatars": true,
+        "avatars_tip": "10,000人以上の幸せな親御さん",
+        "show_award": false,
+        "image": {
+          "src": "/imgs/features/baby-hero.png",
+          "alt": "AI赤ちゃんダンスジェネレーター - オンラインで赤ちゃん写真をアニメーション化",
+          "width": 1200,
+          "height": 800
+        },
+        "image_invert": {
+          "src": "/imgs/features/baby-hero-dark.png",
+          "alt": "AI赤ちゃんダンスジェネレーター",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "/imgs/bg/confetti.jpg",
+          "alt": "背景"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "オンラインで最も簡単な赤ちゃんダンス動画メーカー",
+        "label": "BabyBoogeyとは",
+        "description": "BabyBoogeyは、赤ちゃんの写真を歌って踊る愉快な動画にアニメーション化する最もシンプルな方法です。編集スキルは必要ありません。",
+        "items": [
+          {
+            "title": "赤ちゃん写真をアニメーション化",
+            "description": "赤ちゃんの写真をアップロードするだけで、AIが愛らしいダンスの動きと表情で命を吹き込みます。",
+            "icon": "RiImageAddLine",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
+              "alt": "赤ちゃん写真をアニメーション化"
+            }
+          },
+          {
+            "title": "オンライン顔アニメーター",
+            "description": "高度なオンライン顔アニメーター技術により、自然な顔立ちを保ちながら楽しいダンスの表情を加えます。",
+            "icon": "RiEmotionHappyLine",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
+              "alt": "オンライン顔アニメーター"
+            }
+          },
+          {
+            "title": "無料でスタート",
+            "description": "赤ちゃんダンス動画を無料で作成 — クレジットカードは不要です。無料エクスポートには小さな透かしが入ります。",
+            "icon": "RiGiftLine",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
+              "alt": "無料で赤ちゃんダンス動画を作成"
+            }
+          }
+        ]
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "あらゆるシーンに最適",
+        "label": "利用シーン",
+        "description": "私たちの赤ちゃんダンス動画メーカーで忘れられない瞬間を作りましょう。",
+        "items": [
+          {
+            "title": "🎄 ホリデーカード",
+            "description": "クリスマス、新年、あらゆるお祝いのために、写真を踊る赤ちゃんに変身させましょう。家族全員で楽しめます。",
+            "icon": "RiGiftFill",
+            "image": {
+              "src": "/imgs/features/holiday.png",
+              "alt": "ホリデー赤ちゃんダンスカード"
+            }
+          },
+          {
+            "title": "😂 笑いのために",
+            "description": "絶対にバズる面白い子供ダンス動画を作りましょう。純粋な赤ちゃんの喜びで月曜日の憂鬱を吹き飛ばそう！",
+            "icon": "RiEmotionLaughFill",
+            "image": {
+              "src": "/imgs/features/laugh.png",
+              "alt": "面白い赤ちゃんダンス動画"
+            }
+          },
+          {
+            "title": "🎁 祖父母へのギフト",
+            "description": "赤ちゃんの写真を心温まるダンス動画にアニメーション化。毎回笑顔を保証するデジタルギフトです。",
+            "icon": "RiHeartFill",
+            "image": {
+              "src": "/imgs/features/love.png",
+              "alt": "赤ちゃんダンス動画ギフト"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "親御さんが私たちのAI赤ちゃんダンスジェネレーターを愛する理由",
+        "label": "機能",
+        "description": "すべての笑い声とバズる瞬間の裏にある秘密のソース。",
+        "items": [
+          {
+            "title": "バズるダンスムーブ",
+            "description": "数秒で写真を踊る赤ちゃんに変身 — 振り付けは不要、驚くほどリアルな純粋なAIマジックだけ。",
+            "icon": "RiMusic2Fill",
+            "image": {
+              "src": "https://r2.babyboogey.com/uploads/web/toddler-dancing-neon-studio-4x3.webp",
+              "alt": "写真を踊る赤ちゃんに変身"
+            }
+          },
+          {
+            "title": "鮮明な顔アニメーション",
+            "description": "私たちのオンライン顔アニメーターは、顔を認識可能で、安全で、愛らしいまま保ちます。奇妙な歪みはありません — 純粋な可愛さだけ。",
+            "icon": "RiSafe2Fill",
+            "image": {
+              "src": "https://r2.babyboogey.com/uploads/web/baby-face-animation-split-screen-ai-demo.webp",
+              "alt": "オンライン顔アニメーター"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "数秒で赤ちゃん写真をアニメーション化する方法",
+        "description": "3つの簡単なステップで赤ちゃんダンス動画を無料で作成：",
+        "image": {
+          "src": "/imgs/features/step-1.png",
+          "alt": "赤ちゃんダンス動画の作り方"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "写真をアップロード",
+            "description": "赤ちゃんの写真を選んでください — 可愛くても不機嫌でもOK！私たちのAI赤ちゃんダンスジェネレーターは、鮮明なスナップショットなら何でも機能します。",
+            "image": {
+              "src": "/imgs/features/upload.png",
+              "alt": "赤ちゃん写真をアップロード"
+            }
+          },
+          {
+            "title": "テンプレートを選択",
+            "description": "バズるダンスムーブを選んでください。赤ちゃんの写真をあなたらしくアニメーション化する多数のテンプレートがあります。",
+            "image": {
+              "src": "/imgs/features/template.png",
+              "alt": "赤ちゃんダンステンプレートを選択"
+            }
+          },
+          {
+            "title": "ブギを見る！",
+            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！",
+            "image": {
+              "src": "/imgs/features/export.png",
+              "alt": "赤ちゃんダンス動画をエクスポート"
+            }
+          }
+        ]
+      },
+      "stats": {
+        "id": "stats",
+        "title": "数字は嘘をつかない",
+        "description": "でも私たちの踊る赤ちゃんは少し真実をごまかすかも。",
+        "items": [
+          {
+            "title": "10,000+",
+            "description": "幸せな家族"
+          },
+          {
+            "title": "500万以上",
+            "description": "作成されたダンス動画"
+          },
+          {
+            "title": "50+",
+            "description": "バズるテンプレート"
+          }
+        ]
+      },
+      "pricing": {
+        "id": "pricing",
+        "block": "pricing",
+        "title": "あなたにぴったりのプランを選択",
+        "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
+        "groups": [
+          {
+            "name": "クレジット",
+            "title": "クレジットパック",
+            "is_featured": true
+          },
+          {
+            "name": "毎月",
+            "title": "月額"
+          },
+          {
+            "name": "毎年",
+            "title": "年額",
+            "label": "30%お得"
+          }
+        ],
+        "items": [
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "410 クレジット (無期限)",
+              "約7本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 999,
+            "currency": "米ドル",
+            "price": "$9.99",
+            "original_price": "$19.82",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "スターター",
+            "product_name": "スタータークレジットパック",
+            "credits": 410,
+            "group": "クレジット"
+          },
+          {
+            "title": "スタンダード",
+            "description": "カジュアルなクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット (無期限)",
+              "約20本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 1999,
+            "currency": "米ドル",
+            "price": "$19.99",
+            "original_price": "$39.82",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "標準",
+            "product_name": "スタンダードクレジットパック",
+            "credits": 1170,
+            "group": "クレジット"
+          },
+          {
+            "title": "プレミアム",
+            "description": "大量作成に最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "3040 クレジット (無期限)",
+              "約51本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 3999,
+            "currency": "米ドル",
+            "price": "$39.99",
+            "original_price": "$79.82",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "プレミアム",
+            "product_name": "プレミアムクレジットパック",
+            "credits": 3040,
+            "group": "クレジット"
+          },
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "430 クレジット/月",
+              "約7本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "月",
+            "amount": 999,
+            "currency": "米ドル",
+            "price": "$9.99",
+            "original_price": "$14.28",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-monthly",
+            "product_name": "スターター月額",
+            "credits": 430,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "スターター"
+          },
+          {
+            "title": "スタンダード",
+            "description": "定期的なクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット/月",
+              "約20本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "月",
+            "amount": 1899,
+            "currency": "米ドル",
+            "price": "$18.99",
+            "original_price": "$29.22",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-monthly",
+            "product_name": "スタンダード月額",
+            "credits": 1170,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "スタンダード"
+          },
+          {
+            "title": "プレミアム",
+            "description": "無限の創造性",
+            "features_title": "含まれるもの:",
+            "features": [
+              "2880 クレジット/月",
+              "約48本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "月",
+            "amount": 3599,
+            "currency": "米ドル",
+            "price": "$35.99",
+            "original_price": "$57.59",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-monthly",
+            "product_name": "プレミアム月額",
+            "credits": 2880,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "プレミアム"
+          },
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "430 クレジット/月",
+              "約7本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "年",
+            "amount": 10788,
+            "currency": "米ドル",
+            "price": "$8.99",
+            "original_price": "$12.82",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-yearly",
+            "product_name": "スターター年額",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "スターター"
+          },
+          {
+            "title": "スタンダード",
+            "description": "定期的なクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット/月",
+              "約20本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "年",
+            "amount": 20388,
+            "currency": "米ドル",
+            "price": "$16.99",
+            "original_price": "$24.25",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-yearly",
+            "product_name": "スタンダード年額",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "スタンダード"
+          },
+          {
+            "title": "プレミアム",
+            "description": "無限の創造性",
+            "features_title": "含まれるもの:",
+            "features": [
+              "2880 クレジット/月",
+              "約48本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "年",
+            "amount": 38388,
+            "currency": "米ドル",
+            "price": "$31.99",
+            "original_price": "$45.94",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-yearly",
+            "product_name": "プレミアム年額",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "プレミアム"
+          }
+        ]
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "親御さんの声",
+        "description": "本物の親御さん（と孫に甘いおじいちゃんおばあちゃん）からのリアルなレビュー。",
+        "items": [
+          {
+            "name": "マイク・T",
+            "role": "愉快なパパ",
+            "quote": "妻の誕生日のためにAI赤ちゃんダンスジェネレーターを使いました。パーティーで一番の盛り上がりでした！",
+            "image": {
+              "src": "/imgs/avatars/2.png",
+              "alt": "マイク"
+            }
+          },
+          {
+            "name": "エミリー R.",
+            "role": "クリエイター",
+            "quote": "赤ちゃん写真のアニメーション化が本当に簡単。オンライン顔アニメーターは、他のアプリのように不気味にならず、赤ちゃんの顔を自然に保ってくれます。",
+            "image": {
+              "src": "/imgs/avatars/3.png",
+              "alt": "エミリー"
+            }
+          },
+          {
+            "name": "ジェシカ L.",
+            "role": "幼児のママ",
+            "quote": "うちの子は自分が踊っているのを見るのが大好き！無料で赤ちゃんダンス動画を作れて、何時間も楽しんでくれます。",
+            "image": {
+              "src": "/imgs/avatars/4.png",
+              "alt": "ジェシカ"
+            }
+          },
+          {
+            "name": "クリス P.",
+            "role": "TikToker",
+            "quote": "この赤ちゃんダンス動画メーカーは凄すぎる。写真を踊る赤ちゃんコンテンツに変えると、一晩で1万回再生されるよ！",
+            "image": {
+              "src": "/imgs/avatars/5.png",
+              "alt": "クリス"
+            }
+          },
+          {
+            "name": "サラ・K",
+            "role": "新米ママ",
+            "quote": "踊る赤ちゃんの動画を家族のグループチャットに送ったら、みんなが欲しがりました。今までで最高の5ドルでした！",
+            "image": {
+              "src": "/imgs/avatars/6.png",
+              "alt": "サラ"
+            }
+          },
+          {
+            "name": "デビッド W.",
+            "role": "自慢のおじいちゃん",
+            "quote": "孫娘の1歳の誕生日動画が大ヒット！AIが彼女の顔をとても自然に保っていて、みんな本物だと思いました。",
+            "image": {
+              "src": "/imgs/avatars/7.png",
+              "alt": "デビッド"
+            }
+          },
+          {
+            "name": "デビッド",
+            "role": "自慢のおじいちゃん",
+            "quote": "孫娘の1歳の誕生日ビデオが大ヒットしました！ AI は彼女の顔をとても自然に保っていたので、誰もがそれが本物だと思いました。",
+            "image": {
+              "src": "/imgs/avatars/7.png",
+              "alt": "デビッド"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "よくある質問",
+        "description": "AI赤ちゃんダンスジェネレーターについて知っておくべきことすべて。",
+        "items": [
+          {
+            "question": "AI赤ちゃんダンスジェネレーターは無料ですか？",
+            "answer": "はい！ベーシックプランで赤ちゃんダンス動画を無料で作成できます。高度な赤ちゃんダンス動画メーカー機能や高解像度エクスポートにはプレミアムテンプレートを提供しています。"
+          },
+          {
+            "question": "オンライン顔アニメーターはどのように機能しますか？",
+            "answer": "写真をアップロードすると、AIが自然な動きで赤ちゃんの写真の顔をアニメーション化します。オンライン顔アニメーターは、顔の特徴を保ちながら楽しいダンスの動きと表情を加えます。"
+          },
+          {
+            "question": "写真を踊る赤ちゃんに変えるのにどれくらい時間がかかりますか？",
+            "answer": "ほとんどの動画は30秒以内に準備完了します。私たちのAI赤ちゃんダンスジェネレーターはスピードに最適化されているので、赤ちゃんダンス動画をすぐにソーシャルメディアでシェアできます。"
+          },
+          {
+            "question": "赤ちゃん写真をアニメーション化するのにプロの写真が必要ですか？",
+            "answer": "全く必要ありません！鮮明なスナップショットなら、私たちの赤ちゃんダンス動画メーカーで機能します。カジュアルな自撮りでも、AI技術で素晴らしい赤ちゃん写真の傑作に変わります。"
+          },
+          {
+            "question": "赤ちゃんの写真を使っても安全ですか？",
+            "answer": "もちろんです。写真は安全に処理され、第三者と共有されることはありません。アップロードされた画像はすべてプライベートに保存され、アカウントからいつでも削除できます。"
+          },
+          {
+            "question": "サポートされている写真の形式とサイズは？",
+            "answer": "JPG、PNG、WebP形式をサポートしています。最良の結果を得るには、照明の良い正面からの写真を使用してください。推奨される最小サイズは512x512ピクセルです。"
+          },
+          {
+            "question": "BabyBoogeyは大人やペットにも使えますか？",
+            "answer": "はい！BabyBoogeyは赤ちゃんの写真用に設計されていますが、私たちのAI顔アニメーターは、大人、子供、さらには顔がはっきり見えるペットの写真でも素晴らしい機能を発揮します。"
+          },
+          {
+            "question": "TikTokやInstagramで赤ちゃんダンス動画をシェアするには？",
+            "answer": "動画を生成した後、ダウンロードボタンをクリックしてデバイスに保存します。その後、ギャラリーから直接TikTok、Instagram Reels、または任意のソーシャルメディアプラットフォームにアップロードするだけです。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "あなたの赤ちゃんをスターにする準備はできましたか？",
+        "description": "最高のAI赤ちゃんダンスジェネレーターを使っている数千の家族に加わりましょう。今日から無料でスタート！",
+        "buttons": [
+          {
+            "title": "無料で踊りだす",
+            "url": "/#generator",
+            "target": "_self",
+            "icon": "Zap"
+          },
+          {
+            "title": "テンプレートを見る",
+            "url": "/showcases",
+            "target": "_self",
+            "variant": "outline",
+            "icon": "BookOpenText"
+          }
+        ]
+      },
+      "subscribe": {
+        "id": "subscribe",
+        "title": "新しいダンステンプレートの通知を受け取る",
+        "description": "新しいバズるダンステンプレートや機能についていち早く知りましょう。",
+        "submit": {
+          "input": {
+            "placeholder": "メールアドレスを入力"
+          },
+          "button": {
+            "title": "登録"
+          },
+          "action": "/api/subscribe"
+        }
+      }
+    }
+  }
+}

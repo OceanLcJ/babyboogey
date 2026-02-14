@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "title": "BabyBoogey ブログ",
+    "description": "BabyBoogeyでAI赤ちゃんダンス動画を作成するためのヒント、ガイド、アップデート。"
+  },
+  "page": {
+    "title": "BabyBoogey ブログ",
+    "sections": {
+      "blog": {
+        "id": "blog",
+        "title": "ブログ",
+        "description": "BabyBoogeyのヒント、ガイド、製品アップデート。"
+      }
+    }
+  },
+  "messages": {
+    "all": "すべて",
+    "no_content": "コンテンツがありません",
+    "crumb": "ブログ",
+    "toc": "目次"
+  }
+}

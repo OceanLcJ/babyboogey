@@ -1,0 +1,199 @@
+{
+  "header": {
+    "id": "header",
+    "brand": {
+      "title": "BabyBoogey",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "AI赤ちゃんダンスジェネレーター",
+        "width": 100,
+        "height": 100
+      },
+      "url": "/"
+    },
+    "nav": {
+      "items": [
+        {
+          "title": "特徴",
+          "url": "/#features",
+          "icon": "Sparkles"
+        },
+        {
+          "title": "ショーケース",
+          "url": "/showcases",
+          "icon": "Images"
+        },
+        {
+          "title": "料金",
+          "url": "/#pricing",
+          "icon": "CreditCard"
+        },
+        {
+          "title": "コンテンツ",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "ブログ",
+              "description": "ヒント、ガイド、製品アップデート",
+              "url": "/blog",
+              "icon": "Newspaper"
+            },
+            {
+              "title": "アップデート",
+              "description": "リリースノートと変更ログ",
+              "url": "/updates",
+              "icon": "Clock"
+            }
+          ]
+        }
+      ]
+    },
+    "buttons": [],
+    "user_nav": {
+      "show_name": true,
+      "show_credits": true,
+      "show_sign_out": true,
+      "items": [
+        {
+          "title": "請求",
+          "url": "/settings/billing",
+          "icon": "CreditCard"
+        },
+        {
+          "title": "アクティビティ",
+          "url": "/activity",
+          "icon": "Activity"
+        }
+      ]
+    },
+    "show_sign": true,
+    "show_theme": true,
+    "show_locale": true,
+    "topbanner": {
+      "text": "無料で始められます。無料エクスポートには小さな透かしが入ります。"
+    }
+  },
+  "footer": {
+    "id": "footer",
+    "brand": {
+      "title": "BabyBoogey",
+      "description": "AI赤ちゃんダンスジェネレーター - AI技術で赤ちゃんの写真を愛らしいダンス動画に変身させます。一瞬で魔法のような瞬間を。",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "AI赤ちゃんダンスジェネレーター",
+        "width": 100,
+        "height": 100
+      },
+      "url": "/"
+    },
+    "nav": {
+      "items": [
+        {
+          "title": "会社概要",
+          "children": [
+            {
+              "title": "特徴",
+              "url": "/#features",
+              "target": "_self"
+            },
+            {
+              "title": "ショーケース",
+              "url": "/showcases",
+              "target": "_self"
+            },
+            {
+              "title": "料金",
+              "url": "/#pricing",
+              "target": "_self"
+            },
+            {
+              "title": "ブログ",
+              "url": "/blog",
+              "target": "_self"
+            },
+            {
+              "title": "アップデート",
+              "url": "/updates",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "検索",
+          "children": [
+            {
+              "title": "AI赤ちゃんダンス",
+              "url": "/ai-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "無料動画ジェネレーター",
+              "url": "/ai-baby-dance-video-generator-free",
+              "target": "_self"
+            },
+            {
+              "title": "AIダンス動画",
+              "url": "/ai-baby-dance-video",
+              "target": "_self"
+            },
+            {
+              "title": "ダンスAIプロンプト",
+              "url": "/baby-dance-ai-prompt",
+              "target": "_self"
+            },
+            {
+              "title": "動画ジェネレーター",
+              "url": "/ai-baby-dance-video-generator",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "比較",
+          "children": [
+            {
+              "title": "シーダンスベビーダンス",
+              "url": "/seedance-baby-dance",
+              "target": "_self"
+            },
+            {
+              "title": "BabyBoogey vs シーダンス",
+              "url": "/babyboogey-vs-seedance",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    },
+    "social": {
+      "items": [
+        {
+          "title": "×",
+          "icon": "RiTwitterXFill",
+          "url": "https://x.com/babyboogey",
+          "target": "_blank"
+        },
+        {
+          "title": "電子メール",
+          "icon": "Mail",
+          "url": "mailto:support@babyboogey.com",
+          "target": "_self"
+        }
+      ]
+    },
+    "agreement": {
+      "items": [
+        {
+          "title": "プライバシーポリシー",
+          "url": "/privacy-policy"
+        },
+        {
+          "title": "利用規約",
+          "url": "/terms-of-service"
+        }
+      ]
+    },
+    "show_theme": true,
+    "show_locale": true
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "metadata": {
+    "title": "料金",
+    "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選択してください"
+  },
+  "page": {
+    "title": "あなたにぴったりのプランを選択",
+    "sections": {
+      "pricing": {
+        "id": "baby-dance-pricing",
+        "block": "pricing",
+        "title": "あなたにぴったりのプランを選択",
+        "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
+        "groups": [
+          {
+            "name": "クレジット",
+            "title": "クレジットパック",
+            "is_featured": true
+          },
+          {
+            "name": "毎月",
+            "title": "月額"
+          },
+          {
+            "name": "毎年",
+            "title": "年額",
+            "label": "30%お得"
+          }
+        ],
+        "items": [
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "410 クレジット (無期限)",
+              "約7本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 999,
+            "currency": "米ドル",
+            "price": "$9.99",
+            "original_price": "$19.82",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "スターター",
+            "product_name": "スタータークレジットパック",
+            "credits": 410,
+            "group": "クレジット"
+          },
+          {
+            "title": "スタンダード",
+            "description": "カジュアルなクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット (無期限)",
+              "約20本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 1999,
+            "currency": "米ドル",
+            "price": "$19.99",
+            "original_price": "$39.82",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "標準",
+            "product_name": "スタンダードクレジットパック",
+            "credits": 1170,
+            "group": "クレジット"
+          },
+          {
+            "title": "プレミアム",
+            "description": "大量作成に最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "3040 クレジット (無期限)",
+              "約51本の 720p 動画",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 3999,
+            "currency": "米ドル",
+            "price": "$39.99",
+            "original_price": "$79.82",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "プレミアム",
+            "product_name": "プレミアムクレジットパック",
+            "credits": 3040,
+            "group": "クレジット"
+          },
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "430 クレジット/月",
+              "約7本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "月",
+            "amount": 999,
+            "currency": "米ドル",
+            "price": "$9.99",
+            "original_price": "$14.28",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-monthly",
+            "product_name": "スターター月額",
+            "credits": 430,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "スターター"
+          },
+          {
+            "title": "スタンダード",
+            "description": "定期的なクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット/月",
+              "約20本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "月",
+            "amount": 1899,
+            "currency": "米ドル",
+            "price": "$18.99",
+            "original_price": "$29.22",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-monthly",
+            "product_name": "スタンダード月額",
+            "credits": 1170,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "スタンダード"
+          },
+          {
+            "title": "プレミアム",
+            "description": "無限の創造性",
+            "features_title": "含まれるもの:",
+            "features": [
+              "2880 クレジット/月",
+              "約48本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "月",
+            "amount": 3599,
+            "currency": "米ドル",
+            "price": "$35.99",
+            "original_price": "$57.59",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-monthly",
+            "product_name": "プレミアム月額",
+            "credits": 2880,
+            "valid_days": 30,
+            "group": "毎月",
+            "plan_name": "プレミアム"
+          },
+          {
+            "title": "スターター",
+            "description": "始めるのに最適",
+            "features_title": "含まれるもの:",
+            "features": [
+              "430 クレジット/月",
+              "約7本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "年",
+            "amount": 10788,
+            "currency": "米ドル",
+            "price": "$8.99",
+            "original_price": "$12.82",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter-yearly",
+            "product_name": "スターター年額",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "スターター"
+          },
+          {
+            "title": "スタンダード",
+            "description": "定期的なクリエイターに最適",
+            "label": "人気",
+            "features_title": "含まれるもの:",
+            "features": [
+              "1170 クレジット/月",
+              "約20本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "年",
+            "amount": 20388,
+            "currency": "米ドル",
+            "price": "$16.99",
+            "original_price": "$24.25",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard-yearly",
+            "product_name": "スタンダード年額",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "スタンダード"
+          },
+          {
+            "title": "プレミアム",
+            "description": "無限の創造性",
+            "features_title": "含まれるもの:",
+            "features": [
+              "2880 クレジット/月",
+              "約48本の 720p 動画/月",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ",
+              "優先サポート"
+            ],
+            "interval": "年",
+            "amount": 38388,
+            "currency": "米ドル",
+            "price": "$31.99",
+            "original_price": "$45.94",
+            "unit": "/ 月",
+            "is_featured": false,
+            "button": {
+              "title": "登録",
+              "url": "/#pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-yearly",
+            "product_name": "プレミアム年額",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "毎年",
+            "plan_name": "プレミアム"
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "current_plan": "現在のプラン",
+    "processing": "処理中",
+    "credit_pack_subscribers_only": "クレジットパックはサブスクライバーのみ利用可能です。先にサブスクリプション登録をお願いします。"
+  }
+}

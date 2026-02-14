@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "title": "BabyBoogey アップデート",
+    "description": "BabyBoogey（AI赤ちゃんダンスジェネレーター）のリリースノートと改善点。"
+  },
+  "page": {
+    "sections": {
+      "updates": {
+        "id": "updates",
+        "title": "アップデート",
+        "description": "BabyBoogeyのリリースノートと改善点。"
+      }
+    }
+  }
+}

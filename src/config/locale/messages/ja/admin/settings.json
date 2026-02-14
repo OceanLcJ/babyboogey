@@ -1,0 +1,53 @@
+{
+  "groups": {
+    "email_auth": "電子メール認証",
+    "google_auth": "Google認証",
+    "github_auth": "Github認証",
+    "basic_payment": "基本支払い",
+    "stripe": "Stripe",
+    "creem": "Creem",
+    "paypal": "PayPal",
+    "resend": "再送信",
+    "r2": "Cloudflare R2",
+    "s3": "AWS S3",
+    "openrouter": "OpenRouter",
+    "replicate": "複製する",
+    "fal": "ファル",
+    "google_analytics": "Googleアナリティクス",
+    "clarity": "明瞭さ",
+    "plausible": "もっともらしい",
+    "openpanel": "OpenPanel",
+    "vercel_analytics": "バーセルアナリティクス",
+    "adsense": "アドセンス",
+    "affonso": "アフォンソ",
+    "promotekit": "PromoteKit",
+    "tawk": "タカ",
+    "crisp": "サクサク",
+    "credit": "クレジット",
+    "appinfo": "アプリ情報",
+    "user_role": "ユーザーの役割"
+  },
+  "edit": {
+    "title": "設定",
+    "crumbs": {
+      "admin": "管理者",
+      "settings": "設定"
+    },
+    "tabs": {
+      "general": "一般的な",
+      "auth": "認証",
+      "payment": "支払い",
+      "credit": "クレジット",
+      "email": "電子メール",
+      "storage": "ストレージ",
+      "ai": "AI",
+      "analytics": "分析",
+      "ads": "広告",
+      "affiliate": "アフィリエイト",
+      "customer_service": "顧客サービス"
+    },
+    "buttons": {
+      "submit": "保存"
+    }
+  }
+}

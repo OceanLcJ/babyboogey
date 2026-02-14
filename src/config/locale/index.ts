@@ -3,9 +3,10 @@ import { envConfigs } from '..';
 export const localeNames: UnsafeAny = {
   en: 'English',
   zh: '中文',
+  ja: '日本語',
 };
 
-export const locales = ['en', 'zh'];
+export const locales = ['en', 'zh', 'ja'];
 
 export const defaultLocale = envConfigs.locale;
 

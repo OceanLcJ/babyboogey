@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "subscription_no": "購読番号",
+    "user": "ユーザー",
+    "amount": "額",
+    "interval": "間隔",
+    "provider": "プロバイダー",
+    "created_at": "作成日",
+    "current_period_start": "今期の開始",
+    "current_period_end": "今期末",
+    "status": "状態",
+    "description": "説明",
+    "action": "アクション"
+  },
+  "list": {
+    "title": "定期購入",
+    "crumbs": {
+      "admin": "管理者",
+      "subscriptions": "定期購入"
+    },
+    "tabs": {
+      "all": "全て",
+      "month": "月",
+      "year": "年"
+    }
+  }
+}

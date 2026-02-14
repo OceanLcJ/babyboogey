@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "title": "AI音楽ジェネレーター",
+    "description": "AI で素晴らしい音楽を生成"
+  },
+  "page": {
+    "title": "AI音楽ジェネレーター",
+    "description": "AI で素晴らしい音楽を生成"
+  },
+  "generator": {
+    "title": "ミュージックジェネレーター",
+    "prompt": "プロンプト",
+    "prompt_placeholder": "ロミオとジュリエットのラブストーリー",
+    "generate": "音楽を生成する",
+    "loading": "読み込み中...",
+    "generating": "生成中...",
+    "sign_in_to_generate": "サインインして音楽を生成する",
+    "credits_cost": "{credits} クレジットのコスト",
+    "credits_remaining": "残り {credits} クレジット",
+    "buy_credits": "クレジットを購入する",
+    "generation_progress": "世代の進行状況",
+    "time_cost": "これには最大 2 ～ 3 分かかる場合があります...",
+    "generated_song": "生成された曲",
+    "ready_to_play": "すぐにプレイできる",
+    "audio_generating": "音声を生成中...",
+    "generating_song": "ソングを生成中...",
+    "waiting_generation": "傑作を作成するまでお待ちください",
+    "no_song_generated": "曲が生成されませんでした",
+    "downloading": "ダウンロード中...",
+    "download_success": "ダウンロードが正常に完了しました",
+    "download_failed": "音声のダウンロードに失敗しました",
+    "form": {
+      "custom_mode": "カスタムモード",
+      "title": "タイトル",
+      "title_placeholder": "サウンド・オブ・サイレンス",
+      "style": "音楽のスタイル",
+      "style_placeholder": "インディー、エレクトロニック、シンセ、120bpm、ディストーション",
+      "instrumental": "インストゥルメンタル",
+      "prompt": "プロンプト",
+      "prompt_placeholder": "愛についての田舎の民謡",
+      "model": "モデル",
+      "lyrics": "歌詞",
+      "lyrics_placeholder": "最良の結果を得るには、独自の歌詞を 2 つの詩 (8 行) で書いてください。"
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "header": {
+    "brand": {
+      "title": "シップエニツー",
+      "logo": {
+        "src": "/logo.png",
+        "alt": "シップエニツー"
+      },
+      "url": "/admin"
+    },
+    "show_trigger": false
+  },
+  "main_navs": [
+    {
+      "title": "システム",
+      "items": [
+        {
+          "title": "ユーザーと権限",
+          "icon": "User",
+          "is_expand": true,
+          "children": [
+            {
+              "title": "ユーザー",
+              "url": "/admin/users",
+              "icon": "User"
+            },
+            {
+              "title": "役割",
+              "url": "/admin/roles",
+              "icon": "Users"
+            },
+            {
+              "title": "権限",
+              "url": "/admin/permissions",
+              "icon": "ShieldCheck"
+            }
+          ]
+        },
+        {
+          "title": "ページとコンテンツ",
+          "icon": "FileText",
+          "children": [
+            {
+              "title": "カテゴリー",
+              "icon": "Folder",
+              "url": "/admin/categories"
+            },
+            {
+              "title": "投稿",
+              "icon": "FileText",
+              "url": "/admin/posts"
+            }
+          ]
+        },
+        {
+          "title": "支払いとクレジット",
+          "icon": "DollarSign",
+          "children": [
+            {
+              "title": "支払い",
+              "url": "/admin/payments",
+              "icon": "DollarSign"
+            },
+            {
+              "title": "定期購入",
+              "url": "/admin/subscriptions",
+              "icon": "CreditCard"
+            },
+            {
+              "title": "クレジット",
+              "url": "/admin/credits",
+              "icon": "Coins"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "仕事",
+      "items": [
+        {
+          "title": "AIタスク",
+          "url": "/admin/ai-tasks",
+          "icon": "Brain"
+        },
+        {
+          "title": "AIチャット",
+          "url": "/admin/chats",
+          "icon": "MessageCircle"
+        }
+      ]
+    }
+  ],
+  "bottom_nav": {
+    "items": [
+      {
+        "title": "設定",
+        "url": "/admin/settings/general",
+        "icon": "Settings"
+      },
+      {
+        "title": "APIキー",
+        "url": "/admin/apikeys",
+        "icon": "Key"
+      }
+    ]
+  },
+  "user": {
+    "nav": {
+      "items": [
+        {
+          "title": "プロフィール",
+          "url": "/settings/profile",
+          "icon": "User",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_email": false,
+    "show_signout": true,
+    "signout_callback": "/"
+  },
+  "footer": {
+    "nav": {
+      "items": [
+        {
+          "title": "家",
+          "url": "/",
+          "icon": "Home",
+          "target": "_blank"
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/your-app-name",
+          "icon": "Github",
+          "target": "_blank"
+        },
+        {
+          "title": "ツイッター",
+          "url": "https://twitter.com/your-app-name",
+          "icon": "RiTwitterXFill",
+          "target": "_blank"
+        },
+        {
+          "title": "不和",
+          "url": "https://discord.gg/your-app-name",
+          "icon": "RiDiscordFill",
+          "target": "_blank"
+        },
+        {
+          "title": "電子メール",
+          "url": "mailto:support@your-domain.com",
+          "icon": "Mail",
+          "target": "_blank"
+        }
+      ]
+    },
+    "show_theme": true,
+    "show_locale": false
+  },
+  "variant": "sidebar"
+}

@@ -1,0 +1,29 @@
+{
+  "fields": {
+    "title": "タイトル",
+    "user": "ユーザー",
+    "status": "状態",
+    "model": "モデル",
+    "provider": "プロバイダー",
+    "created_at": "作成日",
+    "action": "アクション"
+  },
+  "list": {
+    "title": "AIチャット",
+    "crumbs": {
+      "admin": "管理者",
+      "chats": "AIチャット"
+    },
+    "tabs": {
+      "all": "全て",
+      "pending": "保留中",
+      "completed": "完了",
+      "failed": "失敗した"
+    },
+    "buttons": {
+      "view": "チャットを見る",
+      "new": "新しいチャット"
+    },
+    "empty_message": "チャットが見つかりませんでした"
+  }
+}

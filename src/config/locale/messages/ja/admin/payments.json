@@ -1,0 +1,53 @@
+{
+  "fields": {
+    "order_no": "注文番号",
+    "user": "ユーザー",
+    "amount": "額",
+    "product": "製品",
+    "description": "説明",
+    "type": "タイプ",
+    "provider": "プロバイダー",
+    "created_at": "作成日",
+    "status": "状態",
+    "action": "アクション"
+  },
+  "list": {
+    "title": "支払い",
+    "crumbs": {
+      "admin": "管理者",
+      "payments": "支払い"
+    },
+    "tabs": {
+      "all": "全て",
+      "subscription": "サブスクリプション",
+      "one-time": "One-Time"
+    },
+    "filters": {
+      "status": {
+        "title": "状態",
+        "options": {
+          "all": "全て",
+          "paid": "有料",
+          "created": "作成されました",
+          "failed": "失敗した"
+        }
+      },
+      "provider": {
+        "title": "プロバイダー",
+        "options": {
+          "all": "全て",
+          "stripe": "Stripe",
+          "creem": "Creem",
+          "lemonsqueezy": "レモンスクイーズ",
+          "paypal": "PayPal"
+        }
+      }
+    },
+    "search": {
+      "order_no": {
+        "title": "注文番号",
+        "placeholder": "注文番号"
+      }
+    }
+  }
+}

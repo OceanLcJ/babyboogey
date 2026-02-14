@@ -1,0 +1,136 @@
+{
+  "metadata": {
+    "title": "ショーケース",
+    "description": "AIベイビーで作られた素晴らしいダンス動画"
+  },
+  "page": {
+    "title": "ショーケース",
+    "sections": {
+      "showcases": {
+        "id": "showcases",
+        "block": "showcases-flow",
+        "title": "AI赤ちゃんダンスギャラリー",
+        "description": "コミュニティによって作成されたキュートで面白い赤ちゃんダンス動画をチェックしてください！",
+        "use_this_template": "このテンプレートを使用",
+        "groups": [
+          {
+            "name": "全て",
+            "title": "すべて"
+          },
+          {
+            "name": "熱い",
+            "title": "人気"
+          },
+          {
+            "name": "プロ",
+            "title": "プロ"
+          },
+          {
+            "name": "面白い",
+            "title": "おもしろ"
+          }
+        ],
+        "items": [
+          {
+            "id": "temp-05",
+            "title": "リズムビート",
+            "description": "リズミカルなステップ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4",
+            "group": "熱い"
+          },
+          {
+            "id": "viral-dance",
+            "title": "バズるダンス",
+            "description": "トレンドのダンス",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/effects_video_shortform_viral_dance.mp4",
+            "group": "熱い"
+          },
+          {
+            "id": "temp-01",
+            "title": "クールな動き",
+            "description": "クールなストリートダンス",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-01.mp4",
+            "group": "プロ"
+          },
+          {
+            "id": "temp-02",
+            "title": "楽しいグルーヴ",
+            "description": "楽しいリズム",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4",
+            "group": "プロ"
+          },
+          {
+            "id": "temp-03",
+            "title": "ハッピーバウンス",
+            "description": "楽しいバウンス",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4",
+            "group": "プロ"
+          },
+          {
+            "id": "temp-04",
+            "title": "スムーズな揺れ",
+            "description": "優しい揺れ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-04.mp4",
+            "group": "プロ"
+          },
+          {
+            "id": "temp-06",
+            "title": "キュートな揺れ",
+            "description": "キュートな揺れ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4",
+            "group": "面白い"
+          },
+          {
+            "id": "temp-07",
+            "title": "クイックステップ",
+            "description": "クイックステップ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-07.mp4",
+            "group": "面白い"
+          },
+          {
+            "id": "temp-08",
+            "title": "ジェントルウェーブ",
+            "description": "ジェントルウェーブ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-08.mp4",
+            "group": "面白い"
+          },
+          {
+            "id": "temp-09",
+            "title": "エナジーバースト",
+            "description": "エネルギー全開",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-09.mp4",
+            "group": "熱い"
+          },
+          {
+            "id": "temp-10",
+            "title": "遊び心のあるステップ",
+            "description": "遊び心のあるステップ",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-10.mp4",
+            "group": "面白い"
+          },
+          {
+            "id": "temp-11",
+            "title": "スイートムーブ",
+            "description": "甘いリズム",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-11.mp4",
+            "group": "プロ"
+          },
+          {
+            "id": "temp-12",
+            "title": "ダイナミックダンス",
+            "description": "ダイナミックなダンス",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-12.mp4",
+            "group": "熱い"
+          },
+          {
+            "id": "template-0",
+            "title": "キュートボーイ",
+            "description": "デフォルトテンプレート",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4",
+            "group": "熱い"
+          }
+        ]
+      }
+    }
+  }
+}

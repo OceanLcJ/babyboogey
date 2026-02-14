@@ -1,0 +1,31 @@
+{
+  "title": "活動",
+  "nav": {
+    "items": [
+      {
+        "title": "AIタスク",
+        "url": "/activity/ai-tasks",
+        "icon": "RiTaskLine"
+      },
+      {
+        "title": "AIチャット",
+        "url": "/activity/chats",
+        "icon": "RiChat2Line"
+      }
+    ]
+  },
+  "top_nav": {
+    "items": [
+      {
+        "title": "活動",
+        "url": "/activity",
+        "icon": "Activity"
+      },
+      {
+        "title": "設定",
+        "url": "/settings",
+        "icon": "Settings"
+      }
+    ]
+  }
+}

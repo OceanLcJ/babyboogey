@@ -1,0 +1,30 @@
+{
+  "fields": {
+    "order_no": "注文番号",
+    "user": "ユーザー",
+    "amount": "額",
+    "product_name": "製品名",
+    "price": "価格",
+    "paid_amount": "支払額",
+    "discount_amount": "割引額",
+    "description": "説明",
+    "type": "タイプ",
+    "provider": "プロバイダー",
+    "created_at": "作成日",
+    "status": "状態",
+    "action": "アクション",
+    "actions": {
+      "view_invoice": "請求書の表示"
+    }
+  },
+  "list": {
+    "title": "支払い",
+    "description": "支払いを確認する",
+    "tabs": {
+      "all": "全て",
+      "one-time": "One-Time",
+      "subscription": "サブスクリプション",
+      "renew": "更新する"
+    }
+  }
+}

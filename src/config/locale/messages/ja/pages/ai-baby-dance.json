@@ -1,0 +1,366 @@
+{
+  "metadata": {
+    "title": "AI ベビー ダンス — あらゆる赤ちゃんの写真を AI でダンスさせます",
+    "description": "愛らしい AI ベビー ダンス ビデオを数秒で作成できます。赤ちゃんの写真をアップロードして、陽気なダンスの動きで写真が生き生きと動き出すのを見てください。無料で始められ、編集スキルは必要ありません。"
+  },
+  "page": {
+    "title": "AI ベビー ダンス — あらゆる赤ちゃんの写真を AI でダンスさせます",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "benefits",
+      "usage",
+      "features",
+      "testimonials",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI ベビー ダンス — あらゆる写真をダンスの感覚に変える",
+        "description": "BabyBoogey の AI ベビー ダンス ジェネレーターは、赤ちゃんの静止画を陽気で心とろけるようなダンス ビデオに変換します。アップロードして動きを選択し、さあ始めましょう。編集スキルは必要ありません — 完全に無料で始められます!",
+        "buttons": [
+          {
+            "title": "ベビーダンスを無料にする",
+            "url": "/#generator",
+            "icon": "Zap",
+            "variant": "default"
+          },
+          {
+            "title": "例を参照",
+            "url": "/showcases",
+            "icon": "BookOpenText",
+            "variant": "outline"
+          }
+        ],
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-hero/1200/800",
+          "alt": "AI ベビー ダンス — ダンスの動きで赤ちゃんの写真が生き生きと動き出す様子をご覧ください",
+          "width": 1200,
+          "height": 800
+        },
+        "background_image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-bg/1600/900",
+          "alt": "背景"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "家族に愛されるナンバーワンの AI ベビーダンスジェネレーター",
+        "label": "BabyBoogeyとは",
+        "description": "BabyBoogey を使用すると、どんな写真からでも驚くほど簡単にベビー ダンス ビデオを作成できます。私たちの AI が振り付けを処理します。あなたはただ笑いを楽しむだけです。",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-introduce/1200/800",
+          "alt": "AIベビーダンスジェネレーターの概要"
+        },
+        "items": [
+          {
+            "title": "ワンクリックベビーフォトダンス",
+            "description": "赤ちゃんの写真をアップロードすると、AI が即座に愛らしい本物のようなダンスの動きをアニメーション化します。アプリをインストールしたり、タイムラインを編集したりする必要はありません。赤ちゃんの写真のダンスビデオが数秒で完成します。",
+            "icon": "RiImageAddLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-0/800/600",
+              "alt": "ベビーフォトダンスアニメーション"
+            }
+          },
+          {
+            "title": "AI を活用したダンスの動き",
+            "description": "当社のベビー ダンス AI エンジンは、高度なモーション合成を使用して、スムーズでリアルな動きを作成します。ロボットの赤ちゃんなど誰も望んでいないので、あらゆる揺れ、跳ね返り、小刻みな動きは自然に見えます。",
+            "icon": "RiRobot2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-1/800/600",
+              "alt": "ベビーダンス AI エンジン"
+            }
+          },
+          {
+            "title": "安全かつプライベート",
+            "description": "赤ちゃんの写真は暗号化され、安全に処理され、決して共有されることはありません。完全に安心して AI ベビー ダンス ビデオを作成できます。私たちはお客様と同様にプライバシーを重視しています。",
+            "icon": "RiShieldCheckLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-2/800/600",
+              "alt": "安全なAIベビーダンス動画作成"
+            }
+          },
+          {
+            "title": "50 以上のバイラルダンステンプレート",
+            "description": "トレンドの TikTok の動きからクラシックなブギー スタイルまで、数十のテンプレートから選択して、笑いとシェアが確実に得られるベビー ダンス ビデオを作成します。",
+            "icon": "RiMusic2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-item-3/800/600",
+              "alt": "ベビーダンスビデオテンプレート"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "benefits": {
+        "block": "features-list",
+        "id": "benefits",
+        "title": "AI ベビー ダンス 動画が家族に愛される理由",
+        "label": "利点",
+        "description": "誕生日のサプライズでも、ホリデー カードでも、あるいはただの火曜日のお迎えでも、AI ベビー ダンス ビデオは必ず笑顔を届けます。",
+        "items": [
+          {
+            "title": "誕生日と節目のお祝い",
+            "description": "1歳の誕生日、最初の一歩、または祝う価値のあるマイルストーンに、お子様の写真をダンシングスターに変えましょう。 AI ベビー ダンス ビデオは、忘れられない瞬間を作ります。",
+            "icon": "RiCake2Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-0/800/600",
+              "alt": "AIベビーダンス誕生日ビデオ"
+            }
+          },
+          {
+            "title": "目立つクリスマスの挨拶",
+            "description": "退屈なホリデーカードは忘れてください。クリスマス、新年、その他のお祝いのためにベビー ダンスのビデオを作成し、家族が何度も再生するような挨拶を送りましょう。",
+            "icon": "RiGiftLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-1/800/600",
+              "alt": "ベビーダンス ホリデー カード"
+            }
+          },
+          {
+            "title": "ソーシャルメディアゴールド",
+            "description": "ベビー ダンス ビデオ AI コンテンツがソーシャル フィードの大半を占めています。 TikTok、Instagram Reels、Facebook 用に共有可能でバイラルなクリップを作成できます。豪華な機材は必要ありません。",
+            "icon": "RiShareLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-2/800/600",
+              "alt": "ソーシャルメディア用のベビーダンスビデオ"
+            }
+          },
+          {
+            "title": "祖父母が本当に愛しているギフト",
+            "description": "孫のブギーを見ることほど祖父母の心を溶かすものはありません。赤ちゃんの写真を使ったダンスビデオを作成して、ずっと続くギフトを贈りましょう。",
+            "icon": "RiHeartLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-benefit-3/800/600",
+              "alt": "祖父母へのベビーダンスギフト"
+            }
+          }
+        ]
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "3 ステップで AI ベビーダンスビデオを作成する方法",
+        "description": "独自の AI ベビー ダンスの傑作の作成には 30 秒もかかりません。",
+        "image": {
+          "src": "https://picsum.photos/seed/ai-baby-dance-steps/1200/800",
+          "alt": "ベビーダンスの作り方ビデオ"
+        },
+        "image_position": "left",
+        "text_align": "center",
+        "items": [
+          {
+            "title": "赤ちゃんの写真をアップロードする",
+            "description": "写真を撮るか、ギャラリーから写真を選択します。かわいい、不機嫌そうな、あくびの途中 - 当社の AI ベビー ダンス ジェネレーターは、どんな鮮明な写真でも機能します。 JPG、PNG、WebP 形式がサポートされています。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-1/800/600",
+              "alt": "AIダンス用に赤ちゃんの写真をアップロード"
+            }
+          },
+          {
+            "title": "ダンススタイルを選ぶ",
+            "description": "ヒップホップの頭のボブからばかばかしい全身の小刻みな動きまで、50 を超えるバイラル ダンス テンプレートを参照してください。それぞれの動きをプレビューして、赤ちゃんの雰​​囲気に合ったものを選択してください。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-2/800/600",
+              "alt": "ベビーダンステンプレートを選択してください"
+            }
+          },
+          {
+            "title": "ダウンロードして笑いを共有しましょう",
+            "description": "ベビーダンスビデオは数秒で完成します。 HD でダウンロードして、TikTok、Instagram、WhatsApp、または笑顔を使える場所ならどこでも共有できます。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-step-3/800/600",
+              "alt": "AIベビーダンスビデオをダウンロード"
+            }
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "すべての AI ベビー ダンスの背後にある強力な機能",
+        "label": "特徴",
+        "description": "BabyBoogey は、地球上で最もシンプルで楽しいベビー ダンス ビデオ メーカーに本格的な AI テクノロジーを詰め込みました。",
+        "items": [
+          {
+            "title": "リアルなモーション合成",
+            "description": "当社の AI ベビー ダンス エンジンは、最先端のモーション生成を使用して、滑らかで自然な動きを作成します。頭の傾き、腕の振り、体の跳ね返りはすべて、ロボットではなく本物に見えるように慎重に合成されています。",
+            "icon": "RiBodyScanLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-0/800/600",
+              "alt": "AIベビーダンスモーション合成"
+            }
+          },
+          {
+            "title": "顔面保存技術",
+            "description": "ベビーダンス AI ツールの最大の恐怖は、顔が歪むことです。 BabyBoogey のフェイスロック技術により、アニメーション全体を通して赤ちゃんの特徴が非常に鮮明に認識できるようになります。ここには不気味の谷はありません。",
+            "icon": "RiEyeLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-1/800/600",
+              "alt": "顔を保存するベビーダンスAI"
+            }
+          },
+          {
+            "title": "HD および 4K ビデオのエクスポート",
+            "description": "すべての AI ベビー ダンス ビデオは、鮮明な 720p または 1080p 解像度でエクスポートされます。あなたの赤ちゃんの大きなデビューは、電話の画面でもリビングルームのテレビでも、鮮明に見えるべきです。",
+            "icon": "RiHdLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-2/800/600",
+              "alt": "HD ベビー ダンス ビデオのエクスポート"
+            }
+          },
+          {
+            "title": "音楽とサウンドの同期",
+            "description": "すべてのダンス テンプレートには、完全に同期された音楽が付属しています。 AI が赤ちゃんの動きをビートに合わせて、プロが制作したようなベビー ダンス ビデオ AI コンテンツを作成します。",
+            "icon": "RiMusic4Line",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-3/800/600",
+              "alt": "音楽同期ベビーダンスビデオ"
+            }
+          },
+          {
+            "title": "あらゆる写真に対応",
+            "description": "プロのポートレートでもカジュアルなセルフィーでも、それは問題ではありません。鮮明な写真から赤ちゃんに魔法のダンスをさせましょう。当社の AI は、さまざまな角度、照明条件、さらには集合写真も処理します。",
+            "icon": "RiImageLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-4/800/600",
+              "alt": "あらゆる写真からベイビーダンスを作ろう"
+            }
+          },
+          {
+            "title": "超高速の生成",
+            "description": "ほとんどの赤ちゃんの写真のダンスビデオは 30 秒以内に完成します。私たちの最適化された AI パイプラインは、待ち時間が減り、笑いが増えることを意味します。なぜなら、やるべきことがあるときに待ち続ける人はいないからです。",
+            "icon": "RiFlashlightLine",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-feat-5/800/600",
+              "alt": "ファストベイビーフォトダンスジェネレーション"
+            }
+          }
+        ]
+      },
+      "testimonials": {
+        "id": "testimonials",
+        "title": "親の言うこと",
+        "description": "本物の家族、本物の笑い声、本物の 5 つ星のレビュー。",
+        "items": [
+          {
+            "name": "アマンダ S.",
+            "role": "双子のママ",
+            "quote": "私は双子がそれぞれ異なるダンスを踊るAIベビーダンスビデオを作成し、祖父母に送りました。彼らは5分以内に幸せな涙を流しながら私たちに電話をかけてきました。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-1/100/100",
+              "alt": "アマンダ"
+            }
+          },
+          {
+            "name": "ライアン・M",
+            "role": "楽しいおじさん",
+            "quote": "私の姪の最初の誕生日パーティーは、私が作成したベビーダンス AI ビデオのおかげで大盛況でした。大画面でプレイしたら、家族全員が忘れてしまいました。 10/10 はまたブギーになります。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-2/100/100",
+              "alt": "ライアン"
+            }
+          },
+          {
+            "name": "プリヤ K.",
+            "role": "新しいお母さん",
+            "quote": "AI ベビー ダンス ツールには懐疑的でしたが、BabyBoogey は私を吹き飛ばしてくれました。娘の顔はとても自然で、ダンスの動きはとても面白いです。すでに12本の動画を作成しました！",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-3/100/100",
+              "alt": "プリヤ"
+            }
+          },
+          {
+            "name": "カルロス D.",
+            "role": "TikTokお父さん",
+            "quote": "赤ちゃんの写真を使ったダンスビデオを TikTok に投稿し、5 万回の再生回数を記録しました。 BabyBoogey は私の息子を一夜にしてバイラルセンセーションに変えました!",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-4/100/100",
+              "alt": "カルロス"
+            }
+          },
+          {
+            "name": "リンダ W.",
+            "role": "自慢のおばあちゃん",
+            "quote": "娘がベビーダンスビデオの作り方を教えてくれたのですが、もうやめられません。連絡先リストにあるすべての人に 1 通を送信しました。これはインターネット上で最高のものです!",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-5/100/100",
+              "alt": "リンダ"
+            }
+          },
+          {
+            "name": "ジェイク・T",
+            "role": "コンテンツクリエーター",
+            "quote": "ベビーダンスビデオの AI 品質は非現実的です。スムーズな動き、完璧な顔の保存、そして音楽の同期はまさにシェフのキスです。私のコンテンツ武器庫の中で最高のツール。",
+            "image": {
+              "src": "https://picsum.photos/seed/ai-baby-dance-avatar-6/100/100",
+              "alt": "ジェイク"
+            }
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "よくある質問",
+        "description": "BabyBoogey を使用して AI ベビー ダンス ビデオを作成するために知っておくべきすべてのこと。",
+        "items": [
+          {
+            "question": "AIベビーダンスとは何ですか?またその仕組みは何ですか?",
+            "answer": "AIベビーダンスは、人工知能を利用して赤ちゃんの静止画をアニメーション化してリアルなダンス動画を作成する技術です。 BabyBoogey の AI は、アップロードされた写真を分析し、顔と体をマッピングし、モーション合成を適用して、スムーズで自然なダンスの動きを作成します。これらすべてが 30 秒以内に行われます。"
+          },
+          {
+            "question": "ベビーダンスのビデオを作るのは無料ですか?",
+            "answer": "はい！ BabyBoogey のスターター プランでは、完全に無料でベビー ダンス ビデオを作成できます。クレジット カードを必要とせずに、最初のビデオを作成するために無料のクレジットを取得できます。無料のエクスポートには小さな BabyBoogey ウォーターマークが含まれますが、有料プランではウォーターマークが削除され、HD エクスポート、より多くのテンプレート、追加のクレジットのロックが解除されます。"
+          },
+          {
+            "question": "AIベビーダンス動画にはどのような写真が適しているのでしょうか？",
+            "answer": "鮮明な正面を向いた写真ならどれでも効果的です。最小サイズが 512x512 ピクセルの JPG、PNG、および WebP 形式をサポートします。赤ちゃんの写真ダンスを最高の結果にするには、顔がはっきりと見える明るい写真を使用してください。カジュアルなスナップショットもスタジオポートレートと同じように機能します。"
+          },
+          {
+            "question": "私の赤ちゃんの写真は安全でプライベートなものですか?",
+            "answer": "絶対に。プライバシーは当社の最優先事項です。アップロードされたすべての写真は、転送および処理中に暗号化されます。当社がお客様の画像を第三者と共有することは決してありません。お客様はいつでも当社のサーバーから写真を削除できます。あなたのベビー ダンス AI ビデオはあなたのアカウントに非公開で保存されます。"
+          },
+          {
+            "question": "AIを使ってベビーダンスビデオを作成するにはどのくらい時間がかかりますか?",
+            "answer": "ほとんどの AI ベビー ダンス ビデオは、テンプレートの複雑さとビデオの長さに応じて 15 ～ 30 秒で生成されます。当社の最適化されたパイプラインにより、待ち時間が減り、赤ちゃんの動きを見て笑う時間を増やすことができます。"
+          },
+          {
+            "question": "大人やペットの写真でも AI ベビーダンスを使用できますか?",
+            "answer": "はい！ BabyBoogey は赤ちゃんの写真に最適化されていますが、当社の AI は幼児、子供、大人、さらには顔が見えるペットなど、あらゆる鮮明な顔写真に対応します。ベビー ダンス AI モーション エンジンは、検出したあらゆる顔に適応します。"
+          },
+          {
+            "question": "ベビーダンスビデオをソーシャルメディアで共有するにはどうすればよいですか?",
+            "answer": "AI ベビー ダンス ビデオが生成されたら、ダウンロード ボタンをクリックするだけで MP4 形式で保存できます。その後、TikTok、Instagram Reels、Facebook、YouTube ショートに直接アップロードするか、WhatsApp や iMessage 経由で共有します。このビデオは、すべての主要なソーシャル プラットフォーム向けに最適化されています。"
+          },
+          {
+            "question": "BabyBoogey は他のベビーダンス AI ツールと何が違うのですか?",
+            "answer": "BabyBoogey は、赤ちゃんの見た目を自然に保つ (不気味な歪みがない) 顔保存技術、音楽同期を備えた 50 以上の厳選されたダンス テンプレート、超高速の生成速度、プライバシー最優先のアプローチで際立っています。私たちは、楽しく、安全で、高品質のベビー ダンス ビデオ AI コンテンツを求める家族向けに特別に構築されています。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "あなたのベイビー・ブギーを見る準備はできましたか?",
+        "description": "何千もの家族が忘れられない AI ベビー ダンス ビデオを作成します。写真をアップロードして数秒でダンスを始めましょう - 無料です。",
+        "buttons": [
+          {
+            "title": "ベビーダンスを無料にする",
+            "url": "/#generator",
+            "icon": "Zap",
+            "variant": "default"
+          },
+          {
+            "title": "テンプレートを探索する",
+            "url": "/showcases",
+            "icon": "BookOpenText",
+            "variant": "outline"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "title": "AI画像生成器",
+    "description": "AI モデルを使用して画像を生成し、テキストから画像への変換と画像から画像への変換をサポートします。"
+  },
+  "page": {
+    "title": "AI画像生成器",
+    "description": "AI モデルを使用して画像を生成し、テキストから画像への変換と画像から画像への変換をサポートします。"
+  },
+  "generator": {
+    "title": "画像生成器",
+    "description": "AI モデルを使用して画像を生成し、テキストから画像への変換と画像から画像への変換をサポートします。",
+    "tabs": {
+      "text-to-image": "テキストから画像へ",
+      "image-to-image": "画像から画像へ"
+    },
+    "form": {
+      "provider": "プロバイダー",
+      "model": "モデル",
+      "select_provider": "プロバイダーの選択",
+      "select_model": "モデルの選択",
+      "prompt": "プロンプト",
+      "prompt_placeholder": "色、形、質感など、画像の詳細を説明します。",
+      "reference_image": "参考画像",
+      "reference_image_placeholder": "参照画像をアップロードし、複数の画像をサポートします",
+      "some_images_failed_to_upload": "一部の画像をアップロードできませんでした。削除して再アップロードしてください。",
+      "prompt_too_long": "プロンプトが長すぎます。一部のコンテンツを削除してください"
+    },
+    "generate": "画像の生成",
+    "checking_account": "当座預金口座...",
+    "loading": "読み込み中...",
+    "generating": "生成中...",
+    "sign_in_to_generate": "サインインしてイメージを生成する",
+    "credits_cost": "{credits} クレジットかかります",
+    "credits_remaining": "残り {credits} クレジット",
+    "buy_credits": "クレジットを購入する",
+    "progress": "進捗",
+    "generated_images": "画像プレビュー",
+    "ready_to_generate": "生成の準備ができました",
+    "ready_for_generating": "生成の準備ができました",
+    "no_images_generated": "画像が生成されない"
+  }
+}
