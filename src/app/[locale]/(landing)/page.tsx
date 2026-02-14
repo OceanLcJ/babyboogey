@@ -95,44 +95,44 @@ export default async function LandingPage({
       },
       ...(faqItems.length > 0
         ? [
-            {
-              '@type': 'FAQPage',
-              '@id': `${appUrl}/#faq`,
-              mainEntity: faqItems.map(
-                (item: { question: string; answer: string }) => ({
-                  '@type': 'Question',
-                  name: item.question,
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: item.answer,
-                  },
-                })
-              ),
-            },
-          ]
+          {
+            '@type': 'FAQPage',
+            '@id': `${appUrl}/#faq`,
+            mainEntity: faqItems.map(
+              (item: { question: string; answer: string }) => ({
+                '@type': 'Question',
+                name: item.question,
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: item.answer,
+                },
+              })
+            ),
+          },
+        ]
         : []),
       ...(howToSteps.length > 0
         ? [
-            {
-              '@type': 'HowTo',
-              '@id': `${appUrl}/#howto`,
-              name: usageSection?.title || 'How to Animate Baby Photos',
-              description:
-                usageSection?.description ||
-                'Make baby dance videos in three simple steps',
-              step: howToSteps.map(
-                (
-                  item: { title: string; description: string },
-                  index: number
-                ) => ({
-                  '@type': 'HowToStep',
-                  position: index + 1,
-                  name: item.title,
-                  text: item.description,
-                })
-              ),
-            },
-          ]
+          {
+            '@type': 'HowTo',
+            '@id': `${appUrl}/#howto`,
+            name: usageSection?.title || 'How to Animate Baby Photos',
+            description:
+              usageSection?.description ||
+              'Make baby dance videos in three simple steps',
+            step: howToSteps.map(
+              (
+                item: { title: string; description: string },
+                index: number
+              ) => ({
+                '@type': 'HowToStep',
+                position: index + 1,
+                name: item.title,
+                text: item.description,
+              })
+            ),
+          },
+        ]
         : []),
     ],
   };
@@ -155,13 +155,13 @@ export default async function LandingPage({
                 {customHero.title_line1} <br />
                 <span className="text-[var(--primary)]">{customHero.title_line2}</span>
               </h1>
-              <p className="mt-6 text-lg leading-8 text-[var(--secondary)] mb-10 max-w-lg mx-auto lg:mx-0">
+              <p className="mt-6 text-lg leading-8 text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0">
                 {customHero.description}
               </p>
               <div className="flex items-center justify-center lg:justify-start gap-x-6">
                 <Link
                   href="#generator"
-                  className="rounded-full bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-[var(--primary-foreground)] shadow-[0_10px_20px_-10px_rgba(252,211,77,0.6)] hover:bg-[var(--primary)]/90 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+                  className="rounded-full bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-[var(--primary-foreground)] shadow-[0_10px_20px_-10px_rgba(252,211,77,0.6)] dark:shadow-[0_10px_20px_-10px_rgba(139,92,246,0.5)] hover:bg-[var(--primary)]/90 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
                 >
                   {customHero.cta_button} <ArrowRight className="w-5 h-5" />
                 </Link>
@@ -172,7 +172,7 @@ export default async function LandingPage({
             <div className="relative w-full h-[450px] lg:h-[550px] flex items-center justify-center">
 
               {/* Card 1: Static Photo */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-gray-100">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-card dark:bg-white/[0.06] dark:backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(99,102,241,0.15),0_20px_40px_-15px_rgba(0,0,0,0.5)] p-3 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-border dark:border-white/[0.12] transition-all duration-300">
                 <div className="w-full h-full rounded-2xl overflow-hidden relative">
                   <Image
                     src="https://img.aibabydance.org/assets/imgs/example/image-1.png"
@@ -183,7 +183,7 @@ export default async function LandingPage({
                     priority
                   />
                 </div>
-                <p className="mt-3 font-bold text-gray-400 text-sm">{customHero.card_static}</p>
+                <p className="mt-3 font-bold text-muted-foreground dark:text-white/50 text-sm">{customHero.card_static}</p>
               </div>
 
               {/* Connecting Arrow (Animated) - Behind cards */}
@@ -209,7 +209,7 @@ export default async function LandingPage({
               </div>
 
               {/* Card 2: Dancing Video */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] p-3 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-gray-100">
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-card dark:bg-white/[0.06] dark:backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(139,92,246,0.25),0_20px_40px_-15px_rgba(0,0,0,0.5)] p-3 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-border dark:border-white/[0.15] transition-all duration-300">
                 <div className="w-full h-full rounded-2xl overflow-hidden relative">
                   <video
                     src="https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4"

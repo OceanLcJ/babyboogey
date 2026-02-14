@@ -912,7 +912,7 @@ export function VideoGenerator({
         return;
       }
 
-      void prepareWatermarkedPlayback(video).catch(() => {});
+      void prepareWatermarkedPlayback(video).catch(() => { });
     });
   }, [generatedVideos, prepareWatermarkedPlayback]);
 
@@ -1113,9 +1113,9 @@ export function VideoGenerator({
 
         const signedItem = Array.isArray(data?.results)
           ? data.results.find(
-              (item: Record<string, unknown>) =>
-                item?.assetId === assetId && typeof item?.url === 'string'
-            )
+            (item: Record<string, unknown>) =>
+              item?.assetId === assetId && typeof item?.url === 'string'
+          )
           : null;
 
         const signedUrl =
@@ -2318,7 +2318,7 @@ export function VideoGenerator({
           </Card>
 
           {/* Right Card - Preview */}
-          <Card>
+          <Card className="self-start lg:sticky lg:top-24">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Video className="h-5 w-5" aria-hidden="true" />
@@ -2364,7 +2364,7 @@ export function VideoGenerator({
 
                     return (
                       <div key={video.id} className="space-y-3">
-                        <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
+                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-muted to-muted/50 dark:from-white/[0.04] dark:to-white/[0.02] ring-1 ring-border dark:ring-white/10">
                           {canRenderVideo ? (
                             <video
                               src={playbackUrl}
@@ -2406,12 +2406,11 @@ export function VideoGenerator({
                                   left: '5%',
                                   top: '10%',
                                   opacity: video.watermarkOpacity ?? 0.28,
-                                  animation: `bb-watermark-drift ${
-                                    Math.max(
-                                      5,
-                                      (video.watermarkIntervalSeconds ?? 3) * 4
-                                    )
-                                  }s linear infinite`,
+                                  animation: `bb-watermark-drift ${Math.max(
+                                    5,
+                                    (video.watermarkIntervalSeconds ?? 3) * 4
+                                  )
+                                    }s linear infinite`,
                                 }}
                               >
                                 {video.watermarkText || 'BabyBoogey'}
@@ -2423,12 +2422,11 @@ export function VideoGenerator({
                                   right: '6%',
                                   bottom: '10%',
                                   opacity: video.watermarkOpacity ?? 0.28,
-                                  animation: `bb-watermark-drift-reverse ${
-                                    Math.max(
-                                      6,
-                                      (video.watermarkIntervalSeconds ?? 3) * 5
-                                    )
-                                  }s linear infinite`,
+                                  animation: `bb-watermark-drift-reverse ${Math.max(
+                                    6,
+                                    (video.watermarkIntervalSeconds ?? 3) * 5
+                                  )
+                                    }s linear infinite`,
                                 }}
                               >
                                 {video.watermarkText || 'BabyBoogey'}
@@ -2437,12 +2435,12 @@ export function VideoGenerator({
                           )}
                         </div>
                         {isWatermarked && (
-                          <div className="flex items-center justify-between gap-2 rounded-lg border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                          <div className="flex items-center justify-between gap-2 rounded-xl border border-amber-300/50 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200">
                             <span>{t('watermark.free_notice')}</span>
                             <Button
                               variant="link"
                               size="sm"
-                              className="h-auto px-0 text-xs font-semibold text-amber-900"
+                              className="h-auto px-0 text-xs font-semibold text-amber-900 dark:text-amber-200"
                               onClick={() => handleRemoveWatermarkClick(video)}
                             >
                               {t('watermark.remove_cta')}
@@ -2495,7 +2493,7 @@ export function VideoGenerator({
                                 }}
                               >
                                 {sharingActionKey ===
-                                shareVideoSystemActionKey ? (
+                                  shareVideoSystemActionKey ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : (
                                   <Share2 className="h-4 w-4" />
@@ -2640,7 +2638,7 @@ export function VideoGenerator({
                             </DropdownMenuContent>
                           </DropdownMenu>
                           <Button
-                            variant="outline"
+                            variant="default"
                             size="sm"
                             className="w-full"
                             onClick={() => handleDownloadVideo(video)}
@@ -2660,33 +2658,34 @@ export function VideoGenerator({
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="bg-muted relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-lg border">
-                    <video
-                      src={selectedTemplate.videoUrl}
-                      controls
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="h-auto max-h-[600px] w-full object-contain"
-                      preload="auto"
-                    />
-                  </div>
-                  <div className="bg-muted/50 space-y-2 rounded-lg border p-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">
+                  <div className="relative overflow-hidden rounded-2xl shadow-[0_0_24px_rgba(99,102,241,0.18),inset_0_0_0_1px_rgba(99,102,241,0.25)] dark:shadow-[0_0_28px_rgba(99,102,241,0.22),inset_0_0_0_1px_rgba(99,102,241,0.35)]">
+                    <div className="relative flex max-h-[600px] items-center justify-center bg-black/30">
+                      <video
+                        src={selectedTemplate.videoUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="h-auto max-h-[600px] w-full object-contain"
+                        preload="auto"
+                      />
+                    </div>
+                    {/* Bottom gradient overlay with name + duration */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-5 pb-5 pt-14">
+                      <h3 className="text-xl font-bold text-white leading-tight">
                         {locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name}
                       </h3>
-                      <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-medium">
-                        {selectedTemplate.duration}
-                      </span>
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white">
+                          <svg className="h-3 w-3 fill-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z" /></svg>
+                          {selectedTemplate.duration}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-muted/50 border-primary/20 rounded-lg border p-3">
-                    <p className="text-muted-foreground text-xs leading-relaxed">
-                      {t('privacy_notice')}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground text-center text-xs leading-relaxed">
+                    {t('privacy_notice')}
+                  </p>
                 </div>
               )}
             </CardContent>
