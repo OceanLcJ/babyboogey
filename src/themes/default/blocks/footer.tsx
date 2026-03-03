@@ -10,6 +10,8 @@ import { SmartIcon } from '@/shared/blocks/common/smart-icon';
 import { NavItem } from '@/shared/types/blocks/common';
 import { Footer as FooterType } from '@/shared/types/blocks/landing';
 
+const isExternalUrl = (url?: string) => /^https?:\/\//i.test(url || '');
+
 export function Footer({ footer }: { footer: FooterType }) {
   return (
     <footer
@@ -97,17 +99,37 @@ export function Footer({ footer }: { footer: FooterType }) {
           {footer.social ? (
             <div className="flex min-w-0 flex-wrap items-center gap-2">
               {footer.social?.items.map((item: NavItem, index) => (
-                <Link
-                  key={index}
-                  href={item.url || ''}
-                  target={item.target || ''}
-                  className="text-muted-foreground hover:text-primary bg-background block cursor-pointer rounded-full p-2 duration-150"
-                  aria-label={item.title || 'Social media link'}
-                >
-                  {item.icon && (
-                    <SmartIcon name={item.icon as string} size={20} />
-                  )}
-                </Link>
+                isExternalUrl(item.url) ? (
+                  <a
+                    key={index}
+                    href={item.url || ''}
+                    target={item.target || '_blank'}
+                    rel={
+                      (item.target || '_blank') === '_blank'
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
+                    className="text-muted-foreground hover:text-primary bg-background block cursor-pointer rounded-full p-2 duration-150"
+                    aria-label={item.title || 'Social media link'}
+                    suppressHydrationWarning
+                  >
+                    {item.icon && (
+                      <SmartIcon name={item.icon as string} size={20} />
+                    )}
+                  </a>
+                ) : (
+                  <Link
+                    key={index}
+                    href={item.url || ''}
+                    target={item.target || '_self'}
+                    className="text-muted-foreground hover:text-primary bg-background block cursor-pointer rounded-full p-2 duration-150"
+                    aria-label={item.title || 'Social media link'}
+                  >
+                    {item.icon && (
+                      <SmartIcon name={item.icon as string} size={20} />
+                    )}
+                  </Link>
+                )
               ))}
             </div>
           ) : null}
