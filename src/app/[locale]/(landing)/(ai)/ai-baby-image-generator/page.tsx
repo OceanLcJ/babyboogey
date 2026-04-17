@@ -1,9 +1,15 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { getThemePage } from '@/core/theme';
-import { BabyImageGenerator } from '@/shared/blocks/generator';
+import { BabyImageGenerator } from '@/shared/blocks/generator/baby-image';
+import {
+  BabyImageLandingCta,
+  BabyImageLandingFaq,
+  BabyImageLandingHero,
+  BabyImageLandingShowcase,
+  BabyImageLandingUsage,
+} from '@/shared/blocks/generator/baby-image-landing';
 import { getMetadata } from '@/shared/lib/seo';
-import { DynamicPage } from '@/shared/types/blocks/landing';
+import { DynamicPage, Hero, Section } from '@/shared/types/blocks/landing';
 
 export const revalidate = 3600;
 
@@ -23,24 +29,19 @@ export default async function AiBabyImageGeneratorPage({
   const pageT = await getTranslations('pages.ai-baby-image-generator');
   const generatorT = await getTranslations('ai.baby-image');
 
-  // Pull the full landing-page tree from i18n, then inject the React-only
-  // generator section. `t.raw()` returns plain JSON so we can mutate a shallow
-  // copy before handing it to the dynamic-page theme.
   const page = pageT.raw('page') as DynamicPage;
-  const sections = { ...(page.sections || {}) };
-  sections.generator = {
-    ...(sections.generator || {}),
-    component: (
+  const sections = page.sections || {};
+
+  return (
+    <>
+      <BabyImageLandingHero section={sections.hero as Hero | undefined} />
       <BabyImageGenerator srOnlyTitle={generatorT.raw('generator.title')} />
-    ),
-  };
-
-  const composed: DynamicPage = {
-    ...page,
-    sections,
-  };
-
-  const Page = await getThemePage('dynamic-page');
-
-  return <Page locale={locale} page={composed} />;
+      <BabyImageLandingShowcase
+        section={sections.showcase as Section | undefined}
+      />
+      <BabyImageLandingUsage section={sections.usage as Section | undefined} />
+      <BabyImageLandingFaq section={sections.faq as Section | undefined} />
+      <BabyImageLandingCta section={sections.cta as Section | undefined} />
+    </>
+  );
 }
