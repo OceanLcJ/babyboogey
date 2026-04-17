@@ -247,8 +247,9 @@ export function SignUser({
           <Button
             asChild
             size={signButtonSize}
+            variant="outline"
             className={cn(
-              'border-foreground/10 ml-4 cursor-pointer ring-0',
+              'bb-sign-btn ml-4 cursor-pointer',
               isScrolled && 'lg:hidden'
             )}
             onClick={() => setIsShowSignModal(true)}

@@ -187,3 +187,157 @@ pre {
     @apply bg-background text-foreground;
   }
 }
+/* Header polish — Nursery Nightfall accents on the shared site header.
+ * Scoped via two hook classes: .bb-nav-brand (logo wrapper) and .bb-nav-link
+ * (individual <Link> in the desktop NavMenu). No structural changes.
+ */
+
+@keyframes bb-nav-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, oklch(0.88 0.18 85) 18%, transparent),
+      0 4px 10px -4px color-mix(in srgb, oklch(0.88 0.18 85) 45%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, oklch(0.88 0.18 85) 10%, transparent),
+      0 4px 12px -3px color-mix(in srgb, oklch(0.88 0.18 85) 55%, transparent);
+  }
+}
+
+/* ───────── Brand wordmark + halo ───────── */
+.bb-nav-brand {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.bb-nav-brand > a {
+  position: relative;
+  z-index: 1;
+}
+
+/* Typographic wordmark — matches the prototype's Fraunces + italic flourish */
+.bb-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  color: var(--foreground);
+  transition: color 0.2s ease;
+}
+.bb-wordmark em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: color-mix(in srgb, oklch(0.88 0.18 85) 55%, var(--foreground));
+  margin-left: 0.04em;
+}
+.bb-nav-brand:hover .bb-wordmark em {
+  color: color-mix(in srgb, oklch(0.88 0.18 85) 75%, var(--foreground));
+}
+/* Solid pastel halo behind the logo — only visible on hover, no gradient */
+.bb-nav-brand::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background: color-mix(in srgb, oklch(0.88 0.18 85) 22%, transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(8px);
+}
+.bb-nav-brand:hover::before { opacity: 1; }
+.bb-nav-brand img {
+  transition: filter 0.25s, transform 0.25s;
+}
+.bb-nav-brand:hover img {
+  filter: saturate(1.12) brightness(1.04);
+  transform: rotate(-2deg) scale(1.02);
+}
+/* Brand title — subtle Fraunces-italic flourish on the second half */
+.bb-nav-brand span {
+  transition: color 0.2s;
+}
+
+/* ───────── Nav link — prototype parity ───────── */
+.bb-nav-link {
+  position: relative;
+  color: color-mix(in srgb, var(--foreground) 72%, transparent);
+  font-weight: 500;
+  letter-spacing: -0.003em;
+  transition: color 0.18s ease;
+  border-radius: 0.5rem;
+}
+.bb-nav-link:hover { color: var(--foreground); }
+
+.bb-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -2px;
+  height: 2px;
+  background: oklch(0.88 0.18 85); /* flat primary */
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(2px) scaleX(0.65);
+  transform-origin: center;
+  transition: opacity 0.28s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.bb-nav-link:hover::after {
+  opacity: 0.55;
+  transform: translateY(0) scaleX(0.85);
+}
+.bb-nav-link-active {
+  color: var(--foreground) !important;
+}
+.bb-nav-link-active::after {
+  opacity: 0.95;
+  transform: translateY(0) scaleX(1);
+}
+/* Neutralize the default bg-muted tint that fights the underline */
+.bb-nav-link-active {
+  background-color: transparent !important;
+}
+
+/* ───────── NavigationMenuTrigger (dropdown parent) — same treatment ───────── */
+.bb-nav-trigger {
+  position: relative;
+  color: color-mix(in srgb, var(--foreground) 75%, transparent);
+  transition: color 0.18s;
+}
+.bb-nav-trigger:hover { color: var(--foreground); }
+
+/* ───────── Mobile: skip underline decoration, keep color polish only ───────── */
+@media (max-width: 1023px) {
+  .bb-nav-link::after { display: none; }
+}
+
+/* ───────── Sign-in ghost pill (matches prototype .btn-ghost) ───────── */
+.bb-sign-btn {
+  height: 2.4rem !important;
+  padding: 0 1.1rem !important;
+  border-radius: 9999px !important;
+  background: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1.5px solid color-mix(in srgb, oklch(0.78 0.12 295) 40%, var(--border)) !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.005em;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.bb-sign-btn:hover {
+  border-color: color-mix(in srgb, oklch(0.78 0.12 295) 75%, var(--border)) !important;
+  background: color-mix(in srgb, oklch(0.78 0.12 295) 8%, var(--card)) !important;
+  transform: translateY(-1px);
+}
+.bb-sign-btn:active { transform: translateY(0); }
