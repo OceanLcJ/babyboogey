@@ -16,7 +16,6 @@ import {
   Download,
   Loader2,
   Paperclip,
-  Send,
   Sparkles,
   User,
   X,
@@ -66,8 +65,19 @@ const HANDOFF_STORAGE_KEY = 'babyboogey:baby-image-handoff';
 const HANDOFF_TTL_MS = 30 * 60 * 1000;
 const MAX_UPLOAD_MB = 10;
 
+const STYLE_THUMB_FILES: Record<BabyStyleId, string> = {
+  'pixar-3d': 'ai-baby-photo-pixar-3d-animation-style.webp',
+  ghibli: 'ai-baby-photo-hand-drawn-fantasy-style.webp',
+  anime: 'ai-baby-photo-classic-anime-style.webp',
+  claymation: 'ai-baby-photo-claymation-sculpt-style.webp',
+  chibi: 'ai-baby-photo-chibi-kawaii-style.webp',
+  watercolor: 'ai-baby-photo-watercolor-storybook-style.webp',
+  plush: 'ai-baby-photo-plush-doll-style.webp',
+  'pixel-art': 'ai-baby-photo-pixel-art-retro-style.webp',
+};
+
 const STYLE_THUMB_URL = (id: BabyStyleId) =>
-  `https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/${id}-after.webp`;
+  `/imgs/showcases/ai-baby-image-generator/${STYLE_THUMB_FILES[id]}`;
 
 // Short English descriptors for the style popover. Kept inline to avoid
 // expanding the i18n message files for this first landing — translations can
@@ -83,24 +93,37 @@ const STYLE_DESCRIPTIONS: Record<BabyStyleId, string> = {
   'pixel-art': '16-bit nostalgia, limited palette',
 };
 
-const SUGGESTIONS: { label: string; prompt: string }[] = [
+const SUGGESTIONS: {
+  emoji: string;
+  label: string;
+  subtitle: string;
+  prompt: string;
+}[] = [
   {
-    label: '🎂 First birthday in the garden',
+    emoji: '🎂',
+    label: 'First birthday in the garden',
+    subtitle: 'Sunlit balloons · soft focus',
     prompt:
       'A joyful baby at their first birthday party in a sunlit garden full of balloons and flowers.',
   },
   {
-    label: '🧙 Tiny wizard in a forest',
+    emoji: '🧙',
+    label: 'Tiny wizard in a forest',
+    subtitle: 'Mossy log · sunrise glow',
     prompt:
       'A tiny baby wizard wearing a pointed hat, sitting on a mossy log in an enchanted forest at sunrise.',
   },
   {
-    label: '🏖 Beach day with seashells',
+    emoji: '🏖',
+    label: 'Beach day with seashells',
+    subtitle: 'Golden hour · gentle waves',
     prompt:
       'A curious baby on a sunny beach, holding a seashell, waves in the background, golden hour light.',
   },
   {
-    label: '🚀 Astronaut among the stars',
+    emoji: '🚀',
+    label: 'Astronaut among the stars',
+    subtitle: 'Dreamy cosmos · starlight',
     prompt:
       'An adorable baby astronaut floating among stars and planets, dreamy cosmic backdrop.',
   },
@@ -745,28 +768,37 @@ export function BabyImageGenerator({
   const hasMessages = messages.length > 0;
 
   return (
-    <section className={cn('py-10 md:py-14', className)}>
+    <section className={cn('bb-studio py-10 md:py-14', className)}>
       {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
       <div className="container max-w-3xl">
         <div className="bb-chat-card">
           {/* ============== Head ============== */}
           <div className="bb-chat-head">
-            <div className="flex items-center gap-3">
-              <span className="bb-brand-dot">👶</span>
-              <div className="leading-tight">
-                <div className="text-[1.05rem] font-extrabold tracking-tight text-foreground">
-                  {t('title')}
-                </div>
-                <div className="text-xs font-semibold text-muted-foreground">
-                  Nano Banana Pro
-                  {hasMessages ? ` · ${messages.length} messages` : ' · fresh session'}
-                </div>
+            <span className="bb-brand-dot" aria-hidden="true">
+              👶
+            </span>
+            <div>
+              <div className="bb-chat-head-title">{t('title')}</div>
+              <div className="bb-chat-head-sub">
+                <span className="bb-model-pill">Nano Banana Pro</span>
+                <span>
+                  {hasMessages
+                    ? t('session_count', { count: messages.length })
+                    : t('session_ready')}
+                </span>
               </div>
             </div>
             {isMounted && user ? (
-              <span className="bb-credits-pill">{remainingCredits}</span>
+              <span className="bb-credits-pill">
+                <span className="bb-credits-pill-star" aria-hidden="true" />
+                <span>{remainingCredits}</span>
+                <span className="bb-credits-pill-unit">{t('credits_unit')}</span>
+              </span>
             ) : (
-              <span className="bb-credits-pill">—</span>
+              <span className="bb-credits-pill">
+                <span className="bb-credits-pill-star" aria-hidden="true" />
+                <span>—</span>
+              </span>
             )}
           </div>
 
@@ -808,6 +840,31 @@ export function BabyImageGenerator({
 
           {/* ============== Composer ============== */}
           <div className="bb-composer-wrap">
+            {/* Horizontal style rail — primary visual picker */}
+            <div className="bb-style-rail" role="radiogroup" aria-label={t('form.style_label')}>
+              {BABY_STYLE_IDS.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="radio"
+                  aria-checked={id === selectedStyle}
+                  className={cn(
+                    'bb-style-pill',
+                    id === selectedStyle && 'is-active'
+                  )}
+                  onClick={() => setSelectedStyle(id)}
+                >
+                  <span
+                    className="bb-style-pill-sw"
+                    style={{ backgroundImage: `url(${STYLE_THUMB_URL(id)})` }}
+                  />
+                  <span className="bb-style-pill-label">
+                    {t(`styles.${id}.label`)}
+                  </span>
+                </button>
+              ))}
+            </div>
+
             {attachedImage && (
               <div className="mb-2.5 flex items-center">
                 <div className="bb-attach-preview">
@@ -978,7 +1035,11 @@ export function BabyImageGenerator({
                     {t('credits_cost', { credits: BABY_IMAGE_COST_CREDITS })}
                   </span>
                   {!isMounted || isCheckSign ? (
-                    <button className="bb-send-btn" disabled>
+                    <button
+                      className="bb-send-btn bb-send-btn-icon-only"
+                      disabled
+                      aria-label={t('loading')}
+                    >
                       <Loader2 className="h-4 w-4 animate-spin" />
                     </button>
                   ) : !user ? (
@@ -988,6 +1049,15 @@ export function BabyImageGenerator({
                       aria-label={t('sign_in_to_generate')}
                     >
                       <User className="h-4 w-4" />
+                      <span>{t('sign_in_to_generate')}</span>
+                    </button>
+                  ) : isGenerating ? (
+                    <button
+                      className="bb-send-btn bb-send-btn-icon-only"
+                      disabled
+                      aria-label={t('generating')}
+                    >
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     </button>
                   ) : (
                     <button
@@ -996,11 +1066,10 @@ export function BabyImageGenerator({
                       onClick={() => handleSend()}
                       aria-label={t('generate')}
                     >
-                      {isGenerating ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Send className="h-4 w-4" />
-                      )}
+                      <span className="bb-send-spark" aria-hidden="true">
+                        ✦
+                      </span>
+                      <span>{t('generate_cta')}</span>
                     </button>
                   )}
                 </div>
@@ -1031,8 +1100,9 @@ export function BabyImageGenerator({
         </div>
 
         {/* helper text below the card (matches prototype footer) */}
-        <p className="mt-5 text-center text-xs font-semibold text-muted-foreground">
-          ⏎ to generate · ⇧⏎ for new line · Each image costs {BABY_IMAGE_COST_CREDITS} credits
+        <p className="bb-foot-hint">
+          <span className="bb-foot-hint-tag">{t('footer_tag')}</span>
+          <span>{t('footer_hint', { credits: BABY_IMAGE_COST_CREDITS })}</span>
         </p>
       </div>
     </section>
@@ -1048,29 +1118,49 @@ function EmptyState({
 }: {
   onSuggestion: (prompt: string) => void;
 }) {
+  const t = useTranslations('ai.baby-image.generator');
   return (
-    <div className="flex h-full flex-col items-center justify-center text-center">
-      <div className="bb-hero-orb">
-        <Sparkles className="h-9 w-9 text-primary-foreground" strokeWidth={2.4} />
+    <div className="flex h-full flex-col items-center justify-center">
+      <div className="bb-hero-scene" aria-hidden="true">
+        <div className="bb-hero-orbit" />
+        <div className="bb-hero-moon" />
+        <svg className="bb-hero-face" viewBox="0 0 72 72">
+          <g
+            stroke="#3b2a0d"
+            strokeWidth="1.8"
+            fill="none"
+            strokeLinecap="round"
+          >
+            <path d="M24 36 q3 -4 6 0" />
+            <path d="M42 36 q3 -4 6 0" />
+            <path d="M30 46 q6 4 12 0" />
+          </g>
+          <circle cx="24" cy="44" r="3" fill="#fdb4a0" opacity="0.75" />
+          <circle cx="48" cy="44" r="3" fill="#fdb4a0" opacity="0.75" />
+        </svg>
       </div>
-      <h3 className="mt-7 text-2xl font-extrabold tracking-tight text-foreground">
-        Imagine your baby.
+
+      <h3 className="bb-hero-title">
+        {t.rich('empty.title', { em: (chunks) => <em>{chunks}</em> })}
       </h3>
-      <p className="mt-2 max-w-[360px] text-sm font-medium text-muted-foreground">
-        Pick a style, attach a photo (optional), and describe the scene.
-      </p>
-      <div className="mt-6 text-[0.7rem] font-bold uppercase tracking-widest text-muted-foreground">
-        Try an idea
-      </div>
-      <div className="mt-3 flex max-w-[460px] flex-wrap justify-center gap-2">
+      <p className="bb-hero-sub">{t('empty.subtitle')}</p>
+
+      <div className="bb-try-label">{t('empty.try_label')}</div>
+      <div className="bb-idea-grid">
         {SUGGESTIONS.map((s) => (
           <button
             key={s.label}
             type="button"
-            className="bb-followup"
+            className="bb-idea"
             onClick={() => onSuggestion(s.prompt)}
           >
-            {s.label}
+            <span className="bb-idea-ill" aria-hidden="true">
+              {s.emoji}
+            </span>
+            <span className="bb-idea-body">
+              <span>{s.label}</span>
+              <span className="bb-idea-tiny">{s.subtitle}</span>
+            </span>
           </button>
         ))}
       </div>
