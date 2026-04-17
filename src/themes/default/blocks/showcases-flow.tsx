@@ -308,7 +308,7 @@ export function ShowcasesFlow({
                       className="h-auto max-h-[90vh] w-auto max-w-full object-contain"
                     />
                   )}
-                  <div className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 text-white">
+                  <div className="absolute right-0 bottom-0 left-0 bg-black/60 p-6 text-white">
                     <h3 className="mb-2 text-2xl font-bold">
                       {filteredItems[selectedIndex].title}
                     </h3>

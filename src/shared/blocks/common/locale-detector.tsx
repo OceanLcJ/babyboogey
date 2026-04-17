@@ -246,7 +246,7 @@ export function LocaleDetector() {
     <>
       <div
         ref={bannerRef}
-        className="from-primary to-primary/80 text-primary-foreground fixed top-0 right-0 left-0 z-[51] hidden bg-gradient-to-r shadow-lg md:block"
+        className="bg-primary text-primary-foreground fixed top-0 right-0 left-0 z-[51] hidden shadow-lg md:block"
       >
         <div className="container py-2.5">
           <div className="flex items-center justify-between gap-4">

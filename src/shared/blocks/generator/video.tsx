@@ -2132,7 +2132,7 @@ export function VideoGenerator({
                           )}
                           onClick={() => handleTemplateSelect(template)}
                         >
-                          <div className="from-muted to-muted/50 relative aspect-[3/4] overflow-hidden bg-gradient-to-br">
+                          <div className="bg-muted relative aspect-[3/4] overflow-hidden">
                             <video
                               src={template.videoUrl}
                               className="absolute inset-0 h-full w-full object-cover"
@@ -2404,7 +2404,7 @@ export function VideoGenerator({
 
                     return (
                       <div key={video.id} className="space-y-3">
-                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-muted to-muted/50 dark:from-white/[0.04] dark:to-white/[0.02] ring-1 ring-border dark:ring-white/10">
+                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-muted dark:bg-white/[0.03] ring-1 ring-border dark:ring-white/10">
                           {canRenderVideo ? (
                             <video
                               src={playbackUrl}
@@ -2710,8 +2710,8 @@ export function VideoGenerator({
                         preload="auto"
                       />
                     </div>
-                    {/* Bottom gradient overlay with name + duration */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-5 pb-5 pt-14">
+                    {/* Bottom readability overlay (flat, no gradient) */}
+                    <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pb-5 pt-14">
                       <h3 className="text-xl font-bold text-white leading-tight">
                         {locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name}
                       </h3>
