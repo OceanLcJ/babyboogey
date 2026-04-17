@@ -1,6 +1,6 @@
 import '@/config/style/global.css';
 
-import { Nunito } from 'next/font/google';
+import { Fraunces, Nunito } from 'next/font/google';
 import { getLocale, setRequestLocale } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
 
@@ -18,6 +18,15 @@ const nunito = Nunito({
   variable: '--font-sans',
   display: 'swap',
   preload: true,
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  preload: false,
 });
 
 export default async function RootLayout({
@@ -89,7 +98,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${nunito.variable}`}
+      className={`${nunito.variable} ${fraunces.variable}`}
       suppressHydrationWarning
     >
       <head>

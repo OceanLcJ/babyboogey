@@ -46,6 +46,7 @@
   --font-sans: Nunito, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Nunito, serif;
   --font-mono: Nunito, monospace;
+  --font-display: Fraunces, ui-serif, Georgia, serif;
 
   --radius: 1.5rem; /* rounded-3xl approx 24px */
 
@@ -118,6 +119,7 @@
   --font-sans: Nunito, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Nunito, serif;
   --font-mono: Nunito, monospace;
+  --font-display: Fraunces, ui-serif, Georgia, serif;
   --radius: 1.5rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
