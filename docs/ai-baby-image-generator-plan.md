@@ -1,6 +1,6 @@
 # AI Baby Image Generator — 实施计划
 
-> 版本：v3（2026-04-16 定版）
+> 版本：v3.3（2026-04-16 定版）
 > 关联需求：为 BabyBoogey 新增独立 AI 宝宝图片生成入口，并与现有 AI 舞蹈视频生成器衔接。
 > 受众：后续接手的工程师（含 AI agent）。阅读本文后应能直接按 Phase 执行。
 
@@ -25,7 +25,7 @@
 | 定价 | **40 credits / 图**（成本 $0.20，$0.017/credit 售价 = $0.68，70% 毛利） |
 | 获客钩子 | **首次免费 1 张**，复用 `grantCreditsForFirstLogin` 风控 |
 | 内容合规 | v1 **不接入** moderation provider，通过 ToS 兜底；R2 违禁图残留风险用户已知悉并接受 |
-| 总工期 | **5 天**（Phase 0–5 相加：0.25+0.25+0.5+0.5+2+1+0.5） |
+| 总工期 | **5.25 天**（Phase 0–5 相加：0.25+0.5+0.5+0.5+2+1+0.5） |
 
 ### 1.3 8 个风格预设
 
@@ -92,9 +92,13 @@
 
 **阻断性**：Phase 0 未完成禁止进入 Phase 1。
 
-### Phase 1a · 退款观测性加固（0.25 天）
+### Phase 1a · 退款观测性加固 + D1 并发原子化（0.5 天）
 
-**目标**：不重做退款，仅加运营对账字段。
+**目标**：加对账字段 + 消除 D1 并发双击导致的重复退款风险。
+
+**🔴 为什么必须动退款逻辑**：生产运行在 **Cloudflare D1**，CLAUDE.md 明确"D1 在 Workers 上 BEGIN 失败会降级为无事务回调"且 `.for('update')` 被 `withSqliteCompat` 降级为 no-op。现有 `updateAITaskById` 的幂等依赖 SELECT-then-UPDATE 的 `CreditStatus.ACTIVE` check，在无事务降级下并发双击（notify webhook + query 轮询同时命中 FAILED）可能让两条 UPDATE 都走完 `remainingCredits += X`，造成**双倍退款**。触发概率低但真实存在，观测字段不足以防。
+
+**步骤**：
 
 - [ ] **同时改三份方言 schema**（不要只改其中一个，CI 可能只跑 sqlite 会漏网）：
   - `src/config/db/schema.sqlite.ts`（生产 D1）：
@@ -105,41 +109,81 @@
   - `src/config/db/schema.mysql.ts`：按现有 timestamp 列风格加 `timestamp`/`datetime` + `varchar(64)` 或 `text`
   - `src/config/db/schema.postgres.ts`：按现有风格加 `timestamp` + `varchar(64)` 或 `text`
 - [ ] `pnpm db:generate` 生成 migration（三方言），`pnpm db:migrate` 在 dev 执行
-- [ ] [src/shared/models/ai_task.ts](../src/shared/models/ai_task.ts) 的 `updateAITaskById` 退款分支（L76-L108）里，在最后 `.update(aiTask).set(updateAITask)` 前把 `updateAITask.refundedAt = new Date(); updateAITask.refundReason = updateAITask.refundReason ?? 'task_failed'` 注入到 payload（Drizzle sqlite `timestamp_ms` mode 接受 Date 对象）
+- [ ] 🔴 **[src/shared/models/ai_task.ts](../src/shared/models/ai_task.ts) 的退款分支改成条件 UPDATE，不再依赖事务隔离**：
+  ```ts
+  // L88-L99：加回 credits 的 UPDATE 追加 WHERE status = ACTIVE，让 SQL 自身原子去重
+  await Promise.all(
+    consumedItems.map((item: UnsafeAny) => {
+      if (item?.creditId && item.creditsConsumed > 0) {
+        return tx.update(credit)
+          .set({ remainingCredits: sql`${credit.remainingCredits} + ${item.creditsConsumed}` })
+          .where(and(eq(credit.id, item.creditId), eq(credit.status, CreditStatus.ACTIVE)));
+      }
+    })
+  );
+  // L102-L107：置 DELETED 的 UPDATE 同样追加 WHERE status = ACTIVE
+  await tx.update(credit)
+    .set({ status: CreditStatus.DELETED })
+    .where(and(eq(credit.id, updateAITask.creditId), eq(credit.status, CreditStatus.ACTIVE)));
+  ```
+  ⚠️ `item.creditId` 指向**扣款时占用的具体 credit 条目**（可能是不同 credit 包），与主循环外 `updateAITask.creditId` 指向**消费记录**不同，两处 WHERE 都要加
+- [ ] 退款分支最后 `.update(aiTask).set(updateAITask)` 前注入观测字段：
+  ```ts
+  updateAITask.refundedAt = new Date();
+  updateAITask.refundReason = updateAITask.refundReason ?? 'task_failed';
+  ```
 - [ ] admin/ai-tasks 列表加一列显示 refund 状态（后续运营需要）
 
-**覆盖面**：现有 music / video / image scene 全部自动继承（它们都走 `updateAITaskById`）。**无行为变化**，只加字段。
+**覆盖面**：现有 music / video / image scene 全部自动继承（它们都走 `updateAITaskById`）。**行为变化**：无并发时完全等价；并发双击时第二次 UPDATE 的 WHERE 不匹配，remainingCredits 不会重复加，DELETED 置位也幂等。
+
+**回归测试清单**（Phase 5 执行）：
+- [ ] 单次 FAILED：credit 正确加回一次，`refundedAt` 写入
+- [ ] 手工并发触发（wrangler tail + curl 同时双击 notify + query）：credit 只加回一次
+- [ ] 已 FAILED 的 task 再次调 query：短路跳过（hasStatusChanged=false）
 
 ### Phase 1b · baby-image 路由 + 业务服务（0.5 天）
 
-**架构位置**（审查代理建议拆分）：
+**架构位置**：
 
 ```
 src/shared/services/baby-image/
-├── styles.ts    # 8 风格 prompt 模板，结构 Record<styleId, Record<modelId, string>>
-└── config.ts    # scene 常量（BABY_IMAGE_SCENE = 'baby-image'）、costCredits = 40、defaultModel
+├── config.ts    # scene 常量、costCredits、defaultModel
+├── styles.ts    # 8 风格 prompt 模板（v1 扁平结构 Record<styleId, string>）
+└── prompts.ts   # buildBabyImagePrompt(styleId, userPrompt) 拼接逻辑
 ```
 
 - [ ] 新建 `src/shared/services/baby-image/config.ts`：
   ```ts
-  export const BABY_IMAGE_SCENE = 'baby-image';
+  // scene 拆两档，对齐现有 text-to-* / image-to-* 命名风格，
+  // 保留运营侧可观测性 + 复用 generate route 的 scene 白名单校验
+  export const BABY_IMAGE_SCENE_TEXT = 'baby-image-text';
+  export const BABY_IMAGE_SCENE_IMAGE = 'baby-image-image';
   export const BABY_IMAGE_COST_CREDITS = 40;
   export const BABY_IMAGE_DEFAULT_MODEL = '<Phase 0 实测的 kie model ID>';
   ```
-- [ ] 新建 `src/shared/services/baby-image/styles.ts`：8 风格 × ≥1 模型的 prompt 模板，结构如：
+- [ ] 新建 `src/shared/services/baby-image/styles.ts`：v1 扁平结构（YAGNI，v2 真引入 Seedream 再升多模型维度）
   ```ts
-  export const BABY_STYLES: Record<string, Record<string, string>> = {
-    'pixar-3d': {
-      'google/nano-banana': 'Transform into a Pixar-style 3D animated baby character, huge sparkling eyes, soft rounded face, subsurface scattering skin, cinematic lighting, ultra high quality 3D render',
-      // 'bytedance/seedream-v4': '...' (v1 暂不填)
-    },
+  export const BABY_STYLES: Record<string, string> = {
+    'pixar-3d': 'Transform into a Pixar-style 3D animated baby character, huge sparkling eyes, soft rounded face, subsurface scattering skin, cinematic lighting, ultra high quality 3D render',
     // ...剩下 7 个
   };
   ```
-- [ ] [src/app/api/ai/generate/route.ts](../src/app/api/ai/generate/route.ts) 加 baby-image 分支：
-  - 按 `options.styleId` + `options.model || defaultModel` 查模板，拼最终 prompt
-  - `scene = BABY_IMAGE_SCENE`，`costCredits = BABY_IMAGE_COST_CREDITS`
-  - `image_input` / `aspect_ratio` 走现有透传
+- [ ] 新建 `src/shared/services/baby-image/prompts.ts`：`buildBabyImagePrompt(styleId, userPrompt)` 负责模板查表 + 与 user prompt 拼接。generate route 只调用一次，不内联逻辑
+- [ ] 🔴 **[src/app/api/ai/generate/route.ts](../src/app/api/ai/generate/route.ts) 必须改 image 分支白名单**（L151-L159 硬编码 `image-to-image` / `text-to-image`，非白名单 scene 会 `throw invalid scene`）：
+  ```ts
+  if (mediaType === AIMediaType.IMAGE) {
+    if (scene === 'image-to-image') {
+      costCredits = 4;
+    } else if (scene === 'text-to-image') {
+      costCredits = 2;
+    } else if (scene === BABY_IMAGE_SCENE_TEXT || scene === BABY_IMAGE_SCENE_IMAGE) {
+      costCredits = BABY_IMAGE_COST_CREDITS;
+      // 调 buildBabyImagePrompt 重写 normalizedPrompt
+    } else {
+      throw new Error('invalid scene');
+    }
+  }
+  ```
 - [ ] **不改 kie.ts**（现有 generateImage 已覆盖所有需求）
 
 ### Phase 2 · Generator UI（0.5 天）
@@ -150,7 +194,7 @@ src/shared/services/baby-image/
 - [ ] 新增 **8 风格卡片网格**（每张卡片一个缩略图 + UI label），单选
 - [ ] 保留：prompt 输入、参考图上传（复用现有 upload 组件）、aspect ratio、轮询 pattern、credit 成本显示
 - [ ] 成功结果面板加 CTA "Make them dance →"（Phase 4 连接）
-- [ ] **契约（与 Phase 1b 对齐）**：请求体统一为 `{ provider, model, scene: 'baby-image', prompt, options: { styleId, image_input?, aspect_ratio } }`。后端按 `styleId` 查 prompt 模板并与 user prompt 拼接
+- [ ] **契约（与 Phase 1b 对齐）**：请求体 scene 按输入形态拆分——有参考图走 `baby-image-image`，纯文字走 `baby-image-text`；payload `{ provider, model, scene, prompt, options: { styleId, image_input?, aspect_ratio } }`。后端按 `styleId` 查 prompt 模板并与 user prompt 拼接
 
 ### Phase 3 · 落地页 + SEO（2 天）
 
@@ -180,16 +224,19 @@ src/shared/services/baby-image/
 
 - [ ] **图片结果页**（Phase 2 的 UI 内）："Make them dance →" CTA 点击时：
   ```ts
+  // assetId 通过 extractAssetIdFromMediaUrl(image.url) 从现有 generatedImages[].url 解析，
+  // 工具函数应从 video.tsx:227 提取到 shared/lib/asset-ref.ts 供两处复用，
+  // 不扩展 generatedImages shape（零改动路径）
   try {
     localStorage.setItem('babyboogey:baby-image-handoff', JSON.stringify({
-      assetRef: `asset://${mediaAssetId}`,
+      assetRef: `asset://${assetId}`,
+      previewUrl: image.url, // 形如 /api/storage/assets/<id>，供 VideoGenerator 的 preview 字段直接渲染
       expiresAt: Date.now() + 30 * 60 * 1000, // 30 分钟 TTL（仅防用户隔天点开）
     }));
   } catch {}
   router.push('/ai-video-generator');
   ```
-  ⚠️ **`mediaAssetId` 来源**：现有 image.tsx 的 `generatedImages` 条目只有 `url: '/api/storage/assets/<assetId>'`（见 [image.tsx:398-404](../src/shared/blocks/generator/image.tsx)），**没有独立 `assetId` 字段**。Phase 2 fork 时需要二选一：(a) 扩展 `generatedImages` 条目 shape 加 `assetId` 字段（推荐，更清晰）；(b) 在 CTA handler 里用 `extractAssetIdFromMediaUrl`（见 [video.tsx:1086](../src/shared/blocks/generator/video.tsx) 同名工具）从 url 解析
-- [ ] **Dance 页面**（[src/shared/blocks/generator/video.tsx:630](../src/shared/blocks/generator/video.tsx)）：在 `VideoGenerator` 组件内加 `useEffect`（**client only，避 SSR hydration mismatch**）：
+- [ ] **Dance 页面**（[src/shared/blocks/generator/video.tsx:630](../src/shared/blocks/generator/video.tsx)）：真实 state 形状为 `{ preview: string; url?: string; status: 'idle' | 'uploading' | 'uploaded' | 'error' }`。在 `VideoGenerator` 组件内加 `useEffect`（**client only，避 SSR hydration mismatch**）：
   ```ts
   useEffect(() => {
     try {
@@ -198,14 +245,16 @@ src/shared/services/baby-image/
       const data = JSON.parse(raw);
       localStorage.removeItem('babyboogey:baby-image-handoff'); // 读后立即删
       if (Date.now() > data.expiresAt) return;
-      // uploadedImage 是 { url, ... } 形态，payload 用 image_input: [uploadedImage.url]
-      // 此处 url 直接用 asset:// 引用，generate route 会自动签名
-      setUploadedImage({ url: data.assetRef, /* 其他字段按现有 shape 填充 */ });
+      // preview 必须是可渲染 URL（asset:// 会破图），url 用 asset:// 引用由 generate route 自动签名
+      setUploadedImage({
+        preview: data.previewUrl,
+        url: data.assetRef,
+        status: 'uploaded',
+      });
       setShowHandoffBanner(true);
     } catch {}
   }, []);
   ```
-  ⚠️ **开工前必读 `video.tsx:630` 的 `uploadedImage` 完整 shape**，上面 `{ url, ... }` 的其他字段（尺寸/类型/缩略图等）要按 image 上传组件的真实返回补全，否则 UI 可能显示异常
 - [ ] Dance 页顶部展示横幅："Using your AI-generated baby photo"，给用户一个明显的反馈点
 - [ ] 三语 banner 文案加入 i18n messages
 
@@ -234,7 +283,10 @@ src/shared/services/baby-image/
 | i18n 注册中心 | [src/config/locale/index.ts](../src/config/locale/index.ts) |
 | ToS | [content/pages/terms-of-service.mdx](../content/pages/terms-of-service.mdx) |
 | Middleware（CDN 缓存） | [src/middleware.ts](../src/middleware.ts) |
-| DB Schema | [src/config/db/schema.ts](../src/config/db/schema.ts) |
+| DB Schema — D1/SQLite（生产） | [src/config/db/schema.sqlite.ts](../src/config/db/schema.sqlite.ts) |
+| DB Schema — MySQL | [src/config/db/schema.mysql.ts](../src/config/db/schema.mysql.ts) |
+| DB Schema — Postgres | [src/config/db/schema.postgres.ts](../src/config/db/schema.postgres.ts) |
+| DB Schema — 动态 re-export 入口 | [src/config/db/schema.ts](../src/config/db/schema.ts) |
 
 ---
 
@@ -260,3 +312,5 @@ src/shared/services/baby-image/
 - **v2**：审查发现 3 个 Critical（无退款 / query 污染 / 签名过期），工期 → 5 天含 moderation。用户选"不做 moderation / ToS 兜底"，工期 → 4.5 天。
 - **v3（本文）**：二次审查发现退款机制实际已存在、签名 API 已存在，Phase 1a 从 1 天压缩到 0.25 天，Phase 3 从 1.5 天扩到 2 天。Phase 4 从 sessionStorage 改 localStorage + 30 分钟 TTL。商标风险词二次清理。加首次免费 1 张钩子。**总工期 5 天**（0.25+0.25+0.5+0.5+2+1+0.5）。
 - **v3.1（本次事实核对修正）**：三轮审查发现（a）DB schema 实际是三方言文件（sqlite/mysql/postgres）不是单一 `schema.ts`，Phase 1a 必须同时改三处；（b）`/ai-baby-dance-video-generator` 不是功能路由而是 SEO 落地页，Phase 4 跳转目标修正为 `/ai-video-generator`；（c）`VideoGenerator` 真实 state 名是 `uploadedImage: { url, ... }`（原文档 `setInputImageAssetRef` 是杜撰的）；（d）前端不需要主动重签——generate route 已自动 resolve `asset://` refs；（e）Phase 2 UI 砍选择器但保留 request body 的 `provider/model` 字段；（f）Phase 3 指定 R2 showcase 路径约定 + 确认项目无 ToS 日语版需新增。
+- **v3.2（代码事实二次核对修正）**：七条补丁。(1) Phase 1b 原只写"加 baby-image 分支"未点名改 generate route，实际 `route.ts:151-159` 对 image scene 白名单硬编码，非白名单 scene 会 `throw invalid scene`——补明确改造指引 + 40 credits 分支代码样例。(2) scene 从单一 `baby-image` 拆为 `baby-image-text` / `baby-image-image`，对齐现有 `text-to-*` / `image-to-*` 命名风格，保留运营侧分析维度。(3) Phase 4 handoff 漏 `previewUrl` 字段——`uploadedImage` 真实形状 `{ preview, url?, status }`，若 preview 拿 `asset://` 会破图；localStorage payload 补 `previewUrl` 字段（用现有 `image.url` 即可）。(4) 第 4 节"关键文件索引"DB Schema 单行替换为三方言路径 + re-export 入口，避免误导。(5) Phase 1b 明确 prompt 拼接逻辑落位 `services/baby-image/prompts.ts::buildBabyImagePrompt`，不内联进 route。(6) `BABY_STYLES` 由 `Record<styleId, Record<modelId, string>>` 扁平为 `Record<styleId, string>`（YAGNI，v1 仅启用单模型）。(7) Phase 4 mediaAssetId 来源二选一改为单一方案：用 `extractAssetIdFromMediaUrl`（从 `video.tsx:227` 提到 `shared/lib/asset-ref.ts`）解析，不扩展 `generatedImages` shape。
+- **v3.3（D1 并发原子化加固）**：确认生产使用 Cloudflare D1，事务在 Workers 会降级为无事务回调 + `.for('update')` 被 `withSqliteCompat` 置空，现有 `updateAITaskById` 退款分支在并发双击（notify + query）下存在双倍退款理论风险。Phase 1a 从"仅加观测字段"扩展为"加字段 + 退款 UPDATE 追加 `WHERE status = ACTIVE` 条件"，让 SQL 自身原子去重，不再依赖事务隔离。Phase 1a 工期 0.25d → 0.5d，总工期 5d → 5.25d。Phase 5 追加三条退款并发回归测试。
