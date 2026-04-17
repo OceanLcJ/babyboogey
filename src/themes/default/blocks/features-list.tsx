@@ -20,12 +20,12 @@ export function FeaturesList({
   return (
     <section
       className={cn(
-        'overflow-x-hidden py-16 md:py-24',
+        'overflow-x-clip py-16 md:py-24',
         section.className,
         className
       )}
     >
-      <div className="container overflow-x-hidden">
+      <div className="container overflow-x-clip">
         <ScrollAnimation>
           <div className="mx-auto max-w-2xl text-center pb-12">
             {section.label && (

@@ -2056,7 +2056,7 @@ export function VideoGenerator({
                           <Button
                             variant="destructive"
                             size="icon"
-                            className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                            className="absolute right-2 top-2 h-7 w-7 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
                             onClick={handleRemoveImage}
                           >
                             <IconX className="h-4 w-4" />
