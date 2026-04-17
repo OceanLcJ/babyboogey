@@ -30,7 +30,7 @@ export default async function AiVideoGeneratorPage({
         title: t.raw('page.title'),
         description: t.raw('page.description'),
         background_image: {
-          src: 'https://r2.babyboogey.com/assets/imgs/bg/tree.webp',
+          src: '/imgs/bg/ai-hero-pastel.webp',
           alt: 'hero background',
         },
       },

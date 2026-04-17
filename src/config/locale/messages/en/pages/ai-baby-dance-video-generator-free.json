@@ -33,7 +33,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-free-bg/1600/900",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "background"
         }
       },
@@ -84,7 +84,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "benefits": {
         "block": "features-list",
@@ -268,7 +268,7 @@
             "icon": "BookOpenText"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

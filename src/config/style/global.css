@@ -47,17 +47,29 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    /* 品牌氛围光斑：阳光黄 + 暖橙，对齐 unified 主题 */
+    /* 全站统一 pastel 背景 + 品牌氛围光斑（暖黄/暖橙）。
+       layer 顺序从上到下：光斑 → 半透明底色遮罩（柔化图）→ pastel 图。 */
     background-image:
       radial-gradient(circle at 10% 20%, #fff5cc 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, #ffe7b8 0%, transparent 40%);
+      radial-gradient(circle at 90% 80%, #ffe7b8 0%, transparent 40%),
+      linear-gradient(180deg, rgba(249, 250, 251, 0.55), rgba(249, 250, 251, 0.55)),
+      url('/imgs/bg/ai-hero-pastel.webp');
+    background-size: auto, auto, auto, cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
   }
   .dark body {
-    /* 暗色下更克制的黄/橙光，避免过亮 */
+    /* 暗色下：暖紫黑遮罩压制 pastel 图，仅保留暖调氛围。 */
     background-image:
       radial-gradient(circle at 10% 20%, rgba(252, 211, 77, 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(255, 152, 0, 0.06) 0%, transparent 40%);
+      radial-gradient(circle at 90% 80%, rgba(255, 152, 0, 0.06) 0%, transparent 40%),
+      linear-gradient(180deg, rgba(26, 21, 36, 0.82), rgba(26, 21, 36, 0.82)),
+      url('/imgs/bg/ai-hero-pastel.webp');
+    background-size: auto, auto, auto, cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 }
 

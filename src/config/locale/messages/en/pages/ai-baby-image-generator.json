@@ -32,7 +32,7 @@
           }
         ],
         "background_image": {
-          "src": "https://r2.babyboogey.com/assets/imgs/bg/tree.webp",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "AI Baby Image Generator background"
         }
       },
@@ -50,8 +50,8 @@
             "description": "Big eyes, cinematic lighting, and feature-film polish — the style that made 3D animated characters a global favorite.",
             "icon": "Film",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixar-3d-after.webp",
-              "alt": "3D animation style AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixar-3d-animation-style.webp",
+              "alt": "Smiling baby boy reimagined as a Pixar-style 3D animated character by the AI baby photo generator"
             }
           },
           {
@@ -59,8 +59,8 @@
             "description": "Soft watercolor washes and whimsical storybook composition — perfect for nursery prints and keepsakes.",
             "icon": "Brush",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ghibli-after.webp",
-              "alt": "Hand-drawn fantasy AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-hand-drawn-fantasy-style.webp",
+              "alt": "Baby turned into a hand-drawn fantasy watercolor illustration among meadow flowers by the AI baby photo generator"
             }
           },
           {
@@ -68,8 +68,8 @@
             "description": "Bold line art and vibrant cel shading for that instantly recognizable anime protagonist feel.",
             "icon": "Stars",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/anime-after.webp",
-              "alt": "Classic anime AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-classic-anime-style.webp",
+              "alt": "Baby transformed into a classic Japanese anime character with sparkling big eyes by the AI baby generator"
             }
           },
           {
@@ -77,8 +77,8 @@
             "description": "Stop-motion claymation with visible sculpt marks — handmade warmth your relatives will adore.",
             "icon": "Shapes",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/claymation-after.webp",
-              "alt": "Clay sculpt AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-claymation-sculpt-style.webp",
+              "alt": "Baby recreated as a stop-motion claymation sculpted character in a miniature nursery diorama"
             }
           },
           {
@@ -86,8 +86,8 @@
             "description": "Super-deformed chibi proportions, blush cheeks, sticker-ready composition. Irresistibly shareable.",
             "icon": "Heart",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/chibi-after.webp",
-              "alt": "Chibi cute AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-chibi-kawaii-style.webp",
+              "alt": "Baby styled as a cute chibi kawaii sticker character on a pastel pink background by the AI baby photo generator"
             }
           },
           {
@@ -95,8 +95,8 @@
             "description": "Delicate brush strokes on textured paper — gentle enough for baby books and invitation cards.",
             "icon": "Palette",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/watercolor-after.webp",
-              "alt": "Watercolor AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-watercolor-storybook-style.webp",
+              "alt": "Baby rendered as a soft watercolor storybook illustration on textured paper by the AI baby photo generator"
             }
           },
           {
@@ -104,8 +104,8 @@
             "description": "Fabric texture, stitched seams, button eyes — the plush toy version of your little one.",
             "icon": "Rabbit",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/plush-after.webp",
-              "alt": "Plush doll AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-plush-doll-style.webp",
+              "alt": "Baby reimagined as a handmade plush doll with button eyes and stitched seams by the AI baby generator"
             }
           },
           {
@@ -113,12 +113,12 @@
             "description": "Retro 16-bit pixel art for gamer parents. A nostalgic nod to SNES-era charm.",
             "icon": "Gamepad2",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixel-art-after.webp",
-              "alt": "Pixel art AI baby image"
+              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixel-art-retro-style.webp",
+              "alt": "Baby recreated in retro 16-bit pixel art style under a starry night sky by the AI baby photo generator"
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "usage": {
         "block": "features-step",
@@ -188,7 +188,7 @@
             "icon": "CreditCard"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

@@ -27,13 +27,13 @@
           }
         ],
         "image": {
-          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "Seedance 2.0 Online Generator - BabyBoogey Preview",
           "width": 1200,
           "height": 800
         },
         "background_image": {
-          "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/blog/baby-dance-hero-modern-ai_16x9_compressed.webp",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "background"
         }
       },
@@ -84,7 +84,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "benefits": {
         "block": "features-list",
@@ -208,7 +208,7 @@
             "icon": "PlayCircle"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

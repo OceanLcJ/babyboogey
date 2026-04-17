@@ -36,7 +36,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-bg/1600/900",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "Colorful background with dancing baby silhouettes"
         }
       },
@@ -87,7 +87,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "features": {
         "block": "features-accordion",
@@ -193,7 +193,7 @@
             "icon": "Zap"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

@@ -34,7 +34,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/ai-baby-dance-video-bg/1600/900",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "background"
         }
       },
@@ -85,7 +85,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "benefits": {
         "block": "features-list",
@@ -329,7 +329,7 @@
             "icon": "PlayCircle"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

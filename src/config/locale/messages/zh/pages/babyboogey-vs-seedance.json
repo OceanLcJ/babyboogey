@@ -31,7 +31,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/babyboogey-plus-seedance-bg/1600/900",
+          "src": "/imgs/bg/ai-hero-pastel.webp",
           "alt": "背景图"
         }
       },
@@ -73,7 +73,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "features": {
         "block": "features-accordion",
@@ -184,7 +184,7 @@
             "icon": "BookOpenText"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }
