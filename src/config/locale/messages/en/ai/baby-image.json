@@ -8,8 +8,18 @@
     "description": "Upload a reference photo or describe your dream baby and pick a style — we'll handle the rest."
   },
   "generator": {
-    "title": "Baby Image Generator",
+    "title": "Baby Image Studio",
     "description": "Pick a style, optionally upload a reference photo, and generate in seconds.",
+    "session_ready": "fresh session · ready when you are",
+    "session_count": "{count} messages this session",
+    "credits_unit": "/ image",
+    "empty": {
+      "title": "Imagine your <em>little star</em>.",
+      "subtitle": "Pick a style, attach a photo if you have one, then whisper the scene you'd love to see.",
+      "try_label": "Spark an idea"
+    },
+    "generate_cta": "Make Baby Magic",
+    "footer_tag": "First try free",
     "make_them_dance": "Make them dance →",
     "form": {
       "style_label": "Pick a style",
@@ -62,6 +72,7 @@
     "credits_cost": "Cost {credits} credits",
     "credits_remaining": "Remaining {credits} credits",
     "buy_credits": "Buy Credits",
+    "footer_hint": "⏎ to generate · ⇧⏎ for new line · Each image costs {credits} credits",
     "progress": "Progress",
     "generated_images": "Image Preview",
     "ready_to_generate": "Ready to generate",

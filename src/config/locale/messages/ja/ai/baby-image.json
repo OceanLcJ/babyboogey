@@ -8,8 +8,18 @@
     "description": "参考写真をアップロードするか、説明を入力してスタイルを選ぶだけ。"
   },
   "generator": {
-    "title": "ベビー画像ジェネレーター",
+    "title": "ベビー画像スタジオ",
     "description": "スタイルを選んで、任意で参考写真をアップロード。数秒で生成します。",
+    "session_ready": "新しいセッション · 準備完了",
+    "session_count": "このセッションで {count} 件",
+    "credits_unit": "/ 枚",
+    "empty": {
+      "title": "あなたの<em>小さなスター</em>を想像して。",
+      "subtitle": "スタイルを選び、参考写真があれば添付、見たいシーンを教えてください。",
+      "try_label": "アイデアを試す"
+    },
+    "generate_cta": "ベビーマジックを起こす",
+    "footer_tag": "初回無料",
     "make_them_dance": "踊らせる →",
     "form": {
       "style_label": "スタイルを選ぶ",
@@ -62,6 +72,7 @@
     "credits_cost": "{credits} クレジット",
     "credits_remaining": "残り {credits} クレジット",
     "buy_credits": "クレジットを購入",
+    "footer_hint": "⏎ で生成 · ⇧⏎ で改行 · 1 枚 {credits} クレジット",
     "progress": "進捗",
     "generated_images": "生成結果",
     "ready_to_generate": "準備完了",
