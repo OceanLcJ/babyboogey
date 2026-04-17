@@ -8,15 +8,8 @@
   --bb-mint:     oklch(0.83 0.11 160);
   --bb-sky:      oklch(0.78 0.12 260);
 
-  --bb-aurora: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--primary) 18%,
-    var(--bb-peach) 40%,
-    var(--bb-lavender) 65%,
-    var(--bb-sky) 85%,
-    transparent 100%
-  );
+  /* Solid brand bar replacing the old multi-stop aurora */
+  --bb-aurora: var(--primary);
 
   --bb-card-shadow:
     0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent) inset,
@@ -31,11 +24,6 @@
 }
 
 /* ══════════ Keyframes ══════════ */
-@keyframes bb-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-@keyframes bb-spin { to { transform: rotate(360deg); } }
 @keyframes bb-twinkle {
   0%, 100% { opacity: 0.55; }
   50%      { opacity: 1; }
@@ -60,14 +48,7 @@
 /* ══════════ Chat card ══════════ */
 .bb-chat-card {
   position: relative;
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--bb-lavender) 8%, transparent),
-      transparent 40%),
-    linear-gradient(0deg,
-      color-mix(in srgb, var(--primary) 6%, transparent),
-      transparent 55%),
-    var(--card);
+  background: var(--card);
   border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
   border-radius: var(--radius);
   overflow: hidden;
@@ -76,13 +57,13 @@
   height: clamp(600px, 78vh, 740px);
   box-shadow: var(--bb-card-shadow);
 }
-/* Top aurora strip */
+/* Top brand bar — flat primary */
 .bb-chat-card::before {
   content: '';
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: var(--bb-aurora);
+  background: var(--primary);
   opacity: 0.9;
   z-index: 2;
 }
@@ -95,11 +76,7 @@
   align-items: center;
   padding: 18px 22px;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 8%, transparent) 0%,
-    transparent 100%
-  );
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
 }
 .bb-chat-head-title {
   font-family: var(--font-display);
@@ -155,11 +132,7 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 9999px;
-  background:
-    radial-gradient(circle at 32% 28%,
-      color-mix(in srgb, var(--primary) 40%, white) 0%,
-      var(--primary) 55%,
-      color-mix(in srgb, var(--primary) 80%, black) 100%);
+  background: var(--primary);
   color: var(--primary-foreground);
   display: inline-flex;
   align-items: center;
@@ -184,11 +157,7 @@
   gap: 0.5rem;
   padding: 0.42rem 0.75rem 0.42rem 0.5rem;
   border-radius: 9999px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 22%, transparent),
-    color-mix(in srgb, var(--primary) 8%, transparent)
-  );
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
   color: var(--foreground);
   font-size: 0.8rem;
   font-weight: 900;
@@ -199,8 +168,9 @@
   width: 14px;
   height: 14px;
   border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, #fff, var(--primary) 70%);
+  background: var(--primary);
   box-shadow: 0 0 8px color-mix(in srgb, var(--primary) 65%, transparent);
+  animation: bb-twinkle 3.4s ease-in-out infinite;
 }
 .bb-credits-pill-unit {
   color: var(--muted-foreground);
@@ -216,11 +186,24 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius) var(--radius) 0.5rem var(--radius);
-  padding: 0.9rem 1.1rem;
+  padding: 0.9rem 3.4rem 0.9rem 1.1rem;
   color: var(--foreground);
   font-size: 0.95rem;
   line-height: 1.55;
   box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.bb-user-time {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.85rem;
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--muted-foreground) 85%, transparent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  background: color-mix(in srgb, var(--bb-lavender) 14%, transparent);
+  border-radius: 9999px;
 }
 .bb-user-bubble-meta {
   margin-top: 0.65rem;
@@ -240,60 +223,6 @@
   background-size: cover;
   background-position: center;
   border: 1px solid var(--border);
-}
-
-/* ══════════ Empty state — moon + baby ══════════ */
-.bb-hero-scene {
-  position: relative;
-  width: 168px;
-  height: 168px;
-  margin: 0 auto 1.15rem;
-}
-.bb-hero-orbit {
-  position: absolute;
-  inset: -4px;
-  border-radius: 9999px;
-  border: 1.5px dashed color-mix(in srgb, var(--bb-lavender) 45%, transparent);
-  animation: bb-spin 14s linear infinite;
-}
-.bb-hero-orbit::before,
-.bb-hero-orbit::after {
-  content: '✦';
-  position: absolute;
-  font-size: 14px;
-  line-height: 1;
-  color: var(--bb-lavender);
-  text-shadow: 0 0 10px color-mix(in srgb, var(--bb-lavender) 70%, transparent);
-}
-.bb-hero-orbit::before { top: -6px; left: 50%; transform: translateX(-50%); }
-.bb-hero-orbit::after  {
-  bottom: -2px; left: 18%;
-  color: var(--bb-peach);
-  font-size: 12px;
-  text-shadow: 0 0 10px color-mix(in srgb, var(--bb-peach) 70%, transparent);
-}
-.bb-hero-moon {
-  position: absolute;
-  inset: 18px;
-  border-radius: 9999px;
-  background:
-    radial-gradient(circle at 34% 28%,
-      color-mix(in srgb, var(--primary) 35%, white) 0%,
-      var(--primary) 55%,
-      color-mix(in srgb, var(--primary) 80%, black) 100%);
-  box-shadow:
-    0 0 0 8px color-mix(in srgb, var(--primary) 14%, transparent),
-    0 0 0 18px color-mix(in srgb, var(--primary) 6%, transparent),
-    0 24px 60px -16px color-mix(in srgb, var(--primary) 55%, transparent);
-  animation: bb-float 5s ease-in-out infinite;
-}
-.bb-hero-face {
-  position: absolute;
-  top: 58px;
-  left: 58px;
-  width: 72px;
-  height: 72px;
-  pointer-events: none;
 }
 
 /* Display heading */
@@ -338,10 +267,7 @@
   content: '';
   width: 24px;
   height: 1px;
-  background: linear-gradient(90deg,
-    transparent,
-    color-mix(in srgb, var(--bb-lavender) 45%, transparent),
-    transparent);
+  background: color-mix(in srgb, var(--bb-lavender) 40%, transparent);
 }
 
 /* Idea cards grid (2x2) */
@@ -388,9 +314,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg,
-    color-mix(in srgb, var(--bb-lavender) 22%, transparent),
-    color-mix(in srgb, var(--bb-peach) 18%, transparent));
+  background: color-mix(in srgb, var(--bb-lavender) 18%, var(--card));
   border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
   font-size: 1.35rem;
 }
@@ -404,88 +328,238 @@
   letter-spacing: 0.01em;
 }
 
-/* ══════════ Result polaroid ══════════ */
+/* ══════════ Assistant header ══════════ */
+.bb-assist-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+.bb-assist-head-text { min-width: 0; }
+.bb-assist-title {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--foreground);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+.bb-assist-title em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--primary) 55%, var(--foreground));
+  margin-left: 0.18em;
+}
+.bb-assist-error {
+  color: var(--destructive);
+}
+.bb-meta-pills {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+.bb-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 6px;
+  background: color-mix(in srgb, var(--bb-lavender) 8%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+  letter-spacing: 0.02em;
+}
+.bb-meta-pill-sw {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 15%, transparent);
+}
+
+/* Mini visual aspect-ratio indicator — used in meta pills, quick chips, composer ctl */
+.bb-ar-icon {
+  display: inline-block;
+  background: color-mix(in srgb, var(--foreground) 75%, transparent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.bb-ar-11   { width: 12px; height: 12px; }
+.bb-ar-34   { width: 9px;  height: 12px; }
+.bb-ar-43   { width: 12px; height: 9px;  }
+.bb-ar-916  { width: 7px;  height: 12px; }
+.bb-ar-169  { width: 14px; height: 8px;  }
+
+/* ══════════ Result polaroid — v2 minimalist square ══════════ */
+.bb-result-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+.bb-result-grid.is-single { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 640px) {
+  .bb-result-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 .bb-result {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1 / 1;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 1rem;
-  padding: 0.6rem;
-  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--foreground) 6%, transparent);
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    0 10px 22px -16px color-mix(in srgb, var(--bb-lavender) 60%, transparent);
   transition:
     transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 0.3s ease;
 }
 .bb-result:hover {
-  transform: translateY(-4px) rotate(-0.3deg);
+  transform: translateY(-3px) rotate(-0.3deg);
   box-shadow:
-    0 4px 12px -2px color-mix(in srgb, var(--foreground) 12%, transparent),
-    0 20px 40px -14px color-mix(in srgb, var(--primary) 22%, transparent);
+    0 4px 10px -2px color-mix(in srgb, var(--foreground) 10%, transparent),
+    0 24px 44px -18px color-mix(in srgb, var(--primary) 32%, transparent);
 }
 .bb-result-photo {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
-.bb-result-photo img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
-.bb-result-dl {
+/* Photographic texture overlays */
+.bb-result-grain {
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.1  0 0 0 0 0.1  0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+/* Soft edge darkening — inset box-shadow instead of a radial gradient */
+.bb-result-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 60px 0 color-mix(in srgb, var(--foreground) 40%, transparent);
+}
+/* Italic serif roman numerals — echoes Fraunces titles */
+.bb-result-no {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: color-mix(in srgb, #fff 95%, var(--primary));
+  letter-spacing: -0.02em;
+  text-shadow:
+    0 1px 0 color-mix(in srgb, var(--foreground) 40%, transparent),
+    0 0 8px color-mix(in srgb, var(--foreground) 45%, transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Overlay action buttons — always visible for discoverability on any device,
+ * with a subtle opacity boost on hover/focus for polish. */
+.bb-result-overlay {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 32px;
-  height: 32px;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--card) 94%, transparent);
-  color: var(--foreground);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--foreground) 12%, transparent);
-  border: 1px solid var(--border);
-}
-/* keep the download button always visible on touch where hover is unreliable */
-@media (hover: none) {
-  .bb-result-dl { opacity: 1; transform: none; }
-}
-.bb-result:hover .bb-result-dl {
-  opacity: 1;
-  transform: translateY(0);
-}
-.bb-result-caption {
-  margin-top: 0.55rem;
-  padding: 0 0.3rem 0.15rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--muted-foreground);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  letter-spacing: 0.03em;
+  gap: 6px;
+  z-index: 3;
+  opacity: 0.88;
+  transition: opacity 0.2s;
 }
-.bb-result-stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--foreground);
+.bb-result:hover .bb-result-overlay,
+.bb-result:focus-within .bb-result-overlay {
+  opacity: 1;
 }
-.bb-result-stamp-num {
+.bb-ov-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  border: 1.5px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--primary) 22%, transparent);
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -6px 10px -6px rgba(0,0,0,0.12) inset,
+    0 4px 10px -2px color-mix(in srgb, var(--foreground) 22%, transparent);
+  transition:
+    transform 0.18s cubic-bezier(0.3, 0.9, 0.3, 1.2),
+    box-shadow 0.22s ease,
+    color 0.18s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+.bb-ov-btn:hover:not(:disabled) {
+  transform: scale(1.08) translateY(-1px);
   color: var(--foreground);
-  font-size: 0.65rem;
-  font-weight: 800;
+  border-color: color-mix(in srgb, var(--primary) 70%, var(--foreground));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -6px 10px -6px rgba(0,0,0,0.14) inset,
+    0 10px 22px -6px color-mix(in srgb, var(--foreground) 35%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--primary) 32%, transparent);
+}
+.bb-ov-btn:active:not(:disabled) {
+  transform: scale(0.94);
+  transition-duration: 0.1s;
+}
+.bb-ov-btn:focus-visible {
+  outline: none;
+  border-color: color-mix(in srgb, var(--primary) 85%, var(--foreground));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -6px 10px -6px rgba(0,0,0,0.14) inset,
+    0 4px 10px -2px color-mix(in srgb, var(--foreground) 22%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+.bb-ov-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.bb-ov-btn svg { width: 16px; height: 16px; display: block; }
+
+.bb-ov-primary svg { stroke-width: 1.9; }
+.bb-ov-primary {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 -6px 10px -6px rgba(0,0,0,0.15) inset,
+    0 6px 14px -4px color-mix(in srgb, var(--foreground) 28%, transparent);
+}
+/* Download icon: arrow + tray drop 1.2px on hover */
+.bb-ov-primary svg path {
+  transition: transform 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.bb-ov-primary:hover:not(:disabled) svg path { transform: translateY(1.2px); }
+
+/* Dance overlay — emoji dancer lifts + sways */
+.bb-ov-dancer {
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.bb-ov-btn:hover:not(:disabled) .bb-ov-dancer {
+  transform: rotate(-10deg) scale(1.15);
 }
 
 /* ══════════ Dance CTA (kept, used in result card) ══════════ */
@@ -498,12 +572,7 @@
   gap: 0.5rem;
   height: 2.6rem;
   padding: 0 1rem;
-  background: linear-gradient(
-    120deg,
-    var(--primary) 0%,
-    color-mix(in srgb, var(--primary) 75%, white) 45%,
-    var(--accent) 100%
-  );
+  background: var(--primary);
   color: var(--primary-foreground);
   border: 1px solid color-mix(in srgb, var(--primary) 75%, black);
   border-radius: 9999px;
@@ -513,55 +582,43 @@
     0 8px 22px -8px color-mix(in srgb, var(--primary) 55%, transparent),
     0 2px 6px -2px color-mix(in srgb, var(--primary) 30%, transparent);
   transition: transform 0.18s ease, box-shadow 0.3s ease, filter 0.25s ease;
-  overflow: hidden;
-  isolation: isolate;
   cursor: pointer;
 }
-.bb-dance-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    110deg,
-    transparent 0%, transparent 38%,
-    rgba(255,255,255,0.75) 50%,
-    transparent 62%, transparent 100%);
-  transform: translateX(-120%);
-  transition: transform 0.7s cubic-bezier(0.4,0.2,0.2,1);
-  pointer-events: none;
-  z-index: 0;
-}
-.bb-dance-btn > * { position: relative; z-index: 1; }
-.bb-dance-btn:hover:not(:disabled)::before { transform: translateX(120%); }
 .bb-dance-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow:
     0 14px 32px -8px color-mix(in srgb, var(--primary) 55%, transparent),
     0 4px 10px -2px color-mix(in srgb, var(--accent) 40%, transparent);
-  filter: saturate(1.1);
+  filter: saturate(1.08) brightness(1.02);
 }
 .bb-dance-btn:active:not(:disabled) { transform: translateY(0); }
 .bb-dance-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 .bb-dance-btn .bb-dancer {
   display: inline-block;
-  transition: transform 0.4s cubic-bezier(0.4,0.2,0.2,1);
+  transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 .bb-dance-btn:hover:not(:disabled) .bb-dancer { transform: rotate(-10deg) scale(1.12); }
 .bb-dance-btn .bb-arrow { transition: transform 0.25s; }
 .bb-dance-btn:hover:not(:disabled) .bb-arrow { transform: translateX(3px); }
 
-/* ══════════ Follow-up chips ══════════ */
+/* ══════════ Follow-up (quick) chips ══════════ */
+.bb-quick-chips {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 .bb-followup {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.45rem 0.9rem;
+  gap: 0.4rem;
+  padding: 0.42rem 0.85rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 800;
   color: var(--foreground);
   transition: transform 0.18s ease, border-color 0.2s, background 0.2s;
   cursor: pointer;
@@ -572,75 +629,21 @@
   transform: translateY(-1px);
 }
 .bb-followup:active { transform: translateY(0); }
+.bb-followup .bb-followup-sw {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+.bb-followup .bb-ar-icon { background: var(--foreground); }
 
 /* ══════════ Composer ══════════ */
 .bb-composer-wrap {
   padding: 0.9rem 1rem 1rem;
   border-top: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in srgb, var(--bb-lavender) 4%, transparent) 70%,
-    color-mix(in srgb, var(--primary) 4%, transparent)
-  );
-}
-
-/* Style rail (horizontal film) */
-.bb-style-rail {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 4px 4px 12px;
-  margin: 0 -4px 6px;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--bb-lavender) 35%, transparent) transparent;
-}
-.bb-style-rail::-webkit-scrollbar { height: 6px; }
-.bb-style-rail::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--bb-lavender) 35%, transparent);
-  border-radius: 99px;
-}
-.bb-style-pill {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 5px 14px 5px 5px;
-  border-radius: 9999px;
-  background: var(--card);
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
-  color: var(--foreground);
-}
-.bb-style-pill:hover {
-  border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-  background: color-mix(in srgb, var(--primary) 10%, var(--card));
-}
-.bb-style-pill.is-active {
-  border-color: color-mix(in srgb, var(--primary) 90%, transparent);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 24%, transparent),
-    color-mix(in srgb, var(--primary) 6%, transparent)
-  );
-  box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--primary) 85%, transparent);
-}
-.bb-style-pill-sw {
-  width: 30px;
-  height: 30px;
-  border-radius: 9999px;
-  background-size: cover;
-  background-position: center;
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--foreground) 12%, transparent);
-  flex: 0 0 auto;
-}
-.bb-style-pill-label {
-  font-weight: 800;
-  font-size: 0.78rem;
-  letter-spacing: 0.005em;
+  background: color-mix(in srgb, var(--primary) 3%, transparent);
 }
 
 .bb-composer {
@@ -679,13 +682,39 @@
   font-style: italic;
 }
 
-/* ══════════ Rail chip (composer toolbar) ══════════ */
+/* ══════════ Composer bar layout ══════════ */
+.bb-composer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;           /* allow right cluster to drop below left on narrow screens */
+  margin-top: 0.35rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed color-mix(in srgb, var(--border) 55%, transparent);
+}
+.bb-bar-left {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.bb-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;         /* stays right-aligned after wrap */
+}
+
+/* Rail chip — now the primary composer control style */
 .bb-rail-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  height: 2rem;
-  padding: 0 0.75rem;
+  gap: 0.45rem;
+  height: 2.15rem;
+  padding: 0 0.8rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 9999px;
@@ -709,10 +738,38 @@
   flex-shrink: 0;
 }
 .bb-rail-chip-icon {
-  width: 2rem;
+  width: 2.15rem;
   padding: 0;
   justify-content: center;
 }
+.bb-rail-chip-caret {
+  opacity: 0.55;
+  font-size: 0.72rem;
+  margin-left: 0.1rem;
+}
+
+/* Inline character counter inside composer bar */
+.bb-char-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted-foreground);
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--muted) 70%, transparent);
+}
+.bb-char-count b {
+  color: var(--foreground);
+  font-weight: 900;
+}
+.bb-char-count span {
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+.bb-char-count.is-over b { color: var(--destructive); }
 
 /* ══════════ Send button — "Make Baby Magic" pill ══════════ */
 .bb-send-btn {
@@ -727,15 +784,10 @@
   font-size: 0.84rem;
   letter-spacing: 0.005em;
   color: var(--primary-foreground);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--primary) 40%, white) 0%,
-    var(--primary) 55%,
-    color-mix(in srgb, var(--primary) 85%, black) 100%);
+  background: var(--primary);
   border: 1px solid color-mix(in srgb, var(--primary) 75%, black);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.55) inset,
-    0 -10px 16px -8px color-mix(in srgb, var(--primary) 50%, black) inset,
+    0 1px 0 rgba(255, 255, 255, 0.45) inset,
     0 14px 26px -10px color-mix(in srgb, var(--primary) 55%, transparent);
   transition: filter 0.2s, transform 0.15s, box-shadow 0.2s;
   cursor: pointer;
@@ -757,37 +809,39 @@
   color: color-mix(in srgb, var(--primary-foreground) 85%, transparent);
 }
 
-/* ══════════ Attach preview ══════════ */
+/* ══════════ Attach chip — shows reference photo in composer ══════════ */
 .bb-attach-preview {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 0.7rem 0.4rem 0.4rem;
-  background: var(--card);
-  border: 1px solid var(--border);
+  gap: 0.5rem;
+  padding: 0.35rem;
+  margin: 0.25rem 0 0.6rem;
+  background: color-mix(in srgb, var(--bb-lavender) 12%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--bb-lavender) 45%, var(--border));
   border-radius: 9999px;
 }
 .bb-attach-preview-thumb {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 9999px;
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
-  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px var(--border);
 }
 .bb-attach-preview-name {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.74rem;
+  font-weight: 800;
   color: var(--foreground);
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 0.15rem;
 }
 .bb-attach-preview-x {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
@@ -796,6 +850,7 @@
   color: var(--muted-foreground);
   cursor: pointer;
   border: 0;
+  margin-left: 2px;
 }
 .bb-attach-preview-x:hover {
   background: var(--border);

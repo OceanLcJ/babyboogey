@@ -10,7 +10,6 @@ import {
   useState,
 } from 'react';
 import {
-  ArrowRight,
   Check,
   ChevronDown,
   Download,
@@ -218,6 +217,26 @@ function extractImageUrls(result: UnsafeAny): string[] {
 
 function makeId(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function aspectRatioIconClass(ratio: string): string {
+  return `bb-ar-${ratio.replace(':', '')}`;
+}
+
+const ROMAN_LOWER = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
+function toRomanLower(n: number): string {
+  return ROMAN_LOWER[n - 1] ?? String(n);
+}
+
+function formatRelativeTime(ts: number, now: number = Date.now()): string {
+  const diffSec = Math.max(0, Math.floor((now - ts) / 1000));
+  if (diffSec < 60) return 'now';
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}m`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h`;
+  const diffDay = Math.floor(diffHr / 24);
+  return `${diffDay}d`;
 }
 
 async function uploadReferenceImage(file: File): Promise<{
@@ -840,56 +859,29 @@ export function BabyImageGenerator({
 
           {/* ============== Composer ============== */}
           <div className="bb-composer-wrap">
-            {/* Horizontal style rail — primary visual picker */}
-            <div className="bb-style-rail" role="radiogroup" aria-label={t('form.style_label')}>
-              {BABY_STYLE_IDS.map((id) => (
-                <button
-                  key={id}
-                  type="button"
-                  role="radio"
-                  aria-checked={id === selectedStyle}
-                  className={cn(
-                    'bb-style-pill',
-                    id === selectedStyle && 'is-active'
-                  )}
-                  onClick={() => setSelectedStyle(id)}
-                >
-                  <span
-                    className="bb-style-pill-sw"
-                    style={{ backgroundImage: `url(${STYLE_THUMB_URL(id)})` }}
-                  />
-                  <span className="bb-style-pill-label">
-                    {t(`styles.${id}.label`)}
-                  </span>
-                </button>
-              ))}
-            </div>
-
             {attachedImage && (
-              <div className="mb-2.5 flex items-center">
-                <div className="bb-attach-preview">
-                  {attachedImage.uploading ? (
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
-                    </div>
-                  ) : (
-                    <div
-                      className="bb-attach-preview-thumb"
-                      style={{ backgroundImage: `url(${attachedImage.previewUrl})` }}
-                    />
-                  )}
-                  <span className="bb-attach-preview-name">
-                    {attachedImage.error ? t('form.some_images_failed_to_upload') : attachedImage.fileName}
-                  </span>
-                  <button
-                    type="button"
-                    className="bb-attach-preview-x"
-                    aria-label="Remove attachment"
-                    onClick={handleRemoveAttachment}
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </div>
+              <div className="bb-attach-preview">
+                {attachedImage.uploading ? (
+                  <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-muted">
+                    <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                  </div>
+                ) : (
+                  <div
+                    className="bb-attach-preview-thumb"
+                    style={{ backgroundImage: `url(${attachedImage.previewUrl})` }}
+                  />
+                )}
+                <span className="bb-attach-preview-name">
+                  {attachedImage.error ? t('form.some_images_failed_to_upload') : attachedImage.fileName}
+                </span>
+                <button
+                  type="button"
+                  className="bb-attach-preview-x"
+                  aria-label="Remove attachment"
+                  onClick={handleRemoveAttachment}
+                >
+                  <X className="h-3 w-3" />
+                </button>
               </div>
             )}
 
@@ -902,17 +894,18 @@ export function BabyImageGenerator({
                 placeholder={t('form.prompt_placeholder')}
                 maxLength={MAX_PROMPT_LENGTH + 200}
               />
-              <div className="mt-1 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5">
+              <div className="bb-composer-bar">
+                <div className="bb-bar-left">
                   {/* attach */}
                   <button
                     type="button"
-                    className="bb-rail-chip bb-rail-chip-icon"
+                    className="bb-rail-chip"
                     onClick={handleAttachClick}
                     aria-label={t('form.reference_image')}
                     title={t('form.reference_image')}
                   >
                     <Paperclip className="h-3.5 w-3.5" />
+                    <span>{t('form.reference_image')}</span>
                   </button>
                   <input
                     ref={fileInputRef}
@@ -936,7 +929,7 @@ export function BabyImageGenerator({
                           }}
                         />
                         <span>{t(`styles.${selectedStyle}.label`)}</span>
-                        <ChevronDown className="h-3 w-3 opacity-60" />
+                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -988,18 +981,9 @@ export function BabyImageGenerator({
                   >
                     <DropdownMenuTrigger asChild>
                       <button type="button" className="bb-rail-chip">
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <rect x="4" y="4" width="16" height="16" rx="2" />
-                        </svg>
+                        <span className={cn('bb-ar-icon', aspectRatioIconClass(aspectRatio))} aria-hidden="true" />
                         <span>{aspectRatio}</span>
-                        <ChevronDown className="h-3 w-3 opacity-60" />
+                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -1019,7 +1003,10 @@ export function BabyImageGenerator({
                             setAspectPopoverOpen(false);
                           }}
                         >
-                          <span>{ratio}</span>
+                          <span className="inline-flex items-center gap-2">
+                            <span className={cn('bb-ar-icon', aspectRatioIconClass(ratio))} aria-hidden="true" />
+                            <span>{ratio}</span>
+                          </span>
                           {ratio === aspectRatio && (
                             <Check className="h-3.5 w-3.5 text-primary" />
                           )}
@@ -1029,10 +1016,11 @@ export function BabyImageGenerator({
                   </DropdownMenu>
                 </div>
 
-                {/* send */}
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[11px] font-semibold text-muted-foreground">
-                    {t('credits_cost', { credits: BABY_IMAGE_COST_CREDITS })}
+                {/* right: inline char count + send */}
+                <div className="bb-bar-right">
+                  <span className={cn('bb-char-count', isPromptTooLong && 'is-over')}>
+                    <b>{promptLength}</b>
+                    <span>/{MAX_PROMPT_LENGTH}</span>
                   </span>
                   {!isMounted || isCheckSign ? (
                     <button
@@ -1076,10 +1064,9 @@ export function BabyImageGenerator({
               </div>
             </div>
 
-            {/* inline char count inside composer footer */}
             <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
               <span>
-                {promptLength} / {MAX_PROMPT_LENGTH}
+                {t('credits_cost', { credits: BABY_IMAGE_COST_CREDITS })}
                 {isPromptTooLong && (
                   <span className="ml-2 text-destructive">
                     {t('form.prompt_too_long')}
@@ -1120,26 +1107,7 @@ function EmptyState({
 }) {
   const t = useTranslations('ai.baby-image.generator');
   return (
-    <div className="flex h-full flex-col items-center justify-center">
-      <div className="bb-hero-scene" aria-hidden="true">
-        <div className="bb-hero-orbit" />
-        <div className="bb-hero-moon" />
-        <svg className="bb-hero-face" viewBox="0 0 72 72">
-          <g
-            stroke="#3b2a0d"
-            strokeWidth="1.8"
-            fill="none"
-            strokeLinecap="round"
-          >
-            <path d="M24 36 q3 -4 6 0" />
-            <path d="M42 36 q3 -4 6 0" />
-            <path d="M30 46 q6 4 12 0" />
-          </g>
-          <circle cx="24" cy="44" r="3" fill="#fdb4a0" opacity="0.75" />
-          <circle cx="48" cy="44" r="3" fill="#fdb4a0" opacity="0.75" />
-        </svg>
-      </div>
-
+    <div className="flex h-full flex-col items-center justify-start pt-6">
       <h3 className="bb-hero-title">
         {t.rich('empty.title', { em: (chunks) => <em>{chunks}</em> })}
       </h3>
@@ -1174,9 +1142,18 @@ function EmptyState({
 
 function UserBubble({ msg }: { msg: UserChatMessage }) {
   const t = useTranslations('ai.baby-image.generator');
+  const [relTime, setRelTime] = useState(() => formatRelativeTime(msg.timestamp));
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setRelTime(formatRelativeTime(msg.timestamp));
+    }, 30000);
+    return () => window.clearInterval(id);
+  }, [msg.timestamp]);
+
   return (
     <div className="flex justify-end">
       <div className="bb-user-bubble">
+        <span className="bb-user-time" aria-hidden="true">{relTime}</span>
         {msg.prompt || (
           <span className="italic text-muted-foreground">
             (reference photo only)
@@ -1234,45 +1211,83 @@ function AssistantCard({
       ? Math.max(1, Math.round((msg.endTime - msg.startTime) / 1000))
       : null;
 
-  // status label
   let statusLabel: string | null = null;
   if (msg.status === AITaskStatus.PENDING) statusLabel = t('status.pending');
   else if (msg.status === AITaskStatus.PROCESSING)
     statusLabel = t('status.processing');
   else if (msg.status === AITaskStatus.FAILED) statusLabel = t('status.failed');
 
+  const previewStyleId = msg.images[0]?.styleId ?? userMsg?.styleId;
+  const previewAspect = userMsg?.aspectRatio;
+
   return (
     <div>
-      <div className="mb-4 flex items-center gap-2.5">
-        <span className="bb-brand-dot bb-brand-dot-sm">
+      <div className="bb-assist-head">
+        <span className="bb-brand-dot bb-brand-dot-sm" aria-hidden="true">
           <Sparkles className="h-3.5 w-3.5" strokeWidth={2.4} />
         </span>
-        <div className="leading-tight">
+        <div className="bb-assist-head-text">
           {isLoading && !hasImages ? (
             <div className="flex items-center gap-2.5">
-              <span className="text-sm font-bold text-foreground">
+              <span className="bb-assist-title">
                 {statusLabel || t('status.processing')}
               </span>
-              <span className="bb-dots">
+              <span className="bb-dots" aria-hidden="true">
                 <span />
                 <span />
                 <span />
               </span>
             </div>
           ) : msg.status === AITaskStatus.FAILED ? (
-            <div className="text-sm font-bold text-destructive">
+            <div className="bb-assist-title bb-assist-error">
               {msg.errorMessage || t('errors.generate_failed')}
             </div>
           ) : (
             <>
-              <div className="text-sm font-extrabold text-foreground">
-                {hasImages
-                  ? `Here's ${msg.images.length} image${msg.images.length > 1 ? 's' : ''}`
-                  : t('status.success')}
+              <div className="bb-assist-title">
+                {hasImages ? (
+                  <>
+                    <span>Here&rsquo;s {msg.images.length}</span>
+                    <em>for you</em>
+                  </>
+                ) : (
+                  t('status.success')
+                )}
               </div>
-              {renderSeconds !== null && (
-                <div className="text-xs font-bold text-muted-foreground">
-                  Rendered in {renderSeconds}s
+              {hasImages && (
+                <div className="bb-meta-pills">
+                  {renderSeconds !== null && (
+                    <span className="bb-meta-pill">
+                      <span aria-hidden="true">◷</span>
+                      {renderSeconds}s
+                    </span>
+                  )}
+                  {previewStyleId && (
+                    <span className="bb-meta-pill">
+                      <span
+                        className="bb-meta-pill-sw"
+                        style={{
+                          backgroundImage: `url(${STYLE_THUMB_URL(
+                            previewStyleId
+                          )})`,
+                        }}
+                        aria-hidden="true"
+                      />
+                      {t(`styles.${previewStyleId}.label`)}
+                    </span>
+                  )}
+                  {previewAspect && (
+                    <span className="bb-meta-pill">
+                      <span
+                        className={cn(
+                          'bb-ar-icon',
+                          aspectRatioIconClass(previewAspect)
+                        )}
+                        aria-hidden="true"
+                      />
+                      {previewAspect}
+                    </span>
+                  )}
                 </div>
               )}
             </>
@@ -1283,73 +1298,76 @@ function AssistantCard({
       {hasImages && (
         <div
           className={cn(
-            'grid gap-4',
-            msg.images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
+            'bb-result-grid',
+            msg.images.length === 1 && 'is-single'
           )}
         >
           {msg.images.map((image, index) => (
-            <div key={image.id}>
-              <div className="bb-result">
-                <div className="bb-result-photo">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={image.url} alt={image.prompt || 'Generated baby image'} />
-                  <button
-                    type="button"
-                    className="bb-result-dl"
-                    aria-label="Download"
-                    onClick={() => onDownload(image)}
-                    disabled={downloadingImageId === image.id}
-                  >
-                    {downloadingImageId === image.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Download className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                <div className="bb-result-caption">
-                  <span className="bb-result-stamp">
-                    <span className="bb-result-stamp-num">{index + 1}</span>
-                    {msg.images[index].styleId
-                      ? t(`styles.${msg.images[index].styleId as BabyStyleId}.label`)
-                      : ''}
-                  </span>
-                </div>
+            <figure key={image.id} className="bb-result">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="bb-result-photo"
+                src={image.url}
+                alt={image.prompt || 'Generated baby image'}
+              />
+              <div className="bb-result-grain" aria-hidden="true" />
+              <div className="bb-result-vignette" aria-hidden="true" />
+              <span className="bb-result-no" aria-hidden="true">
+                {toRomanLower(index + 1)}.
+              </span>
+              <div className="bb-result-overlay">
+                <button
+                  type="button"
+                  className="bb-ov-btn bb-ov-primary"
+                  aria-label="Download"
+                  title="Download"
+                  onClick={() => onDownload(image)}
+                  disabled={downloadingImageId === image.id}
+                >
+                  {downloadingImageId === image.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Download className="h-4 w-4" strokeWidth={1.9} />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="bb-ov-btn"
+                  aria-label={t('make_them_dance')}
+                  title={t('make_them_dance')}
+                  onClick={() => onDance(image)}
+                  disabled={handoffImageId === image.id}
+                >
+                  {handoffImageId === image.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <span className="bb-ov-dancer" aria-hidden="true">
+                      💃
+                    </span>
+                  )}
+                </button>
               </div>
-              <button
-                type="button"
-                className="bb-dance-btn mt-3"
-                onClick={() => onDance(image)}
-                disabled={handoffImageId === image.id}
-              >
-                {handoffImageId === image.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <span className="bb-dancer">💃</span>
-                )}
-                <span>{t('make_them_dance')}</span>
-                <ArrowRight className="bb-arrow h-4 w-4" />
-              </button>
-            </div>
+            </figure>
           ))}
         </div>
       )}
 
-      {/* Follow-ups — only for last completed success assistant message */}
       {isLast &&
         userMsg &&
         msg.status === AITaskStatus.SUCCESS &&
         hasImages && (
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="bb-quick-chips">
             <button
               type="button"
               className="bb-followup"
               onClick={() => onRegenerate(userMsg)}
             >
-              ↻ Regenerate
+              <span aria-hidden="true">↻</span>
+              <span>Regenerate</span>
             </button>
             <button type="button" className="bb-followup" onClick={onTryStyle}>
-              🎨 Try another style
+              <span aria-hidden="true">🎨</span>
+              <span>Try another style</span>
             </button>
             {userMsg.aspectRatio !== '3:4' && (
               <button
@@ -1357,7 +1375,8 @@ function AssistantCard({
                 className="bb-followup"
                 onClick={() => onAspectChange('3:4', userMsg)}
               >
-                ↕ 3:4 portrait
+                <span className="bb-ar-icon bb-ar-34" aria-hidden="true" />
+                <span>3:4 portrait</span>
               </button>
             )}
             {userMsg.aspectRatio !== '16:9' && (
@@ -1366,7 +1385,8 @@ function AssistantCard({
                 className="bb-followup"
                 onClick={() => onAspectChange('16:9', userMsg)}
               >
-                ↔ 16:9 wide
+                <span className="bb-ar-icon bb-ar-169" aria-hidden="true" />
+                <span>16:9 wide</span>
               </button>
             )}
           </div>
