@@ -60,6 +60,8 @@ export default async function AiTasksPage({
       { name: 'prompt', title: t('fields.prompt'), type: 'copy' },
       { name: 'options', title: t('fields.options'), type: 'json_preview' },
       { name: 'taskResult', title: t('fields.result'), type: 'json_preview' },
+      { name: 'refundedAt', title: t('fields.refunded_at'), type: 'time' },
+      { name: 'refundReason', title: t('fields.refund_reason'), type: 'label' },
     ],
     data: aiTasks,
     pagination: {

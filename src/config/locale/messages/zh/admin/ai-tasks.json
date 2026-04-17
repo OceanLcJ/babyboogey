@@ -12,7 +12,9 @@
     "result": "结果",
     "created_at": "创建时间",
     "action": "操作",
-    "scene": "场景"
+    "scene": "场景",
+    "refunded_at": "退款时间",
+    "refund_reason": "退款原因"
   },
   "list": {
     "title": "AI任务",

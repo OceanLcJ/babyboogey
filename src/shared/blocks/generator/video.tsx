@@ -54,7 +54,10 @@ import {
   markWatermarkCtaClick,
   trackAnalyticsEvent,
 } from '@/shared/lib/analytics-events';
-import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
+import {
+  extractAssetIdFromMediaUrl,
+  resolveMediaValueToApiPath,
+} from '@/shared/lib/asset-ref';
 import {
   inferExtensionFromMimeType,
   isDynamicWatermarkedVideo,
@@ -221,30 +224,6 @@ function getAbsoluteUrl(url: string): string {
     return new URL(url, window.location.origin).toString();
   } catch {
     return url;
-  }
-}
-
-function extractAssetIdFromMediaUrl(url: string): string | null {
-  if (!url) {
-    return null;
-  }
-
-  try {
-    const parsed = new URL(
-      url,
-      typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
-    );
-    const matched = parsed.pathname.match(/\/api\/storage\/assets\/([^/?#]+)/);
-    if (!matched?.[1]) {
-      return null;
-    }
-    return decodeURIComponent(matched[1]);
-  } catch {
-    const matched = url.match(/\/api\/storage\/assets\/([^/?#]+)/);
-    if (!matched?.[1]) {
-      return null;
-    }
-    return decodeURIComponent(matched[1]);
   }
 }
 
@@ -623,6 +602,7 @@ export function VideoGenerator({
   srOnlyTitle,
 }: VideoGeneratorProps) {
   const t = useTranslations('ai.video.generator');
+  const handoffT = useTranslations('ai.baby-image.dance_handoff');
   const locale = useLocale();
   const router = useRouter();
 
@@ -660,6 +640,7 @@ export function VideoGenerator({
   const [watermarkedPlaybackByVideoId, setWatermarkedPlaybackByVideoId] =
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
+  const [showHandoffBanner, setShowHandoffBanner] = useState(false);
   const isPollingRef = useRef(false);
   const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const successHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -738,6 +719,42 @@ export function VideoGenerator({
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  // Phase-4 handoff: the baby-image generator drops a payload into localStorage
+  // before navigating here, so we can pre-load its result as the reference
+  // image. We only run client-side to avoid SSR hydration mismatch, read-once
+  // then remove, and gate on the TTL so stale payloads don't resurrect days
+  // later. preview stays an `/api/storage/assets/...` path (renderable);
+  // `url` stays an `asset://` ref so the generate route re-signs at submit.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem(
+        'babyboogey:baby-image-handoff'
+      );
+      if (!raw) return;
+      window.localStorage.removeItem('babyboogey:baby-image-handoff');
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return;
+      if (typeof data.expiresAt === 'number' && Date.now() > data.expiresAt) {
+        return;
+      }
+      if (
+        typeof data.previewUrl !== 'string' ||
+        typeof data.assetRef !== 'string'
+      ) {
+        return;
+      }
+      setUploadedImage({
+        preview: data.previewUrl,
+        url: data.assetRef,
+        status: 'uploaded',
+      });
+      setShowHandoffBanner(true);
+    } catch {
+      /* ignore invalid payloads */
+    }
   }, []);
 
   useEffect(() => {
@@ -1968,6 +1985,29 @@ export function VideoGenerator({
         <h2 className="mb-4 text-3xl font-bold">{t('title')}</h2>
         <p className="text-muted-foreground text-lg">{t('description')}</p>
       </div>
+
+      {showHandoffBanner && (
+        <div className="border-primary/30 bg-primary/10 text-primary-foreground mx-auto mb-8 max-w-3xl rounded-lg border px-4 py-3">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-primary text-sm font-semibold">
+                {handoffT('banner_title')}
+              </p>
+              <p className="text-muted-foreground mt-1 text-xs">
+                {handoffT('banner_description')}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowHandoffBanner(false)}
+              className="text-muted-foreground hover:text-foreground text-xs"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">

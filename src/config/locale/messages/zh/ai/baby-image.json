@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "title": "AI 宝宝图片生成器",
+    "description": "上传照片或输入描述，一键生成 8 种风格的 AI 萌娃图，再一键让 TA 跳舞。"
+  },
+  "page": {
+    "title": "AI 宝宝图片生成器",
+    "description": "上传一张参考照片，或者直接写描述，选好风格交给我们。"
+  },
+  "generator": {
+    "title": "宝宝图片生成器",
+    "description": "选风格，可选上传参考照片，数秒出图。",
+    "make_them_dance": "让 TA 跳舞 →",
+    "form": {
+      "style_label": "选择风格",
+      "aspect_ratio": "图片比例",
+      "prompt_label": "描述一下宝宝（可选）",
+      "prompt_placeholder": "例如：卷发微笑的宝宝，手里拿一朵黄花，柔和窗边光",
+      "prompt_too_long": "描述太长啦，请精简一下",
+      "reference_image": "参考照片（可选）",
+      "reference_image_placeholder": "上传一张清晰的宝宝照片，相似度最高",
+      "reference_hint": "上传清晰的宝宝照片可最大化相似度；不上传则按文字直接生成。",
+      "some_images_failed_to_upload": "上传失败，请移除后重试"
+    },
+    "styles": {
+      "pixar-3d": { "label": "3D 动画大片" },
+      "ghibli": { "label": "手绘奇幻" },
+      "anime": { "label": "经典日漫" },
+      "claymation": { "label": "黏土定格" },
+      "chibi": { "label": "Q 版萌娃" },
+      "watercolor": { "label": "水彩插画" },
+      "plush": { "label": "毛绒玩偶" },
+      "pixel-art": { "label": "像素风" }
+    },
+    "status": {
+      "pending": "等待模型启动",
+      "processing": "正在生成宝宝图…",
+      "success": "宝宝图生成完成",
+      "failed": "生成失败"
+    },
+    "toasts": {
+      "success": "宝宝图生成成功",
+      "downloaded": "图片已下载"
+    },
+    "errors": {
+      "timeout": "生成超时，请重试",
+      "insufficient_credits": "积分不足，充值后即可继续创作",
+      "need_prompt_or_photo": "请先输入描述或上传参考照片",
+      "empty_result": "模型未返回图片，请重试",
+      "generate_failed": "生成宝宝图失败",
+      "create_task_failed": "创建宝宝图任务失败",
+      "task_id_missing": "响应缺少任务 ID",
+      "query_failed": "查询任务失败",
+      "download_failed": "下载图片失败",
+      "handoff_failed": "无法把这张图片传到视频生成器"
+    },
+    "generate": "生成宝宝图",
+    "generating": "生成中…",
+    "checking_account": "正在校验账号…",
+    "loading": "加载中…",
+    "sign_in_to_generate": "登录后生成",
+    "credits_cost": "消耗 {credits} 积分",
+    "credits_remaining": "剩余 {credits} 积分",
+    "buy_credits": "购买积分",
+    "progress": "进度",
+    "generated_images": "生成结果",
+    "ready_to_generate": "准备生成",
+    "no_images_generated": "还没有生成图片"
+  },
+  "dance_handoff": {
+    "banner_title": "正在使用你刚生成的宝宝图",
+    "banner_description": "我们已经把你刚才生成的图片载入了，选择舞蹈模板即可生成视频。"
+  }
+}

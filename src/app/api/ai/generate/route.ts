@@ -12,6 +12,13 @@ import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
 import {
+  BABY_IMAGE_COST_CREDITS,
+  BABY_IMAGE_SCENE_IMAGE,
+  BABY_IMAGE_SCENE_TEXT,
+  isBabyImageScene,
+} from '@/shared/services/baby-image/config';
+import { buildBabyImagePrompt } from '@/shared/services/baby-image/prompts';
+import {
   collectAssetIdsFromValue,
   GUEST_UPLOAD_SESSION_COOKIE,
   resolveAssetRefsWithSignedUrls,
@@ -99,7 +106,7 @@ export async function POST(request: Request) {
     const { provider, mediaType, model, prompt } = body;
     const { options } = body;
     let { scene } = body;
-    const normalizedPrompt = typeof prompt === 'string' ? prompt : '';
+    let normalizedPrompt = typeof prompt === 'string' ? prompt : '';
     const normalizedOptions =
       options &&
       typeof options === 'object' &&
@@ -154,6 +161,29 @@ export async function POST(request: Request) {
         costCredits = 4;
       } else if (scene === 'text-to-image') {
         costCredits = 2;
+      } else if (isBabyImageScene(scene)) {
+        costCredits = BABY_IMAGE_COST_CREDITS;
+        const hasImageInput =
+          Array.isArray(normalizedOptions?.image_input) &&
+          (normalizedOptions?.image_input as unknown[]).length > 0;
+        // Scene split is an ops-side analytics signal; we still cross-check
+        // against the actual payload so a client can't arbitrage the text
+        // scene while uploading a photo.
+        if (scene === BABY_IMAGE_SCENE_IMAGE && !hasImageInput) {
+          throw new Error('baby-image-image scene requires image_input');
+        }
+        if (scene === BABY_IMAGE_SCENE_TEXT && hasImageInput) {
+          throw new Error('baby-image-text scene must not include image_input');
+        }
+        const styleId =
+          typeof normalizedOptions?.styleId === 'string'
+            ? normalizedOptions.styleId
+            : undefined;
+        normalizedPrompt = buildBabyImagePrompt({
+          styleId,
+          userPrompt: normalizedPrompt,
+          hasImageInput,
+        });
       } else {
         throw new Error('invalid scene');
       }

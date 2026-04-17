@@ -19,6 +19,11 @@
           "icon": "Sparkles"
         },
         {
+          "title": "宝宝图像",
+          "url": "/ai-baby-image-generator",
+          "icon": "Baby"
+        },
+        {
           "title": "案例展示",
           "url": "/showcases",
           "icon": "Images"

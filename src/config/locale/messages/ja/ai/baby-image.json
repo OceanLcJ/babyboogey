@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "title": "AI ベビー画像ジェネレーター",
+    "description": "写真をアップロードするか、説明を入力するだけで8種類のAIベビー画像を生成。さらにダンス動画ジェネレーターで動かせます。"
+  },
+  "page": {
+    "title": "AI ベビー画像ジェネレーター",
+    "description": "参考写真をアップロードするか、説明を入力してスタイルを選ぶだけ。"
+  },
+  "generator": {
+    "title": "ベビー画像ジェネレーター",
+    "description": "スタイルを選んで、任意で参考写真をアップロード。数秒で生成します。",
+    "make_them_dance": "踊らせる →",
+    "form": {
+      "style_label": "スタイルを選ぶ",
+      "aspect_ratio": "アスペクト比",
+      "prompt_label": "赤ちゃんの説明（任意）",
+      "prompt_placeholder": "例：くせ毛で笑顔の赤ちゃん、黄色の花を持って、柔らかい窓辺の光",
+      "prompt_too_long": "説明が長すぎます。短くしてください。",
+      "reference_image": "参考写真（任意）",
+      "reference_image_placeholder": "鮮明な赤ちゃんの写真を1枚アップロードしてください",
+      "reference_hint": "鮮明な赤ちゃんの写真をアップロードすると、より似た結果になります。アップロードしない場合はテキストから生成します。",
+      "some_images_failed_to_upload": "アップロードに失敗しました。削除して再試行してください。"
+    },
+    "styles": {
+      "pixar-3d": { "label": "3Dアニメーション" },
+      "ghibli": { "label": "手描きファンタジー" },
+      "anime": { "label": "クラシックアニメ" },
+      "claymation": { "label": "クレイアニメ" },
+      "chibi": { "label": "ちびキュート" },
+      "watercolor": { "label": "水彩画" },
+      "plush": { "label": "ぬいぐるみ" },
+      "pixel-art": { "label": "ピクセルアート" }
+    },
+    "status": {
+      "pending": "モデルの起動を待っています",
+      "processing": "ベビー画像を生成中…",
+      "success": "ベビー画像の生成が完了しました",
+      "failed": "生成に失敗しました"
+    },
+    "toasts": {
+      "success": "ベビー画像を生成しました",
+      "downloaded": "画像をダウンロードしました"
+    },
+    "errors": {
+      "timeout": "タイムアウトしました。もう一度お試しください。",
+      "insufficient_credits": "クレジットが不足しています。チャージしてください。",
+      "need_prompt_or_photo": "説明を入力するか、参考写真をアップロードしてください",
+      "empty_result": "モデルから画像が返されませんでした。再試行してください。",
+      "generate_failed": "ベビー画像の生成に失敗しました",
+      "create_task_failed": "タスクの作成に失敗しました",
+      "task_id_missing": "レスポンスにタスクIDがありません",
+      "query_failed": "タスクのクエリに失敗しました",
+      "download_failed": "ダウンロードに失敗しました",
+      "handoff_failed": "この画像を動画ジェネレーターに渡せませんでした"
+    },
+    "generate": "ベビー画像を生成",
+    "generating": "生成中…",
+    "checking_account": "アカウントを確認中…",
+    "loading": "読み込み中…",
+    "sign_in_to_generate": "サインインして生成",
+    "credits_cost": "{credits} クレジット",
+    "credits_remaining": "残り {credits} クレジット",
+    "buy_credits": "クレジットを購入",
+    "progress": "進捗",
+    "generated_images": "生成結果",
+    "ready_to_generate": "準備完了",
+    "no_images_generated": "まだ画像がありません"
+  },
+  "dance_handoff": {
+    "banner_title": "先ほど生成したベビー画像を使用中",
+    "banner_description": "生成した画像をプリロードしました。ダンステンプレートを選んで動画を作りましょう。"
+  }
+}

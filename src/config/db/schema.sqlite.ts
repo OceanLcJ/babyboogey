@@ -547,6 +547,8 @@ export const aiTask = table(
       .default(false),
     watermarkMode: text('watermark_mode').notNull().default('dynamic_overlay'),
     watermarkedAssetId: text('watermarked_asset_id'),
+    refundedAt: integer('refunded_at', { mode: 'timestamp_ms' }),
+    refundReason: text('refund_reason'),
   },
   (table) => [
     // Composite: Query user's AI tasks by status

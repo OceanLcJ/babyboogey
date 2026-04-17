@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "title": "AI Baby Image Generator",
+    "description": "Turn any photo into an adorable AI baby in 8 artistic styles, then bring it to life with the BabyBoogey dance video generator."
+  },
+  "page": {
+    "title": "AI Baby Image Generator",
+    "description": "Upload a reference photo or describe your dream baby and pick a style — we'll handle the rest."
+  },
+  "generator": {
+    "title": "Baby Image Generator",
+    "description": "Pick a style, optionally upload a reference photo, and generate in seconds.",
+    "make_them_dance": "Make them dance →",
+    "form": {
+      "style_label": "Pick a style",
+      "aspect_ratio": "Aspect ratio",
+      "prompt_label": "Describe your baby (optional)",
+      "prompt_placeholder": "E.g. smiling baby with curly hair, holding a yellow flower, soft window light",
+      "prompt_too_long": "Prompt is too long, please shorten it",
+      "reference_image": "Reference photo (optional)",
+      "reference_image_placeholder": "Upload one baby photo for the best likeness",
+      "reference_hint": "Upload a clear baby photo for best likeness. Skip it to generate purely from your description.",
+      "some_images_failed_to_upload": "Upload failed, please remove and retry"
+    },
+    "styles": {
+      "pixar-3d": { "label": "3D Animation Studio" },
+      "ghibli": { "label": "Hand-drawn Fantasy" },
+      "anime": { "label": "Classic Anime" },
+      "claymation": { "label": "Clay Sculpt" },
+      "chibi": { "label": "Chibi Cute" },
+      "watercolor": { "label": "Watercolor" },
+      "plush": { "label": "Plush Doll" },
+      "pixel-art": { "label": "Pixel Art" }
+    },
+    "status": {
+      "pending": "Waiting for the model to start",
+      "processing": "Generating your baby image...",
+      "success": "Baby image generation complete",
+      "failed": "Generation failed"
+    },
+    "toasts": {
+      "success": "Baby image generated successfully",
+      "downloaded": "Image downloaded"
+    },
+    "errors": {
+      "timeout": "Generation timed out, please try again",
+      "insufficient_credits": "Not enough credits. Top up to keep creating.",
+      "need_prompt_or_photo": "Add a prompt or upload a reference photo first",
+      "empty_result": "The model returned no images, please retry",
+      "generate_failed": "Generate baby image failed",
+      "create_task_failed": "Failed to create baby image task",
+      "task_id_missing": "Task id missing in response",
+      "query_failed": "Query task failed",
+      "download_failed": "Failed to download image",
+      "handoff_failed": "Could not transfer this image to the video generator"
+    },
+    "generate": "Generate Baby Image",
+    "generating": "Generating...",
+    "checking_account": "Checking Account...",
+    "loading": "Loading...",
+    "sign_in_to_generate": "Sign In to Generate",
+    "credits_cost": "Cost {credits} credits",
+    "credits_remaining": "Remaining {credits} credits",
+    "buy_credits": "Buy Credits",
+    "progress": "Progress",
+    "generated_images": "Image Preview",
+    "ready_to_generate": "Ready to generate",
+    "no_images_generated": "No images generated yet"
+  },
+  "dance_handoff": {
+    "banner_title": "Using your AI-generated baby photo",
+    "banner_description": "We pre-loaded the image you just created. Pick a dance template and generate your video."
+  }
+}

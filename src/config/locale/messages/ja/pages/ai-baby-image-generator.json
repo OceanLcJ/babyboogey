@@ -1,0 +1,195 @@
+{
+  "metadata": {
+    "title": "AI ベビー画像ジェネレーター — 1枚の写真を8つのアートスタイルへ",
+    "description": "写真をアップロードするか、説明を入力するだけで8種類のアートスタイルのAIベビー画像を生成。BabyBoogeyのダンス動画ジェネレーターにそのまま送れます。"
+  },
+  "page": {
+    "title": "AI ベビー画像ジェネレーター",
+    "show_sections": [
+      "hero",
+      "generator",
+      "showcase",
+      "usage",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI ベビー画像ジェネレーター — 8スタイル、ワンクリック",
+        "description": "赤ちゃんの写真を3Dアニメーション・水彩絵本・ちびキャラ・ぬいぐるみなど多彩なスタイルに。お気に入りをワンタップでダンス動画ジェネレーターへ送れます。",
+        "buttons": [
+          {
+            "title": "今すぐ生成",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "作例を見る",
+            "url": "#showcase",
+            "variant": "outline",
+            "icon": "Image"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/tree.webp",
+          "alt": "AIベビー画像ジェネレーターの背景"
+        }
+      },
+      "generator": {
+        "id": "generator"
+      },
+      "showcase": {
+        "block": "features-list",
+        "id": "showcase",
+        "title": "8つのアートスタイル",
+        "description": "どのスタイルも赤ちゃんの特徴をはっきり残したまま、独自のアート感を加えます。",
+        "items": [
+          {
+            "title": "3Dアニメーション",
+            "description": "大きな瞳と映画級のライティングで、世界的に親しまれる3Dアニメ大作の質感に。",
+            "icon": "Film",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixar-3d-after.webp",
+              "alt": "3DアニメーションAIベビー画像"
+            }
+          },
+          {
+            "title": "手描きファンタジー",
+            "description": "柔らかな水彩と絵本のような構図。額に入れて飾りたくなる一枚に。",
+            "icon": "Brush",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ghibli-after.webp",
+              "alt": "手描きファンタジーAIベビー画像"
+            }
+          },
+          {
+            "title": "クラシックアニメ",
+            "description": "くっきりした線画と鮮やかなセル塗り。一瞬で主人公感。",
+            "icon": "Stars",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/anime-after.webp",
+              "alt": "クラシックアニメAIベビー画像"
+            }
+          },
+          {
+            "title": "クレイアニメ",
+            "description": "粘土の質感や造形の跡が見える、温かみのあるストップモーション風。",
+            "icon": "Shapes",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/claymation-after.webp",
+              "alt": "クレイアニメAIベビー画像"
+            }
+          },
+          {
+            "title": "ちびキュート",
+            "description": "デフォルメされた頭身と赤い頬で、スタンプ感覚でシェアしたくなる。",
+            "icon": "Heart",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/chibi-after.webp",
+              "alt": "ちびキュートAIベビー画像"
+            }
+          },
+          {
+            "title": "水彩画",
+            "description": "紙のテクスチャと繊細な筆致。絵本や招待状にもぴったり。",
+            "icon": "Palette",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/watercolor-after.webp",
+              "alt": "水彩画AIベビー画像"
+            }
+          },
+          {
+            "title": "ぬいぐるみ",
+            "description": "フェルト生地と縫い目、ボタンの目 — 赤ちゃんがぬいぐるみになったら。",
+            "icon": "Rabbit",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/plush-after.webp",
+              "alt": "ぬいぐるみAIベビー画像"
+            }
+          },
+          {
+            "title": "ピクセルアート",
+            "description": "レトロな16ビットピクセルアート。SNES世代のパパママに刺さる。",
+            "icon": "Gamepad2",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixel-art-after.webp",
+              "alt": "ピクセルアートAIベビー画像"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "使い方",
+        "description": "アップロードからダンス動画まで3ステップ。",
+        "items": [
+          {
+            "title": "ステップ1：写真をアップ or 説明を入力",
+            "description": "鮮明な赤ちゃんの写真をドラッグするか、希望のイメージを言葉で入力します。両方の組み合わせも可。"
+          },
+          {
+            "title": "ステップ2：スタイルを選ぶ",
+            "description": "8スタイルからワンクリック。参考写真をアップすれば特徴を保ったまま各スタイルに変換します。"
+          },
+          {
+            "title": "ステップ3：生成してシェア",
+            "description": "画像をダウンロードするか、「踊らせる」をタップしてダンス動画ジェネレーターへ直送。再アップロードは不要です。"
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "よくある質問",
+        "description": "はじめてAIベビー画像を生成する前に知っておきたいこと。",
+        "items": [
+          {
+            "question": "生成されたAI画像は本物の写真にどれくらい似ますか？",
+            "answer": "鮮明な正面写真をアップロードすると、目の形・肌色・表情などの特徴を保ったままアートスタイルに変換します。明るい照明と高解像度の写真ほど似せやすくなります。"
+          },
+          {
+            "question": "1枚あたり何クレジット？",
+            "answer": "1枚40クレジットです。新規登録時に無料トライアル用のクレジットが配布されます。"
+          },
+          {
+            "question": "どのモデルを使っていますか？",
+            "answer": "GoogleのGeminiベースの画像モデル Nano Banana Pro を使用しています。スタイルを越えた同一性保持に強いモデルです。"
+          },
+          {
+            "question": "生成画像は個人利用や商用利用できますか？",
+            "answer": "個人の記念、SNSシェア、多くの商用用途に利用できます。詳細は利用規約をご確認ください。"
+          },
+          {
+            "question": "アップロードした写真は保存されますか？",
+            "answer": "暗号化されたストレージに保存され、第三者に共有されることはありません。アクティビティページからいつでも削除できます。"
+          },
+          {
+            "question": "生成したベビー画像をダンス動画にするには？",
+            "answer": "生成後「踊らせる →」をタップしてください。その画像をダンス動画ジェネレーターに事前ロードするので、テンプレートを選ぶだけで動画が作れます。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "あなたのAIベビーに会いに行こう",
+        "description": "8スタイルを一気に生成、お気に入りを数分でダンス動画に。",
+        "buttons": [
+          {
+            "title": "今すぐ作る",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "料金を見る",
+            "url": "/pricing",
+            "variant": "outline",
+            "icon": "CreditCard"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

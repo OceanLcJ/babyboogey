@@ -1,0 +1,195 @@
+{
+  "metadata": {
+    "title": "AI 宝宝图片生成器 — 一张照片变 8 种艺术风格",
+    "description": "上传照片或输入描述，生成 8 种艺术风格的 AI 萌娃图；一键送入 BabyBoogey 舞蹈视频生成器。"
+  },
+  "page": {
+    "title": "AI 宝宝图片生成器",
+    "show_sections": [
+      "hero",
+      "generator",
+      "showcase",
+      "usage",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI 宝宝图片生成器 — 8 种风格，一键生成",
+        "description": "把一张宝宝照片变成 3D 动画、手绘奇幻、Q 版萌娃、毛绒玩偶…… 选一张最爱的，再一键送到舞蹈视频生成器。",
+        "buttons": [
+          {
+            "title": "立即生成",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "查看示例",
+            "url": "#showcase",
+            "variant": "outline",
+            "icon": "Image"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/tree.webp",
+          "alt": "AI 宝宝图片生成器背景"
+        }
+      },
+      "generator": {
+        "id": "generator"
+      },
+      "showcase": {
+        "block": "features-list",
+        "id": "showcase",
+        "title": "8 种艺术风格 · 每个宝宝都独一无二",
+        "description": "每种风格都经过精调，既保留宝宝五官辨识度，又赋予独特艺术感。",
+        "items": [
+          {
+            "title": "3D 动画大片",
+            "description": "大眼睛、电影级打光，来自全球熟悉的 3D 动画大片美学。",
+            "icon": "Film",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixar-3d-after.webp",
+              "alt": "3D 动画风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "手绘奇幻",
+            "description": "柔和水彩 + 童话构图，做墙贴、纪念册都好看。",
+            "icon": "Brush",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ghibli-after.webp",
+              "alt": "手绘奇幻风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "经典日漫",
+            "description": "利落线条 + 鲜亮赛璐璐上色，一秒二次元主角感。",
+            "icon": "Stars",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/anime-after.webp",
+              "alt": "经典日漫风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "黏土定格",
+            "description": "可见塑形纹理的黏土定格质感，一看就想捏一捏。",
+            "icon": "Shapes",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/claymation-after.webp",
+              "alt": "黏土定格风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "Q 版萌娃",
+            "description": "超级萌的 Q 版比例、腮红、贴纸感构图，微信群发必备。",
+            "icon": "Heart",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/chibi-after.webp",
+              "alt": "Q 版萌娃风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "水彩插画",
+            "description": "纸面纹理 + 细腻笔触，做绘本、邀请函都合适。",
+            "icon": "Palette",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/watercolor-after.webp",
+              "alt": "水彩插画风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "毛绒玩偶",
+            "description": "绒布质感、针脚、小纽扣眼——把宝宝变成毛绒玩偶的样子。",
+            "icon": "Rabbit",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/plush-after.webp",
+              "alt": "毛绒玩偶风格 AI 宝宝图"
+            }
+          },
+          {
+            "title": "像素风",
+            "description": "16-bit 像素艺术，给玩过 SNES 的爸妈一份复古温柔。",
+            "icon": "Gamepad2",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixel-art-after.webp",
+              "alt": "像素风格 AI 宝宝图"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "三步搞定",
+        "description": "从上传到出舞蹈视频，只要三步。",
+        "items": [
+          {
+            "title": "第一步：上传照片或输入描述",
+            "description": "把清晰的宝宝照片拖进生成器，或者直接写描述。两种模式都可以，也可以组合。"
+          },
+          {
+            "title": "第二步：选风格",
+            "description": "八种风格一键切换。只要上传参考照片，每种风格都会保持五官辨识度。"
+          },
+          {
+            "title": "第三步：生成并分享",
+            "description": "下载图片，或点击 \"让 TA 跳舞\" 直接把图片送进舞蹈视频生成器，不用再上传一次。"
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "常见问题",
+        "description": "生成你的第一张 AI 宝宝图前可能想知道的事。",
+        "items": [
+          {
+            "question": "生成的图会和我的宝宝像吗？",
+            "answer": "上传清晰、正面的照片时，生成器会在保留眼型、肤色、神态的同时做艺术风格化。光照好、分辨率高的原图相似度最高。"
+          },
+          {
+            "question": "一张图多少积分？",
+            "answer": "40 积分 / 张。新用户注册后可领取一次免费体验积分包，先试再买。"
+          },
+          {
+            "question": "用的是什么模型？",
+            "answer": "Nano Banana Pro，Google 基于 Gemini 家族的图像模型，跨风格身份保持能力业界领先。"
+          },
+          {
+            "question": "生成的图片可以商用吗？",
+            "answer": "个人留念、社交分享、绝大多数商业用途都可以。具体限制请查看服务条款。"
+          },
+          {
+            "question": "我上传的照片会被保存吗？",
+            "answer": "上传会加密存储，不会分享给第三方。随时可以在活动页面删除自己的上传。"
+          },
+          {
+            "question": "怎么把生成的宝宝图变成跳舞视频？",
+            "answer": "生成完成后点 \"让 TA 跳舞 →\"，我们会直接把这张图预加载到舞蹈视频生成器里，你只需选择模板即可导出视频。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "现在就认识一下你的 AI 宝宝",
+        "description": "8 种风格一次生成，选一张最爱的，几分钟变成跳舞视频。",
+        "buttons": [
+          {
+            "title": "开始创作",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "查看价格",
+            "url": "/pricing",
+            "variant": "outline",
+            "icon": "CreditCard"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

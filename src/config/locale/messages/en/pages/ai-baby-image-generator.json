@@ -1,0 +1,195 @@
+{
+  "metadata": {
+    "title": "AI Baby Image Generator — Turn Any Photo Into 8 Adorable Styles",
+    "description": "Upload a photo or write a prompt to generate AI baby images in 8 artistic styles — then bring them to life with BabyBoogey's dance video generator."
+  },
+  "page": {
+    "title": "AI Baby Image Generator",
+    "show_sections": [
+      "hero",
+      "generator",
+      "showcase",
+      "usage",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AI Baby Image Generator — 8 Styles, One Click",
+        "description": "Turn any baby photo into a 3D-animation portrait, watercolor storybook scene, chibi sticker, plush doll, and more. Then send your favorite into our dance video generator with one tap.",
+        "buttons": [
+          {
+            "title": "Generate Now",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "See Examples",
+            "url": "#showcase",
+            "variant": "outline",
+            "icon": "Image"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/tree.webp",
+          "alt": "AI Baby Image Generator background"
+        }
+      },
+      "generator": {
+        "id": "generator"
+      },
+      "showcase": {
+        "block": "features-list",
+        "id": "showcase",
+        "title": "8 Artistic Styles, Every Baby",
+        "description": "Pick from eight hand-tuned styles, each designed to keep your baby's features recognizable while adding a unique artistic flair.",
+        "items": [
+          {
+            "title": "3D Animation Studio",
+            "description": "Big eyes, cinematic lighting, and feature-film polish — the style that made 3D animated characters a global favorite.",
+            "icon": "Film",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixar-3d-after.webp",
+              "alt": "3D animation style AI baby image"
+            }
+          },
+          {
+            "title": "Hand-drawn Fantasy",
+            "description": "Soft watercolor washes and whimsical storybook composition — perfect for nursery prints and keepsakes.",
+            "icon": "Brush",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ghibli-after.webp",
+              "alt": "Hand-drawn fantasy AI baby image"
+            }
+          },
+          {
+            "title": "Classic Anime",
+            "description": "Bold line art and vibrant cel shading for that instantly recognizable anime protagonist feel.",
+            "icon": "Stars",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/anime-after.webp",
+              "alt": "Classic anime AI baby image"
+            }
+          },
+          {
+            "title": "Clay Sculpt",
+            "description": "Stop-motion claymation with visible sculpt marks — handmade warmth your relatives will adore.",
+            "icon": "Shapes",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/claymation-after.webp",
+              "alt": "Clay sculpt AI baby image"
+            }
+          },
+          {
+            "title": "Chibi Cute",
+            "description": "Super-deformed chibi proportions, blush cheeks, sticker-ready composition. Irresistibly shareable.",
+            "icon": "Heart",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/chibi-after.webp",
+              "alt": "Chibi cute AI baby image"
+            }
+          },
+          {
+            "title": "Watercolor",
+            "description": "Delicate brush strokes on textured paper — gentle enough for baby books and invitation cards.",
+            "icon": "Palette",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/watercolor-after.webp",
+              "alt": "Watercolor AI baby image"
+            }
+          },
+          {
+            "title": "Plush Doll",
+            "description": "Fabric texture, stitched seams, button eyes — the plush toy version of your little one.",
+            "icon": "Rabbit",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/plush-after.webp",
+              "alt": "Plush doll AI baby image"
+            }
+          },
+          {
+            "title": "Pixel Art",
+            "description": "Retro 16-bit pixel art for gamer parents. A nostalgic nod to SNES-era charm.",
+            "icon": "Gamepad2",
+            "image": {
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/pixel-art-after.webp",
+              "alt": "Pixel art AI baby image"
+            }
+          }
+        ],
+        "className": "bg-muted"
+      },
+      "usage": {
+        "block": "features-step",
+        "id": "usage",
+        "title": "How It Works",
+        "description": "From upload to dance video in three steps.",
+        "items": [
+          {
+            "title": "Step 1: Upload a photo or write a prompt",
+            "description": "Drag a clear baby photo into the generator, or just describe the baby you want. Both modes work — combine them for extra control."
+          },
+          {
+            "title": "Step 2: Pick a style",
+            "description": "Eight styles, one click. Every style is tuned to keep facial features recognizable when a reference photo is provided."
+          },
+          {
+            "title": "Step 3: Generate and share",
+            "description": "Download the image, or hit 'Make them dance' to send the result straight into our dance video generator — no re-upload needed."
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "title": "Frequently Asked Questions",
+        "description": "Everything you need to know before generating your first AI baby image.",
+        "items": [
+          {
+            "question": "How similar will the AI baby image look to my real photo?",
+            "answer": "When you upload a clear, front-facing photo, the generator preserves key facial features — eye shape, skin tone, expression — while restyling the art. Good lighting and a high-resolution photo produce the best likeness."
+          },
+          {
+            "question": "How many credits does one image cost?",
+            "answer": "40 credits per image. First-time visitors get a free trial credit grant on sign-up so you can try it before committing."
+          },
+          {
+            "question": "Which model powers the generator?",
+            "answer": "We use Nano Banana Pro, Google's Gemini-based image model tuned for strong identity preservation across styles."
+          },
+          {
+            "question": "Can I use the image for personal or commercial purposes?",
+            "answer": "Images you generate are yours to use for personal keepsakes, social sharing, and most commercial purposes. Please review our Terms of Service for specifics on content restrictions and eligibility."
+          },
+          {
+            "question": "Is my uploaded photo stored somewhere?",
+            "answer": "Uploads are stored in encrypted object storage and never shared with third parties. You can delete any uploaded image from your activity page at any time."
+          },
+          {
+            "question": "How do I turn my baby image into a dance video?",
+            "answer": "Once the image is generated, tap 'Make them dance →'. We'll pre-load that image into the dance video generator so you can pick a template and export your video immediately."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "title": "Ready to Meet Your AI Baby?",
+        "description": "Generate your first image in 8 styles and turn your favorite into a dance video in minutes.",
+        "buttons": [
+          {
+            "title": "Start Creating",
+            "url": "#generator",
+            "icon": "Sparkles"
+          },
+          {
+            "title": "See Pricing",
+            "url": "/pricing",
+            "variant": "outline",
+            "icon": "CreditCard"
+          }
+        ],
+        "className": "bg-muted"
+      }
+    }
+  }
+}

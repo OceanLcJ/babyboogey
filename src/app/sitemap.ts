@@ -59,6 +59,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/showcases',
     '/blog',
     '/updates',
+    '/ai-video-generator',
+    '/ai-baby-image-generator',
   ];
 
   // 1b. Keyword landing pages (SEO inner pages)

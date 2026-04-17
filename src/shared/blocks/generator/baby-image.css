@@ -1,0 +1,588 @@
+/* Baby Image Studio — chat-style generator styles
+ * Co-located with baby-image.tsx
+ * Theme-agnostic: all colors come from global CSS variables (theme.css)
+ */
+
+/* ============ Keyframes ============ */
+@keyframes bb-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes bb-orbit {
+  from { transform: rotate(0deg) translateX(62px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(62px) rotate(-360deg); }
+}
+
+@keyframes bb-pulse-ring {
+  0%, 100% {
+    box-shadow:
+      0 8px 22px -8px color-mix(in srgb, var(--primary) 55%, transparent),
+      0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 8px 22px -8px color-mix(in srgb, var(--primary) 55%, transparent),
+      0 0 0 7px color-mix(in srgb, var(--primary) 14%, transparent);
+  }
+}
+
+@keyframes bb-blink {
+  0%, 60%, 100% { opacity: 0.3; transform: scale(0.9); }
+  30%          { opacity: 1;   transform: scale(1.1); }
+}
+
+/* ============ Chat card ============ */
+.bb-chat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto minmax(300px, 1fr) auto;
+  height: clamp(600px, 78vh, 740px);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--foreground) 6%, transparent),
+    0 14px 32px -10px color-mix(in srgb, var(--foreground) 18%, transparent),
+    0 6px 14px -6px color-mix(in srgb, var(--foreground) 10%, transparent);
+  position: relative;
+}
+
+.bb-chat-head {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary) 10%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+.bb-chat-stream {
+  overflow-y: auto;
+  padding: 1.5rem 1.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+.bb-chat-stream > :only-child {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.bb-chat-stream::-webkit-scrollbar { width: 6px; }
+.bb-chat-stream::-webkit-scrollbar-track { background: transparent; }
+.bb-chat-stream::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+/* ============ Brand dot ============ */
+.bb-brand-dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  animation: bb-pulse-ring 3.2s ease-in-out infinite;
+}
+.bb-brand-dot-sm {
+  width: 1.8rem;
+  height: 1.8rem;
+  font-size: 0.9rem;
+}
+
+/* ============ Credits pill ============ */
+.bb-credits-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 800;
+  border: 1px solid color-mix(in srgb, var(--primary) 55%, transparent);
+}
+.bb-credits-pill::before {
+  content: '★';
+  color: var(--primary);
+  font-size: 0.7rem;
+}
+
+/* ============ User bubble ============ */
+.bb-user-bubble {
+  position: relative;
+  display: inline-block;
+  max-width: 80%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0.5rem var(--radius);
+  padding: 0.9rem 1.1rem;
+  color: var(--foreground);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.bb-user-bubble::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-bottom-right-radius: 3px;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  transform: translate(4px, 3px) rotate(-10deg);
+}
+.bb-user-bubble-meta {
+  margin-top: 0.65rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+.bb-user-bubble-meta-thumb {
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--border);
+}
+
+/* ============ Result polaroid ============ */
+.bb-result {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.6rem;
+  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--foreground) 6%, transparent);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.3s ease;
+}
+.bb-result:hover {
+  transform: translateY(-4px) rotate(-0.3deg);
+  box-shadow:
+    0 4px 12px -2px color-mix(in srgb, var(--foreground) 12%, transparent),
+    0 20px 40px -14px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+.bb-result-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.bb-result-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bb-result-dl {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  color: var(--foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--foreground) 12%, transparent);
+  border: 1px solid var(--border);
+}
+.bb-result:hover .bb-result-dl {
+  opacity: 1;
+  transform: translateY(0);
+}
+.bb-result-caption {
+  margin-top: 0.55rem;
+  padding: 0 0.3rem 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.03em;
+}
+.bb-result-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--foreground);
+}
+.bb-result-stamp-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
+  color: var(--foreground);
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+/* ============ Dance CTA (magic button) ============ */
+.bb-dance-btn {
+  position: relative;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.6rem;
+  padding: 0 1rem;
+  background: linear-gradient(
+    120deg,
+    var(--primary) 0%,
+    color-mix(in srgb, var(--primary) 75%, white) 45%,
+    var(--accent) 100%
+  );
+  color: var(--primary-foreground);
+  border: 1px solid color-mix(in srgb, var(--primary) 75%, black);
+  border-radius: 9999px;
+  font-weight: 900;
+  font-size: 0.92rem;
+  box-shadow:
+    0 8px 22px -8px color-mix(in srgb, var(--primary) 55%, transparent),
+    0 2px 6px -2px color-mix(in srgb, var(--primary) 30%, transparent);
+  transition: transform 0.18s ease, box-shadow 0.3s ease, filter 0.25s ease;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+}
+.bb-dance-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.75) 50%,
+    transparent 62%,
+    transparent 100%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+.bb-dance-btn > * { position: relative; z-index: 1; }
+.bb-dance-btn:hover:not(:disabled)::before { transform: translateX(120%); }
+.bb-dance-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 32px -8px color-mix(in srgb, var(--primary) 55%, transparent),
+    0 4px 10px -2px color-mix(in srgb, var(--accent) 40%, transparent);
+  filter: saturate(1.1);
+}
+.bb-dance-btn:active:not(:disabled) { transform: translateY(0); }
+.bb-dance-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.bb-dance-btn .bb-dancer {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.bb-dance-btn:hover:not(:disabled) .bb-dancer { transform: rotate(-10deg) scale(1.12); }
+.bb-dance-btn .bb-arrow { transition: transform 0.25s; }
+.bb-dance-btn:hover:not(:disabled) .bb-arrow { transform: translateX(3px); }
+
+/* ============ Follow-up chips ============ */
+.bb-followup {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--foreground);
+  transition: transform 0.18s ease, border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.bb-followup:hover {
+  border-color: color-mix(in srgb, var(--primary) 65%, var(--border));
+  background: color-mix(in srgb, var(--primary) 14%, var(--card));
+  transform: translateY(-1px);
+}
+.bb-followup:active { transform: translateY(0); }
+
+/* ============ Composer ============ */
+.bb-composer-wrap {
+  padding: 0.9rem 1rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--muted) 70%, transparent) 100%
+  );
+}
+.bb-composer {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 0.95rem 0.65rem;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, background 0.2s ease;
+}
+.bb-composer:hover {
+  border-color: color-mix(in srgb, var(--muted-foreground) 40%, var(--border));
+}
+.bb-composer:focus-within {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--primary) 20%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--primary) 14%, transparent);
+}
+.bb-composer textarea {
+  width: 100%;
+  min-height: 48px;
+  max-height: 130px;
+  background: transparent;
+  border: 0;
+  resize: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--foreground);
+}
+.bb-composer textarea::placeholder {
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+/* ============ Rail chip (composer toolbar) ============ */
+.bb-rail-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--foreground);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.bb-rail-chip:hover {
+  border-color: color-mix(in srgb, var(--primary) 60%, var(--border));
+  background: color-mix(in srgb, var(--primary) 12%, var(--card));
+}
+.bb-rail-chip-thumb {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 0 1px var(--border);
+  flex-shrink: 0;
+}
+.bb-rail-chip-icon {
+  width: 2rem;
+  padding: 0;
+  justify-content: center;
+}
+
+/* ============ Send button ============ */
+.bb-send-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 75%, black);
+  box-shadow: 0 8px 22px -8px color-mix(in srgb, var(--primary) 55%, transparent);
+  transition: background 0.2s, transform 0.15s, filter 0.2s;
+  cursor: pointer;
+}
+.bb-send-btn:hover:not(:disabled) { filter: brightness(0.95); }
+.bb-send-btn:active:not(:disabled) { transform: scale(0.94); }
+.bb-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ============ Attach preview ============ */
+.bb-attach-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.7rem 0.4rem 0.4rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+}
+.bb-attach-preview-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.bb-attach-preview-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--foreground);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bb-attach-preview-x {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border: 0;
+}
+.bb-attach-preview-x:hover {
+  background: var(--border);
+  color: var(--foreground);
+}
+
+/* ============ Style popover items ============ */
+.bb-popover-item {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+.bb-popover-item:hover {
+  background: color-mix(in srgb, var(--muted) 75%, transparent);
+}
+.bb-popover-item.bb-active {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+.bb-popover-item-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 0 0 2px var(--card),
+    0 0 0 3px var(--border);
+}
+.bb-popover-item.bb-active .bb-popover-item-thumb {
+  box-shadow:
+    0 0 0 2px var(--card),
+    0 0 0 3px var(--primary),
+    0 6px 14px -4px color-mix(in srgb, var(--primary) 50%, transparent);
+}
+.bb-popover-item-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--foreground);
+  line-height: 1.15;
+}
+.bb-popover-item-desc {
+  font-size: 0.72rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* ============ Hero orb (empty state) ============ */
+.bb-hero-orb {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 32% 30%,
+    color-mix(in srgb, var(--primary) 65%, white) 0%,
+    var(--primary) 55%,
+    color-mix(in srgb, var(--primary) 75%, black) 100%
+  );
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  box-shadow:
+    0 0 0 8px color-mix(in srgb, var(--primary) 18%, transparent),
+    0 14px 30px -12px color-mix(in srgb, var(--primary) 55%, transparent);
+  animation: bb-float 5s ease-in-out infinite;
+}
+.bb-hero-orb::before,
+.bb-hero-orb::after {
+  content: '✦';
+  position: absolute;
+  color: var(--accent);
+  font-size: 0.9rem;
+  line-height: 1;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+}
+.bb-hero-orb::before {
+  animation: bb-orbit 7s linear infinite;
+}
+.bb-hero-orb::after {
+  font-size: 0.65rem;
+  color: var(--primary);
+  animation: bb-orbit 9s linear infinite reverse;
+  animation-delay: -3s;
+}
+
+/* ============ Loading dots ============ */
+.bb-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.bb-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--muted-foreground);
+  animation: bb-blink 1.4s infinite;
+}
+.bb-dots span:nth-child(2) { animation-delay: 0.2s; }
+.bb-dots span:nth-child(3) { animation-delay: 0.4s; }

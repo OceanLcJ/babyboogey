@@ -12,7 +12,9 @@
     "result": "結果",
     "created_at": "作成日",
     "action": "アクション",
-    "scene": "シーン"
+    "scene": "シーン",
+    "refunded_at": "返金日時",
+    "refund_reason": "返金理由"
   },
   "list": {
     "title": "AIタスク",

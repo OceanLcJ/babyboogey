@@ -71,42 +71,54 @@
 }
 
 .dark {
-  --background: oklch(0.2077 0.0398 265.7549);
-  --foreground: oklch(0.9288 0.0126 255.5078);
-  --card: oklch(0.2795 0.0368 260.031);
-  --card-foreground: oklch(0.9288 0.0126 255.5078);
-  --popover: oklch(0.2795 0.0368 260.031);
-  --popover-foreground: oklch(0.9288 0.0126 255.5078);
-  --primary: oklch(0.6801 0.1583 276.9349);
-  --primary-foreground: oklch(0.2077 0.0398 265.7549);
-  --secondary: oklch(0.3351 0.0331 260.912);
-  --secondary-foreground: oklch(0.8717 0.0093 258.3382);
-  --muted: oklch(0.2395 0.0368 260.031);
-  --muted-foreground: oklch(0.7137 0.0192 261.3246);
-  --accent: oklch(0.3729 0.0306 259.7328);
-  --accent-foreground: oklch(0.8717 0.0093 258.3382);
+  /* Dark = 亮色关灯，品牌 DNA 保持：阳光黄主色 · Nunito · 24px 圆角。
+     背景走暖紫黑（与黄色互补），不走冷蓝紫。 */
+  --background: oklch(0.17 0.025 295);        /* 暖紫黑 ≈ #1a1524 */
+  --foreground: oklch(0.86 0.02 295);         /* 暖浅紫白 ≈ #d8d2e6 */
+  --card: oklch(0.24 0.03 295);               /* ≈ #251e33 */
+  --card-foreground: oklch(0.86 0.02 295);
+  --popover: oklch(0.24 0.03 295);
+  --popover-foreground: oklch(0.86 0.02 295);
+
+  --primary: oklch(0.88 0.18 85);             /* 同亮色：阳光黄 #FCD34D（品牌）*/
+  --primary-foreground: oklch(0.2 0 0);       /* 黄底上近黑字 */
+
+  --secondary: oklch(0.30 0.03 295);
+  --secondary-foreground: oklch(0.86 0.02 295);
+  --muted: oklch(0.20 0.025 295);             /* ≈ #1e1829 */
+  --muted-foreground: oklch(0.62 0.03 295);   /* ≈ #948aac */
+
+  --accent: oklch(0.78 0.14 60);              /* 暖橙 ≈ #ffb366，同亮色系 */
+  --accent-foreground: oklch(0.2 0 0);
+
   --destructive: oklch(0.6368 0.2078 25.3313);
-  --destructive-foreground: oklch(0.2077 0.0398 265.7549);
-  --border: oklch(0.4461 0.0263 256.8018);
-  --input: oklch(0.4461 0.0263 256.8018);
-  --ring: oklch(0.6801 0.1583 276.9349);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.35 0.04 295);             /* ≈ #3a3150 */
+  --input: oklch(0.35 0.04 295);
+  --ring: oklch(0.88 0.18 85);                /* 黄色 ring，对齐 primary */
+
+  /* chart 调色板保持不变 —— 数据可视化需要一致性 */
   --chart-1: oklch(0.6801 0.1583 276.9349);
   --chart-2: oklch(0.5854 0.2041 277.1173);
   --chart-3: oklch(0.5106 0.2301 276.9656);
   --chart-4: oklch(0.4568 0.2146 277.0229);
   --chart-5: oklch(0.3984 0.1773 277.3662);
-  --sidebar: oklch(0.2795 0.0368 260.031);
-  --sidebar-foreground: oklch(0.9288 0.0126 255.5078);
-  --sidebar-primary: oklch(0.6801 0.1583 276.9349);
-  --sidebar-primary-foreground: oklch(0.2077 0.0398 265.7549);
-  --sidebar-accent: oklch(0.3729 0.0306 259.7328);
-  --sidebar-accent-foreground: oklch(0.8717 0.0093 258.3382);
-  --sidebar-border: oklch(0.4461 0.0263 256.8018);
-  --sidebar-ring: oklch(0.6801 0.1583 276.9349);
-  --font-sans: Noto Sans Mono, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Merriweather, serif;
-  --font-mono: JetBrains Mono, monospace;
-  --radius: 0.5rem;
+
+  --sidebar: oklch(0.24 0.03 295);
+  --sidebar-foreground: oklch(0.86 0.02 295);
+  --sidebar-primary: oklch(0.88 0.18 85);
+  --sidebar-primary-foreground: oklch(0.2 0 0);
+  --sidebar-accent: oklch(0.30 0.03 295);
+  --sidebar-accent-foreground: oklch(0.86 0.02 295);
+  --sidebar-border: oklch(0.35 0.04 295);
+  --sidebar-ring: oklch(0.88 0.18 85);
+
+  /* 字体与圆角：同亮色，保持品牌圆润与温暖 */
+  --font-sans: Nunito, ui-sans-serif, sans-serif, system-ui;
+  --font-serif: Nunito, serif;
+  --font-mono: Nunito, monospace;
+  --radius: 1.5rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
   --shadow-blur: 8px;
