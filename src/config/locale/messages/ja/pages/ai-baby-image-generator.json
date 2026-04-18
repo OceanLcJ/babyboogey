@@ -32,7 +32,7 @@
           }
         ],
         "background_image": {
-          "src": "/imgs/bg/ai-hero-pastel.webp",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "AIベビー画像ジェネレーターの背景"
         }
       },
@@ -50,7 +50,7 @@
             "description": "大きな瞳と映画級のライティングで、世界的に親しまれる3Dアニメ大作の質感に。",
             "icon": "Film",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixar-3d-animation-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixar-3d-animation-style.webp",
               "alt": "AIベビーフォトジェネレーターでピクサー風3Dアニメキャラクターになった赤ちゃん"
             }
           },
@@ -59,7 +59,7 @@
             "description": "柔らかな水彩と絵本のような構図。額に入れて飾りたくなる一枚に。",
             "icon": "Brush",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-hand-drawn-fantasy-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-hand-drawn-fantasy-style.webp",
               "alt": "花咲く草原に立つ手描きファンタジー水彩風の赤ちゃんイラスト（AIベビーフォトジェネレーター生成）"
             }
           },
@@ -68,7 +68,7 @@
             "description": "くっきりした線画と鮮やかなセル塗り。一瞬で主人公感。",
             "icon": "Stars",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-classic-anime-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-classic-anime-style.webp",
               "alt": "AIベビージェネレーターで大きな瞳のクラシック日本アニメキャラになった赤ちゃん"
             }
           },
@@ -77,7 +77,7 @@
             "description": "粘土の質感や造形の跡が見える、温かみのあるストップモーション風。",
             "icon": "Shapes",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-claymation-sculpt-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-claymation-sculpt-style.webp",
               "alt": "ミニチュアの子供部屋に立つストップモーション粘土アニメ風の赤ちゃん（AI生成）"
             }
           },
@@ -86,7 +86,7 @@
             "description": "デフォルメされた頭身と赤い頬で、スタンプ感覚でシェアしたくなる。",
             "icon": "Heart",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-chibi-kawaii-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-chibi-kawaii-style.webp",
               "alt": "パステルピンク背景のかわいいちびキャラ風ステッカーに変身した赤ちゃん（AIベビーフォトジェネレーター生成）"
             }
           },
@@ -95,7 +95,7 @@
             "description": "紙のテクスチャと繊細な筆致。絵本や招待状にもぴったり。",
             "icon": "Palette",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-watercolor-storybook-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-watercolor-storybook-style.webp",
               "alt": "AIベビーフォトジェネレーターによる柔らかな水彩絵本風の赤ちゃんイラスト"
             }
           },
@@ -104,7 +104,7 @@
             "description": "フェルト生地と縫い目、ボタンの目 — 赤ちゃんがぬいぐるみになったら。",
             "icon": "Rabbit",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-plush-doll-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-plush-doll-style.webp",
               "alt": "ボタンの目と縫い目のある手作りぬいぐるみ風の赤ちゃん（AIベビージェネレーター生成）"
             }
           },
@@ -113,7 +113,7 @@
             "description": "レトロな16ビットピクセルアート。SNES世代のパパママに刺さる。",
             "icon": "Gamepad2",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixel-art-retro-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixel-art-retro-style.webp",
               "alt": "星空の下のレトロ16ビットピクセルアート風赤ちゃん（AIベビーフォトジェネレーター生成）"
             }
           }

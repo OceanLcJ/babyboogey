@@ -36,7 +36,7 @@ NEXT_PUBLIC_APPEARANCE = "system"
 
 # logo
 NEXT_PUBLIC_APP_LOGO = "/logo.png"
-NEXT_PUBLIC_APP_PREVIEW_IMAGE = "/preview.png"
+NEXT_PUBLIC_APP_PREVIEW_IMAGE = "https://r2.babyboogey.com/assets/imgs/preview.webp"
 
 # database
 DATABASE_PROVIDER = "d1"

@@ -32,7 +32,7 @@
           }
         ],
         "background_image": {
-          "src": "/imgs/bg/ai-hero-pastel.webp",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "AI 宝宝图片生成器背景"
         }
       },
@@ -50,7 +50,7 @@
             "description": "大眼睛、电影级打光，来自全球熟悉的 3D 动画大片美学。",
             "icon": "Film",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixar-3d-animation-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixar-3d-animation-style.webp",
               "alt": "AI 宝宝照片生成器将宝宝转换为皮克斯风格 3D 动画角色"
             }
           },
@@ -59,7 +59,7 @@
             "description": "柔和水彩 + 童话构图，做墙贴、纪念册都好看。",
             "icon": "Brush",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-hand-drawn-fantasy-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-hand-drawn-fantasy-style.webp",
               "alt": "AI 宝宝照片生成器生成的手绘奇幻水彩风格宝宝，置身于花丛草地"
             }
           },
@@ -68,7 +68,7 @@
             "description": "利落线条 + 鲜亮赛璐璐上色，一秒二次元主角感。",
             "icon": "Stars",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-classic-anime-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-classic-anime-style.webp",
               "alt": "AI 宝宝生成器将宝宝转换为大眼睛闪亮的经典日系动漫角色"
             }
           },
@@ -77,7 +77,7 @@
             "description": "可见塑形纹理的黏土定格质感，一看就想捏一捏。",
             "icon": "Shapes",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-claymation-sculpt-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-claymation-sculpt-style.webp",
               "alt": "AI 生成的定格黏土动画风格宝宝，背景为迷你房间场景"
             }
           },
@@ -86,7 +86,7 @@
             "description": "超级萌的 Q 版比例、腮红、贴纸感构图，微信群发必备。",
             "icon": "Heart",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-chibi-kawaii-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-chibi-kawaii-style.webp",
               "alt": "AI 宝宝照片生成器转换的可爱 Q 版卡哇伊贴纸风格宝宝，粉色背景"
             }
           },
@@ -95,7 +95,7 @@
             "description": "纸面纹理 + 细腻笔触，做绘本、邀请函都合适。",
             "icon": "Palette",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-watercolor-storybook-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-watercolor-storybook-style.webp",
               "alt": "AI 宝宝照片生成器打造的柔和水彩绘本插画风格宝宝"
             }
           },
@@ -104,7 +104,7 @@
             "description": "绒布质感、针脚、小纽扣眼——把宝宝变成毛绒玩偶的样子。",
             "icon": "Rabbit",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-plush-doll-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-plush-doll-style.webp",
               "alt": "AI 宝宝生成器制作的纽扣眼睛手工毛绒玩偶风格宝宝"
             }
           },
@@ -113,7 +113,7 @@
             "description": "16-bit 像素艺术，给玩过 SNES 的爸妈一份复古温柔。",
             "icon": "Gamepad2",
             "image": {
-              "src": "/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixel-art-retro-style.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/ai-baby-photo-pixel-art-retro-style.webp",
               "alt": "AI 宝宝照片生成器重绘的复古 16 位像素风格宝宝，星夜背景"
             }
           }

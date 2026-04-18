@@ -49,7 +49,7 @@
     @apply bg-background text-foreground font-sans;
     /* 全站统一 pastel 背景：纯色半透明遮罩（轻柔化图）+ pastel 底图。 */
     background-color: rgba(249, 250, 251, 0.25);
-    background-image: url('/imgs/bg/ai-hero-pastel.webp');
+    background-image: url('https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

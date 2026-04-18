@@ -63,7 +63,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "/imgs/bg/ai-hero-pastel.webp",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "背景"
         }
       },
@@ -79,7 +79,7 @@
             "description": "赤ちゃんの写真をアップロードするだけで、AIが愛らしいダンスの動きと表情で命を吹き込みます。",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "/imgs/features/animate-photo.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/animate-photo.webp",
               "alt": "赤ちゃん写真をアニメーション化"
             }
           },
@@ -88,7 +88,7 @@
             "description": "高度なオンライン顔アニメーター技術により、自然な顔立ちを保ちながら楽しいダンスの表情を加えます。",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "/imgs/features/face-animator.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animator.webp",
               "alt": "オンライン顔アニメーター"
             }
           },
@@ -97,7 +97,7 @@
             "description": "赤ちゃんダンス動画を無料で作成 — クレジットカードは不要です。無料エクスポートには小さな透かしが入ります。",
             "icon": "RiGiftLine",
             "image": {
-              "src": "/imgs/features/free-to-start.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/free-to-start.webp",
               "alt": "無料で赤ちゃんダンス動画を作成"
             }
           }
@@ -115,7 +115,7 @@
             "description": "クリスマス、新年、あらゆるお祝いのために、写真を踊る赤ちゃんに変身させましょう。家族全員で楽しめます。",
             "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/holiday.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/holiday.webp",
               "alt": "ホリデー赤ちゃんダンスカード"
             }
           },
@@ -124,7 +124,7 @@
             "description": "絶対にバズる面白い子供ダンス動画を作りましょう。純粋な赤ちゃんの喜びで月曜日の憂鬱を吹き飛ばそう！",
             "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/laugh.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/laugh.webp",
               "alt": "面白い赤ちゃんダンス動画"
             }
           },
@@ -133,7 +133,7 @@
             "description": "赤ちゃんの写真を心温まるダンス動画にアニメーション化。毎回笑顔を保証するデジタルギフトです。",
             "icon": "RiHeartFill",
             "image": {
-              "src": "/imgs/features/love.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/love.webp",
               "alt": "赤ちゃんダンス動画ギフト"
             }
           }
@@ -151,7 +151,7 @@
             "description": "数秒で写真を踊る赤ちゃんに変身 — 振り付けは不要、驚くほどリアルな純粋なAIマジックだけ。",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "/imgs/features/viral-dance.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/viral-dance.webp",
               "alt": "写真を踊る赤ちゃんに変身"
             }
           },
@@ -160,7 +160,7 @@
             "description": "私たちのオンライン顔アニメーターは、顔を認識可能で、安全で、愛らしいまま保ちます。奇妙な歪みはありません — 純粋な可愛さだけ。",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "/imgs/features/face-animation.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animation.webp",
               "alt": "オンライン顔アニメーター"
             }
           }
