@@ -460,7 +460,10 @@
   background-color: color-mix(in srgb, var(--muted) 80%, transparent);
 }
 .bb-home-feat-photo img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block;
+}
+.bb-home-feat-list .bb-home-feat:first-child .bb-home-feat-photo img {
+  object-position: center 25%;
 }
 .bb-home-feat-icon {
   position: absolute; top: 18px; left: 18px; z-index: 2;
