@@ -14,11 +14,6 @@
     "nav": {
       "items": [
         {
-          "title": "Features",
-          "url": "/#features",
-          "icon": "Sparkles"
-        },
-        {
           "title": "Baby Image",
           "url": "/ai-baby-image-generator",
           "icon": "Baby"
@@ -96,11 +91,6 @@
         {
           "title": "About",
           "children": [
-            {
-              "title": "Features",
-              "url": "/#features",
-              "target": "_self"
-            },
             {
               "title": "Showcases",
               "url": "/showcases",
