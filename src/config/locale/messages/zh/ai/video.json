@@ -36,6 +36,7 @@
       "resolution_720p": "720p (标清)",
       "resolution_1080p": "1080p (高清)",
       "resolution_credits": "{credits} 积分",
+      "resolution_credits_per_second": "{credits} 积分/秒",
       "estimated_cost": "预计消耗：",
       "available_credits": "可用",
       "orientation": "角色朝向",

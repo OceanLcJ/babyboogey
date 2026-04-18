@@ -12,11 +12,17 @@ import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
 import {
-  BABY_IMAGE_COST_CREDITS,
   BABY_IMAGE_SCENE_IMAGE,
   BABY_IMAGE_SCENE_TEXT,
+  getBabyImageCostCredits,
   isBabyImageScene,
+  resolveBabyImageResolution,
 } from '@/shared/services/baby-image/config';
+import {
+  getVideoCostCredits,
+  resolveVideoResolution,
+  resolveVideoTemplateDurationSeconds,
+} from '@/shared/services/baby-video/config';
 import { buildBabyImagePrompt } from '@/shared/services/baby-image/prompts';
 import {
   collectAssetIdsFromValue,
@@ -162,7 +168,10 @@ export async function POST(request: Request) {
       } else if (scene === 'text-to-image') {
         costCredits = 2;
       } else if (isBabyImageScene(scene)) {
-        costCredits = BABY_IMAGE_COST_CREDITS;
+        const babyImageResolution = resolveBabyImageResolution(
+          normalizedOptions?.resolution
+        );
+        costCredits = getBabyImageCostCredits(babyImageResolution);
         const hasImageInput =
           Array.isArray(normalizedOptions?.image_input) &&
           (normalizedOptions?.image_input as unknown[]).length > 0;
@@ -188,11 +197,17 @@ export async function POST(request: Request) {
         throw new Error('invalid scene');
       }
     } else if (mediaType === AIMediaType.VIDEO) {
-      // generate video
-      // Keep backend billing consistent with the UI:
-      // 720p costs 60 credits, 1080p costs 120 credits.
-      const resolution = String(normalizedOptions?.resolution || '').toLowerCase();
-      costCredits = resolution === '1080p' ? 120 : 60;
+      // generate video — billed per second using a server-side duration
+      // whitelist keyed by templateId. The client may hint `templateId` and
+      // `durationSeconds`; the server always resolves the authoritative
+      // duration from the whitelist to keep billing tamper-proof.
+      const videoResolution = resolveVideoResolution(
+        normalizedOptions?.resolution || normalizedOptions?.mode
+      );
+      const videoDurationSeconds = resolveVideoTemplateDurationSeconds(
+        normalizedOptions?.templateId
+      );
+      costCredits = getVideoCostCredits(videoResolution, videoDurationSeconds);
 
       const configs = await getAllConfigs();
       const freeVideoWatermarkEnabled = parseConfigBoolean(

@@ -36,6 +36,7 @@
       "resolution_720p": "720p (SD)",
       "resolution_1080p": "1080p (HD)",
       "resolution_credits": "{credits} credits",
+      "resolution_credits_per_second": "{credits} credits/s",
       "estimated_cost": "Estimated Cost:",
       "available_credits": "Available",
       "orientation": "Character Orientation",

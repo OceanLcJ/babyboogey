@@ -394,8 +394,8 @@ const EXAMPLE_IMAGES = [
 ];
 
 const RESOLUTION_OPTIONS = [
-  { value: '720p', credits: 60 },
-  { value: '1080p', credits: 120 },
+  { value: '720p', creditsPerSecond: 15 },
+  { value: '1080p', creditsPerSecond: 25 },
 ];
 
 function parseTaskResult(taskResult: string | null): UnsafeAny {
@@ -765,10 +765,13 @@ export function VideoGenerator({
   }, [selectedTemplate, promptTouched]);
 
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
-  const currentCost =
-    RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.credits ?? 60;
   const selectedTemplateDurationSeconds =
-    parseTemplateDurationSeconds(selectedTemplate.duration) ?? 0;
+    parseTemplateDurationSeconds(selectedTemplate.duration) ?? 5;
+  const currentCreditsPerSecond =
+    RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.creditsPerSecond ??
+    15;
+  const currentCost =
+    currentCreditsPerSecond * Math.max(1, selectedTemplateDurationSeconds);
   const translateError = useCallback(
     (key: string) => t(key as UnsafeAny),
     [t]
@@ -1839,6 +1842,7 @@ export function VideoGenerator({
             character_orientation: orientation,
             mode: resolution,
             resolution,
+            templateId: selectedTemplate.id,
             negative_prompt: DEFAULT_NEGATIVE_PROMPT,
           },
         }),
@@ -2202,8 +2206,8 @@ export function VideoGenerator({
                               {t(`form.resolution_${opt.value}` as UnsafeAny)}
                             </span>
                             <span className="text-muted-foreground text-xs">
-                              {t('form.resolution_credits', {
-                                credits: opt.credits,
+                              {t('form.resolution_credits_per_second', {
+                                credits: opt.creditsPerSecond,
                               })}
                             </span>
                           </div>
@@ -2219,9 +2223,10 @@ export function VideoGenerator({
                     {t('form.estimated_cost')}
                   </span>
                   <span className="font-medium text-destructive">
-                    {currentCost} {t('form.resolution_credits', { credits: '' }).replace('{credits}', '').trim()}
+                    {t('form.resolution_credits', { credits: currentCost })}
                     <span className="text-muted-foreground ml-1 font-normal">
-                      ({t('form.available_credits')}: {remainingCredits})
+                      ({selectedTemplateDurationSeconds}s × {currentCreditsPerSecond}/s
+                      · {t('form.available_credits')}: {remainingCredits})
                     </span>
                   </span>
                 </div>

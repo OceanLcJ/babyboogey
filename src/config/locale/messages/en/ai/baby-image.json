@@ -24,6 +24,10 @@
     "form": {
       "style_label": "Pick a style",
       "aspect_ratio": "Aspect ratio",
+      "resolution_label": "Resolution",
+      "resolution_2k": "2K (standard)",
+      "resolution_4k": "4K (ultra)",
+      "resolution_credits": "{credits} credits",
       "prompt_label": "Describe your baby (optional)",
       "prompt_placeholder": "E.g. smiling baby with curly hair, holding a yellow flower, soft window light",
       "prompt_too_long": "Prompt is too long, please shorten it",
@@ -33,15 +37,21 @@
       "some_images_failed_to_upload": "Upload failed, please remove and retry"
     },
     "styles": {
-      "pixar-3d": { "label": "3D Animation Studio" },
-      "ghibli": { "label": "Hand-drawn Fantasy" },
-      "anime": { "label": "Classic Anime" },
-      "claymation": { "label": "Clay Sculpt" },
-      "chibi": { "label": "Chibi Cute" },
-      "watercolor": { "label": "Watercolor" },
-      "plush": { "label": "Plush Doll" },
-      "pixel-art": { "label": "Pixel Art" }
+      "pixar-3d": { "label": "3D Animation Studio", "description": "Big eyes, cinematic lighting, film polish" },
+      "ghibli": { "label": "Hand-drawn Fantasy", "description": "Dreamy watercolor, whimsical light" },
+      "anime": { "label": "Classic Anime", "description": "Bold line art, vibrant cel-shading" },
+      "claymation": { "label": "Clay Sculpt", "description": "Stop-motion warmth, clay seams" },
+      "chibi": { "label": "Chibi Cute", "description": "Kawaii, sticker-ready, blush cheeks" },
+      "watercolor": { "label": "Watercolor", "description": "Soft washes, storybook paper" },
+      "plush": { "label": "Plush Doll", "description": "Felt, fluff, stitched seams" },
+      "pixel-art": { "label": "Pixel Art", "description": "16-bit nostalgia, limited palette" }
     },
+    "suggestions": [
+      { "label": "First birthday in the garden", "subtitle": "Sunlit balloons · soft focus" },
+      { "label": "Tiny wizard in a forest", "subtitle": "Mossy log · sunrise glow" },
+      { "label": "Beach day with seashells", "subtitle": "Golden hour · gentle waves" },
+      { "label": "Astronaut among the stars", "subtitle": "Dreamy cosmos · starlight" }
+    ],
     "status": {
       "pending": "Waiting for the model to start",
       "processing": "Generating your baby image...",

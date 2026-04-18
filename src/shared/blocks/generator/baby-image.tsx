@@ -40,9 +40,12 @@ import { cn } from '@/shared/lib/utils';
 import {
   BABY_IMAGE_COST_CREDITS,
   BABY_IMAGE_DEFAULT_MODEL,
+  BABY_IMAGE_DEFAULT_RESOLUTION,
   BABY_IMAGE_PROVIDER,
+  BABY_IMAGE_RESOLUTIONS,
   BABY_IMAGE_SCENE_IMAGE,
   BABY_IMAGE_SCENE_TEXT,
+  BabyImageResolution,
 } from '@/shared/services/baby-image/config';
 import {
   BABY_STYLE_IDS,
@@ -76,53 +79,28 @@ const STYLE_THUMB_FILES: Record<BabyStyleId, string> = {
 };
 
 const STYLE_THUMB_URL = (id: BabyStyleId) =>
-  `/imgs/showcases/ai-baby-image-generator/${STYLE_THUMB_FILES[id]}`;
+  `https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/${STYLE_THUMB_FILES[id]}`;
 
-// Short English descriptors for the style popover. Kept inline to avoid
-// expanding the i18n message files for this first landing — translations can
-// be added later against these keys.
-const STYLE_DESCRIPTIONS: Record<BabyStyleId, string> = {
-  'pixar-3d': 'Big eyes, cinematic lighting, film polish',
-  ghibli: 'Dreamy watercolor, whimsical light',
-  anime: 'Bold line art, vibrant cel-shading',
-  claymation: 'Stop-motion warmth, clay seams',
-  chibi: 'Kawaii, sticker-ready, blush cheeks',
-  watercolor: 'Soft washes, storybook paper',
-  plush: 'Felt, fluff, stitched seams',
-  'pixel-art': '16-bit nostalgia, limited palette',
-};
-
-const SUGGESTIONS: {
-  emoji: string;
-  label: string;
-  subtitle: string;
-  prompt: string;
-}[] = [
+// Emoji + AI prompt are locale-independent; label/subtitle are read from i18n
+// (ai.baby-image.generator.suggestions[i]) and kept in sync by index.
+const SUGGESTION_META: { emoji: string; prompt: string }[] = [
   {
     emoji: '🎂',
-    label: 'First birthday in the garden',
-    subtitle: 'Sunlit balloons · soft focus',
     prompt:
       'A joyful baby at their first birthday party in a sunlit garden full of balloons and flowers.',
   },
   {
     emoji: '🧙',
-    label: 'Tiny wizard in a forest',
-    subtitle: 'Mossy log · sunrise glow',
     prompt:
       'A tiny baby wizard wearing a pointed hat, sitting on a mossy log in an enchanted forest at sunrise.',
   },
   {
     emoji: '🏖',
-    label: 'Beach day with seashells',
-    subtitle: 'Golden hour · gentle waves',
     prompt:
       'A curious baby on a sunny beach, holding a seashell, waves in the background, golden hour light.',
   },
   {
     emoji: '🚀',
-    label: 'Astronaut among the stars',
-    subtitle: 'Dreamy cosmos · starlight',
     prompt:
       'An adorable baby astronaut floating among stars and planets, dreamy cosmic backdrop.',
   },
@@ -291,9 +269,13 @@ export function BabyImageGenerator({
   const [selectedStyle, setSelectedStyle] = useState<BabyStyleId>(DEFAULT_STYLE);
   const [aspectRatio, setAspectRatio] =
     useState<(typeof ASPECT_RATIO_OPTIONS)[number]>('1:1');
+  const [resolution, setResolution] = useState<BabyImageResolution>(
+    BABY_IMAGE_DEFAULT_RESOLUTION
+  );
   const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(null);
   const [stylePopoverOpen, setStylePopoverOpen] = useState(false);
   const [aspectPopoverOpen, setAspectPopoverOpen] = useState(false);
+  const [resolutionPopoverOpen, setResolutionPopoverOpen] = useState(false);
   const [downloadingImageId, setDownloadingImageId] = useState<string | null>(
     null
   );
@@ -312,6 +294,7 @@ export function BabyImageGenerator({
   const promptLength = prompt.trim().length;
   const isPromptTooLong = promptLength > MAX_PROMPT_LENGTH;
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
+  const currentCostCredits = BABY_IMAGE_COST_CREDITS[resolution];
 
   const activeAssistant = useMemo(
     () =>
@@ -554,7 +537,7 @@ export function BabyImageGenerator({
 
       if (isGenerating) return;
 
-      if (remainingCredits < BABY_IMAGE_COST_CREDITS) {
+      if (remainingCredits < currentCostCredits) {
         toast.error(t('errors.insufficient_credits'));
         return;
       }
@@ -600,6 +583,7 @@ export function BabyImageGenerator({
         const options: UnsafeAny = {
           styleId: sendStyle,
           aspect_ratio: sendAspect,
+          resolution,
         };
         if (sendRefUrl) {
           options.image_input = [sendRefUrl];
@@ -675,9 +659,11 @@ export function BabyImageGenerator({
       user,
       isGenerating,
       remainingCredits,
+      currentCostCredits,
       prompt,
       selectedStyle,
       aspectRatio,
+      resolution,
       attachedImage,
       setIsShowSignModal,
       t,
@@ -962,7 +948,7 @@ export function BabyImageGenerator({
                                 {t(`styles.${id}.label`)}
                               </span>
                               <span className="bb-popover-item-desc truncate">
-                                {STYLE_DESCRIPTIONS[id]}
+                                {t(`styles.${id}.description`)}
                               </span>
                             </span>
                             {id === selectedStyle && (
@@ -1008,6 +994,50 @@ export function BabyImageGenerator({
                             <span>{ratio}</span>
                           </span>
                           {ratio === aspectRatio && (
+                            <Check className="h-3.5 w-3.5 text-primary" />
+                          )}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* resolution dropdown */}
+                  <DropdownMenu
+                    open={resolutionPopoverOpen}
+                    onOpenChange={setResolutionPopoverOpen}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <button type="button" className="bb-rail-chip">
+                        <span>{t(`form.resolution_${resolution}` as UnsafeAny)}</span>
+                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      side="top"
+                      align="start"
+                      className="w-44 p-1"
+                    >
+                      {BABY_IMAGE_RESOLUTIONS.map((r) => (
+                        <DropdownMenuItem
+                          key={r}
+                          className={cn(
+                            'flex w-full items-center justify-between rounded-md px-3 py-1.5 text-sm font-semibold',
+                            r === resolution && 'bg-primary/20 text-foreground'
+                          )}
+                          onSelect={() => {
+                            setResolution(r);
+                            setResolutionPopoverOpen(false);
+                          }}
+                        >
+                          <span className="inline-flex flex-col">
+                            <span>{t(`form.resolution_${r}` as UnsafeAny)}</span>
+                            <span className="text-[11px] font-normal text-muted-foreground">
+                              {t('form.resolution_credits', {
+                                credits: BABY_IMAGE_COST_CREDITS[r],
+                              })}
+                            </span>
+                          </span>
+                          {r === resolution && (
                             <Check className="h-3.5 w-3.5 text-primary" />
                           )}
                         </DropdownMenuItem>
@@ -1066,14 +1096,14 @@ export function BabyImageGenerator({
 
             <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
               <span>
-                {t('credits_cost', { credits: BABY_IMAGE_COST_CREDITS })}
+                {t('credits_cost', { credits: currentCostCredits })}
                 {isPromptTooLong && (
                   <span className="ml-2 text-destructive">
                     {t('form.prompt_too_long')}
                   </span>
                 )}
               </span>
-              {isMounted && user && remainingCredits < BABY_IMAGE_COST_CREDITS ? (
+              {isMounted && user && remainingCredits < currentCostCredits ? (
                 <Link href="/pricing" className="text-primary underline-offset-2 hover:underline">
                   {t('buy_credits')}
                 </Link>
@@ -1089,7 +1119,7 @@ export function BabyImageGenerator({
         {/* helper text below the card (matches prototype footer) */}
         <p className="bb-foot-hint">
           <span className="bb-foot-hint-tag">{t('footer_tag')}</span>
-          <span>{t('footer_hint', { credits: BABY_IMAGE_COST_CREDITS })}</span>
+          <span>{t('footer_hint', { credits: currentCostCredits })}</span>
         </p>
       </div>
     </section>
@@ -1115,22 +1145,26 @@ function EmptyState({
 
       <div className="bb-try-label">{t('empty.try_label')}</div>
       <div className="bb-idea-grid">
-        {SUGGESTIONS.map((s) => (
-          <button
-            key={s.label}
-            type="button"
-            className="bb-idea"
-            onClick={() => onSuggestion(s.prompt)}
-          >
-            <span className="bb-idea-ill" aria-hidden="true">
-              {s.emoji}
-            </span>
-            <span className="bb-idea-body">
-              <span>{s.label}</span>
-              <span className="bb-idea-tiny">{s.subtitle}</span>
-            </span>
-          </button>
-        ))}
+        {SUGGESTION_META.map((meta, i) => {
+          const label = t(`suggestions.${i}.label`);
+          const subtitle = t(`suggestions.${i}.subtitle`);
+          return (
+            <button
+              key={i}
+              type="button"
+              className="bb-idea"
+              onClick={() => onSuggestion(meta.prompt)}
+            >
+              <span className="bb-idea-ill" aria-hidden="true">
+                {meta.emoji}
+              </span>
+              <span className="bb-idea-body">
+                <span>{label}</span>
+                <span className="bb-idea-tiny">{subtitle}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
