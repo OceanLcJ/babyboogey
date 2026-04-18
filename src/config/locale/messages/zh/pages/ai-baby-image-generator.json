@@ -16,6 +16,7 @@
     "sections": {
       "hero": {
         "id": "hero",
+        "eyebrow": "AI 宝宝图片工作室",
         "title": "AI 宝宝图片生成器 — 8 种风格，一键生成",
         "description": "把一张宝宝照片变成 3D 动画、手绘奇幻、Q 版萌娃、毛绒玩偶…… 选一张最爱的，再一键送到舞蹈视频生成器。",
         "buttons": [
@@ -42,6 +43,7 @@
       "showcase": {
         "block": "features-list",
         "id": "showcase",
+        "eyebrow": "风格精选",
         "title": "8 种艺术风格 · 每个宝宝都独一无二",
         "description": "每种风格都经过精调，既保留宝宝五官辨识度，又赋予独特艺术感。",
         "items": [
@@ -123,6 +125,7 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
+        "eyebrow": "操作流程",
         "title": "三步搞定",
         "description": "从上传到出舞蹈视频，只要三步。",
         "items": [
@@ -142,6 +145,11 @@
       },
       "faq": {
         "id": "faq",
+        "eyebrow": "好问题",
+        "helper": {
+          "label": "还在犹豫？",
+          "text": "2K 每张 12 积分（4K 每张 25 积分）— 积分包起步门槛很低，先买一小包试一张再决定要不要继续。"
+        },
         "title": "常见问题",
         "description": "生成你的第一张 AI 宝宝图前可能想知道的事。",
         "items": [
@@ -151,7 +159,7 @@
           },
           {
             "question": "一张图多少积分？",
-            "answer": "40 积分 / 张。新用户注册后可领取一次免费体验积分包，先试再买。"
+            "answer": "2K 每张 12 积分，4K 每张 25 积分。新用户注册后可领取一次免费体验积分包，先试再买。"
           },
           {
             "question": "用的是什么模型？",
@@ -173,8 +181,9 @@
       },
       "cta": {
         "id": "cta",
+        "eyebrow": "轮到你了",
         "title": "现在就认识一下你的 AI 宝宝",
-        "description": "8 种风格一次生成，选一张最爱的，几分钟变成跳舞视频。",
+        "description": "8 种风格一次生成，选一张最爱的；想看 TA 动起来，还能一键送到跳舞视频生成器。",
         "buttons": [
           {
             "title": "开始创作",

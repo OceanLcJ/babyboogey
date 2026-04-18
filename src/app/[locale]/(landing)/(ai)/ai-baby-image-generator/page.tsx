@@ -32,9 +32,20 @@ export default async function AiBabyImageGeneratorPage({
   const page = pageT.raw('page') as DynamicPage;
   const sections = page.sections || {};
 
+  const stylesRaw = generatorT.raw('generator.styles') as Record<
+    string,
+    { label?: string }
+  >;
+  const styleLabels = Object.fromEntries(
+    Object.entries(stylesRaw || {}).map(([id, v]) => [id, v?.label ?? id])
+  );
+
   return (
     <>
-      <BabyImageLandingHero section={sections.hero as Hero | undefined} />
+      <BabyImageLandingHero
+        section={sections.hero as Hero | undefined}
+        styleLabels={styleLabels}
+      />
       <BabyImageGenerator srOnlyTitle={generatorT.raw('generator.title')} />
       <BabyImageLandingShowcase
         section={sections.showcase as Section | undefined}

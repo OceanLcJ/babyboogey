@@ -24,8 +24,11 @@ const STYLE_THUMB_FILES: Record<BabyStyleId, string> = {
   'pixel-art': 'ai-baby-photo-pixel-art-retro-style.webp',
 };
 
+const STYLE_THUMB_BASE =
+  'https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator';
+
 function styleThumb(id: BabyStyleId): string {
-  return `/imgs/showcases/ai-baby-image-generator/${STYLE_THUMB_FILES[id]}`;
+  return `${STYLE_THUMB_BASE}/${STYLE_THUMB_FILES[id]}`;
 }
 
 const ROMAN_LOWER = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii'];
@@ -99,14 +102,18 @@ const HERO_STRIP_Y = ['10px', '-2px', '0', '0', '6px'];
 
 export function BabyImageLandingHero({
   section,
+  styleLabels,
 }: {
   section?: Hero;
+  styleLabels?: Partial<Record<BabyStyleId, string>>;
 }) {
   if (!section) return null;
   return (
     <section id={section.id} className={cn('bb-land bb-land-hero', section.className)}>
       <div className="container">
-        <span className="bb-land-eyebrow">AI Baby Image Studio</span>
+        {section.eyebrow && (
+          <span className="bb-land-eyebrow">{section.eyebrow}</span>
+        )}
         <h1 className="bb-land-hero-title">
           {renderTitle(section.title, section.highlight_text)}
         </h1>
@@ -135,7 +142,7 @@ export function BabyImageLandingHero({
             />
             <div className="bb-land-poly-tag">
               <b>{pad2(i + 1)}</b>
-              <span>{id.replace('-', ' ')}</span>
+              <span>{styleLabels?.[id] ?? id.replace('-', ' ')}</span>
             </div>
           </div>
         ))}
@@ -182,7 +189,9 @@ export function BabyImageLandingShowcase({
       <div className="container">
         <div className="bb-land-head">
           <div>
-            <span className="bb-land-eyebrow left">The Styles</span>
+            {section.eyebrow && (
+              <span className="bb-land-eyebrow left">{section.eyebrow}</span>
+            )}
             <h2 className="bb-land-title">
               {renderTitle(section.title, section.highlight_text)}
             </h2>
@@ -250,7 +259,9 @@ export function BabyImageLandingUsage({
     >
       <div className="container">
         <div className="bb-land-usage-head">
-          <span className="bb-land-eyebrow">How It Works</span>
+          {section.eyebrow && (
+            <span className="bb-land-eyebrow">{section.eyebrow}</span>
+          )}
           <h2 className="bb-land-title">
             {renderTitle(section.title, section.highlight_text)}
           </h2>
@@ -294,18 +305,23 @@ export function BabyImageLandingFaq({
     >
       <div className="container bb-land-faq-grid">
         <aside className="bb-land-faq-side">
-          <span className="bb-land-eyebrow left">Good Questions</span>
+          {section.eyebrow && (
+            <span className="bb-land-eyebrow left">{section.eyebrow}</span>
+          )}
           <h2 className="bb-land-title">
             {renderTitle(section.title, section.highlight_text)}
           </h2>
           {section.description && (
             <p className="bb-land-desc">{section.description}</p>
           )}
-          <div className="bb-land-faq-helper">
-            <div>
-              <b>Still unsure?</b> 40 credits per render — and the first image is free after sign-up.
+          {section.helper?.text && (
+            <div className="bb-land-faq-helper">
+              <div>
+                {section.helper.label && <b>{section.helper.label}</b>}{' '}
+                {section.helper.text}
+              </div>
             </div>
-          </div>
+          )}
         </aside>
         <div className="bb-land-faq-list">
           {items.map((item, i) => (
@@ -338,7 +354,9 @@ export function BabyImageLandingCta({
       <div className="container">
         <div className="bb-land-cta-card">
           <div>
-            <span className="bb-land-eyebrow left">Your Turn</span>
+            {section.eyebrow && (
+              <span className="bb-land-eyebrow left">{section.eyebrow}</span>
+            )}
             <h2 className="bb-land-title">
               {renderTitle(section.title, section.highlight_text)}
             </h2>

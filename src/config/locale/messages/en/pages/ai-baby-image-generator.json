@@ -16,6 +16,7 @@
     "sections": {
       "hero": {
         "id": "hero",
+        "eyebrow": "AI Baby Image Studio",
         "title": "AI Baby Image Generator — 8 Styles, One Click",
         "description": "Turn any baby photo into a 3D-animation portrait, watercolor storybook scene, chibi sticker, plush doll, and more. Then send your favorite into our dance video generator with one tap.",
         "buttons": [
@@ -42,6 +43,7 @@
       "showcase": {
         "block": "features-list",
         "id": "showcase",
+        "eyebrow": "The Styles",
         "title": "8 Artistic Styles, Every Baby",
         "description": "Pick from eight hand-tuned styles, each designed to keep your baby's features recognizable while adding a unique artistic flair.",
         "items": [
@@ -123,6 +125,7 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
+        "eyebrow": "How It Works",
         "title": "How It Works",
         "description": "From upload to dance video in three steps.",
         "items": [
@@ -142,6 +145,11 @@
       },
       "faq": {
         "id": "faq",
+        "eyebrow": "Good Questions",
+        "helper": {
+          "label": "Still unsure?",
+          "text": "12 credits per 2K image (25 for 4K) — credit packs start small, so you can try a single render without a long-term commitment."
+        },
         "title": "Frequently Asked Questions",
         "description": "Everything you need to know before generating your first AI baby image.",
         "items": [
@@ -151,7 +159,7 @@
           },
           {
             "question": "How many credits does one image cost?",
-            "answer": "40 credits per image. First-time visitors get a free trial credit grant on sign-up so you can try it before committing."
+            "answer": "12 credits for a 2K image, 25 credits for 4K. First-time visitors get a free trial credit grant on sign-up so you can try it before committing."
           },
           {
             "question": "Which model powers the generator?",
@@ -173,8 +181,9 @@
       },
       "cta": {
         "id": "cta",
+        "eyebrow": "Your Turn",
         "title": "Ready to Meet Your AI Baby?",
-        "description": "Generate your first image in 8 styles and turn your favorite into a dance video in minutes.",
+        "description": "Generate your first image in 8 styles and pick your favorite — you can also send it into the dance video generator with one tap.",
         "buttons": [
           {
             "title": "Start Creating",
