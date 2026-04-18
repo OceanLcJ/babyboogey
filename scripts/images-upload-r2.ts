@@ -152,7 +152,10 @@ async function main() {
       return;
     }
 
-    const result = spawnSync('pnpm', command, { stdio: 'inherit' });
+    const result = spawnSync('pnpm', command, {
+      stdio: 'inherit',
+      shell: process.platform === 'win32',
+    });
     if (result.status !== 0) {
       process.exit(result.status ?? 1);
     }

@@ -88,7 +88,8 @@ async function main() {
   const now = new Date().toISOString();
   const usage = scanReferenceUsage(
     manifest.entries.map((entry) => entry.sourceUrl),
-    REWRITE_SCAN_DIRS
+    REWRITE_SCAN_DIRS,
+    manifest.entries.map((entry) => entry.publicUrl)
   );
 
   let rewrittenEntries = 0;
