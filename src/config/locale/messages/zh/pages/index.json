@@ -50,18 +50,6 @@
         "show_avatars": true,
         "avatars_tip": "10,000+ 开心家长",
         "show_award": false,
-        "image": {
-          "src": "/imgs/features/baby-hero.png",
-          "alt": "AI 宝宝跳舞生成器",
-          "width": 1200,
-          "height": 800
-        },
-        "image_invert": {
-          "src": "/imgs/features/baby-hero-dark.png",
-          "alt": "AI 宝宝跳舞生成器",
-          "width": 1200,
-          "height": 800
-        },
         "background_image": {
           "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "背景"
@@ -171,36 +159,20 @@
         "id": "usage",
         "title": "如何秒速让宝宝照片动起来",
         "description": "三步免费制作宝宝跳舞视频：",
-        "image": {
-          "src": "/imgs/features/step-1.png",
-          "alt": "如何制作宝宝跳舞视频"
-        },
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
             "title": "上传照片",
-            "description": "选择任意宝宝照片 — 可爱的或臭脸的都行！我们的 AI 宝宝跳舞生成器支持任何清晰照片。",
-            "image": {
-              "src": "/imgs/features/upload.png",
-              "alt": "上传宝宝照片"
-            }
+            "description": "选择任意宝宝照片 — 可爱的或臭脸的都行！我们的 AI 宝宝跳舞生成器支持任何清晰照片。"
           },
           {
             "title": "选择模板",
-            "description": "选一个爆款舞蹈动作。数十种模板让你随心制作宝宝动画。",
-            "image": {
-              "src": "/imgs/features/template.png",
-              "alt": "选择舞蹈模板"
-            }
+            "description": "选一个爆款舞蹈动作。数十种模板让你随心制作宝宝动画。"
           },
           {
             "title": "开始摇摆！",
-            "description": "导出宝宝跳舞视频，分享欢乐。秒速将照片变成跳舞宝宝！",
-            "image": {
-              "src": "/imgs/features/export.png",
-              "alt": "导出宝宝跳舞视频"
-            }
+            "description": "导出宝宝跳舞视频，分享欢乐。秒速将照片变成跳舞宝宝！"
           }
         ]
       },

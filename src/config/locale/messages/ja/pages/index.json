@@ -50,18 +50,6 @@
         "show_avatars": true,
         "avatars_tip": "10,000人以上の幸せな親御さん",
         "show_award": false,
-        "image": {
-          "src": "/imgs/features/baby-hero.png",
-          "alt": "AI赤ちゃんダンスジェネレーター - オンラインで赤ちゃん写真をアニメーション化",
-          "width": 1200,
-          "height": 800
-        },
-        "image_invert": {
-          "src": "/imgs/features/baby-hero-dark.png",
-          "alt": "AI赤ちゃんダンスジェネレーター",
-          "width": 1200,
-          "height": 800
-        },
         "background_image": {
           "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "背景"
@@ -171,36 +159,20 @@
         "id": "usage",
         "title": "数秒で赤ちゃん写真をアニメーション化する方法",
         "description": "3つの簡単なステップで赤ちゃんダンス動画を無料で作成：",
-        "image": {
-          "src": "/imgs/features/step-1.png",
-          "alt": "赤ちゃんダンス動画の作り方"
-        },
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
             "title": "写真をアップロード",
-            "description": "赤ちゃんの写真を選んでください — 可愛くても不機嫌でもOK！私たちのAI赤ちゃんダンスジェネレーターは、鮮明なスナップショットなら何でも機能します。",
-            "image": {
-              "src": "/imgs/features/upload.png",
-              "alt": "赤ちゃん写真をアップロード"
-            }
+            "description": "赤ちゃんの写真を選んでください — 可愛くても不機嫌でもOK！私たちのAI赤ちゃんダンスジェネレーターは、鮮明なスナップショットなら何でも機能します。"
           },
           {
             "title": "テンプレートを選択",
-            "description": "バズるダンスムーブを選んでください。赤ちゃんの写真をあなたらしくアニメーション化する多数のテンプレートがあります。",
-            "image": {
-              "src": "/imgs/features/template.png",
-              "alt": "赤ちゃんダンステンプレートを選択"
-            }
+            "description": "バズるダンスムーブを選んでください。赤ちゃんの写真をあなたらしくアニメーション化する多数のテンプレートがあります。"
           },
           {
             "title": "ブギを見る！",
-            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！",
-            "image": {
-              "src": "/imgs/features/export.png",
-              "alt": "赤ちゃんダンス動画をエクスポート"
-            }
+            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！"
           }
         ]
       },

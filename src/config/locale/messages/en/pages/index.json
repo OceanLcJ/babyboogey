@@ -50,18 +50,6 @@
         "show_avatars": true,
         "avatars_tip": "10,000+ happy parents",
         "show_award": false,
-        "image": {
-          "src": "/imgs/features/baby-hero.png",
-          "alt": "AI Baby Dance Generator - Animate Baby Photos Online",
-          "width": 1200,
-          "height": 800
-        },
-        "image_invert": {
-          "src": "/imgs/features/baby-hero-dark.png",
-          "alt": "AI Baby Dance Generator",
-          "width": 1200,
-          "height": 800
-        },
         "background_image": {
           "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "background"
@@ -171,36 +159,20 @@
         "id": "usage",
         "title": "How to Animate Baby Photos in Seconds",
         "description": "Make baby dance videos free in three simple steps:",
-        "image": {
-          "src": "/imgs/features/step-1.png",
-          "alt": "How to Make Baby Dance Video"
-        },
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
             "title": "Upload Photo",
-            "description": "Pick any baby photo — cute or grumpy! Our AI baby dance generator works with any clear snapshot.",
-            "image": {
-              "src": "/imgs/features/upload.png",
-              "alt": "Upload Baby Photo"
-            }
+            "description": "Pick any baby photo — cute or grumpy! Our AI baby dance generator works with any clear snapshot."
           },
           {
             "title": "Choose Template",
-            "description": "Select a viral dance move. Dozens of templates to animate baby photos your way.",
-            "image": {
-              "src": "/imgs/features/template.png",
-              "alt": "Choose Baby Dance Template"
-            }
+            "description": "Select a viral dance move. Dozens of templates to animate baby photos your way."
           },
           {
             "title": "Watch 'Em Boogie!",
-            "description": "Export your baby dance video and share the giggles. Turn photo into dancing baby magic in seconds!",
-            "image": {
-              "src": "/imgs/features/export.png",
-              "alt": "Export Baby Dance Video"
-            }
+            "description": "Export your baby dance video and share the giggles. Turn photo into dancing baby magic in seconds!"
           }
         ]
       },
