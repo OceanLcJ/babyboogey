@@ -43,6 +43,7 @@ export default async function LandingPage({
     cta_button: string;
     card_static: string;
     card_boogie: string;
+    eyebrow?: string;
   };
 
   // get page data from original source
@@ -167,7 +168,9 @@ export default async function LandingPage({
         <div className="bb-home-hero-grid container">
           {/* Left: copy + CTA */}
           <div className="bb-home-hero-copy">
-            <span className="bb-home-hero-eyebrow">AI Baby Dance Studio</span>
+            {customHero.eyebrow && (
+              <span className="bb-home-hero-eyebrow">{customHero.eyebrow}</span>
+            )}
             <h1 className="bb-home-hero-title">
               {customHero.title_line1}
               <br />

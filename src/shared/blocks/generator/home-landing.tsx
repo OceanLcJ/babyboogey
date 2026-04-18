@@ -202,7 +202,9 @@ export function HomeBenefits({ section }: { section?: Section }) {
         <div className="bb-home-benefits-wall">
           {items.map((item, i) => (
             <article key={i} className="bb-home-bene">
-              <span className="bb-home-bene-pick">Pick {pad2(i + 1)}</span>
+              <span className="bb-home-bene-pick">
+                {section.pick_label || 'Pick'} {pad2(i + 1)}
+              </span>
               {item.image?.src && (
                 <div className="bb-home-bene-photo">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -247,7 +249,9 @@ export function HomeUsage({ section }: { section?: Section }) {
     >
       <div className="container">
         <div className="bb-home-sec-head">
-          <span className="bb-home-eyebrow">How It Works</span>
+          {section.eyebrow && (
+            <span className="bb-home-eyebrow">{section.eyebrow}</span>
+          )}
           <h2 className="bb-home-title">
             {renderTitleFromHtml(section.title)}
           </h2>
@@ -341,7 +345,9 @@ export function HomeTestimonials({ section }: { section?: Section }) {
     >
       <div className="container">
         <div className="bb-home-sec-head">
-          <span className="bb-home-eyebrow">Love Letters</span>
+          {section.eyebrow && (
+            <span className="bb-home-eyebrow">{section.eyebrow}</span>
+          )}
           <h2 className="bb-home-title">
             {renderTitleFromHtml(section.title)}
           </h2>
@@ -398,7 +404,9 @@ export function HomePricing({ section }: { section?: PricingSection }) {
     >
       <div className="container">
         <div className="bb-home-sec-head">
-          <span className="bb-home-eyebrow">Credit Packs</span>
+          {section.eyebrow && (
+            <span className="bb-home-eyebrow">{section.eyebrow}</span>
+          )}
           <h2 className="bb-home-title">
             {renderTitleFromHtml(section.title)}
           </h2>
@@ -415,7 +423,7 @@ export function HomePricing({ section }: { section?: PricingSection }) {
                 'bb-home-price-card',
                 item.is_featured && 'featured'
               )}
-              data-label={item.label || 'Popular'}
+              data-label={item.label || section.popular_label || 'Popular'}
             >
               <p className="bb-home-price-name">{item.title}</p>
               <div className="bb-home-price-amt">
@@ -465,19 +473,23 @@ export function HomeFaq({ section }: { section?: Section }) {
     >
       <div className="container bb-home-faq-grid">
         <aside className="bb-home-faq-side">
-          <span className="bb-home-eyebrow left">Good Questions</span>
+          {section.eyebrow && (
+            <span className="bb-home-eyebrow left">{section.eyebrow}</span>
+          )}
           <h2 className="bb-home-title">
             {renderTitleFromHtml(section.title)}
           </h2>
           {section.description && (
             <p className="bb-home-desc">{section.description}</p>
           )}
-          <div className="bb-home-faq-helper">
-            <div>
-              <b>Still unsure?</b> Your first render is on the house after
-              sign-up — no card, no subscription.
+          {section.helper?.text && (
+            <div className="bb-home-faq-helper">
+              <div>
+                {section.helper.label && <b>{section.helper.label}</b>}{' '}
+                {section.helper.text}
+              </div>
             </div>
-          </div>
+          )}
         </aside>
         <div className="bb-home-faq-list">
           {items.map((item, i) => (
@@ -528,7 +540,9 @@ export function HomeCta({ section }: { section?: Section }) {
             <span className="s3">✧</span>
           </div>
           <div className="bb-home-cta-copy">
-            <span className="bb-home-eyebrow left">Your Turn</span>
+            {section.eyebrow && (
+              <span className="bb-home-eyebrow left">{section.eyebrow}</span>
+            )}
             <h2 className="bb-home-title">
               {renderTitleFromHtml(section.title)}
             </h2>
@@ -542,18 +556,30 @@ export function HomeCta({ section }: { section?: Section }) {
                 ))}
               </div>
             )}
-            <p className="bb-home-cta-trust">
-              <span>
-                <b>✦ 4.9/5</b>
-              </span>
-              <span className="sep" aria-hidden="true" />
-              <span>2,000+ Families</span>
-              <span className="sep" aria-hidden="true" />
-              <span>First Render Free</span>
-            </p>
+            {section.trust_bar && (
+              <p className="bb-home-cta-trust">
+                {section.trust_bar.rating && (
+                  <span>
+                    <b>{section.trust_bar.rating}</b>
+                  </span>
+                )}
+                {section.trust_bar.rating && section.trust_bar.audience && (
+                  <span className="sep" aria-hidden="true" />
+                )}
+                {section.trust_bar.audience && (
+                  <span>{section.trust_bar.audience}</span>
+                )}
+                {section.trust_bar.audience && section.trust_bar.pricing && (
+                  <span className="sep" aria-hidden="true" />
+                )}
+                {section.trust_bar.pricing && (
+                  <span>{section.trust_bar.pricing}</span>
+                )}
+              </p>
+            )}
           </div>
           <div className="bb-home-cta-collage" aria-hidden="true">
-            {CTA_COLLAGE.map((c) => (
+            {CTA_COLLAGE.map((c, i) => (
               <div key={c.tag} className={`bb-home-cta-poly ${c.pos}`}>
                 <div className="bb-home-cta-poly-photo">
                   {c.isVideo ? (
@@ -571,7 +597,7 @@ export function HomeCta({ section }: { section?: Section }) {
                 </div>
                 <div className="bb-home-cta-poly-tag">
                   <b>{c.tag}</b>
-                  <span>{c.label}</span>
+                  <span>{section.collage_labels?.[i] ?? c.label}</span>
                 </div>
               </div>
             ))}
