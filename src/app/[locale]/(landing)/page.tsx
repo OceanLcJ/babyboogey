@@ -1,12 +1,22 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpenText } from 'lucide-react';
 
 import { envConfigs } from '@/config';
-import { getThemePage } from '@/core/theme';
+import { Link } from '@/core/i18n/navigation';
 import { getMetadata } from '@/shared/lib/seo';
 import { VideoGenerator } from '@/shared/blocks/generator';
+import {
+  HomeBenefits,
+  HomeCta,
+  HomeFaq,
+  HomeFeatures,
+  HomeIntroduce,
+  HomePricing,
+  HomeTestimonials,
+  HomeUsage,
+} from '@/shared/blocks/generator/home-landing';
+import '@/shared/blocks/generator/home-landing.css';
 import type { DynamicPage } from '@/shared/types/blocks/landing';
 
 export const generateMetadata = getMetadata({
@@ -24,7 +34,6 @@ export default async function LandingPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const t = await getTranslations('landing');
   const tIndex = await getTranslations('pages.index');
   const tMeta = await getTranslations('common.metadata');
   const customHero = tIndex.raw('custom_hero') as {
@@ -39,20 +48,28 @@ export default async function LandingPage({
   // get page data from original source
   const page: DynamicPage = tIndex.raw('page');
 
+  // Grab the dynamic hero's secondary button + tip before removing it, so the
+  // custom hero can reuse those i18n-translated strings.
+  const dynamicHero = (page.sections?.hero ?? {}) as {
+    buttons?: { title: string; url?: string; target?: string }[];
+    tip?: string;
+  };
+  const secondaryBtn = dynamicHero.buttons?.[1];
+  const heroTip = dynamicHero.tip;
+
   // Remove the default hero from the dynamic sections to avoid duplication
   if (page.sections && page.sections.hero) {
     delete page.sections.hero;
   }
 
-  // load dynamic page component
-  const Page = await getThemePage('dynamic-page');
+  const sections = page.sections || {};
 
   // Build FAQ items for JSON-LD
-  const faqSection = page.sections?.faq as UnsafeAny;
+  const faqSection = sections.faq as UnsafeAny;
   const faqItems = faqSection?.items || [];
 
   // Build HowTo steps for JSON-LD
-  const usageSection = page.sections?.usage as UnsafeAny;
+  const usageSection = sections.usage as UnsafeAny;
   const howToSteps = usageSection?.items || [];
 
   const appUrl = envConfigs.app_url || '';
@@ -145,100 +162,124 @@ export default async function LandingPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative isolate px-6 pt-14 lg:px-8">
-        <div className="mx-auto max-w-7xl py-12 sm:py-24 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left Side: Copy + CTA */}
-            <div className="text-center lg:text-left">
-              <h1 className="text-5xl font-bold tracking-tight text-[var(--foreground)] sm:text-6xl mb-6">
-                {customHero.title_line1} <br />
-                <span className="text-[var(--primary)]">{customHero.title_line2}</span>
-              </h1>
-              <p className="mt-6 text-lg leading-8 text-muted-foreground mb-10 max-w-lg mx-auto lg:mx-0">
-                {customHero.description}
-              </p>
-              <div className="flex items-center justify-center lg:justify-start gap-x-6">
+      {/* Hero — Nursery Nightfall reskin */}
+      <section className="bb-home-hero">
+        <div className="bb-home-hero-grid container">
+          {/* Left: copy + CTA */}
+          <div className="bb-home-hero-copy">
+            <span className="bb-home-hero-eyebrow">AI Baby Dance Studio</span>
+            <h1 className="bb-home-hero-title">
+              {customHero.title_line1}
+              <br />
+              <em>{customHero.title_line2}</em>
+            </h1>
+            <p className="bb-home-hero-lede">{customHero.description}</p>
+            <div className="bb-home-hero-cta">
+              <Link href="#generator" className="bb-home-hero-primary">
+                <span>{customHero.cta_button}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              {secondaryBtn?.title && (
                 <Link
-                  href="#generator"
-                  className="rounded-full bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-[var(--primary-foreground)] shadow-[0_10px_20px_-10px_rgba(252,211,77,0.6)] dark:shadow-[0_10px_20px_-10px_rgba(252,211,77,0.45)] hover:bg-[var(--primary)]/90 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+                  href={secondaryBtn.url || '/showcases'}
+                  className="bb-home-hero-ghost"
                 >
-                  {customHero.cta_button} <ArrowRight className="w-5 h-5" />
+                  <BookOpenText className="w-4 h-4" />
+                  <span>{secondaryBtn.title}</span>
                 </Link>
+              )}
+            </div>
+            {heroTip && <p className="bb-home-hero-tip">{heroTip}</p>}
+          </div>
+
+          {/* Right: before → after polaroid pair with dashed arc */}
+          <div className="bb-home-hero-visual">
+            {/* Static photo */}
+            <div className="bb-home-hero-poly bb-home-hero-poly-static">
+              <div className="bb-home-hero-poly-photo">
+                <Image
+                  src="https://img.aibabydance.org/assets/imgs/example/image-1.png"
+                  alt="Baby photo before AI dance animation - BabyBoogey"
+                  fill
+                  sizes="(max-width: 1024px) 210px, 240px"
+                  priority
+                />
+              </div>
+              <div className="bb-home-hero-poly-tag">
+                <h4>{customHero.card_static}</h4>
+                <span>i.</span>
               </div>
             </div>
 
-            {/* Right Side: Visual Demo */}
-            <div className="relative w-full h-[450px] lg:h-[550px] flex items-center justify-center">
+            {/* Dashed arc */}
+            <svg
+              className="bb-home-hero-arrow"
+              width="220"
+              height="120"
+              viewBox="0 0 220 120"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                className="bb-home-hero-arrow-dash"
+                d="M20 80 C 60 20, 160 20, 200 80"
+                stroke="currentColor"
+                strokeWidth="5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M185 65 L 200 80 L 192 95"
+                stroke="currentColor"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
-              {/* Card 1: Static Photo */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-card dark:bg-white/[0.06] dark:backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(252,211,77,0.12),0_20px_40px_-15px_rgba(0,0,0,0.5)] p-3 flex flex-col items-center justify-center rotate-[-6deg] z-10 border border-border dark:border-white/[0.12] transition-all duration-300">
-                <div className="w-full h-full rounded-2xl overflow-hidden relative">
-                  <Image
-                    src="https://img.aibabydance.org/assets/imgs/example/image-1.png"
-                    alt="Baby photo before AI dance animation - BabyBoogey"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 224px, 256px"
-                    priority
-                  />
-                </div>
-                <p className="mt-3 font-bold text-muted-foreground dark:text-white/50 text-sm">{customHero.card_static}</p>
+            {/* Boogie video */}
+            <div className="bb-home-hero-poly bb-home-hero-poly-boogie">
+              <span className="bb-home-hero-poly-badge">
+                {customHero.card_boogie}
+              </span>
+              <div className="bb-home-hero-poly-photo">
+                <video
+                  src="https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4"
+                  poster="https://img.aibabydance.org/assets/imgs/example/image-1.png"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
               </div>
-
-              {/* Connecting Arrow (Animated) - Behind cards */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 text-[var(--primary)]">
-                <svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M20 80 C 60 20, 160 20, 200 80"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                    strokeDasharray="15 10"
-                    className="animate-dash"
-                  />
-                  <path
-                    d="M185 65 L 200 80 L 192 95"
-                    stroke="currentColor"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="animate-pulse"
-                  />
-                </svg>
+              <div className="bb-home-hero-poly-tag">
+                <h4>{customHero.card_boogie}</h4>
+                <span>ii.</span>
               </div>
-
-              {/* Card 2: Dancing Video */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-56 h-80 lg:w-64 lg:h-96 bg-card dark:bg-white/[0.06] dark:backdrop-blur-xl rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_8px_32px_rgba(252,211,77,0.22),0_20px_40px_-15px_rgba(0,0,0,0.5)] p-3 flex flex-col items-center justify-center rotate-[6deg] z-20 border border-border dark:border-white/[0.15] transition-all duration-300">
-                <div className="w-full h-full rounded-2xl overflow-hidden relative">
-                  <video
-                    src="https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4"
-                    poster="https://img.aibabydance.org/assets/imgs/example/image-1.png"
-                    className="w-full h-full object-cover"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                  />
-                  <span className="absolute top-2 right-2 text-xl">✨</span>
-                  <span className="absolute bottom-2 left-2 text-xl">✨</span>
-                </div>
-                <p className="mt-3 font-bold text-[var(--primary)] text-sm">{customHero.card_boogie}</p>
+              <div className="bb-home-hero-confetti" aria-hidden="true">
+                <span className="c1">✨</span>
+                <span className="c2">✦</span>
+                <span className="c3">✧</span>
               </div>
-
             </div>
-
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Video Generator Section */}
-      <div id="generator">
+      {/* Video Generator — existing component, Nursery Nightfall shell */}
+      <div id="generator" className="bb-home-studio">
         <VideoGenerator />
       </div>
 
-      {/* Render the rest of the dynamic page content */}
-      <Page locale={locale} page={page} />
+      {/* Reskinned dynamic sections — explicit render order matches
+          pages.index.page.show_sections (minus hero, which is above). */}
+      <HomeIntroduce section={sections.introduce} />
+      <HomeBenefits section={sections.benefits} />
+      <HomeUsage section={sections.usage} />
+      <HomeFeatures section={sections.features} />
+      <HomeTestimonials section={sections.testimonials} />
+      <HomePricing section={sections.pricing} />
+      <HomeFaq section={sections.faq} />
+      <HomeCta section={sections.cta} />
     </>
   );
 }

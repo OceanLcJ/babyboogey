@@ -79,7 +79,7 @@
             "description": "Upload any baby photo and watch our AI bring it to life with adorable dance moves and expressions.",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
+              "src": "/imgs/features/animate-photo.webp",
               "alt": "Animate Baby Photo"
             }
           },
@@ -88,7 +88,7 @@
             "description": "Advanced face animator online technology keeps faces natural while adding fun dance expressions.",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
+              "src": "/imgs/features/face-animator.webp",
               "alt": "Face Animator Online"
             }
           },
@@ -97,7 +97,7 @@
             "description": "Make baby dance videos free — no credit card required, with a small watermark on free exports.",
             "icon": "RiGiftLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
+              "src": "/imgs/features/free-to-start.webp",
               "alt": "Make Baby Dance Video Free"
             }
           }
@@ -115,7 +115,7 @@
             "description": "Turn photo into dancing baby for Christmas, New Year, and every festive celebration. Fun for the whole family.",
             "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/holiday.png",
+              "src": "/imgs/features/holiday.webp",
               "alt": "Holiday Baby Dance Card"
             }
           },
@@ -124,7 +124,7 @@
             "description": "Create a funny kid dance video guaranteed to go viral. Cure the Monday blues with pure baby joy!",
             "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/laugh.png",
+              "src": "/imgs/features/laugh.webp",
               "alt": "Funny Baby Dance Video"
             }
           },
@@ -133,7 +133,7 @@
             "description": "Animate baby photos into heartwarming dance videos. The digital gift that guarantees a smile every time.",
             "icon": "RiHeartFill",
             "image": {
-              "src": "/imgs/features/love.png",
+              "src": "/imgs/features/love.webp",
               "alt": "Baby Dance Video Gift"
             }
           }
@@ -151,7 +151,7 @@
             "description": "Turn photo into dancing baby in seconds — no choreography needed, just pure AI magic that looks amazingly real.",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/toddler-dancing-neon-studio-4x3.webp",
+              "src": "/imgs/features/viral-dance.webp",
               "alt": "Turn Photo Into Dancing Baby"
             }
           },
@@ -160,7 +160,7 @@
             "description": "Our face animator online ensures faces stay recognizable, safe, and adorable. No weird distortions — just pure cuteness.",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/baby-face-animation-split-screen-ai-demo.webp",
+              "src": "/imgs/features/face-animation.webp",
               "alt": "Face Animator Online"
             }
           }

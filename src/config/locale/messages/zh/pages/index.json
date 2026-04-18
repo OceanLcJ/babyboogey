@@ -79,7 +79,7 @@
             "description": "上传任意宝宝照片，AI 即刻赋予可爱的舞蹈动作和丰富表情。",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
+              "src": "/imgs/features/animate-photo.webp",
               "alt": "照片动画"
             }
           },
@@ -88,7 +88,7 @@
             "description": "先进的人脸动画技术保持面部自然，同时添加有趣的舞蹈表情。",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
+              "src": "/imgs/features/face-animator.webp",
               "alt": "在线人脸动画"
             }
           },
@@ -97,7 +97,7 @@
             "description": "免费制作宝宝跳舞视频 — 无需信用卡，免费导出含小水印。",
             "icon": "RiGiftLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
+              "src": "/imgs/features/free-to-start.webp",
               "alt": "免费制作"
             }
           }
@@ -115,7 +115,7 @@
             "description": "将照片变成跳舞宝宝，适用于圣诞节、新年和各种节日庆典。全家同乐！",
             "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/holiday.png",
+              "src": "/imgs/features/holiday.webp",
               "alt": "节日宝宝跳舞"
             }
           },
@@ -124,7 +124,7 @@
             "description": "制作搞笑的宝宝跳舞视频，保证全网爆笑。一键治愈周一综合症！",
             "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/laugh.png",
+              "src": "/imgs/features/laugh.webp",
               "alt": "搞笑宝宝跳舞"
             }
           },
@@ -133,7 +133,7 @@
             "description": "将宝宝照片变成暖心跳舞视频。一份保证让爷爷奶奶笑开花的数字礼物。",
             "icon": "RiHeartFill",
             "image": {
-              "src": "/imgs/features/love.png",
+              "src": "/imgs/features/love.webp",
               "alt": "宝宝跳舞礼物"
             }
           }
@@ -151,7 +151,7 @@
             "description": "秒速将照片变成跳舞宝宝 — 无需编舞，纯粹的 AI 魔法，效果以假乱真。",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "/imgs/features/dance.png",
+              "src": "/imgs/features/viral-dance.webp",
               "alt": "宝宝舞蹈动作"
             }
           },
@@ -160,7 +160,7 @@
             "description": "我们的在线人脸动画器确保面部清晰可辨、安全可爱。绝无奇怪的变形 — 只有纯粹的可爱。",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "/imgs/features/safe.png",
+              "src": "/imgs/features/face-animation.webp",
               "alt": "在线人脸动画"
             }
           }
