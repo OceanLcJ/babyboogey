@@ -425,10 +425,10 @@ export function BabyImageGenerator({
         return false;
       } catch (error: UnsafeAny) {
         console.error('Error polling baby image task:', error);
-        toast.error(`${t('errors.query_failed')}: ${error.message}`);
+        toast.error(t('errors.query_failed'));
         updateAssistant(assistantId, {
           status: AITaskStatus.FAILED,
-          errorMessage: error.message,
+          errorMessage: t('errors.query_failed'),
           endTime: Date.now(),
         });
         fetchUserCredits();
@@ -647,10 +647,14 @@ export function BabyImageGenerator({
         await fetchUserCredits();
       } catch (error: UnsafeAny) {
         console.error('Failed to generate baby image:', error);
-        toast.error(`${t('errors.generate_failed')}: ${error.message}`);
+        const friendly =
+          error?.message === 'insufficient credits'
+            ? t('errors.insufficient_credits')
+            : t('errors.generate_failed');
+        toast.error(friendly);
         updateAssistant(assistantMsg.id, {
           status: AITaskStatus.FAILED,
-          errorMessage: error.message,
+          errorMessage: friendly,
           endTime: Date.now(),
         });
       }

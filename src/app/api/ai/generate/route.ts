@@ -333,7 +333,12 @@ export async function POST(request: Request) {
       watermarkMode,
       watermarkedAssetId: null,
     };
-    await createAITask(newAITask);
+    try {
+      await createAITask(newAITask);
+    } catch (dbError) {
+      console.error('[ai/generate] createAITask failed', dbError);
+      throw new Error('task_persistence_failed');
+    }
 
     const responseTask = {
       ...newAITask,
@@ -358,7 +363,15 @@ export async function POST(request: Request) {
     return respData(responseTask);
   } catch (e: unknown) {
     console.log('generate failed', e);
-    const message = e instanceof Error ? e.message : 'generate failed';
+    const rawMessage = e instanceof Error ? e.message : 'generate failed';
+    // Never leak raw SQL / DB diagnostics to the client. Whitelist short,
+    // user-meaningful messages; collapse everything else into a generic code.
+    const isSafeMessage =
+      rawMessage.length <= 120 &&
+      !/failed query|insert into|update\s|select\s|drizzle|sqlite|d1_error/i.test(
+        rawMessage
+      );
+    const message = isSafeMessage ? rawMessage : 'task_persistence_failed';
     return respErr(message);
   }
 }
