@@ -14,6 +14,8 @@ import {
   ChevronDown,
   Download,
   Loader2,
+  Maximize2,
+  Minimize2,
   Paperclip,
   Sparkles,
   User,
@@ -280,6 +282,7 @@ export function BabyImageGenerator({
     null
   );
   const [handoffImageId, setHandoffImageId] = useState<string | null>(null);
+  const [isCardFullscreen, setIsCardFullscreen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -289,6 +292,20 @@ export function BabyImageGenerator({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!isCardFullscreen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsCardFullscreen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isCardFullscreen]);
 
   /* -------- derived -------- */
   const promptLength = prompt.trim().length;
@@ -777,10 +794,23 @@ export function BabyImageGenerator({
   const hasMessages = messages.length > 0;
 
   return (
-    <section className={cn('bb-studio py-10 md:py-14', className)}>
+    <section
+      className={cn(
+        'bb-studio py-10 md:py-14',
+        isCardFullscreen && 'bb-studio-fullscreen',
+        className
+      )}
+    >
       {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
-      <div className="container max-w-3xl">
-        <div className="bb-chat-card">
+      <div
+        className={cn(
+          'container max-w-3xl',
+          isCardFullscreen && 'bb-container-fullscreen'
+        )}
+      >
+        <div
+          className={cn('bb-chat-card', isCardFullscreen && 'is-fullscreen')}
+        >
           {/* ============== Head ============== */}
           <div className="bb-chat-head">
             <span className="bb-brand-dot" aria-hidden="true">
@@ -797,18 +827,33 @@ export function BabyImageGenerator({
                 </span>
               </div>
             </div>
-            {isMounted && user ? (
-              <span className="bb-credits-pill">
-                <span className="bb-credits-pill-star" aria-hidden="true" />
-                <span>{remainingCredits}</span>
-                <span className="bb-credits-pill-unit">{t('credits_unit')}</span>
-              </span>
-            ) : (
-              <span className="bb-credits-pill">
-                <span className="bb-credits-pill-star" aria-hidden="true" />
-                <span>—</span>
-              </span>
-            )}
+            <div className="bb-head-right">
+              {isMounted && user ? (
+                <span className="bb-credits-pill">
+                  <span className="bb-credits-pill-star" aria-hidden="true" />
+                  <span>{remainingCredits}</span>
+                  <span className="bb-credits-pill-unit">{t('credits_unit')}</span>
+                </span>
+              ) : (
+                <span className="bb-credits-pill">
+                  <span className="bb-credits-pill-star" aria-hidden="true" />
+                  <span>—</span>
+                </span>
+              )}
+              <button
+                type="button"
+                className="bb-head-icon-btn"
+                aria-label={isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                title={isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                onClick={() => setIsCardFullscreen((v) => !v)}
+              >
+                {isCardFullscreen ? (
+                  <Minimize2 className="h-4 w-4" strokeWidth={2} />
+                ) : (
+                  <Maximize2 className="h-4 w-4" strokeWidth={2} />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* ============== Stream ============== */}
