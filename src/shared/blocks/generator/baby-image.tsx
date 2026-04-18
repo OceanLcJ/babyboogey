@@ -1341,51 +1341,66 @@ function AssistantCard({
           )}
         >
           {msg.images.map((image, index) => (
-            <figure key={image.id} className="bb-result">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                className="bb-result-photo"
-                src={image.url}
-                alt={image.prompt || 'Generated baby image'}
-              />
-              <div className="bb-result-grain" aria-hidden="true" />
-              <div className="bb-result-vignette" aria-hidden="true" />
-              <span className="bb-result-no" aria-hidden="true">
-                {toRomanLower(index + 1)}.
-              </span>
-              <div className="bb-result-overlay">
-                <button
-                  type="button"
-                  className="bb-ov-btn bb-ov-primary"
-                  aria-label="Download"
-                  title="Download"
-                  onClick={() => onDownload(image)}
-                  disabled={downloadingImageId === image.id}
-                >
-                  {downloadingImageId === image.id ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Download className="h-4 w-4" strokeWidth={1.9} />
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className="bb-ov-btn"
-                  aria-label={t('make_them_dance')}
-                  title={t('make_them_dance')}
-                  onClick={() => onDance(image)}
-                  disabled={handoffImageId === image.id}
-                >
-                  {handoffImageId === image.id ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <span className="bb-ov-dancer" aria-hidden="true">
+            <div key={image.id} className="bb-result-item">
+              <figure
+                className="bb-result"
+                style={
+                  userMsg?.aspectRatio
+                    ? ({
+                        ['--bb-result-ar' as UnsafeAny]: userMsg.aspectRatio.replace(':', ' / '),
+                      } as UnsafeAny)
+                    : undefined
+                }
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  className="bb-result-photo"
+                  src={image.url}
+                  alt={image.prompt || 'Generated baby image'}
+                />
+                <div className="bb-result-grain" aria-hidden="true" />
+                <div className="bb-result-vignette" aria-hidden="true" />
+                <span className="bb-result-no" aria-hidden="true">
+                  {toRomanLower(index + 1)}.
+                </span>
+                <div className="bb-result-overlay">
+                  <button
+                    type="button"
+                    className="bb-ov-btn bb-ov-primary"
+                    aria-label="Download"
+                    title="Download"
+                    onClick={() => onDownload(image)}
+                    disabled={downloadingImageId === image.id}
+                  >
+                    {downloadingImageId === image.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4" strokeWidth={1.9} />
+                    )}
+                  </button>
+                </div>
+              </figure>
+              <button
+                type="button"
+                className="bb-dance-btn"
+                onClick={() => onDance(image)}
+                disabled={handoffImageId === image.id}
+              >
+                {handoffImageId === image.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <span className="bb-dancer" aria-hidden="true">
                       💃
                     </span>
-                  )}
-                </button>
-              </div>
-            </figure>
+                    <span>{t('make_them_dance')}</span>
+                    <span className="bb-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </>
+                )}
+              </button>
+            </div>
           ))}
         </div>
       )}
