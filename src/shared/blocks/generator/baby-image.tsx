@@ -297,7 +297,7 @@ export function BabyImageGenerator({
     if (!isCardFullscreen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setIsCardFullscreen(false);
     };
     window.addEventListener('keydown', onKey);
