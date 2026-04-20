@@ -36,7 +36,7 @@
           "height": 800
         },
         "background_image": {
-          "src": "https://picsum.photos/seed/baby-dance-ai-prompt-bg/1600/900",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "彩色背景配跳舞宝宝剪影"
         }
       },
@@ -87,7 +87,7 @@
             }
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       },
       "features": {
         "block": "features-accordion",
@@ -193,7 +193,7 @@
             "icon": "Zap"
           }
         ],
-        "className": "bg-muted"
+        "className": ""
       }
     }
   }

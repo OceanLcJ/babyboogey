@@ -54,7 +54,10 @@ import {
   markWatermarkCtaClick,
   trackAnalyticsEvent,
 } from '@/shared/lib/analytics-events';
-import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
+import {
+  extractAssetIdFromMediaUrl,
+  resolveMediaValueToApiPath,
+} from '@/shared/lib/asset-ref';
 import {
   inferExtensionFromMimeType,
   isDynamicWatermarkedVideo,
@@ -221,30 +224,6 @@ function getAbsoluteUrl(url: string): string {
     return new URL(url, window.location.origin).toString();
   } catch {
     return url;
-  }
-}
-
-function extractAssetIdFromMediaUrl(url: string): string | null {
-  if (!url) {
-    return null;
-  }
-
-  try {
-    const parsed = new URL(
-      url,
-      typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
-    );
-    const matched = parsed.pathname.match(/\/api\/storage\/assets\/([^/?#]+)/);
-    if (!matched?.[1]) {
-      return null;
-    }
-    return decodeURIComponent(matched[1]);
-  } catch {
-    const matched = url.match(/\/api\/storage\/assets\/([^/?#]+)/);
-    if (!matched?.[1]) {
-      return null;
-    }
-    return decodeURIComponent(matched[1]);
   }
 }
 
@@ -415,8 +394,8 @@ const EXAMPLE_IMAGES = [
 ];
 
 const RESOLUTION_OPTIONS = [
-  { value: '720p', credits: 60 },
-  { value: '1080p', credits: 120 },
+  { value: '720p', creditsPerSecond: 15 },
+  { value: '1080p', creditsPerSecond: 25 },
 ];
 
 function parseTaskResult(taskResult: string | null): UnsafeAny {
@@ -623,6 +602,7 @@ export function VideoGenerator({
   srOnlyTitle,
 }: VideoGeneratorProps) {
   const t = useTranslations('ai.video.generator');
+  const handoffT = useTranslations('ai.baby-image.dance_handoff');
   const locale = useLocale();
   const router = useRouter();
 
@@ -660,6 +640,7 @@ export function VideoGenerator({
   const [watermarkedPlaybackByVideoId, setWatermarkedPlaybackByVideoId] =
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
+  const [showHandoffBanner, setShowHandoffBanner] = useState(false);
   const isPollingRef = useRef(false);
   const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const successHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -740,6 +721,42 @@ export function VideoGenerator({
     setIsMounted(true);
   }, []);
 
+  // Phase-4 handoff: the baby-image generator drops a payload into localStorage
+  // before navigating here, so we can pre-load its result as the reference
+  // image. We only run client-side to avoid SSR hydration mismatch, read-once
+  // then remove, and gate on the TTL so stale payloads don't resurrect days
+  // later. preview stays an `/api/storage/assets/...` path (renderable);
+  // `url` stays an `asset://` ref so the generate route re-signs at submit.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem(
+        'babyboogey:baby-image-handoff'
+      );
+      if (!raw) return;
+      window.localStorage.removeItem('babyboogey:baby-image-handoff');
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return;
+      if (typeof data.expiresAt === 'number' && Date.now() > data.expiresAt) {
+        return;
+      }
+      if (
+        typeof data.previewUrl !== 'string' ||
+        typeof data.assetRef !== 'string'
+      ) {
+        return;
+      }
+      setUploadedImage({
+        preview: data.previewUrl,
+        url: data.assetRef,
+        status: 'uploaded',
+      });
+      setShowHandoffBanner(true);
+    } catch {
+      /* ignore invalid payloads */
+    }
+  }, []);
+
   useEffect(() => {
     if (promptTouched) {
       return;
@@ -748,10 +765,13 @@ export function VideoGenerator({
   }, [selectedTemplate, promptTouched]);
 
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
-  const currentCost =
-    RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.credits ?? 60;
   const selectedTemplateDurationSeconds =
-    parseTemplateDurationSeconds(selectedTemplate.duration) ?? 0;
+    parseTemplateDurationSeconds(selectedTemplate.duration) ?? 5;
+  const currentCreditsPerSecond =
+    RESOLUTION_OPTIONS.find((r) => r.value === resolution)?.creditsPerSecond ??
+    15;
+  const currentCost =
+    currentCreditsPerSecond * Math.max(1, selectedTemplateDurationSeconds);
   const translateError = useCallback(
     (key: string) => t(key as UnsafeAny),
     [t]
@@ -1822,6 +1842,7 @@ export function VideoGenerator({
             character_orientation: orientation,
             mode: resolution,
             resolution,
+            templateId: selectedTemplate.id,
             negative_prompt: DEFAULT_NEGATIVE_PROMPT,
           },
         }),
@@ -1969,6 +1990,29 @@ export function VideoGenerator({
         <p className="text-muted-foreground text-lg">{t('description')}</p>
       </div>
 
+      {showHandoffBanner && (
+        <div className="border-primary/30 bg-primary/10 text-primary-foreground mx-auto mb-8 max-w-3xl rounded-lg border px-4 py-3">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-primary text-sm font-semibold">
+                {handoffT('banner_title')}
+              </p>
+              <p className="text-muted-foreground mt-1 text-xs">
+                {handoffT('banner_description')}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowHandoffBanner(false)}
+              className="text-muted-foreground hover:text-foreground text-xs"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Card - Create */}
@@ -2092,7 +2136,7 @@ export function VideoGenerator({
                           )}
                           onClick={() => handleTemplateSelect(template)}
                         >
-                          <div className="from-muted to-muted/50 relative aspect-[3/4] overflow-hidden bg-gradient-to-br">
+                          <div className="bg-muted relative aspect-[3/4] overflow-hidden">
                             <video
                               src={template.videoUrl}
                               className="absolute inset-0 h-full w-full object-cover"
@@ -2162,8 +2206,8 @@ export function VideoGenerator({
                               {t(`form.resolution_${opt.value}` as UnsafeAny)}
                             </span>
                             <span className="text-muted-foreground text-xs">
-                              {t('form.resolution_credits', {
-                                credits: opt.credits,
+                              {t('form.resolution_credits_per_second', {
+                                credits: opt.creditsPerSecond,
                               })}
                             </span>
                           </div>
@@ -2179,9 +2223,10 @@ export function VideoGenerator({
                     {t('form.estimated_cost')}
                   </span>
                   <span className="font-medium text-destructive">
-                    {currentCost} {t('form.resolution_credits', { credits: '' }).replace('{credits}', '').trim()}
+                    {t('form.resolution_credits', { credits: currentCost })}
                     <span className="text-muted-foreground ml-1 font-normal">
-                      ({t('form.available_credits')}: {remainingCredits})
+                      ({selectedTemplateDurationSeconds}s × {currentCreditsPerSecond}/s
+                      · {t('form.available_credits')}: {remainingCredits})
                     </span>
                   </span>
                 </div>
@@ -2364,7 +2409,7 @@ export function VideoGenerator({
 
                     return (
                       <div key={video.id} className="space-y-3">
-                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-muted to-muted/50 dark:from-white/[0.04] dark:to-white/[0.02] ring-1 ring-border dark:ring-white/10">
+                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-muted dark:bg-white/[0.03] ring-1 ring-border dark:ring-white/10">
                           {canRenderVideo ? (
                             <video
                               src={playbackUrl}
@@ -2670,8 +2715,8 @@ export function VideoGenerator({
                         preload="auto"
                       />
                     </div>
-                    {/* Bottom gradient overlay with name + duration */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-5 pb-5 pt-14">
+                    {/* Bottom readability overlay (flat, no gradient) */}
+                    <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pb-5 pt-14">
                       <h3 className="text-xl font-bold text-white leading-tight">
                         {locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name}
                       </h3>

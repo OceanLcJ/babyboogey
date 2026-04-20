@@ -14,9 +14,9 @@
     "nav": {
       "items": [
         {
-          "title": "特徴",
-          "url": "/#features",
-          "icon": "Sparkles"
+          "title": "ベビー画像",
+          "url": "/ai-baby-image-generator",
+          "icon": "Baby"
         },
         {
           "title": "ショーケース",
@@ -91,11 +91,6 @@
         {
           "title": "会社概要",
           "children": [
-            {
-              "title": "特徴",
-              "url": "/#features",
-              "target": "_self"
-            },
             {
               "title": "ショーケース",
               "url": "/showcases",

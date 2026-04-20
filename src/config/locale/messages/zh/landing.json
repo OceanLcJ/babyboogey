@@ -14,9 +14,9 @@
     "nav": {
       "items": [
         {
-          "title": "功能亮点",
-          "url": "/#features",
-          "icon": "Sparkles"
+          "title": "宝宝图像",
+          "url": "/ai-baby-image-generator",
+          "icon": "Baby"
         },
         {
           "title": "案例展示",
@@ -91,11 +91,6 @@
         {
           "title": "关于我们",
           "children": [
-            {
-              "title": "功能亮点",
-              "url": "/#features",
-              "target": "_self"
-            },
             {
               "title": "案例展示",
               "url": "/showcases",

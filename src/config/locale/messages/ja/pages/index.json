@@ -1,9 +1,10 @@
 {
   "custom_hero": {
+    "eyebrow": "AI ベビーダンス スタジオ",
     "title_line1": "写真を",
     "title_line2": "ダンス＆ブギさせよう！",
-    "description": "No.1 AI赤ちゃんダンスジェネレーター — 赤ちゃんの写真をワンクリックで陽気で弾むような動画にアニメーション化します。赤ちゃんダンス動画を無料で作成！",
-    "cta_button": "無料で踊りだす",
+    "description": "No.1 AI赤ちゃんダンスジェネレーター — 赤ちゃんの写真をワンクリックで陽気で弾むような動画にアニメーション化。短尺動画はわずか 75 クレジットから。",
+    "cta_button": "踊りだす",
     "card_static": "静止画",
     "card_boogie": "ブギモード！"
   },
@@ -27,13 +28,13 @@
         "description": "どんな赤ちゃんの静止画も、愉快な<strong>ダンス</strong>センセーションに変身させます。編集スキルは不要 — 純粋な喜びだけ。",
         "announcement": {
           "badge": "新しい",
-          "title": "🎉 赤ちゃんダンス動画を無料で作成",
+          "title": "🎉 赤ちゃんダンス動画を数秒で作成",
           "url": "/#generator"
         },
         "tip": "⭐️ 幸せな親御さんと孫に甘いおじいちゃんおばあちゃんに愛されています",
         "buttons": [
           {
-            "title": "無料で踊りだす",
+            "title": "踊りだす",
             "icon": "Zap",
             "url": "/#generator",
             "target": "_self",
@@ -50,20 +51,8 @@
         "show_avatars": true,
         "avatars_tip": "10,000人以上の幸せな親御さん",
         "show_award": false,
-        "image": {
-          "src": "/imgs/features/baby-hero.png",
-          "alt": "AI赤ちゃんダンスジェネレーター - オンラインで赤ちゃん写真をアニメーション化",
-          "width": 1200,
-          "height": 800
-        },
-        "image_invert": {
-          "src": "/imgs/features/baby-hero-dark.png",
-          "alt": "AI赤ちゃんダンスジェネレーター",
-          "width": 1200,
-          "height": 800
-        },
         "background_image": {
-          "src": "/imgs/bg/confetti.jpg",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "背景"
         }
       },
@@ -79,7 +68,7 @@
             "description": "赤ちゃんの写真をアップロードするだけで、AIが愛らしいダンスの動きと表情で命を吹き込みます。",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/animate-photo.webp",
               "alt": "赤ちゃん写真をアニメーション化"
             }
           },
@@ -88,17 +77,17 @@
             "description": "高度なオンライン顔アニメーター技術により、自然な顔立ちを保ちながら楽しいダンスの表情を加えます。",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animator.webp",
               "alt": "オンライン顔アニメーター"
             }
           },
           {
-            "title": "無料でスタート",
-            "description": "赤ちゃんダンス動画を無料で作成 — クレジットカードは不要です。無料エクスポートには小さな透かしが入ります。",
+            "title": "従量課金",
+            "description": "透明なクレジット料金 — 動画は秒単位で課金（720p は 1 秒 15 クレジット、1080p は 1 秒 25 クレジット）、AI 赤ちゃん写真は 2K が 1 枚 12 クレジット、4K が 25 クレジットです。クレジットパックは小口から購入でき、気に入ったら追加購入できます。",
             "icon": "RiGiftLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
-              "alt": "無料で赤ちゃんダンス動画を作成"
+              "src": "https://r2.babyboogey.com/assets/imgs/features/free-to-start.webp",
+              "alt": "クレジット課金のベビーダンス動画ジェネレーター"
             }
           }
         ]
@@ -106,6 +95,7 @@
       "benefits": {
         "block": "features-list",
         "id": "benefits",
+        "pick_label": "シーン",
         "title": "あらゆるシーンに最適",
         "label": "利用シーン",
         "description": "私たちの赤ちゃんダンス動画メーカーで忘れられない瞬間を作りましょう。",
@@ -115,7 +105,7 @@
             "description": "クリスマス、新年、あらゆるお祝いのために、写真を踊る赤ちゃんに変身させましょう。家族全員で楽しめます。",
             "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/holiday.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/holiday.webp",
               "alt": "ホリデー赤ちゃんダンスカード"
             }
           },
@@ -124,7 +114,7 @@
             "description": "絶対にバズる面白い子供ダンス動画を作りましょう。純粋な赤ちゃんの喜びで月曜日の憂鬱を吹き飛ばそう！",
             "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/laugh.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/laugh.webp",
               "alt": "面白い赤ちゃんダンス動画"
             }
           },
@@ -133,7 +123,7 @@
             "description": "赤ちゃんの写真を心温まるダンス動画にアニメーション化。毎回笑顔を保証するデジタルギフトです。",
             "icon": "RiHeartFill",
             "image": {
-              "src": "/imgs/features/love.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/love.webp",
               "alt": "赤ちゃんダンス動画ギフト"
             }
           }
@@ -151,7 +141,7 @@
             "description": "数秒で写真を踊る赤ちゃんに変身 — 振り付けは不要、驚くほどリアルな純粋なAIマジックだけ。",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/toddler-dancing-neon-studio-4x3.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/viral-dance.webp",
               "alt": "写真を踊る赤ちゃんに変身"
             }
           },
@@ -160,7 +150,7 @@
             "description": "私たちのオンライン顔アニメーターは、顔を認識可能で、安全で、愛らしいまま保ちます。奇妙な歪みはありません — 純粋な可愛さだけ。",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/baby-face-animation-split-screen-ai-demo.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animation.webp",
               "alt": "オンライン顔アニメーター"
             }
           }
@@ -169,38 +159,23 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
+        "eyebrow": "ご利用の流れ",
         "title": "数秒で赤ちゃん写真をアニメーション化する方法",
-        "description": "3つの簡単なステップで赤ちゃんダンス動画を無料で作成：",
-        "image": {
-          "src": "/imgs/features/step-1.png",
-          "alt": "赤ちゃんダンス動画の作り方"
-        },
+        "description": "3 つの簡単なステップで赤ちゃんダンス動画を作成：",
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
             "title": "写真をアップロード",
-            "description": "赤ちゃんの写真を選んでください — 可愛くても不機嫌でもOK！私たちのAI赤ちゃんダンスジェネレーターは、鮮明なスナップショットなら何でも機能します。",
-            "image": {
-              "src": "/imgs/features/upload.png",
-              "alt": "赤ちゃん写真をアップロード"
-            }
+            "description": "赤ちゃんの写真を選んでください — 可愛くても不機嫌でもOK！私たちのAI赤ちゃんダンスジェネレーターは、鮮明なスナップショットなら何でも機能します。"
           },
           {
             "title": "テンプレートを選択",
-            "description": "バズるダンスムーブを選んでください。赤ちゃんの写真をあなたらしくアニメーション化する多数のテンプレートがあります。",
-            "image": {
-              "src": "/imgs/features/template.png",
-              "alt": "赤ちゃんダンステンプレートを選択"
-            }
+            "description": "バズるダンスムーブを選んでください。赤ちゃんの写真をあなたらしくアニメーション化する多数のテンプレートがあります。"
           },
           {
             "title": "ブギを見る！",
-            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！",
-            "image": {
-              "src": "/imgs/features/export.png",
-              "alt": "赤ちゃんダンス動画をエクスポート"
-            }
+            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！"
           }
         ]
       },
@@ -226,6 +201,8 @@
       "pricing": {
         "id": "pricing",
         "block": "pricing",
+        "eyebrow": "クレジットパック",
+        "popular_label": "人気",
         "title": "あなたにぴったりのプランを選択",
         "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
         "groups": [
@@ -251,7 +228,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "410 クレジット (無期限)",
-              "約7本の 720p 動画",
+              "AI 赤ちゃん写真 約30枚 (2K)",
+              "短尺ダンス動画 約5本 (5秒, 720p)",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ"
@@ -280,7 +258,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "1170 クレジット (無期限)",
-              "約20本の 720p 動画",
+              "AI 赤ちゃん写真 約90枚 (2K)",
+              "短尺ダンス動画 約15本 (5秒, 720p)",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ"
@@ -308,7 +287,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "3040 クレジット (無期限)",
-              "約51本の 720p 動画",
+              "AI 赤ちゃん写真 約250枚 (2K)",
+              "短尺ダンス動画 約40本 (5秒, 720p)",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ"
@@ -336,7 +316,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "430 クレジット/月",
-              "約7本の 720p 動画/月",
+              "AI 赤ちゃん写真 約35枚 (2K)/月",
+              "短尺ダンス動画 約5本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ"
@@ -367,7 +348,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "1170 クレジット/月",
-              "約20本の 720p 動画/月",
+              "AI 赤ちゃん写真 約90枚 (2K)/月",
+              "短尺ダンス動画 約15本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ",
@@ -398,7 +380,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "2880 クレジット/月",
-              "約48本の 720p 動画/月",
+              "AI 赤ちゃん写真 約240枚 (2K)/月",
+              "短尺ダンス動画 約38本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ",
@@ -429,7 +412,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "430 クレジット/月",
-              "約7本の 720p 動画/月",
+              "AI 赤ちゃん写真 約35枚 (2K)/月",
+              "短尺ダンス動画 約5本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ"
@@ -460,7 +444,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "1170 クレジット/月",
-              "約20本の 720p 動画/月",
+              "AI 赤ちゃん写真 約90枚 (2K)/月",
+              "短尺ダンス動画 約15本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ",
@@ -491,7 +476,8 @@
             "features_title": "含まれるもの:",
             "features": [
               "2880 クレジット/月",
-              "約48本の 720p 動画/月",
+              "AI 赤ちゃん写真 約240枚 (2K)/月",
+              "短尺ダンス動画 約38本 (5秒, 720p)/月",
               "透かしなし",
               "商用ライセンス",
               "プライベートストレージ",
@@ -520,6 +506,7 @@
       },
       "testimonials": {
         "id": "testimonials",
+        "eyebrow": "お客様の声",
         "title": "親御さんの声",
         "description": "本物の親御さん（と孫に甘いおじいちゃんおばあちゃん）からのリアルなレビュー。",
         "items": [
@@ -544,7 +531,7 @@
           {
             "name": "ジェシカ L.",
             "role": "幼児のママ",
-            "quote": "うちの子は自分が踊っているのを見るのが大好き！無料で赤ちゃんダンス動画を作れて、何時間も楽しんでくれます。",
+            "quote": "うちの子は自分が踊っているのを見るのが大好き！小さなクレジットパックで何本も作れて、何時間も楽しんでくれます。",
             "image": {
               "src": "/imgs/avatars/4.png",
               "alt": "ジェシカ"
@@ -581,12 +568,17 @@
       },
       "faq": {
         "id": "faq",
+        "eyebrow": "よくある質問",
+        "helper": {
+          "label": "迷っていますか？",
+          "text": "クレジットパックは 1 本分から購入できます。まず 1 本だけ試してから続けるか決められます。"
+        },
         "title": "よくある質問",
         "description": "AI赤ちゃんダンスジェネレーターについて知っておくべきことすべて。",
         "items": [
           {
-            "question": "AI赤ちゃんダンスジェネレーターは無料ですか？",
-            "answer": "はい！ベーシックプランで赤ちゃんダンス動画を無料で作成できます。高度な赤ちゃんダンス動画メーカー機能や高解像度エクスポートにはプレミアムテンプレートを提供しています。"
+            "question": "AI 赤ちゃんダンスジェネレーターの料金はどうなっていますか？",
+            "answer": "BabyBoogey はクレジット制で、動画は秒単位で課金（720p は 1 秒 15 クレジット、1080p は 1 秒 25 クレジット）、AI 赤ちゃん写真は 2K が 1 枚 12 クレジット、4K が 25 クレジットです。クレジットパックは小口から購入できるので、まず 1 本分だけ試すこともできます。有料プランではプレミアムテンプレートや大口クレジットパックも利用できます。"
           },
           {
             "question": "オンライン顔アニメーターはどのように機能しますか？",
@@ -620,11 +612,18 @@
       },
       "cta": {
         "id": "cta",
+        "eyebrow": "あなたの番",
+        "collage_labels": ["ビフォー", "ダンス"],
+        "trust_bar": {
+          "rating": "✦ 4.9/5",
+          "audience": "2,000+ 組のご家族",
+          "pricing": "1 秒 15 クレジットから"
+        },
         "title": "あなたの赤ちゃんをスターにする準備はできましたか？",
-        "description": "最高のAI赤ちゃんダンスジェネレーターを使っている数千の家族に加わりましょう。今日から無料でスタート！",
+        "description": "最高の AI 赤ちゃんダンスジェネレーターを使っている数千の家族に加わりましょう。短尺動画はわずか 75 クレジットから。",
         "buttons": [
           {
-            "title": "無料で踊りだす",
+            "title": "踊りだす",
             "url": "/#generator",
             "target": "_self",
             "icon": "Zap"

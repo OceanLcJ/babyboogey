@@ -472,6 +472,8 @@ export const aiTask = table(
       .notNull()
       .default('dynamic_overlay'),
     watermarkedAssetId: varchar191('watermarked_asset_id'),
+    refundedAt: timestamp('refunded_at'),
+    refundReason: varchar('refund_reason', { length: 100 }),
   },
   (table) => [
     // Composite: Query user's AI tasks by status

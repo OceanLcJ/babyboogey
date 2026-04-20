@@ -156,21 +156,6 @@ export function Hero({
         </div>
       )}
 
-      {section.background_image?.src && (
-        <div className="absolute inset-0 -z-10 hidden h-full w-full overflow-hidden md:block">
-          <div className="from-background/80 via-background/80 to-background absolute inset-0 z-10 bg-gradient-to-b" />
-          <Image
-            src={section.background_image.src}
-            alt={section.background_image.alt || ''}
-            className="object-cover opacity-60 blur-[0px]"
-            fill
-            loading="lazy"
-            sizes="(max-width: 768px) 0vw, 100vw"
-            quality={70}
-            unoptimized={section.background_image.src.startsWith('http')}
-          />
-        </div>
-      )}
     </section>
   );
 }

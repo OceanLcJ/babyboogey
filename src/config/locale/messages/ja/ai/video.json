@@ -36,6 +36,7 @@
       "resolution_720p": "720p (SD)",
       "resolution_1080p": "1080p (HD)",
       "resolution_credits": "{credits} クレジット",
+      "resolution_credits_per_second": "{credits} クレジット/秒",
       "estimated_cost": "推定コスト:",
       "available_credits": "利用可能",
       "orientation": "キャラクターの向き",

@@ -1,9 +1,10 @@
 {
   "custom_hero": {
+    "eyebrow": "AI Baby Dance Studio",
     "title_line1": "Make Your Photos",
     "title_line2": "Dance & Boogie!",
-    "description": "The #1 AI baby dance generator — animate baby photos into cheerful, bouncing videos with one click. Make baby dance videos free!",
-    "cta_button": "Start Dancing Free",
+    "description": "The #1 AI baby dance generator — animate baby photos into cheerful, bouncing videos with one click. From 75 credits per short render.",
+    "cta_button": "Start Dancing",
     "card_static": "Static Photo",
     "card_boogie": "Boogie Mode!"
   },
@@ -27,13 +28,13 @@
         "description": "Turn any static baby photo into a hilarious <strong>Dancing</strong> sensation. No editing skills needed — just pure joy.",
         "announcement": {
           "badge": "New",
-          "title": "🎉 Make Baby Dance Videos Free",
+          "title": "🎉 Make Baby Dance Videos in Seconds",
           "url": "/#generator"
         },
         "tip": "⭐️ Loved by parents & ticklish grandparents everywhere",
         "buttons": [
           {
-            "title": "Start Dancing Free",
+            "title": "Start Dancing",
             "icon": "Zap",
             "url": "/#generator",
             "target": "_self",
@@ -50,20 +51,8 @@
         "show_avatars": true,
         "avatars_tip": "10,000+ happy parents",
         "show_award": false,
-        "image": {
-          "src": "/imgs/features/baby-hero.png",
-          "alt": "AI Baby Dance Generator - Animate Baby Photos Online",
-          "width": 1200,
-          "height": 800
-        },
-        "image_invert": {
-          "src": "/imgs/features/baby-hero-dark.png",
-          "alt": "AI Baby Dance Generator",
-          "width": 1200,
-          "height": 800
-        },
         "background_image": {
-          "src": "/imgs/bg/confetti.jpg",
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
           "alt": "background"
         }
       },
@@ -79,7 +68,7 @@
             "description": "Upload any baby photo and watch our AI bring it to life with adorable dance moves and expressions.",
             "icon": "RiImageAddLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/1.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/animate-photo.webp",
               "alt": "Animate Baby Photo"
             }
           },
@@ -88,17 +77,17 @@
             "description": "Advanced face animator online technology keeps faces natural while adding fun dance expressions.",
             "icon": "RiEmotionHappyLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/3.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animator.webp",
               "alt": "Face Animator Online"
             }
           },
           {
-            "title": "Free to Start",
-            "description": "Make baby dance videos free — no credit card required, with a small watermark on free exports.",
+            "title": "Pay as You Go",
+            "description": "Transparent credit pricing — videos are billed per second (15 credits/s for 720p, 25 credits/s for 1080p), and AI baby photos cost 12 credits for 2K or 25 for 4K. Start with the smallest pack and scale up only if you love it.",
             "icon": "RiGiftLine",
             "image": {
-              "src": "https://r2.babyboogey.com/assets/imgs/features/4.webp",
-              "alt": "Make Baby Dance Video Free"
+              "src": "https://r2.babyboogey.com/assets/imgs/features/free-to-start.webp",
+              "alt": "Credit-based pricing for baby dance videos"
             }
           }
         ]
@@ -106,6 +95,7 @@
       "benefits": {
         "block": "features-list",
         "id": "benefits",
+        "pick_label": "Pick",
         "title": "Perfect for Every Occasion",
         "label": "Use Cases",
         "description": "Create unforgettable moments with our baby dance video maker.",
@@ -115,7 +105,7 @@
             "description": "Turn photo into dancing baby for Christmas, New Year, and every festive celebration. Fun for the whole family.",
             "icon": "RiGiftFill",
             "image": {
-              "src": "/imgs/features/holiday.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/holiday.webp",
               "alt": "Holiday Baby Dance Card"
             }
           },
@@ -124,7 +114,7 @@
             "description": "Create a funny kid dance video guaranteed to go viral. Cure the Monday blues with pure baby joy!",
             "icon": "RiEmotionLaughFill",
             "image": {
-              "src": "/imgs/features/laugh.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/laugh.webp",
               "alt": "Funny Baby Dance Video"
             }
           },
@@ -133,7 +123,7 @@
             "description": "Animate baby photos into heartwarming dance videos. The digital gift that guarantees a smile every time.",
             "icon": "RiHeartFill",
             "image": {
-              "src": "/imgs/features/love.png",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/love.webp",
               "alt": "Baby Dance Video Gift"
             }
           }
@@ -151,7 +141,7 @@
             "description": "Turn photo into dancing baby in seconds — no choreography needed, just pure AI magic that looks amazingly real.",
             "icon": "RiMusic2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/toddler-dancing-neon-studio-4x3.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/viral-dance.webp",
               "alt": "Turn Photo Into Dancing Baby"
             }
           },
@@ -160,7 +150,7 @@
             "description": "Our face animator online ensures faces stay recognizable, safe, and adorable. No weird distortions — just pure cuteness.",
             "icon": "RiSafe2Fill",
             "image": {
-              "src": "https://r2.babyboogey.com/uploads/web/baby-face-animation-split-screen-ai-demo.webp",
+              "src": "https://r2.babyboogey.com/assets/imgs/features/face-animation.webp",
               "alt": "Face Animator Online"
             }
           }
@@ -169,38 +159,23 @@
       "usage": {
         "block": "features-step",
         "id": "usage",
+        "eyebrow": "How It Works",
         "title": "How to Animate Baby Photos in Seconds",
-        "description": "Make baby dance videos free in three simple steps:",
-        "image": {
-          "src": "/imgs/features/step-1.png",
-          "alt": "How to Make Baby Dance Video"
-        },
+        "description": "Make baby dance videos in three simple steps:",
         "image_position": "left",
         "text_align": "center",
         "items": [
           {
             "title": "Upload Photo",
-            "description": "Pick any baby photo — cute or grumpy! Our AI baby dance generator works with any clear snapshot.",
-            "image": {
-              "src": "/imgs/features/upload.png",
-              "alt": "Upload Baby Photo"
-            }
+            "description": "Pick any baby photo — cute or grumpy! Our AI baby dance generator works with any clear snapshot."
           },
           {
             "title": "Choose Template",
-            "description": "Select a viral dance move. Dozens of templates to animate baby photos your way.",
-            "image": {
-              "src": "/imgs/features/template.png",
-              "alt": "Choose Baby Dance Template"
-            }
+            "description": "Select a viral dance move. Dozens of templates to animate baby photos your way."
           },
           {
             "title": "Watch 'Em Boogie!",
-            "description": "Export your baby dance video and share the giggles. Turn photo into dancing baby magic in seconds!",
-            "image": {
-              "src": "/imgs/features/export.png",
-              "alt": "Export Baby Dance Video"
-            }
+            "description": "Export your baby dance video and share the giggles. Turn photo into dancing baby magic in seconds!"
           }
         ]
       },
@@ -226,6 +201,8 @@
       "pricing": {
         "id": "pricing",
         "block": "pricing",
+        "eyebrow": "Credit Packs",
+        "popular_label": "Popular",
         "title": "Choose Your Perfect Plan",
         "description": "Select the best plan for your AI baby dance video needs. All plans support HD 1080p and SD 720p video generation.",
         "groups": [
@@ -251,7 +228,8 @@
             "features_title": "Includes:",
             "features": [
               "410 credits (never expire)",
-              "~7 720p videos",
+              "~30 AI baby photos (2K)",
+              "~5 short dance videos (5s, 720p)",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -280,7 +258,8 @@
             "features_title": "Includes:",
             "features": [
               "1170 credits (never expire)",
-              "~20 720p videos",
+              "~90 AI baby photos (2K)",
+              "~15 short dance videos (5s, 720p)",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -308,7 +287,8 @@
             "features_title": "Includes:",
             "features": [
               "3040 credits (never expire)",
-              "~51 720p videos",
+              "~250 AI baby photos (2K)",
+              "~40 short dance videos (5s, 720p)",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -336,7 +316,8 @@
             "features_title": "Includes:",
             "features": [
               "430 credits/month",
-              "~7 720p videos/month",
+              "~35 AI baby photos (2K)/month",
+              "~5 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -367,7 +348,8 @@
             "features_title": "Includes:",
             "features": [
               "1170 credits/month",
-              "~20 720p videos/month",
+              "~90 AI baby photos (2K)/month",
+              "~15 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -398,7 +380,8 @@
             "features_title": "Includes:",
             "features": [
               "2880 credits/month",
-              "~48 720p videos/month",
+              "~240 AI baby photos (2K)/month",
+              "~38 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -429,7 +412,8 @@
             "features_title": "Includes:",
             "features": [
               "430 credits/month",
-              "~7 720p videos/month",
+              "~35 AI baby photos (2K)/month",
+              "~5 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -460,7 +444,8 @@
             "features_title": "Includes:",
             "features": [
               "1170 credits/month",
-              "~20 720p videos/month",
+              "~90 AI baby photos (2K)/month",
+              "~15 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -491,7 +476,8 @@
             "features_title": "Includes:",
             "features": [
               "2880 credits/month",
-              "~48 720p videos/month",
+              "~240 AI baby photos (2K)/month",
+              "~38 short dance videos (5s, 720p)/month",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -520,6 +506,7 @@
       },
       "testimonials": {
         "id": "testimonials",
+        "eyebrow": "Love Letters",
         "title": "What Parents Say",
         "description": "Real reviews from real parents (and some ticklish grandparents).",
         "items": [
@@ -544,7 +531,7 @@
           {
             "name": "Jessica L.",
             "role": "Toddler Mom",
-            "quote": "My toddler loves watching herself dance! I can make baby dance videos free and she's entertained for hours.",
+            "quote": "My toddler loves watching herself dance! One credit pack goes a long way and she's entertained for hours.",
             "image": {
               "src": "/imgs/avatars/4.png",
               "alt": "Jessica"
@@ -581,12 +568,17 @@
       },
       "faq": {
         "id": "faq",
+        "eyebrow": "Good Questions",
+        "helper": {
+          "label": "Still unsure?",
+          "text": "Credit packs start as small as a single render, so you can try one video before buying more."
+        },
         "title": "Frequently Asked Questions",
         "description": "Everything you need to know about our AI baby dance generator.",
         "items": [
           {
-            "question": "Is the AI baby dance generator free to use?",
-            "answer": "Yes! You can make baby dance videos free with our basic plan. We offer premium templates for advanced baby dance video maker features and higher resolution exports."
+            "question": "How much does the AI baby dance generator cost?",
+            "answer": "BabyBoogey runs on a credit system — videos are billed per second (15 credits/s for 720p, 25 credits/s for 1080p) and AI baby photos cost 12 credits for 2K or 25 for 4K. Credit packs start small, so you can try a single render before committing. Paid plans unlock premium templates and larger credit bundles."
           },
           {
             "question": "How does the face animator online work?",
@@ -620,11 +612,18 @@
       },
       "cta": {
         "id": "cta",
+        "eyebrow": "Your Turn",
+        "collage_labels": ["Before", "Boogie"],
+        "trust_bar": {
+          "rating": "✦ 4.9/5",
+          "audience": "2,000+ Families",
+          "pricing": "From 15 Credits / Second"
+        },
         "title": "Ready to Make Your Baby a Star?",
-        "description": "Join thousands of families using the best AI baby dance generator. Start free today!",
+        "description": "Join thousands of families using the best AI baby dance generator. Start today from 75 credits per short render.",
         "buttons": [
           {
-            "title": "Start Dancing Free",
+            "title": "Start Dancing",
             "url": "/#generator",
             "target": "_self",
             "icon": "Zap"

@@ -162,7 +162,8 @@ export class KieProvider implements AIProvider {
         payload.input.aspect_ratio = options.aspect_ratio;
       }
       if (options.resolution) {
-        payload.input.resolution = options.resolution;
+        // kie nano-banana-pro expects uppercase "1K" / "2K" / "4K".
+        payload.input.resolution = String(options.resolution).toUpperCase();
       }
       if (options.output_format) {
         payload.input.output_format = options.output_format;

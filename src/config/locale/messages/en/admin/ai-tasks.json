@@ -12,7 +12,9 @@
     "result": "Result",
     "created_at": "Created At",
     "action": "Action",
-    "scene": "Scene"
+    "scene": "Scene",
+    "refunded_at": "Refunded At",
+    "refund_reason": "Refund Reason"
   },
   "list": {
     "title": "AI Tasks",

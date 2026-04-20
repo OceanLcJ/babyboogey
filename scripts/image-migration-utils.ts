@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export const DEFAULT_MANIFEST_PATH = 'docs/image-migration-manifest.json';
-export const DEFAULT_PUBLIC_DOMAIN = 'https://img.aibabydance.org';
+export const DEFAULT_PUBLIC_DOMAIN = 'https://r2.babyboogey.com';
 export const DEFAULT_R2_KEY_PREFIX = 'assets/imgs';
 export const REWRITE_SCAN_DIRS = ['src', 'content'];
 
@@ -51,6 +51,9 @@ const TEXT_EXTS = new Set([
   '.cjs',
   '.yml',
   '.yaml',
+  '.css',
+  '.scss',
+  '.sass',
 ]);
 
 export function toPosix(input: string): string {
@@ -122,14 +125,19 @@ export function countOccurrences(source: string, token: string): number {
 
 export function scanReferenceUsage(
   sourceUrls: string[],
-  dirs: string[] = REWRITE_SCAN_DIRS
+  dirs: string[] = REWRITE_SCAN_DIRS,
+  excludeSubstrings: string[] = []
 ): Map<string, boolean> {
   const textFiles = collectTextFiles(dirs);
   const usage = new Map<string, boolean>();
   for (const sourceUrl of sourceUrls) usage.set(sourceUrl, false);
+  const exclusions = excludeSubstrings.filter((s) => s && s.length > 0);
 
   for (const filePath of textFiles) {
-    const text = fs.readFileSync(filePath, 'utf8');
+    let text = fs.readFileSync(filePath, 'utf8');
+    for (const ex of exclusions) {
+      if (text.includes(ex)) text = text.split(ex).join('');
+    }
     for (const sourceUrl of sourceUrls) {
       if (usage.get(sourceUrl)) continue;
       if (text.includes(sourceUrl)) usage.set(sourceUrl, true);

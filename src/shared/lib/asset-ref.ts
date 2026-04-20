@@ -34,3 +34,35 @@ export function resolveMediaValueToApiPath(value?: string | null): string {
 
   return assetRefToApiPath(assetId);
 }
+
+// Best-effort reverse of `assetRefToApiPath` — pulls the asset id out of a URL
+// shaped like `/api/storage/assets/<id>`. Returns null when the URL does not
+// point at the storage proxy (e.g. a signed external URL). Safe on both SSR
+// and browser contexts.
+export function extractAssetIdFromMediaUrl(url: string): string | null {
+  if (!url) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(
+      url,
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : 'http://localhost'
+    );
+    const matched = parsed.pathname.match(
+      /\/api\/storage\/assets\/([^/?#]+)/
+    );
+    if (!matched?.[1]) {
+      return null;
+    }
+    return decodeURIComponent(matched[1]);
+  } catch {
+    const matched = url.match(/\/api\/storage\/assets\/([^/?#]+)/);
+    if (!matched?.[1]) {
+      return null;
+    }
+    return decodeURIComponent(matched[1]);
+  }
+}

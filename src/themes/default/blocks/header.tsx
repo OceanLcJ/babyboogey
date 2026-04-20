@@ -89,16 +89,18 @@ export function Header({ header }: { header: HeaderType }) {
         <NavigationMenuList className="gap-2">
           {header.nav?.items?.map((item, idx) => {
             if (!item.children || item.children.length === 0) {
+              const isActive =
+                Boolean(item.is_active) ||
+                pathname.endsWith(item.url as string);
               return (
                 <NavigationMenuLink key={idx} asChild>
                   <Link
                     href={item.url || ''}
                     target={item.target || '_self'}
-                    className={`flex flex-row items-center gap-2 px-4 py-1.5 text-sm ${
-                      item.is_active || pathname.endsWith(item.url as string)
-                        ? 'bg-muted/40 text-muted-foreground'
-                        : ''
-                    }`}
+                    className={cn(
+                      'bb-nav-link flex flex-row items-center gap-2 px-4 py-1.5 text-sm whitespace-nowrap',
+                      isActive && 'bb-nav-link-active'
+                    )}
                   >
                     {item.icon && <SmartIcon name={item.icon as string} />}
                     {item.title}
@@ -109,7 +111,7 @@ export function Header({ header }: { header: HeaderType }) {
 
             return (
               <NavigationMenuItem key={idx}>
-                <NavigationMenuTrigger className="flex flex-row items-center gap-2 text-sm">
+                <NavigationMenuTrigger className="bb-nav-trigger flex flex-row items-center gap-2 text-sm whitespace-nowrap">
                   {item.icon && (
                     <SmartIcon name={item.icon as string} className="h-4 w-4" />
                   )}
@@ -263,10 +265,12 @@ export function Header({ header }: { header: HeaderType }) {
             <div className="relative flex flex-wrap items-center justify-between lg:py-5">
               <div className="flex justify-between gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b">
                 {/* Brand Logo */}
-                {header.brand && <BrandLogo brand={header.brand} />}
+                {header.brand && (
+                  <span className="bb-nav-brand">
+                    <BrandLogo brand={header.brand} />
+                  </span>
+                )}
 
-                {/* Desktop Navigation Menu */}
-                {isLarge && <NavMenu />}
                 {/* Hamburger menu button for mobile navigation */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -279,6 +283,15 @@ export function Header({ header }: { header: HeaderType }) {
                   <X className="absolute inset-0 m-auto size-5 scale-0 -rotate-180 opacity-0 duration-200 in-data-[state=active]:scale-100 in-data-[state=active]:rotate-0 in-data-[state=active]:opacity-100" />
                 </button>
               </div>
+
+              {/* Desktop Navigation Menu — absolutely centered between brand (left) and utils (right) */}
+              {isLarge && (
+                <div className="pointer-events-none absolute inset-y-0 left-1/2 flex -translate-x-1/2 items-center">
+                  <div className="pointer-events-auto">
+                    <NavMenu />
+                  </div>
+                </div>
+              )}
 
               {/* Show mobile menu if needed */}
               {!isLarge && isMobileMenuOpen && (

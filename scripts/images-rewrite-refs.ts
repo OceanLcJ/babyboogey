@@ -58,15 +58,46 @@ async function main() {
     replacedCountBySource.set(entry.sourceUrl, 0);
   }
 
+  const PROTECT_OPEN = '\0__R2_PROTECTED_';
+  const PROTECT_CLOSE = '__\0';
+
+  // publicUrl contains sourceUrl as a substring (e.g. /imgs/x.webp lives
+  // inside https://cdn/assets/imgs/x.webp). Without protection a second
+  // pass for any overlapping sourceUrl would splice publicUrl a second
+  // time, producing https://cdn/assetshttps://cdn/assets/... — shield every
+  // known publicUrl behind a placeholder around each replacement, restore
+  // at the end. Longest-first sort guards against entries whose
+  // sourceUrl / publicUrl is a prefix of another.
+  const uniquePublicUrls = Array.from(
+    new Set(
+      targetEntries
+        .map((e) => e.publicUrl)
+        .filter((p): p is string => Boolean(p))
+    )
+  ).sort((a, b) => b.length - a.length);
+  const entriesBySourceLen = [...targetEntries].sort(
+    (a, b) => b.sourceUrl.length - a.sourceUrl.length
+  );
+
   let changedFiles = 0;
   for (const filePath of files) {
     const before = fs.readFileSync(filePath, 'utf8');
     let next = before;
-    let fileChanged = false;
+    const protectedPubs: string[] = [];
 
-    for (const entry of targetEntries) {
+    const protect = (pub: string) => {
+      if (!pub || !next.includes(pub)) return;
+      const token = `${PROTECT_OPEN}${protectedPubs.length}${PROTECT_CLOSE}`;
+      protectedPubs.push(pub);
+      next = next.split(pub).join(token);
+    };
+
+    for (const pub of uniquePublicUrls) protect(pub);
+
+    let fileChanged = false;
+    for (const entry of entriesBySourceLen) {
       const source = entry.sourceUrl;
-      if (!next.includes(source)) continue;
+      if (!source || !next.includes(source)) continue;
       const count = countOccurrences(next, source);
       if (count === 0) continue;
       next = next.split(source).join(entry.publicUrl);
@@ -75,6 +106,12 @@ async function main() {
         (replacedCountBySource.get(source) ?? 0) + count
       );
       fileChanged = true;
+      protect(entry.publicUrl);
+    }
+
+    for (let i = 0; i < protectedPubs.length; i++) {
+      const token = `${PROTECT_OPEN}${i}${PROTECT_CLOSE}`;
+      next = next.split(token).join(protectedPubs[i]);
     }
 
     if (fileChanged) {
@@ -88,7 +125,8 @@ async function main() {
   const now = new Date().toISOString();
   const usage = scanReferenceUsage(
     manifest.entries.map((entry) => entry.sourceUrl),
-    REWRITE_SCAN_DIRS
+    REWRITE_SCAN_DIRS,
+    manifest.entries.map((entry) => entry.publicUrl)
   );
 
   let rewrittenEntries = 0;

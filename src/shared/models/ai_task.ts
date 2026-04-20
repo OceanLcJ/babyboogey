@@ -72,39 +72,59 @@ export async function findAITaskByProviderTaskId({
 
 export async function updateAITaskById(id: string, updateAITask: UpdateAITask) {
   const result = await db().transaction(async (tx: UnsafeAny) => {
-    // task failed, Revoke credit consumption record
+    // Idempotent refund on FAILED. Two-stage pattern that works across dialects:
+    //   1) SELECT the consumption record while ACTIVE — captures `consumedDetail`.
+    //      On MySQL/Postgres/local SQLite, tx isolation serializes concurrent readers.
+    //      On D1 the BEGIN degrades (see CLAUDE.md), so this SELECT alone is racy.
+    //   2) Atomic flip UPDATE ... WHERE status = ACTIVE with RETURNING. On D1/SQLite/
+    //      Postgres this returns [row] only for the winning caller; on MySQL the shim
+    //      returns a synthetic payload but tx isolation already gated the SELECT so
+    //      only one caller sees the ACTIVE candidate per tx.
+    //   Under concurrent notify+query on D1, only the flip-winner proceeds to add
+    //   credits back — preventing double-refund.
     if (updateAITask.status === AITaskStatus.FAILED && updateAITask.creditId) {
-      // get consumed credit record
-      const [consumedCredit] = await tx
+      const [candidate] = await tx
         .select()
         .from(credit)
-        .where(eq(credit.id, updateAITask.creditId));
-      if (consumedCredit && consumedCredit.status === CreditStatus.ACTIVE) {
-        const consumedItems = JSON.parse(consumedCredit.consumedDetail || '[]');
-
-        // console.log('consumedItems', consumedItems);
-
-        // add back consumed credits
-        await Promise.all(
-          consumedItems.map((item: UnsafeAny) => {
-            if (item && item.creditId && item.creditsConsumed > 0) {
-              return tx
-                .update(credit)
-                .set({
-                  remainingCredits: sql`${credit.remainingCredits} + ${item.creditsConsumed}`,
-                })
-                .where(eq(credit.id, item.creditId));
-            }
-          })
+        .where(
+          and(
+            eq(credit.id, updateAITask.creditId),
+            eq(credit.status, CreditStatus.ACTIVE)
+          )
         );
 
-        // delete consumed credit record
-        await tx
+      if (candidate) {
+        const flipped = await tx
           .update(credit)
-          .set({
-            status: CreditStatus.DELETED,
-          })
-          .where(eq(credit.id, updateAITask.creditId));
+          .set({ status: CreditStatus.DELETED })
+          .where(
+            and(
+              eq(credit.id, updateAITask.creditId),
+              eq(credit.status, CreditStatus.ACTIVE)
+            )
+          )
+          .returning();
+
+        const winner = Array.isArray(flipped) && flipped.length > 0;
+        if (winner) {
+          const consumedItems = JSON.parse(candidate.consumedDetail || '[]');
+          await Promise.all(
+            consumedItems.map((item: UnsafeAny) => {
+              if (item && item.creditId && item.creditsConsumed > 0) {
+                return tx
+                  .update(credit)
+                  .set({
+                    remainingCredits: sql`${credit.remainingCredits} + ${item.creditsConsumed}`,
+                  })
+                  .where(eq(credit.id, item.creditId));
+              }
+            })
+          );
+          updateAITask.refundedAt = new Date();
+          if (!updateAITask.refundReason) {
+            updateAITask.refundReason = 'task_failed';
+          }
+        }
       }
     }
 

@@ -43,9 +43,8 @@ export const localeMessagesPaths = [
   'admin/apikeys',
   'admin/ai-tasks',
   'admin/chats',
-  'ai/music',
   'ai/chat',
-  'ai/image',
+  'ai/baby-image',
   'ai/video',
   'activity/sidebar',
   'activity/ai-tasks',
@@ -62,4 +61,5 @@ export const localeMessagesPaths = [
   'pages/ai-baby-dance-video-generator',
   'pages/seedance-baby-dance',
   'pages/babyboogey-vs-seedance',
+  'pages/ai-baby-image-generator',
 ];

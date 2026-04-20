@@ -41,7 +41,10 @@ const SOURCE_DIRS = [
   'public/imgs/cases',
   'public/imgs/bg',
   'public/imgs/blog',
+  'public/imgs/showcases',
 ];
+
+const EXTRA_SOURCE_FILES = ['public/preview.png'];
 
 function parseArgs(argv: string[]): Args {
   const args: Args = {
@@ -128,8 +131,14 @@ function collectSourceImages(): string[] {
         }
         continue;
       }
-      if (!/\.(png|jpe?g)$/i.test(current)) continue;
+      if (!/\.(png|jpe?g|webp)$/i.test(current)) continue;
       files.push(toPosix(path.relative(cwd, current)));
+    }
+  }
+  for (const extra of EXTRA_SOURCE_FILES) {
+    const abs = path.join(cwd, extra);
+    if (fs.existsSync(abs) && fs.statSync(abs).isFile()) {
+      files.push(toPosix(extra));
     }
   }
   return files.sort((a, b) => a.localeCompare(b));
@@ -171,7 +180,8 @@ async function main() {
     const webpPath = webpPathFromSource(sourcePath);
     const webpAbs = path.join(process.cwd(), webpPath);
 
-    if (!args.dryRun) {
+    const isWebpSource = /\.webp$/i.test(sourcePath);
+    if (!args.dryRun && !isWebpSource) {
       await sharpFactory!(sourceAbs).webp({ quality: args.quality }).toFile(webpAbs);
     }
 

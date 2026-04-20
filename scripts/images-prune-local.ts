@@ -47,7 +47,8 @@ async function main() {
 
   const usage = scanReferenceUsage(
     manifest.entries.map((entry) => entry.sourceUrl),
-    REWRITE_SCAN_DIRS
+    REWRITE_SCAN_DIRS,
+    manifest.entries.map((entry) => entry.publicUrl)
   );
 
   const candidates: Array<{
@@ -112,7 +113,11 @@ async function main() {
   }
 
   if (!args.dryRun) {
-    const postDeleteUsage = scanReferenceUsage([...deletedUrls], REWRITE_SCAN_DIRS);
+    const postDeleteUsage = scanReferenceUsage(
+      [...deletedUrls],
+      REWRITE_SCAN_DIRS,
+      manifest.entries.map((entry) => entry.publicUrl)
+    );
     const danglingRefs = [...postDeleteUsage.entries()]
       .filter(([, referenced]) => referenced)
       .map(([sourceUrl]) => sourceUrl);
