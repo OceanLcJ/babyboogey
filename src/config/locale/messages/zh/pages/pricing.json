@@ -29,6 +29,36 @@
         ],
         "items": [
           {
+            "title": "首支舞蹈包",
+            "description": "适合生成第一支完整宝宝跳舞视频",
+            "label": "首支视频",
+            "features_title": "包含：",
+            "features": [
+              "225 积分（永不过期）",
+              "足够生成 1 个 Pro 舞蹈视频（15 秒，720p）",
+              "或约 3 个短舞蹈视频（5 秒，720p）",
+              "无水印",
+              "解锁 Pro 模板",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "购买首支舞蹈包",
+              "url": "/pricing?product=first-dance-pack",
+              "icon": "Zap"
+            },
+            "product_id": "first-dance-pack",
+            "product_name": "首支舞蹈包",
+            "credits": 225,
+            "group": "credits"
+          },
+          {
             "title": "入门包",
             "description": "完美的入门体验",
             "features_title": "包含内容：",
@@ -76,7 +106,7 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
+            "is_featured": false,
             "button": {
               "title": "立即购买",
               "url": "/#pricing",
@@ -89,7 +119,7 @@
           },
           {
             "title": "超大包",
-            "description": "批量创作最佳选择",
+            "description": "适合多次创作",
             "features_title": "包含内容：",
             "features": [
               "3040积分（永久有效）",
@@ -315,6 +345,6 @@
   "messages": {
     "current_plan": "当前方案",
     "processing": "处理中",
-    "credit_pack_subscribers_only": "积分包仅限订阅用户购买，请先订阅。"
+    "credit_pack_subscribers_only": "请登录后购买积分包。"
   }
 }

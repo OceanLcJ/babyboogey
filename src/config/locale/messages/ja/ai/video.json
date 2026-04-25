@@ -46,7 +46,7 @@
       "public_toggle_desc": "生成された動画を他の人が閲覧できるようにする",
       "checking_membership": "メンバーシップを確認中...",
       "pro_template_sign_in_first": "Proテンプレートを使用するにはサインインしてください",
-      "pro_template_member_only": "Proテンプレートはメンバー限定です。料金ページでアップグレードしてください。",
+      "pro_template_member_only": "有料パック購入で解放",
       "orientation_auto_switched_video": "このテンプレートは10秒を超えるため、向きは「動画に合わせる」に切り替えられました。",
       "orientation_image_max_10s": "「写真に合わせる」は10秒までのテンプレートに対応しています。「動画に合わせる」を選択してください。"
     },
@@ -111,6 +111,8 @@
       "download_failed": "お使いのブラウザは透かし入り動画のエクスポートに対応していません。Chrome/Edgeを試すか、透かしを削除するためにアップグレードしてください。",
       "preparing_preview": "保護されたプレビューを準備中...",
       "preview_failed": "保護されたプレビューを準備できませんでした。ダウンロードするか、再生成してください。"
-    }
+    },
+    "first_dance_pack_cta": "First Dance Pack - $4.99",
+    "first_dance_pack_short": "First Dance Pack - $4.99"
   }
 }

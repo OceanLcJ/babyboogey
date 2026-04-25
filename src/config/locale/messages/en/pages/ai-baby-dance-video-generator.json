@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "AI Baby Dance Video Generator — Create Dancing Baby Videos Online",
-    "description": "The #1 AI baby dance video generator. Upload any baby photo and create professional dancing videos with AI. 50+ dance templates, HD quality, and watermark-free exports on paid plans."
+    "description": "The #1 AI baby dance video generator. Upload any baby photo and create professional dancing videos with AI. 14 templates, HD quality, and watermark-free exports on paid plans."
   },
   "page": {
     "title": "AI Baby Dance Video Generator — Create Dancing Baby Videos Online",
@@ -19,7 +19,7 @@
       "hero": {
         "id": "hero",
         "title": "AI Baby Dance Video Generator — Turn Any Photo Into a Dancing Masterpiece",
-        "description": "Meet the most powerful AI baby dance video generator on the web. Upload a single baby photo, pick from 50+ viral dance templates, and watch our AI create a stunning HD dance video in seconds. No editing skills required — just pure, shareable joy.",
+        "description": "Meet the most powerful AI baby dance video generator on the web. Upload a single baby photo, pick from 14 dance templates, and watch our AI create a stunning HD dance video after processing. No editing skills required — just pure, shareable joy.",
         "buttons": [
           {
             "title": "Create Your First Video",
@@ -64,16 +64,16 @@
             }
           },
           {
-            "title": "50+ Curated Dance Templates",
-            "description": "From hip-hop grooves to ballet twirls, our baby dance video generator ships with 50+ professionally choreographed templates. New trending moves are added every week so your content always stays fresh.",
+            "title": "14 Dance Templates",
+            "description": "From hip-hop grooves to ballet twirls, our baby dance video generator ships with 14 templates. New trending moves are added every week so your content always stays fresh.",
             "icon": "LayoutGrid",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-item-1/800/600",
-              "alt": "50+ dance templates for baby dance video creation"
+              "alt": "14 templates for baby dance video creation"
             }
           },
           {
-            "title": "HD & 4K Output Quality",
+            "title": "720p / 1080p Output Quality",
             "description": "Every video produced by our AI baby dance maker exports in crystal-clear 720p or 1080p HD. No blurry frames, no artifacts — just studio-grade quality ready for social media or printing.",
             "icon": "MonitorPlay",
             "image": {
@@ -83,7 +83,7 @@
           },
           {
             "title": "Lightning-Fast Generation",
-            "description": "Our baby dance video creator delivers finished videos in under 30 seconds. Upload, pick a template, and your dancing baby video is ready to download and share before your coffee gets cold.",
+            "description": "Our baby dance video creator delivers finished videos usually in 45-180 seconds. Upload, pick a template, and your dancing baby video is ready to download and share before your coffee gets cold.",
             "icon": "Zap",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-item-3/800/600",
@@ -151,7 +151,7 @@
         "items": [
           {
             "title": "Step 1: Upload Your Baby Photo",
-            "description": "Drag and drop any clear baby photo into our generator. The AI instantly detects the face and body, preparing it for animation. Supports JPG, PNG, and WebP up to 10 MB.",
+            "description": "Drag and drop any clear baby photo into our generator. The AI after processing detects the face and body, preparing it for animation. Supports JPG, PNG, and WebP up to 10 MB.",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-step1/800/600",
               "alt": "Upload baby photo to the AI dance video generator"
@@ -159,15 +159,15 @@
           },
           {
             "title": "Step 2: Pick a Dance Template",
-            "description": "Browse 50+ curated dance templates — trending TikTok moves, classic baby boogies, holiday specials, and more. Preview each one before generating to find the perfect vibe.",
+            "description": "Browse 14 dance templates — trending TikTok moves, classic baby boogies, holiday specials, and more. Preview each one before generating to find the perfect vibe.",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-step2/800/600",
-              "alt": "Choose from 50+ baby dance templates"
+              "alt": "Choose from 14 baby dance templates"
             }
           },
           {
             "title": "Step 3: Generate & Share",
-            "description": "Hit the generate button and your HD dancing baby video is ready in under 30 seconds. Download it instantly or share directly to TikTok, Instagram, and more with one click.",
+            "description": "Hit the generate button and your HD dancing baby video is ready usually in 45-180 seconds. Download it after processing or share directly to TikTok, Instagram, and more with one click.",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-step3/800/600",
               "alt": "Generate and share baby dance video"
@@ -218,8 +218,8 @@
             }
           },
           {
-            "title": "Batch Generation Mode",
-            "description": "Need multiple videos at once? BabyBoogey supports batch processing — upload several photos, apply the same or different templates, and generate them all simultaneously.",
+            "title": "Template Preview Mode",
+            "description": "Preview real dance templates first, then generate one finished video at a time so credits and quality stay clear.",
             "icon": "Layers",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-feat5/800/600",
@@ -296,11 +296,11 @@
         "items": [
           {
             "question": "What exactly is an AI baby dance video generator?",
-            "answer": "An AI baby dance video generator is a tool that uses artificial intelligence to transform a still baby photo into a realistic dancing video. BabyBoogey's generator uses advanced motion diffusion models and facial mapping to animate the photo, sync it to music, and export a high-quality video — all in under 30 seconds."
+            "answer": "An AI baby dance video generator is a tool that uses artificial intelligence to transform a still baby photo into a realistic dancing video. BabyBoogey's generator uses advanced motion diffusion models and facial mapping to animate the photo, sync it to music, and export a high-quality video — all usually in 45-180 seconds."
           },
           {
             "question": "How many dance templates does the baby dance video generator include?",
-            "answer": "BabyBoogey currently offers 50+ professionally choreographed dance templates, including trending TikTok routines, classic baby boogies, holiday-themed dances, and more. New templates are added weekly so you always have fresh content to create with."
+            "answer": "BabyBoogey currently offers 14 dance templates, including trending TikTok routines, classic baby boogies, holiday-themed dances, and more. New templates are added weekly so you always have fresh content to create with."
           },
           {
             "question": "What video quality can I expect from this AI baby dance maker?",
@@ -308,7 +308,7 @@
           },
           {
             "question": "How long does it take to generate a baby dance video?",
-            "answer": "Most videos are generated in 15 to 30 seconds depending on the template complexity and chosen resolution. Our AI infrastructure is optimized for speed so you can create and share your baby dance video almost instantly."
+            "answer": "Most videos are generated usually in 45-180 seconds depending on the template complexity and chosen resolution. Our AI infrastructure is optimized for speed so you can create and share your baby dance video almost after processing."
           },
           {
             "question": "Is my baby's photo safe when using this online baby dance generator?",
@@ -331,7 +331,7 @@
       "cta": {
         "id": "cta",
         "title": "Ready to Create Your First Dancing Baby Video?",
-        "description": "Join 10,000+ happy families using the #1 AI baby dance video generator. Upload a photo, pick a template, and let the magic happen — it takes less than 30 seconds.",
+        "description": "Join 10,000+ happy families using the #1 AI baby dance video generator. Upload a photo, pick a template, and let the magic happen — it usually takes 45-180 seconds.",
         "buttons": [
           {
             "title": "Start Creating Now",

@@ -52,7 +52,7 @@
         "items": [
           {
             "title": "即复即用的提示词",
-            "description": "本指南中的每条宝宝跳舞AI提示词都可以直接使用。只需复制粘贴到你喜欢的AI视频工具（Seedance、Kling、Sora、Runway等），即刻生成视频。无需摸索，无需反复试错。",
+            "description": "本指南中的每条宝宝跳舞AI提示词都可以直接使用。只需复制粘贴到你喜欢的AI视频工具（Seedance、Kling、Sora、Runway等），通常 45-180 秒生成视频。无需摸索，无需反复试错。",
             "icon": "ClipboardCopy",
             "image": {
               "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-0/800/600",
@@ -180,7 +180,7 @@
       "cta": {
         "id": "cta",
         "title": "跳过提示词 — 让BabyBoogey施展魔法",
-        "description": "何必花时间打磨完美的提示词？BabyBoogey自动创建精彩的宝宝舞蹈视频。上传照片，选择模板，30秒内获得可分享的视频。无需提示词，无需学习成本，只有纯粹的乐趣。",
+        "description": "何必花时间打磨完美的提示词？BabyBoogey自动创建精彩的宝宝舞蹈视频。上传照片，选择模板，通常 45-180 秒获得可分享的视频。无需提示词，无需学习成本，只有纯粹的乐趣。",
         "buttons": [
           {
             "title": "免费创建第一个视频",

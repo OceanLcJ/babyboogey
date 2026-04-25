@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Seedance 2.0 オンライン無料ジェネレーター — BabyBoogey (ByteDance AI 搭載)",
-    "description": "Seedance 2.0 をオンラインで無料で使用してください! BabyBoogey は ByteDance の公式 Seedance 2.0 モデルを統合しています。ダウンロードは必要ありません。バイラル AI ベビー ダンス ビデオを即座に生成します。"
+    "description": "Seedance 2.0 をオンラインでプレビューから使用してください! BabyBoogey は ByteDance の公式 Seedance 2.0 モデルを統合しています。ダウンロードは必要ありません。バイラル AI ベビー ダンス ビデオを処理後に生成します。"
   },
   "page": {
     "title": "Seedance 2.0 オンライン無料ジェネレーター — BabyBoogey",
@@ -16,12 +16,12 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "Seedance 2.0 をオンラインで無料で使用する — ワンクリックのベビー ダンス ビデオ",
+        "title": "Seedance 2.0 をオンラインでプレビューから使用する — ワンクリックのベビー ダンス ビデオ",
         "highlight_text": "シーダンス 2.0",
         "description": "アプリのダウンロードは必要ありません。複雑な設定は必要ありません。 BabyBoogey は ByteDance の公式 Seedance 2.0 モデルと直接統合されています。 50 を超える赤ちゃん専用のテンプレートと組み合わせて、究極の AI ダンス生成体験を提供します。写真をアップロードすると、すぐに結果が得られます。",
         "buttons": [
           {
-            "title": "Seedance 2.0をオンラインで無料でお試しください",
+            "title": "Seedance 2.0をオンラインでプレビューからお試しください",
             "url": "/#generator",
             "icon": "Zap"
           }
@@ -67,7 +67,7 @@
           },
           {
             "title": "使いやすいインターフェース",
-            "description": "オリジナルの Seedance は主に開発者向けです。 BabyBoogey は、親向けに最適化されたユーザーフレンドリーなインターフェイスを提供します。コーディングや技術的な知識は必要ありません。数秒で作成を開始できます。",
+            "description": "オリジナルの Seedance は主に開発者向けです。 BabyBoogey は、親向けに最適化されたユーザーフレンドリーなインターフェイスを提供します。コーディングや技術的な知識は必要ありません。処理後で作成を開始できます。",
             "icon": "UserCheck",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/one-click-generate-on-laptop-ui.webp",
@@ -76,7 +76,7 @@
           },
           {
             "title": "高速生成",
-            "description": "世界中で Seedance 2.0 サービスに高速かつ安定してアクセスできるように、ネットワーク接続を最適化しました。高品質のビデオを数秒で生成します。",
+            "description": "世界中で Seedance 2.0 サービスに高速かつ安定してアクセスできるように、ネットワーク接続を最適化しました。高品質のビデオを処理後で生成します。",
             "icon": "Zap",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/fast-generation-lightning-play-icon.webp",
@@ -102,12 +102,12 @@
             }
           },
           {
-            "title": "無料でお試しいただけます",
-            "description": "より多くの人に Seedance 2.0 のパワーを体験してもらうために、BabyBoogey は無料トライアル クレジットを提供しています。登録すると毎日無料でビデオを生成します。クレジット カードは必要ありません。",
+            "title": "プレビューからお試しいただけます",
+            "description": "より多くの人に Seedance 2.0 のパワーを体験してもらうために、BabyBoogey は無料トライアル クレジットを提供しています。登録すると毎日プレビューからビデオを生成します。クレジット カードは必要ありません。",
             "icon": "Gift",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
-              "alt": "登録して Seedance 2.0 を無料でお試しください"
+              "alt": "登録して Seedance 2.0 をプレビューからお試しください"
             }
           },
           {
@@ -175,7 +175,7 @@
             "answer": "現在、Seedance 2.0 にはスタンドアロンの公式アプリがありません。これは主に API および Web サービスとして存在します。 BabyBoogey はモバイルで使用するのに最も便利な Web インターフェイスであり、ストレージ容量を占有せずにアプリのようなエクスペリエンスを提供します。"
           },
           {
-            "question": "ここでの Seedance 2.0 の使用は無料ですか?",
+            "question": "ここでの Seedance 2.0 の使用はプレビューからすか?",
             "answer": "BabyBoogey では無料お試しプランを提供しています。すべての新規ユーザーは、登録時に Seedance 2.0 ビデオを生成するための無料クレジットを取得します。より多くの、またはより高品質のビデオをご希望の場合は、お手頃なプランをご用意しています。"
           },
           {
@@ -194,7 +194,7 @@
       },
       "cta": {
         "id": "cta",
-        "title": "今すぐ Seedance 2.0 を無料でお試しください",
+        "title": "今すぐ Seedance 2.0 をプレビューからお試しください",
         "description": "ダウンロードを検索するのはやめてください。 Seedance 2.0 を使用するには BabyBoogey が最適です。待つ必要はありません。今すぐ始めましょう。",
         "buttons": [
           {

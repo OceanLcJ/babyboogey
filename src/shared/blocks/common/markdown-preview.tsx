@@ -42,7 +42,7 @@ function generateHeadingId(text: string): string {
 }
 
 const md = new MarkdownIt({
-  html: true,
+  html: false,
   linkify: true,
   breaks: true,
 });

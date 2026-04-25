@@ -171,7 +171,7 @@
           },
           {
             "title": "选择模板",
-            "description": "选一个爆款舞蹈动作。数十种模板让你随心制作宝宝动画。"
+            "description": "选一个爆款舞蹈动作。14 个模板让你随心制作宝宝动画。"
           },
           {
             "title": "开始摇摆！",
@@ -193,7 +193,7 @@
             "description": "跳舞视频已创建"
           },
           {
-            "title": "50+",
+            "title": "14 个",
             "description": "爆款模板"
           }
         ]
@@ -222,6 +222,36 @@
           }
         ],
         "items": [
+          {
+            "title": "首支舞蹈包",
+            "description": "适合生成第一支完整宝宝跳舞视频",
+            "label": "首支视频",
+            "features_title": "包含：",
+            "features": [
+              "225 积分（永不过期）",
+              "足够生成 1 个 Pro 舞蹈视频（15 秒，720p）",
+              "或约 3 个短舞蹈视频（5 秒，720p）",
+              "无水印",
+              "解锁 Pro 模板",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "购买首支舞蹈包",
+              "url": "/pricing?product=first-dance-pack",
+              "icon": "Zap"
+            },
+            "product_id": "first-dance-pack",
+            "product_name": "首支舞蹈包",
+            "credits": 225,
+            "group": "credits"
+          },
           {
             "title": "入门包",
             "description": "完美的入门体验",
@@ -270,7 +300,7 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
+            "is_featured": false,
             "button": {
               "title": "立即购买",
               "url": "/#pricing",
@@ -283,7 +313,7 @@
           },
           {
             "title": "超大包",
-            "description": "批量创作最佳选择",
+            "description": "适合多次创作",
             "features_title": "包含内容：",
             "features": [
               "3040积分（永久有效）",
@@ -586,7 +616,7 @@
           },
           {
             "question": "将照片变成跳舞宝宝需要多久？",
-            "answer": "大多数视频在 30 秒内即可完成。我们的 AI 宝宝跳舞生成器专为速度优化，让你可以立即在社交媒体上分享跳舞视频。"
+            "answer": "大多数视频通常 45-180 秒完成。生成前会显示预计积分，完成后即可下载分享。"
           },
           {
             "question": "需要专业照片才能制作动画吗？",
@@ -607,13 +637,24 @@
           {
             "question": "怎么把跳舞视频分享到抖音或小红书？",
             "answer": "生成视频后，点击下载按钮将视频保存到设备。然后直接从相册上传到抖音、小红书或任何社交媒体平台即可。"
+          },
+          {
+            "question": "如果生成失败会退还积分吗？",
+            "answer": "会。如果视频或图片生成失败且没有交付可用结果，已扣除的积分会自动退回到你的账户。"
+          },
+          {
+            "question": "免费阶段可以生成完整视频吗？",
+            "answer": "免费注册积分用于体验 AI 宝宝图片和预览舞蹈模板。生成完整宝宝跳舞视频需要足够积分，例如首支舞蹈包。"
           }
         ]
       },
       "cta": {
         "id": "cta",
         "eyebrow": "轮到你了",
-        "collage_labels": ["原图", "摇摆"],
+        "collage_labels": [
+          "原图",
+          "摇摆"
+        ],
         "trust_bar": {
           "rating": "✦ 4.9/5",
           "audience": "2,000+ 家庭",

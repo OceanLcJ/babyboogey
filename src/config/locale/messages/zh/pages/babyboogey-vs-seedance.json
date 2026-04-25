@@ -56,7 +56,7 @@
           },
           {
             "title": "上层叠加宝宝专属模板",
-            "description": "在 Seedance 2.0 强大的原始能力之上，BabyBoogey 添加了 50 多个专为宝宝身体比例和可爱动作设计的跳舞模板。每个模板都编码了精心调校的参数——动作强度、身体映射比例、表情灵敏度——全部针对婴幼儿进行了校准。生成的效果自然又可爱，绝非僵硬或诡异。这正是 BabyBoogey 成为宝宝内容领域最佳 Seedance 替代方案的原因。",
+            "description": "在 Seedance 2.0 强大的原始能力之上，BabyBoogey 添加了 14 个专为宝宝身体比例和可爱动作设计的跳舞模板。每个模板都编码了精心调校的参数——动作强度、身体映射比例、表情灵敏度——全部针对婴幼儿进行了校准。生成的效果自然又可爱，绝非僵硬或诡异。这正是 BabyBoogey 成为宝宝内容领域最佳 Seedance 替代方案的原因。",
             "icon": "RiLayoutGridFill",
             "image": {
               "src": "https://picsum.photos/seed/babyboogey-seedance-templates/800/600",
@@ -152,7 +152,7 @@
           },
           {
             "question": "为什么我应该用 BabyBoogey 而不是直接用 Seedance API？",
-            "answer": "BabyBoogey 让您无需面对复杂性就能享受 Seedance 2.0 的强大能力。直接使用 Seedance API 需要编写详细的提示词、配置参数，并经过多次反复才能获得好的宝宝跳舞效果。BabyBoogey 将这一切打包成三步操作流程，配备 50 多个预制宝宝跳舞模板。更快、更省钱（减少浪费的尝试次数），而且完全不需要技术知识。可以把 BabyBoogey 理解为专门为宝宝内容设计的 Seedance 2.0 简化版。"
+            "answer": "BabyBoogey 让您无需面对复杂性就能享受 Seedance 2.0 的强大能力。直接使用 Seedance API 需要编写详细的提示词、配置参数，并经过多次反复才能获得好的宝宝跳舞效果。BabyBoogey 将这一切打包成三步操作流程，配备 14 个预制宝宝跳舞模板。更快、更省钱（减少浪费的尝试次数），而且完全不需要技术知识。可以把 BabyBoogey 理解为专门为宝宝内容设计的 Seedance 2.0 简化版。"
           },
           {
             "question": "在 BabyBoogey 中还能自定义提示词吗？",
@@ -171,7 +171,7 @@
       "cta": {
         "id": "cta",
         "title": "享受 Seedance 2.0 品质——告别复杂操作",
-        "description": "BabyBoogey 让您通过宝宝专属模板和一键操作流程，轻松使用 Seedance 2.0 的世界级 AI 能力。上传照片、选择舞蹈、30 秒即可获得值得分享的宝宝跳舞视频。立即免费开始——无需信用卡。",
+        "description": "BabyBoogey 让您通过宝宝专属模板和一键操作流程，轻松使用 Seedance 2.0 的世界级 AI 能力。上传照片、选择舞蹈、45-180 秒即可获得值得分享的宝宝跳舞视频。可免费预览模板，生成成品视频需积分。",
         "buttons": [
           {
             "title": "免费试用 BabyBoogey",

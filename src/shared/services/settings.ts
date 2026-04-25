@@ -345,7 +345,7 @@ export async function getSettings() {
       name: 'initial_credits_enabled',
       title: 'First Login Credits Enabled',
       type: 'switch',
-      value: 'false',
+      value: 'true',
       group: 'credit',
       tab: 'general',
       tip: 'whether grant initial credits on the first successful sign in for each user',
@@ -709,6 +709,7 @@ export async function getSettings() {
         rows: 6,
       },
       placeholder: `{
+  "first-dance-pack": "prod_xxx",
   "starter": "prod_xxx",
   "standard-monthly": "prod_xxx",
   "premium-yearly": "prod_xxx"

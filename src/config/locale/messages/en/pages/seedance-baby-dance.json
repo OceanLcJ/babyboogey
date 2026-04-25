@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Seedance 2.0 Online Free Generator — BabyBoogey (Powered by ByteDance AI)",
-    "description": "Use Seedance 2.0 online for free! BabyBoogey integrates ByteDance's official Seedance 2.0 model. No download required. Generate viral AI baby dance videos instantly."
+    "description": "Use Seedance 2.0 online with BabyBoogey. Preview baby dance templates for free, then generate finished AI baby dance videos with credits."
   },
   "page": {
     "title": "Seedance 2.0 Online Free Generator — BabyBoogey",
@@ -18,7 +18,7 @@
         "id": "hero",
         "title": "Use Seedance 2.0 Online for Free — One-Click Baby Dance Video",
         "highlight_text": "Seedance 2.0",
-        "description": "No App download required. No complex setup. BabyBoogey integrates directly with ByteDance's official Seedance 2.0 model. Combined with 50+ baby-specific templates, we offer the ultimate AI dance generation experience. Upload a photo and get results instantly.",
+        "description": "No App download required. No complex setup. BabyBoogey integrates directly with ByteDance's official Seedance 2.0 model. Combined with 14 baby-specific templates, we offer the ultimate AI dance generation experience. Upload a photo and get results after processing.",
         "buttons": [
           {
             "title": "Try Seedance 2.0 Online Free",
@@ -67,7 +67,7 @@
           },
           {
             "title": "Easy-to-Use Interface",
-            "description": "The original Seedance is mainly for developers. BabyBoogey provides a user-friendly interface optimized for parents. No coding or technical knowledge required—start creating in seconds.",
+            "description": "The original Seedance is mainly for developers. BabyBoogey provides a user-friendly interface optimized for parents. No coding or technical knowledge required—start creating after processing.",
             "icon": "UserCheck",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/one-click-generate-on-laptop-ui.webp",
@@ -76,7 +76,7 @@
           },
           {
             "title": "Fast Generation",
-            "description": "We've optimized our network connection to ensure fast and stable access to Seedance 2.0 services globally. Generate high-quality videos in seconds.",
+            "description": "We've optimized our network connection to ensure fast and stable access to Seedance 2.0 services globally. Generate high-quality videos after processing.",
             "icon": "Zap",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/fast-generation-lightning-play-icon.webp",
@@ -103,7 +103,7 @@
           },
           {
             "title": "Free to Try",
-            "description": "To let more people experience the power of Seedance 2.0, BabyBoogey offers free trial credits. Generate videos for free every day upon registration, no credit card required.",
+            "description": "To let more people experience the power of Seedance 2.0, BabyBoogey offers free trial credits. Preview templates for free and use signup credits for AI baby images, no credit card required.",
             "icon": "Gift",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
@@ -176,11 +176,11 @@
           },
           {
             "question": "Is using Seedance 2.0 here free?",
-            "answer": "BabyBoogey offers a free trial plan. All new users get free credits upon registration to generate Seedance 2.0 videos. For more or higher quality videos, we offer affordable plans."
+            "answer": "BabyBoogey offers signup credits for AI baby image trials and dance template previews. Finished Seedance 2.0 baby dance videos require enough credits, with affordable packs available."
           },
           {
             "question": "Do generated videos have watermarks?",
-            "answer": "Free user videos have a small BabyBoogey watermark. Upgrading to any paid plan removes all watermarks and grants commercial usage rights."
+            "answer": "Finished videos from any paid pack have no BabyBoogey watermark and include commercial usage rights."
           },
           {
             "question": "What photo formats does Seedance 2.0 support?",

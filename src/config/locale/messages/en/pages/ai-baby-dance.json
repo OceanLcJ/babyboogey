@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "AI Baby Dance — Make Any Baby Photo Dance with AI",
-    "description": "Create adorable AI baby dance videos in seconds. Upload any baby photo and watch it come alive with hilarious dance moves. Free to start, no editing skills needed."
+    "description": "Create adorable AI baby dance videos after processing. Upload any baby photo and watch it come alive with hilarious dance moves. Free to start, no editing skills needed."
   },
   "page": {
     "title": "AI Baby Dance — Make Any Baby Photo Dance with AI",
@@ -58,7 +58,7 @@
         "items": [
           {
             "title": "One-Click Baby Photo Dance",
-            "description": "Upload any baby photo and our AI instantly animates it with adorable, lifelike dance moves. No apps to install, no timeline editing — your baby photo dance video is ready in seconds.",
+            "description": "Upload any baby photo and our AI after processing animates it with adorable, lifelike dance moves. No apps to install, no timeline editing — your baby photo dance video is ready after processing.",
             "icon": "RiImageAddLine",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-item-0/800/600",
@@ -84,8 +84,8 @@
             }
           },
           {
-            "title": "50+ Viral Dance Templates",
-            "description": "From trending TikTok moves to classic boogie styles — choose from dozens of templates to make baby dance videos that are guaranteed to get laughs and shares.",
+            "title": "14 Dance Templates",
+            "description": "From trending TikTok moves to classic boogie styles — choose from 14 templates to make baby dance videos that are guaranteed to get laughs and shares.",
             "icon": "RiMusic2Line",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-item-3/800/600",
@@ -144,7 +144,7 @@
         "block": "features-step",
         "id": "usage",
         "title": "How to Make an AI Baby Dance Video in 3 Steps",
-        "description": "Creating your own AI baby dance masterpiece takes less than 30 seconds:",
+        "description": "Creating your own AI baby dance masterpiece usually takes 45-180 seconds:",
         "image": {
           "src": "https://picsum.photos/seed/ai-baby-dance-steps/1200/800",
           "alt": "How to Make Baby Dance Video"
@@ -162,7 +162,7 @@
           },
           {
             "title": "Pick a Dance Style",
-            "description": "Browse 50+ viral dance templates — from hip-hop head bobs to silly full-body wiggles. Preview each move and pick the one that matches your baby's vibe.",
+            "description": "Browse 14 dance templates — from hip-hop head bobs to silly full-body wiggles. Preview each move and pick the one that matches your baby's vibe.",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-step-2/800/600",
               "alt": "Choose Baby Dance Template"
@@ -170,7 +170,7 @@
           },
           {
             "title": "Download & Share the Laughs",
-            "description": "Your baby dance video is ready in seconds! Download in HD and share it on TikTok, Instagram, WhatsApp, or anywhere else that could use a smile.",
+            "description": "Your baby dance video is ready after processing! Download in HD and share it on TikTok, Instagram, WhatsApp, or anywhere else that could use a smile.",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-step-3/800/600",
               "alt": "Download AI Baby Dance Video"
@@ -204,7 +204,7 @@
             }
           },
           {
-            "title": "HD & 4K Video Export",
+            "title": "720p / 1080p Video Export",
             "description": "Every AI baby dance video exports in crisp 720p or 1080p resolution. Your baby's big debut deserves to look sharp, whether it's on a phone screen or a living room TV.",
             "icon": "RiHdLine",
             "image": {
@@ -232,7 +232,7 @@
           },
           {
             "title": "Lightning-Fast Generation",
-            "description": "Most baby photo dance videos are ready in under 30 seconds. Our optimized AI pipeline means less waiting and more laughing — because nobody wants to wait around when there's boogieing to be done.",
+            "description": "Most baby photo dance videos are ready usually in 45-180 seconds. Our optimized AI pipeline means less waiting and more laughing — because nobody wants to wait around when there's boogieing to be done.",
             "icon": "RiFlashlightLine",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-feat-5/800/600",
@@ -309,11 +309,11 @@
         "items": [
           {
             "question": "What is AI baby dance and how does it work?",
-            "answer": "AI baby dance is a technology that uses artificial intelligence to animate still baby photos into realistic dance videos. BabyBoogey's AI analyzes your uploaded photo, maps the face and body, and applies motion synthesis to create smooth, natural-looking dance movements — all in under 30 seconds."
+            "answer": "AI baby dance is a technology that uses artificial intelligence to animate still baby photos into realistic dance videos. BabyBoogey's AI analyzes your uploaded photo, maps the face and body, and applies motion synthesis to create smooth, natural-looking dance movements — all usually in 45-180 seconds."
           },
           {
             "question": "Is it free to make baby dance videos?",
-            "answer": "Yes! BabyBoogey lets you make baby dance videos completely free with our starter plan. You get free credits to create your first videos with no credit card required. Free exports include a small BabyBoogey watermark, while paid plans remove watermarks and unlock HD exports, more templates, and additional credits."
+            "answer": "BabyBoogey lets you preview dance templates for free and use signup credits for AI baby images. Finished baby dance videos require enough credits; paid packs remove watermarks and unlock Pro templates."
           },
           {
             "question": "What kind of photos work best for AI baby dance videos?",
@@ -337,14 +337,14 @@
           },
           {
             "question": "What makes BabyBoogey different from other baby dance AI tools?",
-            "answer": "BabyBoogey stands out with face-preserving technology that keeps your baby looking natural (no creepy distortions), 50+ curated dance templates with music sync, lightning-fast generation speeds, and a privacy-first approach. We're built specifically for families who want fun, safe, and high-quality baby dance video AI content."
+            "answer": "BabyBoogey stands out with face-preserving technology that keeps your baby looking natural (no creepy distortions), 14 dance templates with music sync, lightning-fast generation speeds, and a privacy-first approach. We're built specifically for families who want fun, safe, and high-quality baby dance video AI content."
           }
         ]
       },
       "cta": {
         "id": "cta",
         "title": "Ready to See Your Baby Boogie?",
-        "description": "Join thousands of families making unforgettable AI baby dance videos. Upload a photo and start dancing in seconds — it's free!",
+        "description": "Join thousands of families making unforgettable AI baby dance videos. Upload a photo and start dancing after processing — it's free!",
         "buttons": [
           {
             "title": "Make Baby Dance Free",

@@ -52,7 +52,7 @@
         "items": [
           {
             "title": "Copy-Paste Ready Prompts",
-            "description": "Every baby dance AI prompt in this guide is ready to use. Simply copy it, paste it into your favorite AI video tool (Seedance, Kling, Sora, Runway, or others), and generate your video instantly. No guesswork, no trial and error.",
+            "description": "Every baby dance AI prompt in this guide is ready to use. Simply copy it, paste it into your favorite AI video tool (Seedance, Kling, Sora, Runway, or others), and generate your video after processing. No guesswork, no trial and error.",
             "icon": "ClipboardCopy",
             "image": {
               "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-0/800/600",
@@ -61,7 +61,7 @@
           },
           {
             "title": "Prompt-Free with BabyBoogey",
-            "description": "Don't want to write prompts at all? BabyBoogey lets you create stunning baby dance videos without typing a single word. Upload your baby's photo, choose from 50+ dance templates, and get a professional video in seconds. The best prompts baby dance video creators use are already built into our templates.",
+            "description": "Don't want to write prompts at all? BabyBoogey lets you create stunning baby dance videos without typing a single word. Upload your baby's photo, choose from 14 templates, and get a professional video after processing. The best prompts baby dance video creators use are already built into our templates.",
             "icon": "Wand2",
             "image": {
               "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-1/800/600",
@@ -70,7 +70,7 @@
           },
           {
             "title": "Organized by Category",
-            "description": "We sorted every ai baby dance prompt by theme — classic dances, holiday specials, funny moves, music genres, and viral trends. Find exactly the vibe you are looking for in seconds, whether you want a salsa baby or a breakdancing toddler.",
+            "description": "We sorted every ai baby dance prompt by theme — classic dances, holiday specials, funny moves, music genres, and viral trends. Find exactly the vibe you are looking for after processing, whether you want a salsa baby or a breakdancing toddler.",
             "icon": "LayoutGrid",
             "image": {
               "src": "https://picsum.photos/seed/baby-dance-ai-prompt-item-2/800/600",
@@ -180,7 +180,7 @@
       "cta": {
         "id": "cta",
         "title": "Skip the Prompts — Let BabyBoogey Do the Magic",
-        "description": "Why spend time crafting the perfect prompt when BabyBoogey creates stunning baby dance videos automatically? Upload a photo, pick a template, and get a shareable video in under 30 seconds. No prompts. No learning curve. Just pure fun.",
+        "description": "Why spend time crafting the perfect prompt when BabyBoogey creates stunning baby dance videos automatically? Upload a photo, pick a template, and get a shareable video usually in 45-180 seconds. No prompts. No learning curve. Just pure fun.",
         "buttons": [
           {
             "title": "Create Your First Video Free",

@@ -56,7 +56,7 @@
           },
           {
             "title": "Baby-Specific Templates on Top",
-            "description": "On top of Seedance 2.0's raw capabilities, BabyBoogey adds 50+ dance templates designed specifically for baby proportions and cute movements. Each template encodes carefully tuned parameters — motion intensity, body mapping ratios, expression sensitivity — all calibrated for infants and toddlers. You get results that look natural and adorable, not robotic or uncanny. This is what makes BabyBoogey the best Seedance alternative for baby content.",
+            "description": "On top of Seedance 2.0's raw capabilities, BabyBoogey adds 14 dance templates designed specifically for baby proportions and cute movements. Each template encodes carefully tuned parameters — motion intensity, body mapping ratios, expression sensitivity — all calibrated for infants and toddlers. You get results that look natural and adorable, not robotic or uncanny. This is what makes BabyBoogey the best Seedance alternative for baby content.",
             "icon": "RiLayoutGridFill",
             "image": {
               "src": "https://picsum.photos/seed/babyboogey-seedance-templates/800/600",
@@ -152,7 +152,7 @@
           },
           {
             "question": "Why should I use BabyBoogey instead of the Seedance API?",
-            "answer": "BabyBoogey gives you Seedance 2.0's power without the complexity. Using the Seedance API directly requires writing detailed prompts, configuring parameters, and iterating through multiple attempts to get good baby dance results. BabyBoogey packages all of this into a three-click workflow with 50+ pre-built baby dance templates. It is faster, cheaper (fewer wasted attempts), and requires zero technical knowledge. Think of BabyBoogey as Seedance 2.0 with training wheels for baby content."
+            "answer": "BabyBoogey gives you Seedance 2.0's power without the complexity. Using the Seedance API directly requires writing detailed prompts, configuring parameters, and iterating through multiple attempts to get good baby dance results. BabyBoogey packages all of this into a three-click workflow with 14 pre-built baby dance templates. It is faster, cheaper (fewer wasted attempts), and requires zero technical knowledge. Think of BabyBoogey as Seedance 2.0 with training wheels for baby content."
           },
           {
             "question": "Can I still write custom prompts in BabyBoogey?",
@@ -171,7 +171,7 @@
       "cta": {
         "id": "cta",
         "title": "Get Seedance 2.0 Quality — Without the Complexity",
-        "description": "BabyBoogey puts Seedance 2.0's world-class AI at your fingertips with baby-specific templates and a one-click workflow. Upload a photo, pick a dance, and have a share-worthy baby dance video in 30 seconds. Start free today — no credit card needed.",
+        "description": "BabyBoogey puts Seedance 2.0's world-class AI at your fingertips with baby-specific templates and a one-click workflow. Upload a photo, pick a dance, preview the template, and generate a share-worthy baby dance video after checkout.",
         "buttons": [
           {
             "title": "Try BabyBoogey Free",

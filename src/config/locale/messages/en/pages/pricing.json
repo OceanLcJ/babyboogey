@@ -19,15 +19,47 @@
           },
           {
             "name": "monthly",
-            "title": "Monthly"
+            "title": "Monthly",
+            "is_featured": false
           },
           {
             "name": "yearly",
             "title": "Yearly",
-            "label": "Save 30%"
+            "label": "Save 30%",
+            "is_featured": false
           }
         ],
         "items": [
+          {
+            "title": "First Dance Pack",
+            "description": "Best for your first finished baby dance video",
+            "label": "First video",
+            "features_title": "Includes:",
+            "features": [
+              "225 credits (never expire)",
+              "Enough for 1 Pro dance video (15s, 720p)",
+              "Or ~3 short dance videos (5s, 720p)",
+              "No watermark",
+              "Unlocks Pro templates",
+              "Private storage"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "Get First Dance Pack",
+              "url": "/pricing?product=first-dance-pack",
+              "icon": "Zap"
+            },
+            "product_id": "first-dance-pack",
+            "product_name": "First Dance Pack",
+            "credits": 225,
+            "group": "credits"
+          },
           {
             "title": "Starter",
             "description": "Perfect for getting started",
@@ -76,7 +108,7 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
+            "is_featured": false,
             "button": {
               "title": "Buy Now",
               "url": "/#pricing",
@@ -315,6 +347,6 @@
   "messages": {
     "current_plan": "Current Plan",
     "processing": "Processing",
-    "credit_pack_subscribers_only": "Credit packs are available to subscribers only. Please subscribe first."
+    "credit_pack_subscribers_only": "Please sign in to buy credit packs."
   }
 }

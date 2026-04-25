@@ -153,6 +153,9 @@ const SUCCESS_HOLD_MS = 1200;
 const PROGRESS_CAP_BEFORE_SUCCESS = 95;
 const SHARE_LINK_EXPIRES_SECONDS = 60 * 60 * 24;
 const SHARE_LINK_CACHE_BUFFER_MS = 30 * 1000;
+const FIRST_DANCE_PACK_PRODUCT_ID = 'first-dance-pack';
+const VIDEO_INTENT_STORAGE_KEY = 'babyboogey:video-generator-intent';
+const VIDEO_INTENT_TTL_MS = 30 * 60 * 1000;
 
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
@@ -641,6 +644,7 @@ export function VideoGenerator({
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
   const [showHandoffBanner, setShowHandoffBanner] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
   const isPollingRef = useRef(false);
   const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const successHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -662,6 +666,7 @@ export function VideoGenerator({
     setIsShowSignModal,
     fetchUserCredits,
     fetchUserInfo,
+    configs,
   } =
     useAppContext();
   const searchParams = useSearchParams();
@@ -758,6 +763,53 @@ export function VideoGenerator({
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem(VIDEO_INTENT_STORAGE_KEY);
+      if (!raw) return;
+      window.localStorage.removeItem(VIDEO_INTENT_STORAGE_KEY);
+
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return;
+      if (typeof data.expiresAt === 'number' && Date.now() > data.expiresAt) {
+        return;
+      }
+
+      if (typeof data.templateId === 'string') {
+        const template = DANCE_TEMPLATES.find((t) => t.id === data.templateId);
+        if (template) {
+          setSelectedTemplate(template);
+        }
+      }
+      if (data.resolution === '720p' || data.resolution === '1080p') {
+        setResolution(data.resolution);
+      }
+      if (data.orientation === 'image' || data.orientation === 'video') {
+        setOrientation(data.orientation);
+      }
+      if (typeof data.prompt === 'string') {
+        setPrompt(data.prompt);
+        setPromptTouched(Boolean(data.promptTouched));
+      }
+      if (typeof data.isPublic === 'boolean') {
+        setIsPublic(data.isPublic);
+      }
+      if (
+        typeof data.previewUrl === 'string' &&
+        typeof data.assetRef === 'string'
+      ) {
+        setUploadedImage({
+          preview: data.previewUrl,
+          url: data.assetRef,
+          status: 'uploaded',
+        });
+      }
+    } catch {
+      /* ignore invalid payloads */
+    }
+  }, []);
+
+  useEffect(() => {
     if (promptTouched) {
       return;
     }
@@ -772,6 +824,8 @@ export function VideoGenerator({
     15;
   const currentCost =
     currentCreditsPerSecond * Math.max(1, selectedTemplateDurationSeconds);
+  const shouldShowFirstDancePackCta =
+    Boolean(user) && remainingCredits < currentCost;
   const translateError = useCallback(
     (key: string) => t(key as UnsafeAny),
     [t]
@@ -1770,19 +1824,94 @@ export function VideoGenerator({
     };
   }, [clearPollingTimer, isGenerating, pollTaskStatus, scheduleNextPoll, taskId]);
 
-  const handleGenerate = async () => {
+  const persistVideoIntent = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(
+      VIDEO_INTENT_STORAGE_KEY,
+      JSON.stringify({
+        previewUrl: uploadedImage?.preview,
+        assetRef: uploadedImage?.url,
+        templateId: selectedTemplate.id,
+        resolution,
+        orientation,
+        prompt,
+        promptTouched,
+        isPublic,
+        expiresAt: Date.now() + VIDEO_INTENT_TTL_MS,
+      })
+    );
+  }, [
+    uploadedImage?.preview,
+    uploadedImage?.url,
+    selectedTemplate.id,
+    resolution,
+    orientation,
+    prompt,
+    promptTouched,
+    isPublic,
+  ]);
+
+  const handleFirstDancePackCheckout = useCallback(async () => {
     if (!user) {
       setIsShowSignModal(true);
       return;
     }
 
-    if (remainingCredits < currentCost) {
-      toast.error(
-        mapVideoErrorToUserMessage('insufficient credits', {
-          t: translateError,
-          locale,
-        })
-      );
+    persistVideoIntent();
+    setIsCheckoutLoading(true);
+
+    try {
+      const response = await fetch('/api/payment/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: FIRST_DANCE_PACK_PRODUCT_ID,
+          currency: 'USD',
+          locale: locale || 'en',
+          payment_provider: configs.default_payment_provider || '',
+          metadata: {
+            return_path: '/#generator',
+          },
+        }),
+      });
+
+      if (response.status === 401) {
+        setIsCheckoutLoading(false);
+        setIsShowSignModal(true);
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`request failed with status ${response.status}`);
+      }
+
+      const { code, message, data } = await response.json();
+      if (code !== 0) {
+        throw new Error(message || 'checkout failed');
+      }
+      if (!data?.checkoutUrl) {
+        throw new Error('checkout url not found');
+      }
+
+      window.location.href = data.checkoutUrl;
+    } catch (error: UnsafeAny) {
+      console.error('first dance checkout failed:', error);
+      toast.error(error?.message || 'checkout failed');
+      setIsCheckoutLoading(false);
+    }
+  }, [
+    user,
+    persistVideoIntent,
+    setIsShowSignModal,
+    locale,
+    configs.default_payment_provider,
+  ]);
+
+  const handleGenerate = async () => {
+    if (!user) {
+      setIsShowSignModal(true);
       return;
     }
 
@@ -1809,6 +1938,11 @@ export function VideoGenerator({
       selectedTemplateDurationSeconds > MAX_IMAGE_ORIENTATION_SECONDS
     ) {
       toast.error(t('form.orientation_image_max_10s'));
+      return;
+    }
+
+    if (remainingCredits < currentCost) {
+      await handleFirstDancePackCheckout();
       return;
     }
 
@@ -2297,18 +2431,28 @@ export function VideoGenerator({
               ) : user ? (
                 <Button
                   className="w-full"
-                  onClick={handleGenerate}
+                  onClick={
+                    shouldShowFirstDancePackCta
+                      ? handleFirstDancePackCheckout
+                      : handleGenerate
+                  }
                   disabled={
                     isGenerating ||
+                    isCheckoutLoading ||
                     uploadedImage?.status === 'uploading' ||
                     uploadedImage?.status === 'error' ||
                     !uploadedImage?.url
                   }
                 >
-                  {isGenerating ? (
+                  {isGenerating || isCheckoutLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t('generating')}
+                      {isCheckoutLoading ? t('checking_account') : t('generating')}
+                    </>
+                  ) : shouldShowFirstDancePackCta ? (
+                    <>
+                      <CreditCard className="mr-2 h-4 w-4" aria-hidden="true" />
+                      {t('first_dance_pack_cta')}
                     </>
                   ) : (
                     t('generate')
@@ -2329,10 +2473,12 @@ export function VideoGenerator({
                   </span>
                   <span>{t('credits_remaining', { credits: remainingCredits })}</span>
                 </div>
-                <Link href="/pricing">
+                <Link href="/pricing?product=first-dance-pack&return_path=%2F%23generator">
                   <Button variant="outline" size="sm" className="w-full gap-1.5">
                     <CreditCard className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
-                    {t('buy_credits')}
+                    {shouldShowFirstDancePackCta
+                      ? t('first_dance_pack_short')
+                      : t('buy_credits')}
                   </Button>
                 </Link>
               </div>

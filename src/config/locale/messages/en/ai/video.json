@@ -46,7 +46,7 @@
       "public_toggle_desc": "Allow others to view your generated video",
       "checking_membership": "Checking membership...",
       "pro_template_sign_in_first": "Sign in to unlock Pro templates",
-      "pro_template_member_only": "Pro templates are for members only. Please upgrade on the pricing page.",
+      "pro_template_member_only": "Unlock with any paid pack",
       "orientation_auto_switched_video": "This template is longer than 10 seconds, so orientation was switched to Follow Video.",
       "orientation_image_max_10s": "Follow Photo supports templates up to 10 seconds. Please choose Follow Video."
     },
@@ -111,6 +111,8 @@
       "download_failed": "Your browser cannot export a watermarked video. Please try Chrome/Edge, or upgrade to remove the watermark.",
       "preparing_preview": "Preparing protected preview...",
       "preview_failed": "Unable to prepare protected preview. Please try downloading or regenerate."
-    }
+    },
+    "first_dance_pack_cta": "Get First Dance Pack - $4.99",
+    "first_dance_pack_short": "First Dance Pack - $4.99"
   }
 }

@@ -7,9 +7,11 @@
 
 import { desc } from 'drizzle-orm';
 
+import { PERMISSIONS } from '@/core/rbac';
 import { db } from '@/core/db';
 import { order } from '@/config/db/schema';
 import { getUserInfo } from '@/shared/models/user';
+import { hasPermission } from '@/shared/services/rbac';
 
 export async function GET() {
   try {
@@ -18,6 +20,13 @@ export async function GET() {
     if (!currentUser) {
       return new Response('Unauthorized - Please log in first', {
         status: 401,
+        headers: { 'Content-Type': 'text/plain' }
+      });
+    }
+    const isAdmin = await hasPermission(currentUser.id, PERMISSIONS.ADMIN_ACCESS);
+    if (!isAdmin) {
+      return new Response('Forbidden', {
+        status: 403,
         headers: { 'Content-Type': 'text/plain' }
       });
     }

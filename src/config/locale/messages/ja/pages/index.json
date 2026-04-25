@@ -28,7 +28,7 @@
         "description": "どんな赤ちゃんの静止画も、愉快な<strong>ダンス</strong>センセーションに変身させます。編集スキルは不要 — 純粋な喜びだけ。",
         "announcement": {
           "badge": "新しい",
-          "title": "🎉 赤ちゃんダンス動画を数秒で作成",
+          "title": "🎉 赤ちゃんダンス動画を処理後で作成",
           "url": "/#generator"
         },
         "tip": "⭐️ 幸せな親御さんと孫に甘いおじいちゃんおばあちゃんに愛されています",
@@ -138,7 +138,7 @@
         "items": [
           {
             "title": "バズるダンスムーブ",
-            "description": "数秒で写真を踊る赤ちゃんに変身 — 振り付けは不要、驚くほどリアルな純粋なAIマジックだけ。",
+            "description": "処理後で写真を踊る赤ちゃんに変身 — 振り付けは不要、驚くほどリアルな純粋なAIマジックだけ。",
             "icon": "RiMusic2Fill",
             "image": {
               "src": "https://r2.babyboogey.com/assets/imgs/features/viral-dance.webp",
@@ -160,7 +160,7 @@
         "block": "features-step",
         "id": "usage",
         "eyebrow": "ご利用の流れ",
-        "title": "数秒で赤ちゃん写真をアニメーション化する方法",
+        "title": "処理後で赤ちゃん写真をアニメーション化する方法",
         "description": "3 つの簡単なステップで赤ちゃんダンス動画を作成：",
         "image_position": "left",
         "text_align": "center",
@@ -175,7 +175,7 @@
           },
           {
             "title": "ブギを見る！",
-            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に数秒で変身！"
+            "description": "赤ちゃんダンス動画をエクスポートして、笑いをシェアしましょう。写真を踊る赤ちゃんの魔法に処理後で変身！"
           }
         ]
       },
@@ -193,7 +193,7 @@
             "description": "作成されたダンス動画"
           },
           {
-            "title": "50+",
+            "title": "14",
             "description": "バズるテンプレート"
           }
         ]
@@ -207,21 +207,51 @@
         "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
         "groups": [
           {
-            "name": "クレジット",
+            "name": "credits",
             "title": "クレジットパック",
             "is_featured": true
           },
           {
-            "name": "毎月",
+            "name": "monthly",
             "title": "月額"
           },
           {
-            "name": "毎年",
+            "name": "yearly",
             "title": "年額",
             "label": "30%お得"
           }
         ],
         "items": [
+          {
+            "title": "First Dance Pack",
+            "description": "最初の完成版ベビーダンス動画に最適",
+            "label": "初回動画",
+            "features_title": "含まれるもの：",
+            "features": [
+              "225クレジット（無期限）",
+              "Proダンス動画1本分（15秒、720p）",
+              "または短いダンス動画約3本分（5秒、720p）",
+              "透かしなし",
+              "Proテンプレートを解放",
+              "プライベート保存"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "First Dance Packを購入",
+              "url": "/pricing?product=first-dance-pack",
+              "icon": "Zap"
+            },
+            "product_id": "first-dance-pack",
+            "product_name": "First Dance Pack",
+            "credits": 225,
+            "group": "credits"
+          },
           {
             "title": "スターター",
             "description": "始めるのに最適",
@@ -246,10 +276,10 @@
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "スターター",
+            "product_id": "starter",
             "product_name": "スタータークレジットパック",
             "credits": 410,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スタンダード",
@@ -270,16 +300,16 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
+            "is_featured": false,
             "button": {
               "title": "今すぐ購入",
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "標準",
+            "product_id": "standard",
             "product_name": "スタンダードクレジットパック",
             "credits": 1170,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "プレミアム",
@@ -305,10 +335,10 @@
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "プレミアム",
+            "product_id": "premium",
             "product_name": "プレミアムクレジットパック",
             "credits": 3040,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スターター",
@@ -322,7 +352,7 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 999,
             "currency": "米ドル",
             "price": "$9.99",
@@ -338,7 +368,7 @@
             "product_name": "スターター月額",
             "credits": 430,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スターター"
           },
           {
@@ -355,7 +385,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 1899,
             "currency": "米ドル",
             "price": "$18.99",
@@ -371,7 +401,7 @@
             "product_name": "スタンダード月額",
             "credits": 1170,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スタンダード"
           },
           {
@@ -387,7 +417,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 3599,
             "currency": "米ドル",
             "price": "$35.99",
@@ -403,7 +433,7 @@
             "product_name": "プレミアム月額",
             "credits": 2880,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "プレミアム"
           },
           {
@@ -418,7 +448,7 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 10788,
             "currency": "米ドル",
             "price": "$8.99",
@@ -434,7 +464,7 @@
             "product_name": "スターター年額",
             "credits": 5160,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スターター"
           },
           {
@@ -451,7 +481,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 20388,
             "currency": "米ドル",
             "price": "$16.99",
@@ -467,7 +497,7 @@
             "product_name": "スタンダード年額",
             "credits": 14040,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スタンダード"
           },
           {
@@ -483,7 +513,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 38388,
             "currency": "米ドル",
             "price": "$31.99",
@@ -499,7 +529,7 @@
             "product_name": "プレミアム年額",
             "credits": 34560,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "プレミアム"
           }
         ]
@@ -586,7 +616,7 @@
           },
           {
             "question": "写真を踊る赤ちゃんに変えるのにどれくらい時間がかかりますか？",
-            "answer": "ほとんどの動画は30秒以内に準備完了します。私たちのAI赤ちゃんダンスジェネレーターはスピードに最適化されているので、赤ちゃんダンス動画をすぐにソーシャルメディアでシェアできます。"
+            "answer": "ほとんどの動画は通常45〜180秒で準備完了します。私たちのAI赤ちゃんダンスジェネレーターはスピードに最適化されているので、赤ちゃんダンス動画をすぐにソーシャルメディアでシェアできます。"
           },
           {
             "question": "赤ちゃん写真をアニメーション化するのにプロの写真が必要ですか？",
@@ -607,13 +637,24 @@
           {
             "question": "TikTokやInstagramで赤ちゃんダンス動画をシェアするには？",
             "answer": "動画を生成した後、ダウンロードボタンをクリックしてデバイスに保存します。その後、ギャラリーから直接TikTok、Instagram Reels、または任意のソーシャルメディアプラットフォームにアップロードするだけです。"
+          },
+          {
+            "question": "生成に失敗した場合、クレジットは戻りますか？",
+            "answer": "はい。動画または画像の生成が失敗し、利用可能な結果が届かなかった場合、消費されたクレジットは自動的にアカウントへ返金されます。"
+          },
+          {
+            "question": "無料段階で完成版動画を生成できますか？",
+            "answer": "無料登録クレジットはAIベビー画像の試用とダンステンプレートのプレビュー用です。完成版のベビーダンス動画には、First Dance Packなど十分なクレジットが必要です。"
           }
         ]
       },
       "cta": {
         "id": "cta",
         "eyebrow": "あなたの番",
-        "collage_labels": ["ビフォー", "ダンス"],
+        "collage_labels": [
+          "ビフォー",
+          "ダンス"
+        ],
         "trust_bar": {
           "rating": "✦ 4.9/5",
           "audience": "2,000+ 組のご家族",

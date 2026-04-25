@@ -19,12 +19,11 @@ function base64url(input: string | Buffer): string {
 }
 
 function mediaAssetSecret() {
-  return (
-    envConfigs.auth_secret ||
-    process.env.AUTH_SECRET ||
-    process.env.NEXTAUTH_SECRET ||
-    'media-asset-dev-secret'
-  );
+  const secret = envConfigs.media_asset_signing_secret;
+  if (!secret) {
+    throw new Error('MEDIA_ASSET_SIGNING_SECRET is not configured');
+  }
+  return secret;
 }
 
 function signAssetPayload(payload: string): string {

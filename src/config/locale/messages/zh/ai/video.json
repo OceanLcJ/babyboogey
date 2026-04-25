@@ -46,7 +46,7 @@
       "public_toggle_desc": "允许其他人查看您生成的视频",
       "checking_membership": "正在检查会员状态...",
       "pro_template_sign_in_first": "请先登录以解锁 Pro 模板",
-      "pro_template_member_only": "Pro 模板仅限会员使用，请先购买套餐/订阅",
+      "pro_template_member_only": "购买任意付费包即可解锁",
       "orientation_auto_switched_video": "当前模板时长超过 10 秒，已自动切换为“跟随视频”。",
       "orientation_image_max_10s": "“跟随照片”仅支持 10 秒以内模板，请选择“跟随视频”。"
     },
@@ -111,6 +111,8 @@
       "download_failed": "当前浏览器不支持导出带动态水印的视频，请使用 Chrome/Edge，或升级后下载无水印版本。",
       "preparing_preview": "正在准备受保护预览...",
       "preview_failed": "受保护预览准备失败，请尝试下载或重新生成。"
-    }
+    },
+    "first_dance_pack_cta": "购买首支舞蹈包 - $4.99",
+    "first_dance_pack_short": "首支舞蹈包 - $4.99"
   }
 }

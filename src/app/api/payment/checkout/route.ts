@@ -15,10 +15,38 @@ import {
   OrderStatus,
   updateOrderByOrderNo,
 } from '@/shared/models/order';
-import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getPaymentService } from '@/shared/services/payment';
 import { PricingCurrency } from '@/shared/types/blocks/pricing';
+
+function resolveReturnPath(value: unknown): string | undefined {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed || !trimmed.startsWith('/') || trimmed.startsWith('//')) {
+    return undefined;
+  }
+
+  try {
+    const parsed = new URL(trimmed, 'https://babyboogey.local');
+    const allowedPaths = new Set([
+      '/',
+      '/ai-video-generator',
+      '/ai-baby-image-generator',
+      '/pricing',
+    ]);
+
+    if (!allowedPaths.has(parsed.pathname)) {
+      return undefined;
+    }
+
+    return `${parsed.pathname}${parsed.search}${parsed.hash}`;
+  } catch {
+    return undefined;
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -49,14 +77,10 @@ export async function POST(req: Request) {
     // get sign user
     const user = await getUserInfo();
     if (!user || !user.email) {
-      return respErr('no auth, please sign in');
-    }
-
-    if (pricingItem.group === 'credits') {
-      const currentSubscription = await getCurrentSubscription(user.id);
-      if (!currentSubscription) {
-        return respErr(t('messages.credit_pack_subscribers_only'));
-      }
+      return Response.json(
+        { code: -1, message: 'no auth, please sign in' },
+        { status: 401 }
+      );
     }
 
     // get configs
@@ -205,10 +229,17 @@ export async function POST(req: Request) {
       callbackBaseUrl += `/${locale}`;
     }
 
+    const metadataRecord =
+      metadata && typeof metadata === 'object' && !Array.isArray(metadata)
+        ? (metadata as Record<string, UnsafeAny>)
+        : {};
+    const returnPath = resolveReturnPath(metadataRecord.return_path);
     const callbackUrl =
-      paymentType === PaymentType.SUBSCRIPTION
-        ? `${callbackBaseUrl}/settings/billing`
-        : `${callbackBaseUrl}/settings/payments`;
+      returnPath && paymentType !== PaymentType.SUBSCRIPTION
+        ? `${callbackBaseUrl}${returnPath}`
+        : paymentType === PaymentType.SUBSCRIPTION
+          ? `${callbackBaseUrl}/settings/billing`
+          : `${callbackBaseUrl}/settings/payments`;
 
     // build checkout order
     const checkoutOrder: PaymentOrder = {
@@ -222,7 +253,7 @@ export async function POST(req: Request) {
         app_name: configs.app_name,
         order_no: orderNo,
         user_id: user.id,
-        ...(metadata || {}),
+        ...metadataRecord,
       },
       successUrl: `${configs.app_url}/api/payment/callback?order_no=${orderNo}`,
       cancelUrl: `${callbackBaseUrl}/pricing`,
@@ -299,9 +330,9 @@ export async function POST(req: Request) {
 
       return respData(result.checkoutInfo);
     } catch (e: UnsafeAny) {
-      // update order status to completed, means checkout failed
+      // update order status to failed when checkout creation failed
       await updateOrderByOrderNo(orderNo, {
-        status: OrderStatus.COMPLETED, // means checkout failed
+        status: OrderStatus.FAILED,
         checkoutInfo: JSON.stringify(checkoutOrder),
       });
 

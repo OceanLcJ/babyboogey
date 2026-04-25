@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Seedance 2.0 在线免费生成 — BabyBoogey (由字节跳动 AI 驱动)",
-    "description": "Seedance 2.0 在线版无需下载！BabyBoogey 接入字节跳动官方 Seedance 2.0 模型，免费提供 AI 宝宝跳舞视频生成服务。一键上传，即刻生成。"
+    "description": "Seedance 2.0 在线版无需下载！BabyBoogey 接入字节跳动官方 Seedance 2.0 模型，可免费预览模板；生成成品 AI 宝宝跳舞视频需要积分。"
   },
   "page": {
     "title": "Seedance 2.0 在线免费生成 — BabyBoogey",
@@ -18,7 +18,7 @@
         "id": "hero",
         "title": "Seedance 2.0 免费在线版 — 一键生成宝宝跳舞视频",
         "highlight_text": "Seedance 2.0",
-        "description": "无需下载 App，无需配置复杂环境。BabyBoogey 直接接入字节跳动 Seedance 2.0 官方模型接口。结合 50+ 宝宝专属模板，为您打造最顶级的 AI 舞蹈生成体验。上传照片，立等可取。",
+        "description": "无需下载 App，无需配置复杂环境。BabyBoogey 直接接入字节跳动 Seedance 2.0 官方模型接口。结合 14 个宝宝专属模板，为您打造最顶级的 AI 舞蹈生成体验。上传照片，购买积分后生成。",
         "buttons": [
           {
             "title": "免费在线试用 Seedance 2.0",
@@ -102,8 +102,8 @@
             }
           },
           {
-            "title": "完全免费试用",
-            "description": "为了让更多人体验到 Seedance 2.0 的强大，BabyBoogey 提供免费试用额度。每天都有机会免费生成视频，无需绑定信用卡，注册即用。",
+            "title": "可免费预览模板并试用图片",
+            "description": "为了让更多人体验 Seedance 2.0 的效果，BabyBoogey 提供注册体验积分，可用于 AI 宝宝图片和模板预览；成品视频生成需要足够积分。",
             "icon": "Gift",
             "image": {
               "src": "https://pub-ffcc869db6c64ec3bc286050119d171f.r2.dev/assets/imgs/seeddance/stopwatch-rocket-fast-processing.webp",
@@ -176,11 +176,11 @@
           },
           {
             "question": "在这里使用 Seedance 2.0 是免费的吗？",
-            "answer": "BabyBoogey 提供免费试用计划。所有新用户注册后都会获得免费积分，可以用于生成 Seedance 2.0 视频。如果需要生成更多或更高清的视频，我们也有非常实惠的套餐可供选择。"
+            "answer": "BabyBoogey 提供注册体验积分，可用于 AI 宝宝图片和模板预览。生成 Seedance 2.0 成品视频需要足够积分，也可以购买小额积分包。"
           },
           {
             "question": "生成的视频有水印吗？能否去除？",
-            "answer": "免费用户生成的视频右下角会有小的 BabyBoogey 标识。升级到任意付费会员（即便是最低档）即可一键去除所有水印，并获得商业使用授权。"
+            "answer": "购买任意付费积分包后生成的视频无 BabyBoogey 水印，并包含商业使用授权。"
           },
           {
             "question": "Seedance 2.0 支持哪些照片格式？",

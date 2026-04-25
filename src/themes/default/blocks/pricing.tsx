@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { SmartIcon } from '@/shared/blocks/common';
@@ -118,38 +119,34 @@ export function Pricing({
 }) {
   const locale = useLocale();
   const t = useTranslations('pages.pricing.messages');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const preferredProductId = searchParams.get('product');
+  const returnPath = searchParams.get('return_path');
 
   const {
     user,
-    isShowPaymentModal,
     setIsShowSignModal,
     setIsShowPaymentModal,
     configs,
   } = useAppContext();
 
-  const hasSubscriptionAccess = Boolean(
-    currentSubscription || user?.membership?.hasSubscription
-  );
-
   const visibleGroups = useMemo(() => {
     if (!section.groups) return [];
-    return hasSubscriptionAccess
-      ? section.groups
-      : section.groups.filter((groupItem) => groupItem.name !== 'credits');
-  }, [section.groups, hasSubscriptionAccess]);
+    return section.groups;
+  }, [section.groups]);
 
   const visibleItems = useMemo(() => {
     if (!section.items) return [];
-    return hasSubscriptionAccess
-      ? section.items
-      : section.items.filter((item) => item.group !== 'credits');
-  }, [section.items, hasSubscriptionAccess]);
+    return section.items;
+  }, [section.items]);
 
   const [group, setGroup] = useState(() => {
     return resolveDefaultGroup({
       items: visibleItems,
       groups: visibleGroups,
-      currentProductId: currentSubscription?.productId,
+      currentProductId: preferredProductId || currentSubscription?.productId,
     });
   });
 
@@ -179,7 +176,7 @@ export function Pricing({
       resolveDefaultGroup({
         items: visibleItems,
         groups: visibleGroups,
-        currentProductId: currentSubscription?.productId,
+        currentProductId: preferredProductId || currentSubscription?.productId,
       })
     );
   }, [
@@ -188,6 +185,7 @@ export function Pricing({
     visibleGroups,
     visibleItems,
     currentSubscription?.productId,
+    preferredProductId,
   ]);
 
   // current pricing item
@@ -283,6 +281,18 @@ export function Pricing({
   };
 
   const handlePayment = async (item: PricingItem) => {
+    const buttonUrl = item.button?.url;
+    const isPricingPage =
+      pathname === '/pricing' || pathname?.endsWith('/pricing');
+    if (
+      !isPricingPage &&
+      typeof buttonUrl === 'string' &&
+      buttonUrl.startsWith('/pricing')
+    ) {
+      router.push(buttonUrl);
+      return;
+    }
+
     if (!user) {
       setIsShowSignModal(true);
       return;
@@ -350,7 +360,10 @@ export function Pricing({
         currency: item.currency,
         locale: locale || 'en',
         payment_provider: paymentProvider || '',
-        metadata: affiliateMetadata,
+        metadata: {
+          ...affiliateMetadata,
+          ...(returnPath ? { return_path: returnPath } : {}),
+        },
       };
       const shouldTrackWatermarkAttribution = hasRecentWatermarkAttribution();
       const watermarkAttributionAgeMs = shouldTrackWatermarkAttribution
@@ -412,11 +425,27 @@ export function Pricing({
 
   useEffect(() => {
     if (visibleItems.length > 0) {
+      const preferredItem = preferredProductId
+        ? visibleItems.find((i) => i.product_id === preferredProductId)
+        : undefined;
       const featuredItem = visibleItems.find((i) => i.is_featured);
-      setProductId(featuredItem?.product_id || visibleItems[0]?.product_id);
+      setProductId(
+        preferredItem?.product_id ||
+          featuredItem?.product_id ||
+          visibleItems[0]?.product_id
+      );
       setIsLoading(false);
     }
-  }, [visibleItems]);
+  }, [visibleItems, preferredProductId]);
+
+  const gridColumnsClass =
+    filteredItems.length >= 4
+      ? 'md:grid-cols-4'
+      : filteredItems.length === 3
+        ? 'md:grid-cols-3'
+        : filteredItems.length === 2
+          ? 'md:grid-cols-2'
+          : 'md:grid-cols-1';
 
   return (
     <section
@@ -455,11 +484,7 @@ export function Pricing({
           </div>
         )}
 
-        <div
-          className={`mx-auto mt-0 grid w-full gap-6 md:grid-cols-${
-            filteredItems.length || 1
-          }`}
-        >
+        <div className={cn('mx-auto mt-0 grid w-full gap-6', gridColumnsClass)}>
           {filteredItems.map((item: PricingItem) => {
             let isCurrentPlan = false;
             if (

@@ -13,21 +13,51 @@
         "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
         "groups": [
           {
-            "name": "クレジット",
+            "name": "credits",
             "title": "クレジットパック",
             "is_featured": true
           },
           {
-            "name": "毎月",
+            "name": "monthly",
             "title": "月額"
           },
           {
-            "name": "毎年",
+            "name": "yearly",
             "title": "年額",
             "label": "30%お得"
           }
         ],
         "items": [
+          {
+            "title": "First Dance Pack",
+            "description": "最初の完成版ベビーダンス動画に最適",
+            "label": "初回動画",
+            "features_title": "含まれるもの：",
+            "features": [
+              "225クレジット（無期限）",
+              "Proダンス動画1本分（15秒、720p）",
+              "または短いダンス動画約3本分（5秒、720p）",
+              "透かしなし",
+              "Proテンプレートを解放",
+              "プライベート保存"
+            ],
+            "interval": "one-time",
+            "amount": 499,
+            "currency": "USD",
+            "price": "$4.99",
+            "original_price": "$9.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "First Dance Packを購入",
+              "url": "/pricing?product=first-dance-pack",
+              "icon": "Zap"
+            },
+            "product_id": "first-dance-pack",
+            "product_name": "First Dance Pack",
+            "credits": 225,
+            "group": "credits"
+          },
           {
             "title": "スターター",
             "description": "始めるのに最適",
@@ -52,10 +82,10 @@
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "スターター",
+            "product_id": "starter",
             "product_name": "スタータークレジットパック",
             "credits": 410,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スタンダード",
@@ -76,16 +106,16 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
+            "is_featured": false,
             "button": {
               "title": "今すぐ購入",
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "標準",
+            "product_id": "standard",
             "product_name": "スタンダードクレジットパック",
             "credits": 1170,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "プレミアム",
@@ -111,10 +141,10 @@
               "url": "/#pricing",
               "icon": "Zap"
             },
-            "product_id": "プレミアム",
+            "product_id": "premium",
             "product_name": "プレミアムクレジットパック",
             "credits": 3040,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スターター",
@@ -128,7 +158,7 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 999,
             "currency": "米ドル",
             "price": "$9.99",
@@ -144,7 +174,7 @@
             "product_name": "スターター月額",
             "credits": 430,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スターター"
           },
           {
@@ -161,7 +191,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 1899,
             "currency": "米ドル",
             "price": "$18.99",
@@ -177,7 +207,7 @@
             "product_name": "スタンダード月額",
             "credits": 1170,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スタンダード"
           },
           {
@@ -193,7 +223,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 3599,
             "currency": "米ドル",
             "price": "$35.99",
@@ -209,7 +239,7 @@
             "product_name": "プレミアム月額",
             "credits": 2880,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "プレミアム"
           },
           {
@@ -224,7 +254,7 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 10788,
             "currency": "米ドル",
             "price": "$8.99",
@@ -240,7 +270,7 @@
             "product_name": "スターター年額",
             "credits": 5160,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スターター"
           },
           {
@@ -257,7 +287,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 20388,
             "currency": "米ドル",
             "price": "$16.99",
@@ -273,7 +303,7 @@
             "product_name": "スタンダード年額",
             "credits": 14040,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スタンダード"
           },
           {
@@ -289,7 +319,7 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 38388,
             "currency": "米ドル",
             "price": "$31.99",
@@ -305,7 +335,7 @@
             "product_name": "プレミアム年額",
             "credits": 34560,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "プレミアム"
           }
         ]
@@ -315,6 +345,6 @@
   "messages": {
     "current_plan": "現在のプラン",
     "processing": "処理中",
-    "credit_pack_subscribers_only": "クレジットパックはサブスクライバーのみ利用可能です。先にサブスクリプション登録をお願いします。"
+    "credit_pack_subscribers_only": "クレジットパックを購入するにはサインインしてください。"
   }
 }
