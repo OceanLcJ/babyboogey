@@ -30,6 +30,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/components/ui/card';
+import { Checkbox } from '@/shared/components/ui/checkbox';
 import { Label } from '@/shared/components/ui/label';
 import { Progress } from '@/shared/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group';
@@ -65,6 +66,15 @@ import {
   renderWatermarkedVideoBlob,
 } from '@/shared/lib/watermark';
 import { cn } from '@/shared/lib/utils';
+import {
+  BABY_VIDEO_MOTION_MODEL,
+  BABY_VIDEO_PROVIDER,
+} from '@/shared/services/baby-video/config';
+import {
+  BABY_SAFETY_CONFIRMATION_OPTION,
+  isBabySafetyConfirmationRequiredMessage,
+  isBabySafetyContentPolicyMessage,
+} from '@/shared/services/content-safety';
 import type {
   VideoWatermarkType,
   WatermarkedPlaybackState,
@@ -157,8 +167,8 @@ const SHARE_LINK_CACHE_BUFFER_MS = 30 * 1000;
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
 
-const VIDEO_PROVIDER = 'kie';
-const VIDEO_MODEL = 'kling-2.6/motion-control';
+const VIDEO_PROVIDER = BABY_VIDEO_PROVIDER;
+const VIDEO_MODEL = BABY_VIDEO_MOTION_MODEL;
 
 const DANCE_TEMPLATE_PROMPTS: Record<string, string> = {
   'temp-05':
@@ -547,6 +557,14 @@ function mapVideoErrorToUserMessage(
   const message = (rawMessage || '').toLowerCase();
   const { t } = localeContext;
 
+  if (isBabySafetyConfirmationRequiredMessage(rawMessage)) {
+    return t('safety.required');
+  }
+
+  if (isBabySafetyContentPolicyMessage(rawMessage)) {
+    return t('safety.blocked');
+  }
+
   if (
     message.includes('insufficient credits') ||
     message.includes('not enough credits')
@@ -620,6 +638,7 @@ export function VideoGenerator({
   const [resolution, setResolution] = useState('720p');
   const [orientation, setOrientation] = useState('video');
   const [isPublic, setIsPublic] = useState(true);
+  const [safetyConfirmed, setSafetyConfirmed] = useState(false);
 
   const [generatedVideos, setGeneratedVideos] = useState<GeneratedVideo[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -772,6 +791,12 @@ export function VideoGenerator({
     15;
   const currentCost =
     currentCreditsPerSecond * Math.max(1, selectedTemplateDurationSeconds);
+  const canGenerate =
+    !isGenerating &&
+    uploadedImage?.status !== 'uploading' &&
+    uploadedImage?.status !== 'error' &&
+    Boolean(uploadedImage?.url) &&
+    safetyConfirmed;
   const translateError = useCallback(
     (key: string) => t(key as UnsafeAny),
     [t]
@@ -1776,6 +1801,11 @@ export function VideoGenerator({
       return;
     }
 
+    if (!safetyConfirmed) {
+      toast.error(t('safety.required'));
+      return;
+    }
+
     if (remainingCredits < currentCost) {
       toast.error(
         mapVideoErrorToUserMessage('insufficient credits', {
@@ -1844,6 +1874,7 @@ export function VideoGenerator({
             resolution,
             templateId: selectedTemplate.id,
             negative_prompt: DEFAULT_NEGATIVE_PROMPT,
+            [BABY_SAFETY_CONFIRMATION_OPTION]: true,
           },
         }),
       });
@@ -2283,6 +2314,25 @@ export function VideoGenerator({
                 />
               </div>
 
+              <div className="rounded-lg border p-3">
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="video-safety-confirmation"
+                    checked={safetyConfirmed}
+                    onCheckedChange={(checked) =>
+                      setSafetyConfirmed(checked === true)
+                    }
+                    className="mt-0.5"
+                  />
+                  <Label
+                    htmlFor="video-safety-confirmation"
+                    className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground"
+                  >
+                    {t('safety.confirmation')}
+                  </Label>
+                </div>
+              </div>
+
               {/* Generate Button */}
               {!isMounted ? (
                 <Button className="w-full" disabled>
@@ -2298,12 +2348,7 @@ export function VideoGenerator({
                 <Button
                   className="w-full"
                   onClick={handleGenerate}
-                  disabled={
-                    isGenerating ||
-                    uploadedImage?.status === 'uploading' ||
-                    uploadedImage?.status === 'error' ||
-                    !uploadedImage?.url
-                  }
+                  disabled={!canGenerate}
                 >
                   {isGenerating ? (
                     <>

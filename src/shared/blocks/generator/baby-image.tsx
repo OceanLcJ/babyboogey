@@ -53,6 +53,11 @@ import {
   BABY_STYLE_IDS,
   BabyStyleId,
 } from '@/shared/services/baby-image/styles';
+import {
+  BABY_SAFETY_CONFIRMATION_OPTION,
+  isBabySafetyConfirmationRequiredMessage,
+  isBabySafetyContentPolicyMessage,
+} from '@/shared/services/content-safety';
 
 import './baby-image.css';
 
@@ -219,6 +224,29 @@ function formatRelativeTime(ts: number, now: number = Date.now()): string {
   return `${diffDay}d`;
 }
 
+function mapBabyImageErrorToUserMessage(
+  rawMessage: string | undefined,
+  t: (key: string) => string
+): string {
+  if (isBabySafetyConfirmationRequiredMessage(rawMessage)) {
+    return t('safety.required');
+  }
+
+  if (isBabySafetyContentPolicyMessage(rawMessage)) {
+    return t('safety.blocked');
+  }
+
+  const message = (rawMessage || '').toLowerCase();
+  if (
+    message.includes('insufficient credits') ||
+    message.includes('not enough credits')
+  ) {
+    return t('errors.insufficient_credits');
+  }
+
+  return rawMessage || t('errors.generate_failed');
+}
+
 async function uploadReferenceImage(file: File): Promise<{
   assetId: string;
   assetRef: string;
@@ -284,6 +312,7 @@ export function BabyImageGenerator({
   const [handoffImageId, setHandoffImageId] = useState<string | null>(null);
   const [isCardFullscreen, setIsCardFullscreen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [safetyConfirmed, setSafetyConfirmed] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const streamRef = useRef<HTMLDivElement | null>(null);
@@ -332,6 +361,7 @@ export function BabyImageGenerator({
     !isPromptTooLong &&
     !attachedImage?.uploading &&
     !attachedImage?.error &&
+    safetyConfirmed &&
     (prompt.trim().length > 0 || Boolean(attachedImage));
 
   /* -------- message updaters -------- */
@@ -417,8 +447,10 @@ export function BabyImageGenerator({
         }
 
         if (currentStatus === AITaskStatus.FAILED) {
-          const errorMessage =
-            parsedResult?.errorMessage || t('errors.generate_failed');
+          const errorMessage = mapBabyImageErrorToUserMessage(
+            parsedResult?.errorMessage,
+            (key) => t(key as UnsafeAny)
+          );
           updateAssistant(assistantId, {
             status: AITaskStatus.FAILED,
             errorMessage,
@@ -442,10 +474,16 @@ export function BabyImageGenerator({
         return false;
       } catch (error: UnsafeAny) {
         console.error('Error polling baby image task:', error);
-        toast.error(t('errors.query_failed'));
+        const mapped = mapBabyImageErrorToUserMessage(
+          error?.message,
+          (key) => t(key as UnsafeAny)
+        );
+        const friendly =
+          mapped === error?.message ? t('errors.query_failed') : mapped;
+        toast.error(friendly);
         updateAssistant(assistantId, {
           status: AITaskStatus.FAILED,
-          errorMessage: t('errors.query_failed'),
+          errorMessage: friendly,
           endTime: Date.now(),
         });
         fetchUserCredits();
@@ -554,6 +592,11 @@ export function BabyImageGenerator({
 
       if (isGenerating) return;
 
+      if (!safetyConfirmed) {
+        toast.error(t('safety.required'));
+        return;
+      }
+
       if (remainingCredits < currentCostCredits) {
         toast.error(t('errors.insufficient_credits'));
         return;
@@ -601,6 +644,7 @@ export function BabyImageGenerator({
           styleId: sendStyle,
           aspect_ratio: sendAspect,
           resolution,
+          [BABY_SAFETY_CONFIRMATION_OPTION]: true,
         };
         if (sendRefUrl) {
           options.image_input = [sendRefUrl];
@@ -664,10 +708,11 @@ export function BabyImageGenerator({
         await fetchUserCredits();
       } catch (error: UnsafeAny) {
         console.error('Failed to generate baby image:', error);
+        const mapped = mapBabyImageErrorToUserMessage(error?.message, (key) =>
+          t(key as UnsafeAny)
+        );
         const friendly =
-          error?.message === 'insufficient credits'
-            ? t('errors.insufficient_credits')
-            : t('errors.generate_failed');
+          mapped === error?.message ? t('errors.generate_failed') : mapped;
         toast.error(friendly);
         updateAssistant(assistantMsg.id, {
           status: AITaskStatus.FAILED,
@@ -686,6 +731,7 @@ export function BabyImageGenerator({
       aspectRatio,
       resolution,
       attachedImage,
+      safetyConfirmed,
       setIsShowSignModal,
       t,
       updateAssistant,
@@ -1142,6 +1188,16 @@ export function BabyImageGenerator({
                 </div>
               </div>
             </div>
+
+            <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-md border border-border/70 bg-background/80 px-3 py-2 text-[11px] font-medium leading-snug text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={safetyConfirmed}
+                onChange={(event) => setSafetyConfirmed(event.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+              />
+              <span>{t('safety.confirmation')}</span>
+            </label>
 
             <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
               <span>

@@ -36,6 +36,11 @@
       "reference_hint": "Upload a clear baby photo for best likeness. Skip it to generate purely from your description.",
       "some_images_failed_to_upload": "Upload failed, please remove and retry"
     },
+    "safety": {
+      "confirmation": "I confirm I am the parent/guardian or have guardian consent, and the image/prompt is not nude, sexualized, violent, or unlawful.",
+      "required": "Please confirm guardian consent and safe content before generating.",
+      "blocked": "We can't generate that request. Please keep baby images safe, non-sexual, non-violent, and lawful."
+    },
     "styles": {
       "pixar-3d": { "label": "3D Animation Studio", "description": "Big eyes, cinematic lighting, film polish" },
       "ghibli": { "label": "Hand-drawn Fantasy", "description": "Dreamy watercolor, whimsical light" },

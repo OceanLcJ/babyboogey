@@ -50,6 +50,11 @@
       "orientation_auto_switched_video": "当前模板时长超过 10 秒，已自动切换为“跟随视频”。",
       "orientation_image_max_10s": "“跟随照片”仅支持 10 秒以内模板，请选择“跟随视频”。"
     },
+    "safety": {
+      "confirmation": "我确认自己是监护人或已获得监护人同意，且上传照片/提示词不包含裸露、性化、暴力或违法内容。",
+      "required": "请先确认监护人同意和内容安全，再开始生成。",
+      "blocked": "无法生成这个请求。请保持宝宝视频安全、非性化、非暴力且合法。"
+    },
     "generate": "开始生成",
     "checking_account": "检查账户中...",
     "loading": "加载中...",

@@ -1,12 +1,15 @@
-import { AIMediaType } from '@/extensions/ai/types';
+import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
 import { respData, respErr } from '@/shared/lib/resp';
 import {
   findAITaskById,
   UpdateAITask,
   updateAITaskById,
 } from '@/shared/models/ai_task';
+import { getAllConfigs } from '@/shared/models/config';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
+import { moderateBabyImageOutputResult } from '@/shared/services/content-safety-openai';
+import { BABY_SAFETY_CONTENT_POLICY_MESSAGE } from '@/shared/services/content-safety';
 import { resolveAssetRefsWithSignedUrls } from '@/shared/services/media-asset';
 
 function safeParseJson(value?: string | null) {
@@ -175,13 +178,14 @@ export async function POST(req: Request) {
       return respErr('no permission');
     }
 
-    const aiService = await getAIService();
+    const configs = await getAllConfigs();
+    const aiService = await getAIService(configs);
     const aiProvider = aiService.getProvider(task.provider);
     if (!aiProvider) {
       return respErr('invalid ai provider');
     }
 
-    const result = await aiProvider?.query?.({
+    let result = await aiProvider?.query?.({
       taskId: task.taskId,
       mediaType: task.mediaType,
       model: task.model,
@@ -192,6 +196,13 @@ export async function POST(req: Request) {
       return respErr('query ai task failed');
     }
 
+    result = await moderateBabyImageOutputResult({
+      apiKey: configs.openai_api_key,
+      result,
+      task,
+      userId: user.id,
+    });
+
     // update ai task
     const updateAITask: UpdateAITask = {
       status: result.taskStatus,
@@ -199,6 +210,12 @@ export async function POST(req: Request) {
       taskResult: result.taskResult ? JSON.stringify(result.taskResult) : null,
       creditId: task.creditId, // credit consumption record id
     };
+    if (
+      result.taskStatus === AITaskStatus.FAILED &&
+      result.taskInfo?.errorCode === BABY_SAFETY_CONTENT_POLICY_MESSAGE
+    ) {
+      updateAITask.refundReason = BABY_SAFETY_CONTENT_POLICY_MESSAGE;
+    }
 
     const hasStatusChanged = updateAITask.status !== task.status;
     const hasTaskInfoChanged = updateAITask.taskInfo !== task.taskInfo;

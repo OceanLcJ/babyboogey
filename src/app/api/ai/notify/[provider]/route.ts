@@ -1,10 +1,14 @@
+import { AITaskStatus } from '@/extensions/ai/types';
 import { respData, respErr } from '@/shared/lib/resp';
 import {
   findAITaskByProviderTaskId,
   UpdateAITask,
   updateAITaskById,
 } from '@/shared/models/ai_task';
+import { getAllConfigs } from '@/shared/models/config';
 import { getAIService } from '@/shared/services/ai';
+import { BABY_SAFETY_CONTENT_POLICY_MESSAGE } from '@/shared/services/content-safety';
+import { moderateBabyImageOutputResult } from '@/shared/services/content-safety-openai';
 
 function parseWebhookPayload(raw: string) {
   if (!raw) {
@@ -83,7 +87,8 @@ export async function POST(
       return respErr('invalid provider');
     }
 
-    const aiService = await getAIService();
+    const configs = await getAllConfigs();
+    const aiService = await getAIService(configs);
     const aiProvider = aiService.getProvider(provider);
     if (!aiProvider?.query) {
       return respErr('invalid ai provider');
@@ -113,7 +118,7 @@ export async function POST(
       });
     }
 
-    const result = await aiProvider.query({
+    let result = await aiProvider.query({
       taskId: task.taskId,
       mediaType: task.mediaType,
       model: task.model,
@@ -123,12 +128,25 @@ export async function POST(
       return respErr('query ai task failed');
     }
 
+    result = await moderateBabyImageOutputResult({
+      apiKey: configs.openai_api_key,
+      result,
+      task,
+      userId: task.userId,
+    });
+
     const updatePayload: UpdateAITask = {
       status: result.taskStatus,
       taskInfo: result.taskInfo ? JSON.stringify(result.taskInfo) : null,
       taskResult: result.taskResult ? JSON.stringify(result.taskResult) : null,
       creditId: task.creditId,
     };
+    if (
+      result.taskStatus === AITaskStatus.FAILED &&
+      result.taskInfo?.errorCode === BABY_SAFETY_CONTENT_POLICY_MESSAGE
+    ) {
+      updatePayload.refundReason = BABY_SAFETY_CONTENT_POLICY_MESSAGE;
+    }
 
     const hasStatusChanged = updatePayload.status !== task.status;
     const hasTaskInfoChanged = updatePayload.taskInfo !== task.taskInfo;

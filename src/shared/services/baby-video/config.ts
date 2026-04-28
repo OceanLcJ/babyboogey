@@ -4,6 +4,8 @@
 export const VIDEO_RESOLUTIONS = ['720p', '1080p'] as const;
 export type VideoResolution = (typeof VIDEO_RESOLUTIONS)[number];
 export const VIDEO_DEFAULT_RESOLUTION: VideoResolution = '720p';
+export const BABY_VIDEO_PROVIDER = 'kie';
+export const BABY_VIDEO_MOTION_MODEL = 'kling-2.6/motion-control';
 
 export const VIDEO_COST_CREDITS_PER_SECOND: Record<VideoResolution, number> = {
   '720p': 15,

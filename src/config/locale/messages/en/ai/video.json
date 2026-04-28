@@ -50,6 +50,11 @@
       "orientation_auto_switched_video": "This template is longer than 10 seconds, so orientation was switched to Follow Video.",
       "orientation_image_max_10s": "Follow Photo supports templates up to 10 seconds. Please choose Follow Video."
     },
+    "safety": {
+      "confirmation": "I confirm I am the parent/guardian or have guardian consent, and the uploaded photo/prompt is not nude, sexualized, violent, or unlawful.",
+      "required": "Please confirm guardian consent and safe content before generating.",
+      "blocked": "We can't generate that request. Please keep baby videos safe, non-sexual, non-violent, and lawful."
+    },
     "generate": "Generate Video",
     "checking_account": "Checking Account...",
     "loading": "Loading...",

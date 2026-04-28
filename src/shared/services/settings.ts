@@ -215,6 +215,12 @@ export async function getSettingGroups() {
       tab: 'ai',
     },
     {
+      name: 'openai',
+      title: 'OpenAI',
+      description: `Custom <a href="https://platform.openai.com" class="text-primary" target="_blank">OpenAI</a> settings for moderation`,
+      tab: 'ai',
+    },
+    {
       name: 'replicate',
       title: t('groups.replicate'),
       description: `Custom <a href="https://replicate.com" class="text-primary" target="_blank">Replicate</a> settings`,
@@ -892,6 +898,15 @@ export async function getSettings() {
       tip: 'Set any OpenAI compatible API URL, leave empty to use the default OpenRouter API URL',
       group: 'openrouter',
       tab: 'ai',
+    },
+    {
+      name: 'openai_api_key',
+      title: 'OpenAI API Key',
+      type: 'password',
+      placeholder: 'sk-xxx',
+      group: 'openai',
+      tab: 'ai',
+      tip: 'Used by OpenAI Moderations for baby prompt and image safety checks. OPENAI_API_KEY env var takes priority.',
     },
     {
       name: 'replicate_api_token',

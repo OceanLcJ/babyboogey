@@ -25,6 +25,7 @@ import {
   BABY_IMAGE_SCENE_TEXT,
 } from '@/shared/services/baby-image/config';
 import { BABY_STYLE_IDS } from '@/shared/services/baby-image/styles';
+import { BABY_SAFETY_CONFIRMATION_OPTION } from '@/shared/services/content-safety';
 
 type StyleId = (typeof BABY_STYLE_IDS)[number];
 
@@ -71,18 +72,17 @@ if (onlyStyle && !BABY_STYLE_IDS.includes(onlyStyle)) {
 interface GenerateResponse {
   code: number;
   message?: string;
-  data?: { taskId?: string };
+  data?: { id?: string; taskId?: string };
 }
 
 interface QueryResponse {
   code: number;
   message?: string;
   data?: {
-    aiTask?: {
-      status?: string;
-      taskResult?: string | null;
-      costCredits?: number | null;
-    };
+    status?: string;
+    taskInfo?: string | null;
+    taskResult?: string | null;
+    costCredits?: number | null;
   };
 }
 
@@ -124,6 +124,7 @@ async function runOne(style: StyleId): Promise<Result> {
   const options: Record<string, unknown> = {
     styleId: style,
     aspect_ratio: '1:1',
+    [BABY_SAFETY_CONFIRMATION_OPTION]: true,
   };
   if (hasImage) {
     options.image_input = [imageRef];
@@ -141,15 +142,15 @@ async function runOne(style: StyleId): Promise<Result> {
   let taskId: string;
   try {
     const submit = await postJson<GenerateResponse>('/api/ai/generate', payload);
-    if (submit.code !== 0 || !submit.data?.taskId) {
+    if (submit.code !== 0 || !submit.data?.id) {
       return {
         style,
         status: 'SUBMIT_FAILED',
         durationMs: Date.now() - started,
-        error: submit.message || 'no taskId returned',
+        error: submit.message || 'no local task id returned',
       };
     }
-    taskId = submit.data.taskId;
+    taskId = submit.data.id;
   } catch (err) {
     return {
       style,
@@ -172,13 +173,13 @@ async function runOne(style: StyleId): Promise<Result> {
       continue;
     }
 
-    const status = q.data?.aiTask?.status;
-    if (status === 'succeeded' || status === 'SUCCEEDED') {
-      const taskResultRaw = q.data?.aiTask?.taskResult;
+    const status = q.data?.status;
+    if (status === 'success' || status === 'succeeded' || status === 'SUCCEEDED') {
+      const taskInfoRaw = q.data?.taskInfo;
       let resultUrl: string | undefined;
-      if (taskResultRaw) {
+      if (taskInfoRaw) {
         try {
-          const parsed = JSON.parse(taskResultRaw);
+          const parsed = JSON.parse(taskInfoRaw);
           const images = parsed?.images ?? parsed?.data ?? [];
           const first = Array.isArray(images) ? images[0] : undefined;
           resultUrl =
@@ -186,9 +187,11 @@ async function runOne(style: StyleId): Promise<Result> {
               ? first
               : typeof first?.url === 'string'
                 ? first.url
-                : typeof first?.image_url === 'string'
-                  ? first.image_url
-                  : undefined;
+                : typeof first?.imageUrl === 'string'
+                  ? first.imageUrl
+                  : typeof first?.image_url === 'string'
+                    ? first.image_url
+                    : undefined;
         } catch {
           // ignore parse errors
         }
@@ -198,7 +201,7 @@ async function runOne(style: StyleId): Promise<Result> {
         taskId,
         status: 'SUCCEEDED',
         durationMs: Date.now() - started,
-        creditsCharged: q.data?.aiTask?.costCredits ?? undefined,
+        creditsCharged: q.data?.costCredits ?? undefined,
         resultUrl,
       };
     }
@@ -209,7 +212,7 @@ async function runOne(style: StyleId): Promise<Result> {
         taskId,
         status: 'FAILED',
         durationMs: Date.now() - started,
-        creditsCharged: q.data?.aiTask?.costCredits ?? undefined,
+        creditsCharged: q.data?.costCredits ?? undefined,
         error: q.message || 'task reported FAILED',
       };
     }

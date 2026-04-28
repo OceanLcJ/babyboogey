@@ -12,6 +12,8 @@ import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getAIService } from '@/shared/services/ai';
 import {
+  BABY_IMAGE_DEFAULT_MODEL,
+  BABY_IMAGE_PROVIDER,
   BABY_IMAGE_SCENE_IMAGE,
   BABY_IMAGE_SCENE_TEXT,
   getBabyImageCostCredits,
@@ -19,11 +21,22 @@ import {
   resolveBabyImageResolution,
 } from '@/shared/services/baby-image/config';
 import {
+  BABY_VIDEO_MOTION_MODEL,
+  BABY_VIDEO_PROVIDER,
   getVideoCostCredits,
   resolveVideoResolution,
   resolveVideoTemplateDurationSeconds,
 } from '@/shared/services/baby-video/config';
 import { buildBabyImagePrompt } from '@/shared/services/baby-image/prompts';
+import {
+  assertBabyGenerationPromptSafe,
+  assertBabySafetyConfirmation,
+  normalizeBabySafetyErrorMessage,
+} from '@/shared/services/content-safety';
+import {
+  assertBabyGenerationOpenAIModerationSafe,
+  collectBabyModerationImageInputs,
+} from '@/shared/services/content-safety-openai';
 import {
   collectAssetIdsFromValue,
   GUEST_UPLOAD_SESSION_COOKIE,
@@ -128,7 +141,8 @@ export async function POST(request: Request) {
       throw new Error('prompt or options is required');
     }
 
-    const aiService = await getAIService();
+    const configs = await getAllConfigs();
+    const aiService = await getAIService(configs);
 
     // check generate type
     if (!aiService.getMediaTypes().includes(mediaType)) {
@@ -151,6 +165,7 @@ export async function POST(request: Request) {
     let costCredits = 2;
     let watermarkApplied = false;
     let watermarkMode: VideoWatermarkMode = 'none';
+    let requiresBabySafetyModeration = false;
     let watermarkPolicy:
       | {
           watermarkApplied: boolean;
@@ -162,6 +177,11 @@ export async function POST(request: Request) {
       | undefined;
 
     if (mediaType === AIMediaType.IMAGE) {
+      const requiresBabyImageSafety =
+        isBabyImageScene(scene) ||
+        (provider === BABY_IMAGE_PROVIDER &&
+          model === BABY_IMAGE_DEFAULT_MODEL);
+
       // generate image
       if (scene === 'image-to-image') {
         costCredits = 4;
@@ -196,11 +216,31 @@ export async function POST(request: Request) {
       } else {
         throw new Error('invalid scene');
       }
+
+      if (requiresBabyImageSafety) {
+        assertBabySafetyConfirmation(normalizedOptions);
+        assertBabyGenerationPromptSafe(normalizedPrompt);
+        requiresBabySafetyModeration = true;
+      }
     } else if (mediaType === AIMediaType.VIDEO) {
       // generate video — billed per second using a server-side duration
       // whitelist keyed by templateId. The client may hint `templateId` and
       // `durationSeconds`; the server always resolves the authoritative
       // duration from the whitelist to keep billing tamper-proof.
+      if (
+        scene !== 'text-to-video' &&
+        scene !== 'image-to-video' &&
+        scene !== 'video-to-video'
+      ) {
+        throw new Error('invalid scene');
+      }
+
+      if (provider === BABY_VIDEO_PROVIDER && model === BABY_VIDEO_MOTION_MODEL) {
+        assertBabySafetyConfirmation(normalizedOptions);
+        assertBabyGenerationPromptSafe(normalizedPrompt);
+        requiresBabySafetyModeration = true;
+      }
+
       const videoResolution = resolveVideoResolution(
         normalizedOptions?.resolution || normalizedOptions?.mode
       );
@@ -209,7 +249,6 @@ export async function POST(request: Request) {
       );
       costCredits = getVideoCostCredits(videoResolution, videoDurationSeconds);
 
-      const configs = await getAllConfigs();
       const freeVideoWatermarkEnabled = parseConfigBoolean(
         configs.free_video_watermark_enabled,
         true
@@ -246,14 +285,6 @@ export async function POST(request: Request) {
           watermarkText: String(envConfigs.app_name || 'BabyBoogey').slice(0, 50),
         };
       }
-
-      if (
-        scene !== 'text-to-video' &&
-        scene !== 'image-to-video' &&
-        scene !== 'video-to-video'
-      ) {
-        throw new Error('invalid scene');
-      }
     } else if (mediaType === AIMediaType.MUSIC) {
       // generate music
       costCredits = 10;
@@ -285,6 +316,14 @@ export async function POST(request: Request) {
     );
     if (unresolvedAssetIds.length > 0) {
       throw new Error('invalid or inaccessible media reference');
+    }
+
+    if (requiresBabySafetyModeration) {
+      await assertBabyGenerationOpenAIModerationSafe({
+        apiKey: configs.openai_api_key,
+        prompt: normalizedPrompt,
+        imageInputs: collectBabyModerationImageInputs(resolvedProviderOptions),
+      });
     }
 
     const persistedTaskOptions =
@@ -364,6 +403,10 @@ export async function POST(request: Request) {
   } catch (e: unknown) {
     console.log('generate failed', e);
     const rawMessage = e instanceof Error ? e.message : 'generate failed';
+    const safetyMessage = normalizeBabySafetyErrorMessage(rawMessage);
+    if (safetyMessage && safetyMessage !== rawMessage) {
+      return respErr(safetyMessage);
+    }
     // Never leak raw SQL / DB diagnostics to the client. Whitelist short,
     // user-meaningful messages; collapse everything else into a generic code.
     const isSafeMessage =
