@@ -6,12 +6,12 @@ import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
 import { VerifyEmail } from '@/shared/blocks/email/verify-email';
-import { isCloudflareWorker } from '@/shared/lib/env';
 import {
   getCookieFromCtx,
   getHeaderValue,
   guessLocaleFromAcceptLanguage,
 } from '@/shared/lib/cookie';
+import { isCloudflareWorker } from '@/shared/lib/env';
 import { getClientIpFromCtx, getCountryFromCtx } from '@/shared/lib/geo';
 import { getUuid } from '@/shared/lib/hash';
 import { getClientIp } from '@/shared/lib/ip';
@@ -134,8 +134,8 @@ const authOptions = {
 
 // get auth options with configs
 export async function getAuthOptions(configs: Record<string, string>) {
-  const emailVerificationEnabled =
-    configs.email_verification_enabled === 'true' && !!configs.resend_api_key;
+  // Temporarily keep email verification off while the sign-in flow is being simplified.
+  const emailVerificationEnabled = false;
 
   return {
     ...authOptions,
@@ -275,7 +275,9 @@ export async function getAuthOptions(configs: Record<string, string>) {
                   recentVerificationEmailSentAt.set(key, now);
                 }
 
-                const emailService = await getEmailService(configs as UnsafeAny);
+                const emailService = await getEmailService(
+                  configs as UnsafeAny
+                );
                 const logoUrl = envConfigs.app_logo?.startsWith('http')
                   ? envConfigs.app_logo
                   : `${envConfigs.app_url}${envConfigs.app_logo?.startsWith('/') ? '' : '/'}${envConfigs.app_logo || ''}`;

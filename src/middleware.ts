@@ -19,15 +19,20 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Handle internationalization first
-  const intlResponse = intlMiddleware(request);
-
   // Extract locale from pathname
   const locale = pathname.split('/')[1];
   const isValidLocale = routing.locales.includes(locale as UnsafeAny);
   const pathWithoutLocale = isValidLocale
     ? pathname.slice(locale.length + 1)
     : pathname;
+
+  // Handle internationalization first. In local development, Next's dev
+  // proxy can recurse on same-URL middleware rewrites for already-prefixed
+  // locale paths, so let App Router handle those paths directly.
+  const intlResponse =
+    process.env.NODE_ENV === 'development' && isValidLocale
+      ? NextResponse.next()
+      : intlMiddleware(request);
 
   // Only check authentication for admin routes
   if (

@@ -5,8 +5,8 @@ import { Loader2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
-import { authClient, signIn } from '@/core/auth/client';
-import { Link, useRouter } from '@/core/i18n/navigation';
+import { signIn } from '@/core/auth/client';
+import { Link } from '@/core/i18n/navigation';
 import { defaultLocale } from '@/config/locale';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -31,13 +31,11 @@ export function SignIn({
   callbackUrl: string;
   defaultEmail?: string;
 }) {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('common.sign');
   const [email, setEmail] = useState(defaultEmail || '');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
 
   const isGoogleAuthEnabled = configs.google_auth_enabled === 'true';
   const isGithubAuthEnabled = configs.github_auth_enabled === 'true';
@@ -64,6 +62,16 @@ export function SignIn({
       return path.slice(locale.length + 1) || '/';
     return path;
   };
+  const getPostSignInPath = () => {
+    const normalizedCallbackUrl = stripLocalePrefix(callbackUrl || '/');
+    return normalizedCallbackUrl === '/'
+      ? '/activity/ai-tasks'
+      : normalizedCallbackUrl;
+  };
+  const navigateAfterSignIn = () => {
+    if (typeof window === 'undefined') return;
+    window.location.assign(`${base}${getPostSignInPath()}`);
+  };
 
   const handleSignIn = async () => {
     if (loading) {
@@ -79,50 +87,35 @@ export function SignIn({
     setLoading(true);
 
     try {
-      await signIn.email(
+      let didNavigate = false;
+      const result = (await signIn.email(
         {
           email,
           password,
-          callbackURL: callbackUrl,
+          callbackURL: `${base}${getPostSignInPath()}`,
         },
         {
-          onRequest: (ctx) => {
+          onRequest: () => {
             // loading is already set above; keep as no-op for safety
           },
-          onResponse: (ctx) => {
+          onResponse: () => {
             // Do NOT reset loading here; navigation may not have completed yet.
           },
-          onSuccess: (ctx) => {
+          onSuccess: () => {
             // Keep loading=true until navigation completes.
+            didNavigate = true;
+            navigateAfterSignIn();
           },
           onError: (e: UnsafeAny) => {
-            const status = e?.error?.status;
-            if (status === 403) {
-              const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
-              const verifyPath = `/verify-email?sent=1&email=${encodeURIComponent(
-                email
-              )}&callbackUrl=${encodeURIComponent(normalizedCallbackUrl)}`;
-
-              // IMPORTANT:
-              // better-auth does not URL-encode callbackURL when generating the verification URL.
-              // So callbackURL must not contain its own '&' query params (or they'll get split).
-              // We send users to home/callbackUrl after verification, and keep the verify page only
-              // as the waiting UI.
-              void authClient.sendVerificationEmail({
-                email,
-                callbackURL: `${base}${normalizedCallbackUrl || '/'}`,
-              });
-
-              // i18n router will prefix locale automatically; do NOT include locale here.
-              router.push(verifyPath);
-              return;
-            }
-
             toast.error(e?.error?.message || 'sign in failed');
             setLoading(false);
           },
         }
-      );
+      )) as UnsafeAny;
+
+      if (!result?.error && !didNavigate) {
+        navigateAfterSignIn();
+      }
     } catch (e: UnsafeAny) {
       toast.error(e?.message || 'sign in failed');
       setLoading(false);
@@ -183,16 +176,6 @@ export function SignIn({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-
-              {/* <div className="flex items-center gap-2">
-            <Checkbox
-              id="remember"
-              onClick={() => {
-                setRememberMe(!rememberMe);
-              }}
-            />
-            <Label htmlFor="remember">Remember me</Label>
-          </div> */}
 
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? (

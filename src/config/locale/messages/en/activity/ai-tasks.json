@@ -12,8 +12,58 @@
     "created_at": "Created At",
     "action": "Action"
   },
+  "actions": {
+    "download": "Download",
+    "refresh": "Refresh",
+    "use_as_template": "Use as template",
+    "fix_and_retry": "Fix and retry"
+  },
+  "stats": {
+    "total": "Total",
+    "images": "Images",
+    "videos": "Videos",
+    "active": "Active"
+  },
+  "sections": {
+    "now_processing": "Now processing",
+    "history": "History",
+    "newest_first": "Newest first"
+  },
+  "active": {
+    "refresh_hint": "refresh available",
+    "status_line": "{media} task is still running"
+  },
+  "details": {
+    "title": "Task details",
+    "original_prompt": "Original prompt",
+    "failure_reason": "Failure reason"
+  },
+  "status": {
+    "unknown": "unknown"
+  },
+  "media": {
+    "image": "Image",
+    "video": "Video",
+    "music": "Music",
+    "audio": "Audio",
+    "text": "Text",
+    "unknown": "Task"
+  },
+  "result": {
+    "image_alt": "Generated image",
+    "processing": "Generation is still running",
+    "empty": "No result yet",
+    "unavailable": "Result is unavailable",
+    "no_prompt": "No prompt",
+    "prepare_preview": "Prepare protected preview",
+    "retry_preview": "Retry preview",
+    "preview_on_demand": "Preview is generated on demand",
+    "preparing_preview": "Preparing protected preview...",
+    "preview_failed": "Protected preview failed"
+  },
   "list": {
     "title": "AI Tasks",
+    "description": "Browse generated babies, recover active jobs, and download final media.",
     "tabs": {
       "all": "All",
       "music": "Music",

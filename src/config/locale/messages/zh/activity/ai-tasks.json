@@ -12,8 +12,58 @@
     "created_at": "创建时间",
     "action": "操作"
   },
+  "actions": {
+    "download": "下载",
+    "refresh": "刷新",
+    "use_as_template": "再做一次",
+    "fix_and_retry": "修正并重试"
+  },
+  "stats": {
+    "total": "全部",
+    "images": "图片",
+    "videos": "视频",
+    "active": "进行中"
+  },
+  "sections": {
+    "now_processing": "正在处理",
+    "history": "历史记录",
+    "newest_first": "最新优先"
+  },
+  "active": {
+    "refresh_hint": "可刷新状态",
+    "status_line": "{media}任务仍在生成中"
+  },
+  "details": {
+    "title": "任务详情",
+    "original_prompt": "原始提示词",
+    "failure_reason": "失败原因"
+  },
+  "status": {
+    "unknown": "未知"
+  },
+  "media": {
+    "image": "图片",
+    "video": "视频",
+    "music": "音乐",
+    "audio": "音频",
+    "text": "文本",
+    "unknown": "任务"
+  },
+  "result": {
+    "image_alt": "生成图片",
+    "processing": "生成仍在进行中",
+    "empty": "暂无结果",
+    "unavailable": "结果不可用",
+    "no_prompt": "无提示词",
+    "prepare_preview": "准备受保护预览",
+    "retry_preview": "重试预览",
+    "preview_on_demand": "预览会按需生成",
+    "preparing_preview": "正在准备受保护预览...",
+    "preview_failed": "受保护预览生成失败"
+  },
   "list": {
     "title": "AI 任务",
+    "description": "浏览已生成的宝宝作品，恢复进行中的任务，并快速下载最终媒体。",
     "tabs": {
       "all": "全部",
       "music": "音乐",

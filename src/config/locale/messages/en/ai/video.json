@@ -100,6 +100,10 @@
       "eta_range_720p": "Usually 45-120s",
       "eta_range_1080p": "Usually 70-180s"
     },
+    "restore": {
+      "ready": "Draft restored from history. Review it before generating.",
+      "media_unavailable": "Prompt and settings were restored. The original input image may need to be uploaded again."
+    },
     "errors": {
       "timeout_actionable": "Generation timed out. Please try again, switch template, or choose 720p for faster results.",
       "empty_result_actionable": "The model returned no video. Please retry or switch to another dance template.",

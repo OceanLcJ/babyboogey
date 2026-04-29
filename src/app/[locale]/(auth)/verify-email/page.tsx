@@ -3,7 +3,6 @@ import { getTranslations } from 'next-intl/server';
 import { redirect } from '@/core/i18n/navigation';
 import { envConfigs } from '@/config';
 import { defaultLocale } from '@/config/locale';
-import { VerifyEmailPage } from '@/shared/blocks/sign/verify-email';
 
 export async function generateMetadata({
   params,
@@ -31,18 +30,16 @@ export default async function VerifyEmailRoute({
   searchParams: Promise<{
     email?: string;
     callbackUrl?: string;
-    sent?: string;
   }>;
   params: Promise<{ locale: string }>;
 }) {
-  const { email, callbackUrl, sent } = await searchParams;
+  const { email, callbackUrl } = await searchParams;
   const { locale } = await params;
-  // If user lands here without required context (e.g. direct navigation),
-  // send them to sign-in instead of showing an incomplete verify page.
-  if (!email && !callbackUrl) {
-    redirect({ href: '/sign-in', locale });
-  }
-  return (
-    <VerifyEmailPage email={email} callbackUrl={callbackUrl} sent={sent} />
-  );
+  const signInQuery = new URLSearchParams();
+  if (email) signInQuery.set('email', email);
+  signInQuery.set('callbackUrl', callbackUrl || '/');
+
+  // Email verification is temporarily disabled, so don't leave users on the
+  // verification waiting screen if an old redirect or URL brings them here.
+  redirect({ href: `/sign-in?${signInQuery.toString()}`, locale });
 }

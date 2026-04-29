@@ -12,8 +12,58 @@
     "created_at": "作成日",
     "action": "アクション"
   },
+  "actions": {
+    "download": "ダウンロード",
+    "refresh": "更新",
+    "use_as_template": "もう一度作る",
+    "fix_and_retry": "修正して再試行"
+  },
+  "stats": {
+    "total": "合計",
+    "images": "画像",
+    "videos": "動画",
+    "active": "進行中"
+  },
+  "sections": {
+    "now_processing": "処理中",
+    "history": "履歴",
+    "newest_first": "新しい順"
+  },
+  "active": {
+    "refresh_hint": "更新できます",
+    "status_line": "{media}タスクはまだ生成中です"
+  },
+  "details": {
+    "title": "タスク詳細",
+    "original_prompt": "元のプロンプト",
+    "failure_reason": "失敗理由"
+  },
+  "status": {
+    "unknown": "不明"
+  },
+  "media": {
+    "image": "画像",
+    "video": "動画",
+    "music": "音楽",
+    "audio": "オーディオ",
+    "text": "テキスト",
+    "unknown": "タスク"
+  },
+  "result": {
+    "image_alt": "生成画像",
+    "processing": "生成中です",
+    "empty": "まだ結果がありません",
+    "unavailable": "結果を表示できません",
+    "no_prompt": "プロンプトなし",
+    "prepare_preview": "保護プレビューを準備",
+    "retry_preview": "プレビューを再試行",
+    "preview_on_demand": "プレビューは必要時に生成されます",
+    "preparing_preview": "保護プレビューを準備中...",
+    "preview_failed": "保護プレビューに失敗しました"
+  },
   "list": {
     "title": "AIタスク",
+    "description": "生成済みの作品を確認し、進行中のジョブを復旧して、完成したメディアをすばやくダウンロードできます。",
     "tabs": {
       "all": "全て",
       "music": "音楽",

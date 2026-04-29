@@ -100,6 +100,10 @@
       "eta_range_720p": "通常约 45-120 秒",
       "eta_range_1080p": "通常约 70-180 秒"
     },
+    "restore": {
+      "ready": "已从历史记录恢复草稿，请确认后再生成。",
+      "media_unavailable": "已恢复提示词和参数，原输入图片可能需要重新上传。"
+    },
     "errors": {
       "timeout_actionable": "生成超时，请重试；也可切换模板或选择 720p 提升速度。",
       "empty_result_actionable": "模型未返回视频结果，请重试或切换其他舞蹈模板。",

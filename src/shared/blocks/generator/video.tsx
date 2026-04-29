@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { IconX } from '@tabler/icons-react';
 import {
   Check,
@@ -17,7 +18,6 @@ import {
   Video,
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { Link, useRouter } from '@/core/i18n/navigation';
@@ -31,6 +31,14 @@ import {
   CardTitle,
 } from '@/shared/components/ui/card';
 import { Checkbox } from '@/shared/components/ui/checkbox';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 import { Label } from '@/shared/components/ui/label';
 import { Progress } from '@/shared/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group';
@@ -41,16 +49,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/shared/components/ui/dropdown-menu';
 import { Switch } from '@/shared/components/ui/switch';
 import { useAppContext } from '@/shared/contexts/app';
+import {
+  type AITaskReuseHandoffPayload,
+  consumeAITaskReuseHandoff,
+  normalizeRestoredMediaReference,
+  readFirstStringFromOptionArray,
+  readStringOption,
+} from '@/shared/lib/ai-task-reuse-handoff';
 import {
   markWatermarkCtaClick,
   trackAnalyticsEvent,
@@ -59,13 +66,13 @@ import {
   extractAssetIdFromMediaUrl,
   resolveMediaValueToApiPath,
 } from '@/shared/lib/asset-ref';
+import { cn } from '@/shared/lib/utils';
 import {
   inferExtensionFromMimeType,
   isDynamicWatermarkedVideo,
   normalizeWatermarkType,
   renderWatermarkedVideoBlob,
 } from '@/shared/lib/watermark';
-import { cn } from '@/shared/lib/utils';
 import {
   BABY_VIDEO_MOTION_MODEL,
   BABY_VIDEO_PROVIDER,
@@ -172,7 +179,7 @@ const VIDEO_MODEL = BABY_VIDEO_MOTION_MODEL;
 
 const DANCE_TEMPLATE_PROMPTS: Record<string, string> = {
   'temp-05':
-    "Animate the child in the photo doing a rhythmic beat dance: bouncy steps, shoulder pops, and simple hand waves. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.",
+    'Animate the child in the photo doing a rhythmic beat dance: bouncy steps, shoulder pops, and simple hand waves. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.',
   'viral-dance':
     'Animate the child in the photo doing a trendy viral short-form dance: energetic, playful, easy-to-follow moves with hand gestures and hip sways. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
   'temp-01':
@@ -273,8 +280,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-05',
     name: 'Rhythm Beat',
     nameZh: '节奏感舞步',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4',
     duration: '0:04',
   },
   {
@@ -290,8 +296,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-01',
     name: 'Cool Moves',
     nameZh: '酷炫街舞',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-01.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-01.mp4',
     duration: '0:15',
     isPro: true,
   },
@@ -299,8 +304,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-02',
     name: 'Fun Groove',
     nameZh: '趣味律动',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -308,8 +312,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-03',
     name: 'Happy Bounce',
     nameZh: '欢乐蹦跳',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -317,8 +320,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-04',
     name: 'Smooth Sway',
     nameZh: '柔和摇摆',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-04.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-04.mp4',
     duration: '0:21',
     isPro: true,
   },
@@ -326,8 +328,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-06',
     name: 'Cute Wiggle',
     nameZh: '可爱扭动',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4',
     duration: '0:08',
     isPro: true,
   },
@@ -335,8 +336,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-07',
     name: 'Quick Steps',
     nameZh: '快速小步',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-07.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-07.mp4',
     duration: '0:15',
     isPro: true,
   },
@@ -344,8 +344,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-08',
     name: 'Gentle Wave',
     nameZh: '温柔波浪',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-08.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-08.mp4',
     duration: '0:09',
     isPro: true,
   },
@@ -353,8 +352,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-09',
     name: 'Energy Burst',
     nameZh: '活力四射',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-09.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-09.mp4',
     duration: '0:19',
     isPro: true,
   },
@@ -362,8 +360,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-10',
     name: 'Playful Steps',
     nameZh: '俏皮舞步',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-10.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-10.mp4',
     duration: '0:17',
     isPro: true,
   },
@@ -371,8 +368,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-11',
     name: 'Sweet Moves',
     nameZh: '甜美律动',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-11.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-11.mp4',
     duration: '0:16',
     isPro: true,
   },
@@ -380,8 +376,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'temp-12',
     name: 'Dynamic Dance',
     nameZh: '动感舞蹈',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/temp-12.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/temp-12.mp4',
     duration: '0:14',
     isPro: true,
   },
@@ -389,8 +384,7 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     id: 'template-0',
     name: 'Cute Boy',
     nameZh: '默认模板',
-    videoUrl:
-      'https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4',
+    videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4',
     duration: '0:14',
     isPro: true,
   },
@@ -408,6 +402,17 @@ const RESOLUTION_OPTIONS = [
   { value: '1080p', creditsPerSecond: 25 },
 ];
 
+function isVideoResolutionOption(value: unknown): value is string {
+  return (
+    typeof value === 'string' &&
+    RESOLUTION_OPTIONS.some((option) => option.value === value)
+  );
+}
+
+function isVideoOrientation(value: unknown): value is 'image' | 'video' {
+  return value === 'image' || value === 'video';
+}
+
 function parseTaskResult(taskResult: string | null): UnsafeAny {
   if (!taskResult) {
     return null;
@@ -423,7 +428,8 @@ function parseTaskResult(taskResult: string | null): UnsafeAny {
 
 function readTaskWatermarkFallback(task?: BackendTask | null) {
   const watermarkType = normalizeWatermarkType(task?.watermarkMode || 'none');
-  const watermarkApplied = Boolean(task?.watermarkApplied) && watermarkType !== 'none';
+  const watermarkApplied =
+    Boolean(task?.watermarkApplied) && watermarkType !== 'none';
 
   return {
     watermarkApplied,
@@ -472,7 +478,9 @@ function toTaskVideoMetadata({
     watermarkOpacity: Number.isFinite(Number(item.watermarkOpacity))
       ? Number(item.watermarkOpacity)
       : undefined,
-    watermarkIntervalSeconds: Number.isFinite(Number(item.watermarkIntervalSeconds))
+    watermarkIntervalSeconds: Number.isFinite(
+      Number(item.watermarkIntervalSeconds)
+    )
       ? Number(item.watermarkIntervalSeconds)
       : undefined,
     watermarkText:
@@ -480,7 +488,10 @@ function toTaskVideoMetadata({
   };
 }
 
-function extractGeneratedVideos(result: UnsafeAny, task?: BackendTask | null): TaskVideoMetadata[] {
+function extractGeneratedVideos(
+  result: UnsafeAny,
+  task?: BackendTask | null
+): TaskVideoMetadata[] {
   const fallback = readTaskWatermarkFallback(task);
 
   if (!result) {
@@ -490,7 +501,9 @@ function extractGeneratedVideos(result: UnsafeAny, task?: BackendTask | null): T
   const videos = result.videos;
   if (videos && Array.isArray(videos)) {
     return videos
-      .map((item: unknown) => toTaskVideoMetadata({ candidate: item, fallback }))
+      .map((item: unknown) =>
+        toTaskVideoMetadata({ candidate: item, fallback })
+      )
       .filter(Boolean) as TaskVideoMetadata[];
   }
 
@@ -507,7 +520,9 @@ function extractGeneratedVideos(result: UnsafeAny, task?: BackendTask | null): T
 
   if (Array.isArray(output)) {
     return output
-      .map((item: unknown) => toTaskVideoMetadata({ candidate: item, fallback }))
+      .map((item: unknown) =>
+        toTaskVideoMetadata({ candidate: item, fallback })
+      )
       .filter(Boolean) as TaskVideoMetadata[];
   }
 
@@ -542,8 +557,7 @@ const uploadImageFile = async (file: File) => {
   return {
     assetId: result.data.assetId as string,
     assetRef: result.data.assetRef as string,
-    previewUrl:
-      `/api/storage/assets/${encodeURIComponent(result.data.assetId as string)}`,
+    previewUrl: `/api/storage/assets/${encodeURIComponent(result.data.assetId as string)}`,
   };
 };
 
@@ -660,6 +674,8 @@ export function VideoGenerator({
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
   const [showHandoffBanner, setShowHandoffBanner] = useState(false);
+  const [pendingAITaskReuseHandoff, setPendingAITaskReuseHandoff] =
+    useState<AITaskReuseHandoffPayload | null>(null);
   const isPollingRef = useRef(false);
   const pollingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const successHoldTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
@@ -681,8 +697,7 @@ export function VideoGenerator({
     setIsShowSignModal,
     fetchUserCredits,
     fetchUserInfo,
-  } =
-    useAppContext();
+  } = useAppContext();
   const searchParams = useSearchParams();
   const isZhLocale = locale.toLowerCase().startsWith('zh');
 
@@ -749,9 +764,7 @@ export function VideoGenerator({
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
-      const raw = window.localStorage.getItem(
-        'babyboogey:baby-image-handoff'
-      );
+      const raw = window.localStorage.getItem('babyboogey:baby-image-handoff');
       if (!raw) return;
       window.localStorage.removeItem('babyboogey:baby-image-handoff');
       const data = JSON.parse(raw);
@@ -783,6 +796,91 @@ export function VideoGenerator({
     setPrompt(getDefaultDancePrompt(selectedTemplate));
   }, [selectedTemplate, promptTouched]);
 
+  useEffect(() => {
+    const handoff = consumeAITaskReuseHandoff();
+    if (!handoff || handoff.mediaType !== AIMediaType.VIDEO) {
+      return;
+    }
+
+    setPendingAITaskReuseHandoff(handoff);
+  }, []);
+
+  useEffect(() => {
+    const handoff = pendingAITaskReuseHandoff;
+    if (!handoff) {
+      return;
+    }
+
+    const options = handoff.options;
+    const templateId = readStringOption(options, ['templateId', 'template_id']);
+    const nextTemplate = templateId
+      ? DANCE_TEMPLATES.find((template) => template.id === templateId)
+      : null;
+    const nextResolution = readStringOption(options, ['resolution', 'mode']);
+    const nextOrientation = readStringOption(options, [
+      'character_orientation',
+      'orientation',
+    ]);
+    const inputImage = readFirstStringFromOptionArray(options, [
+      'image_input',
+      'input_images',
+      'referenceImageUrl',
+      'reference_image',
+    ]);
+    const restoredImage = normalizeRestoredMediaReference(inputImage);
+    const shouldWaitForMembership =
+      Boolean(nextTemplate?.isPro) &&
+      ((isCheckSign && !user?.id) ||
+        Boolean(user?.id && user.membership === undefined));
+
+    if (shouldWaitForMembership) {
+      return;
+    }
+
+    if (nextTemplate) {
+      if (!nextTemplate.isPro || canUseProTemplates) {
+        setSelectedTemplate(nextTemplate);
+      } else if (user?.id && user.membership !== undefined) {
+        toast.error(t('form.pro_template_member_only'));
+      }
+    }
+    if (handoff.prompt) {
+      setPrompt(handoff.prompt);
+      setPromptTouched(true);
+    }
+    if (isVideoResolutionOption(nextResolution)) {
+      setResolution(nextResolution);
+    }
+    if (isVideoOrientation(nextOrientation)) {
+      setOrientation(nextOrientation);
+    }
+    if (restoredImage) {
+      setUploadedImage({
+        preview: restoredImage.previewUrl,
+        url: restoredImage.assetRef,
+        status: 'uploaded',
+      });
+    }
+
+    toast.success(t('restore.ready'));
+    const expectsInputImage =
+      handoff.scene === 'image-to-video' || Boolean(inputImage);
+    if (
+      expectsInputImage &&
+      (!restoredImage || !restoredImage.recoveredAssetRef)
+    ) {
+      toast(t('restore.media_unavailable'));
+    }
+    setPendingAITaskReuseHandoff(null);
+  }, [
+    canUseProTemplates,
+    isCheckSign,
+    pendingAITaskReuseHandoff,
+    t,
+    user?.id,
+    user?.membership,
+  ]);
+
   const remainingCredits = user?.credits?.remainingCredits ?? 0;
   const selectedTemplateDurationSeconds =
     parseTemplateDurationSeconds(selectedTemplate.duration) ?? 5;
@@ -797,10 +895,7 @@ export function VideoGenerator({
     uploadedImage?.status !== 'error' &&
     Boolean(uploadedImage?.url) &&
     safetyConfirmed;
-  const translateError = useCallback(
-    (key: string) => t(key as UnsafeAny),
-    [t]
-  );
+  const translateError = useCallback((key: string) => t(key as UnsafeAny), [t]);
 
   const stageLabel = useMemo(() => {
     if (!generationStage) {
@@ -957,7 +1052,7 @@ export function VideoGenerator({
         return;
       }
 
-      void prepareWatermarkedPlayback(video).catch(() => { });
+      void prepareWatermarkedPlayback(video).catch(() => {});
     });
   }, [generatedVideos, prepareWatermarkedPlayback]);
 
@@ -989,12 +1084,16 @@ export function VideoGenerator({
 
   const reportWatermarkShown = useCallback(
     (taskIdentifier: string, videos: GeneratedVideo[]) => {
-      if (!taskIdentifier || watermarkShownTaskIdsRef.current.has(taskIdentifier)) {
+      if (
+        !taskIdentifier ||
+        watermarkShownTaskIdsRef.current.has(taskIdentifier)
+      ) {
         return;
       }
 
       const watermarkedCount = videos.filter(
-        (video) => video.watermarkApplied && video.watermarkType === 'dynamic_overlay'
+        (video) =>
+          video.watermarkApplied && video.watermarkType === 'dynamic_overlay'
       ).length;
       if (watermarkedCount === 0) {
         return;
@@ -1158,13 +1257,15 @@ export function VideoGenerator({
 
         const signedItem = Array.isArray(data?.results)
           ? data.results.find(
-            (item: Record<string, unknown>) =>
-              item?.assetId === assetId && typeof item?.url === 'string'
-          )
+              (item: Record<string, unknown>) =>
+                item?.assetId === assetId && typeof item?.url === 'string'
+            )
           : null;
 
         const signedUrl =
-          signedItem && typeof signedItem.url === 'string' ? signedItem.url : '';
+          signedItem && typeof signedItem.url === 'string'
+            ? signedItem.url
+            : '';
         if (!signedUrl) {
           throw new Error('signed url is empty');
         }
@@ -1212,7 +1313,8 @@ export function VideoGenerator({
           ? 'page'
           : target;
       const text = t('share.default_text', {
-        template: locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name,
+        template:
+          locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name,
       });
       const title = t('page.title');
 
@@ -1237,7 +1339,14 @@ export function VideoGenerator({
         isSignedVideoLink,
       };
     },
-    [getShareableVideoUrl, locale, selectedTemplate.id, selectedTemplate.name, selectedTemplate.nameZh, t]
+    [
+      getShareableVideoUrl,
+      locale,
+      selectedTemplate.id,
+      selectedTemplate.name,
+      selectedTemplate.nameZh,
+      t,
+    ]
   );
 
   const copyShareLink = useCallback(
@@ -1271,10 +1380,19 @@ export function VideoGenerator({
   );
 
   const shareViaSystem = useCallback(
-    async ({ target, video }: { target: ShareTarget; video?: GeneratedVideo }) => {
+    async ({
+      target,
+      video,
+    }: {
+      target: ShareTarget;
+      video?: GeneratedVideo;
+    }) => {
       const payload = await resolveSharePayload({ target, video });
 
-      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      if (
+        typeof navigator !== 'undefined' &&
+        typeof navigator.share === 'function'
+      ) {
         try {
           await navigator.share({
             title: payload.title,
@@ -1382,7 +1500,9 @@ export function VideoGenerator({
         console.error('share action failed:', error);
         toast.error(t('share.share_failed'));
       } finally {
-        setSharingActionKey((current) => (current === actionKey ? null : current));
+        setSharingActionKey((current) =>
+          current === actionKey ? null : current
+        );
       }
     },
     [t]
@@ -1468,9 +1588,7 @@ export function VideoGenerator({
     } catch (error: UnsafeAny) {
       console.error('Upload failed:', error);
       toast.error(error?.message || 'Upload failed');
-      setUploadedImage((prev) =>
-        prev ? { ...prev, status: 'error' } : null
-      );
+      setUploadedImage((prev) => (prev ? { ...prev, status: 'error' } : null));
     }
   };
 
@@ -1538,7 +1656,9 @@ export function VideoGenerator({
       clearPollingTimer();
       clearSuccessHoldTimer();
       watermarkedRenderInFlightIdsRef.current.clear();
-      revokeWatermarkedPlaybackBlobUrls(watermarkedPlaybackByVideoIdRef.current);
+      revokeWatermarkedPlaybackBlobUrls(
+        watermarkedPlaybackByVideoIdRef.current
+      );
     };
   }, [
     clearPollingTimer,
@@ -1580,7 +1700,9 @@ export function VideoGenerator({
       if (!isAliveRef.current) {
         return;
       }
-      setElapsedSeconds(Math.max(0, Math.floor((Date.now() - generationStartTime) / 1000)));
+      setElapsedSeconds(
+        Math.max(0, Math.floor((Date.now() - generationStartTime) / 1000))
+      );
     };
 
     updateElapsedSeconds();
@@ -1649,7 +1771,10 @@ export function VideoGenerator({
               ? Date.now() - generationStartTime
               : 0;
             if (elapsedMs > FINALIZING_STAGE_MS) {
-              setGenerationProgressStage('finalizing', PROGRESS_CAP_BEFORE_SUCCESS);
+              setGenerationProgressStage(
+                'finalizing',
+                PROGRESS_CAP_BEFORE_SUCCESS
+              );
             } else {
               setGenerationProgressStage('processing', 72);
             }
@@ -1740,7 +1865,9 @@ export function VideoGenerator({
         ? Date.now() - generationStartTime
         : 0;
       const delay =
-        elapsedMs < FAST_POLL_PHASE_MS ? FAST_POLL_INTERVAL : SLOW_POLL_INTERVAL;
+        elapsedMs < FAST_POLL_PHASE_MS
+          ? FAST_POLL_INTERVAL
+          : SLOW_POLL_INTERVAL;
 
       clearPollingTimer();
       pollingTimerRef.current = setTimeout(async () => {
@@ -1793,7 +1920,13 @@ export function VideoGenerator({
       clearPollingTimer();
       isPollingRef.current = false;
     };
-  }, [clearPollingTimer, isGenerating, pollTaskStatus, scheduleNextPoll, taskId]);
+  }, [
+    clearPollingTimer,
+    isGenerating,
+    pollTaskStatus,
+    scheduleNextPoll,
+    taskId,
+  ]);
 
   const handleGenerate = async () => {
     if (!user) {
@@ -1899,7 +2032,10 @@ export function VideoGenerator({
       if (data.status === AITaskStatus.SUCCESS && data.taskInfo) {
         const parsedResult = parseTaskResult(data.taskInfo);
         const immediateTask = data as BackendTask;
-        const extractedVideos = extractGeneratedVideos(parsedResult, immediateTask);
+        const extractedVideos = extractGeneratedVideos(
+          parsedResult,
+          immediateTask
+        );
 
         if (extractedVideos.length > 0) {
           const mappedVideos = mapTaskVideos(
@@ -2091,7 +2227,7 @@ export function VideoGenerator({
                           <Button
                             variant="destructive"
                             size="icon"
-                            className="absolute right-2 top-2 h-7 w-7 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
+                            className="absolute top-2 right-2 h-7 w-7 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
                             onClick={handleRemoveImage}
                           >
                             <IconX className="h-4 w-4" />
@@ -2104,8 +2240,10 @@ export function VideoGenerator({
                         className="border-border bg-muted/50 hover:border-border hover:bg-muted flex h-[136px] w-[136px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed p-1 shadow-sm transition"
                         onClick={() => inputRef.current?.click()}
                       >
-                        <ImageIcon className="h-8 w-8 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">Upload</span>
+                        <ImageIcon className="text-muted-foreground h-8 w-8" />
+                        <span className="text-muted-foreground text-xs">
+                          Upload
+                        </span>
                       </button>
                     )}
                   </div>
@@ -2128,7 +2266,9 @@ export function VideoGenerator({
                       >
                         <img
                           src={url}
-                          alt={t('form.example_image_alt', { index: index + 1 })}
+                          alt={t('form.example_image_alt', {
+                            index: index + 1,
+                          })}
                           className="h-full w-full object-cover"
                         />
                       </button>
@@ -2152,8 +2292,7 @@ export function VideoGenerator({
                 <div className="relative -mx-2 px-2">
                   <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent flex gap-2 overflow-x-auto pb-2">
                     {DANCE_TEMPLATES.map((template) => {
-                      const isLocked =
-                        !!template.isPro && !canUseProTemplates;
+                      const isLocked = !!template.isPro && !canUseProTemplates;
 
                       return (
                         <button
@@ -2177,16 +2316,16 @@ export function VideoGenerator({
                               autoPlay
                               preload="auto"
                             />
-                            <div className="absolute right-1 top-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                            <div className="absolute top-1 right-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
                               {template.duration}
                             </div>
                             {selectedTemplate.id === template.id && (
-                              <div className="bg-primary absolute left-1 top-1 rounded-full p-0.5">
+                              <div className="bg-primary absolute top-1 left-1 rounded-full p-0.5">
                                 <Check className="text-primary-foreground h-2.5 w-2.5" />
                               </div>
                             )}
                             {template.isHot && (
-                              <div className="absolute left-1 top-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                              <div className="absolute top-1 left-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
                                 ⭐
                               </div>
                             )}
@@ -2216,7 +2355,6 @@ export function VideoGenerator({
                   </div>
                 </div>
               </div>
-
 
               {/* Options */}
               <div className="space-y-3 rounded-lg border p-3">
@@ -2253,11 +2391,12 @@ export function VideoGenerator({
                   <span className="text-muted-foreground">
                     {t('form.estimated_cost')}
                   </span>
-                  <span className="font-medium text-destructive">
+                  <span className="text-destructive font-medium">
                     {t('form.resolution_credits', { credits: currentCost })}
                     <span className="text-muted-foreground ml-1 font-normal">
-                      ({selectedTemplateDurationSeconds}s × {currentCreditsPerSecond}/s
-                      · {t('form.available_credits')}: {remainingCredits})
+                      ({selectedTemplateDurationSeconds}s ×{' '}
+                      {currentCreditsPerSecond}/s ·{' '}
+                      {t('form.available_credits')}: {remainingCredits})
                     </span>
                   </span>
                 </div>
@@ -2326,7 +2465,7 @@ export function VideoGenerator({
                   />
                   <Label
                     htmlFor="video-safety-confirmation"
-                    className="cursor-pointer text-xs font-normal leading-relaxed text-muted-foreground"
+                    className="text-muted-foreground cursor-pointer text-xs leading-relaxed font-normal"
                   >
                     {t('safety.confirmation')}
                   </Label>
@@ -2360,7 +2499,10 @@ export function VideoGenerator({
                   )}
                 </Button>
               ) : (
-                <Button className="w-full" onClick={() => setIsShowSignModal(true)}>
+                <Button
+                  className="w-full"
+                  onClick={() => setIsShowSignModal(true)}
+                >
                   <User className="mr-2 h-4 w-4" aria-hidden="true" />
                   {t('sign_in_to_generate')}
                 </Button>
@@ -2372,11 +2514,20 @@ export function VideoGenerator({
                   <span className="text-primary">
                     {t('credits_cost', { credits: currentCost })}
                   </span>
-                  <span>{t('credits_remaining', { credits: remainingCredits })}</span>
+                  <span>
+                    {t('credits_remaining', { credits: remainingCredits })}
+                  </span>
                 </div>
                 <Link href="/pricing">
-                  <Button variant="outline" size="sm" className="w-full gap-1.5">
-                    <CreditCard className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-1.5"
+                  >
+                    <CreditCard
+                      className="mr-2 h-3.5 w-3.5"
+                      aria-hidden="true"
+                    />
                     {t('buy_credits')}
                   </Button>
                 </Link>
@@ -2399,7 +2550,9 @@ export function VideoGenerator({
                     </p>
                   )}
                   <div className="text-muted-foreground flex items-center justify-between text-xs">
-                    <span>{t('status.elapsed_seconds', { seconds: elapsedSeconds })}</span>
+                    <span>
+                      {t('status.elapsed_seconds', { seconds: elapsedSeconds })}
+                    </span>
                     <span>{etaRangeLabel}</span>
                   </div>
                 </div>
@@ -2422,7 +2575,8 @@ export function VideoGenerator({
                 <div className="space-y-4">
                   {generatedVideos.map((video) => {
                     const isWatermarked = isDynamicWatermarkedVideo(video);
-                    const playbackState = watermarkedPlaybackByVideoId[video.id];
+                    const playbackState =
+                      watermarkedPlaybackByVideoId[video.id];
                     const playbackUrl = isWatermarked
                       ? playbackState?.blobUrl || ''
                       : video.url;
@@ -2454,13 +2608,15 @@ export function VideoGenerator({
 
                     return (
                       <div key={video.id} className="space-y-3">
-                        <div className="relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl bg-muted dark:bg-white/[0.03] ring-1 ring-border dark:ring-white/10">
+                        <div className="bg-muted ring-border relative flex max-h-[600px] items-center justify-center overflow-hidden rounded-2xl ring-1 dark:bg-white/[0.03] dark:ring-white/10">
                           {canRenderVideo ? (
                             <video
                               src={playbackUrl}
                               controls
                               controlsList={
-                                isWatermarked ? 'nodownload noremoteplayback' : undefined
+                                isWatermarked
+                                  ? 'nodownload noremoteplayback'
+                                  : undefined
                               }
                               disablePictureInPicture={isWatermarked}
                               autoPlay
@@ -2482,7 +2638,9 @@ export function VideoGenerator({
                               ) : (
                                 <>
                                   <Loader2 className="h-4 w-4 animate-spin" />
-                                  <span>{t('watermark.preparing_preview')}</span>
+                                  <span>
+                                    {t('watermark.preparing_preview')}
+                                  </span>
                                 </>
                               )}
                             </div>
@@ -2499,8 +2657,7 @@ export function VideoGenerator({
                                   animation: `bb-watermark-drift ${Math.max(
                                     5,
                                     (video.watermarkIntervalSeconds ?? 3) * 4
-                                  )
-                                    }s linear infinite`,
+                                  )}s linear infinite`,
                                 }}
                               >
                                 {video.watermarkText || 'BabyBoogey'}
@@ -2515,8 +2672,7 @@ export function VideoGenerator({
                                   animation: `bb-watermark-drift-reverse ${Math.max(
                                     6,
                                     (video.watermarkIntervalSeconds ?? 3) * 5
-                                  )
-                                    }s linear infinite`,
+                                  )}s linear infinite`,
                                 }}
                               >
                                 {video.watermarkText || 'BabyBoogey'}
@@ -2525,7 +2681,7 @@ export function VideoGenerator({
                           )}
                         </div>
                         {isWatermarked && (
-                          <div className="flex items-center justify-between gap-2 rounded-xl border border-amber-300/50 bg-amber-50 dark:border-amber-500/20 dark:bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200">
+                          <div className="flex items-center justify-between gap-2 rounded-xl border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">
                             <span>{t('watermark.free_notice')}</span>
                             <Button
                               variant="link"
@@ -2556,10 +2712,7 @@ export function VideoGenerator({
                                   : t('share.share')}
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                              align="end"
-                              className="w-64"
-                            >
+                            <DropdownMenuContent align="end" className="w-64">
                               <DropdownMenuLabel>
                                 {t('share.share_video')}
                               </DropdownMenuLabel>
@@ -2568,7 +2721,8 @@ export function VideoGenerator({
                               </DropdownMenuLabel>
                               <DropdownMenuItem
                                 disabled={
-                                  isSharingCurrentVideo || !canShareVideoDirectly
+                                  isSharingCurrentVideo ||
+                                  !canShareVideoDirectly
                                 }
                                 onSelect={(event) => {
                                   event.preventDefault();
@@ -2583,7 +2737,7 @@ export function VideoGenerator({
                                 }}
                               >
                                 {sharingActionKey ===
-                                  shareVideoSystemActionKey ? (
+                                shareVideoSystemActionKey ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : (
                                   <Share2 className="h-4 w-4" />
@@ -2592,7 +2746,8 @@ export function VideoGenerator({
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 disabled={
-                                  isSharingCurrentVideo || !canShareVideoDirectly
+                                  isSharingCurrentVideo ||
+                                  !canShareVideoDirectly
                                 }
                                 onSelect={(event) => {
                                   event.preventDefault();
@@ -2606,7 +2761,8 @@ export function VideoGenerator({
                                   );
                                 }}
                               >
-                                {sharingActionKey === shareVideoCopyActionKey ? (
+                                {sharingActionKey ===
+                                shareVideoCopyActionKey ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : (
                                   <Copy className="h-4 w-4" />
@@ -2625,7 +2781,8 @@ export function VideoGenerator({
                                   <DropdownMenuItem
                                     key={`video-${video.id}-${platform}`}
                                     disabled={
-                                      isSharingCurrentVideo || !canShareVideoDirectly
+                                      isSharingCurrentVideo ||
+                                      !canShareVideoDirectly
                                     }
                                     onSelect={(event) => {
                                       event.preventDefault();
@@ -2643,7 +2800,9 @@ export function VideoGenerator({
                                     ) : (
                                       <ExternalLink className="h-4 w-4" />
                                     )}
-                                    <span>{getSharePlatformLabel(platform)}</span>
+                                    <span>
+                                      {getSharePlatformLabel(platform)}
+                                    </span>
                                   </DropdownMenuItem>
                                 );
                               })}
@@ -2665,7 +2824,8 @@ export function VideoGenerator({
                                   );
                                 }}
                               >
-                                {sharingActionKey === sharePageSystemActionKey ? (
+                                {sharingActionKey ===
+                                sharePageSystemActionKey ? (
                                   <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : (
                                   <Share2 className="h-4 w-4" />
@@ -2721,7 +2881,9 @@ export function VideoGenerator({
                                     ) : (
                                       <ExternalLink className="h-4 w-4" />
                                     )}
-                                    <span>{getSharePlatformLabel(platform)}</span>
+                                    <span>
+                                      {getSharePlatformLabel(platform)}
+                                    </span>
                                   </DropdownMenuItem>
                                 );
                               })}
@@ -2761,13 +2923,21 @@ export function VideoGenerator({
                       />
                     </div>
                     {/* Bottom readability overlay (flat, no gradient) */}
-                    <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pb-5 pt-14">
-                      <h3 className="text-xl font-bold text-white leading-tight">
-                        {locale === 'zh' ? selectedTemplate.nameZh : selectedTemplate.name}
+                    <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pt-14 pb-5">
+                      <h3 className="text-xl leading-tight font-bold text-white">
+                        {locale === 'zh'
+                          ? selectedTemplate.nameZh
+                          : selectedTemplate.name}
                       </h3>
                       <div className="mt-2 flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white">
-                          <svg className="h-3 w-3 fill-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z" /></svg>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                          <svg
+                            className="h-3 w-3 fill-white"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
                           {selectedTemplate.duration}
                         </span>
                       </div>

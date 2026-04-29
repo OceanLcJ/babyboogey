@@ -34,6 +34,12 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import { useAppContext } from '@/shared/contexts/app';
 import {
+  consumeAITaskReuseHandoff,
+  normalizeRestoredMediaReference,
+  readFirstStringFromOptionArray,
+  readStringOption,
+} from '@/shared/lib/ai-task-reuse-handoff';
+import {
   extractAssetIdFromMediaUrl,
   resolveMediaValueToApiPath,
   toAssetRef,
@@ -48,10 +54,12 @@ import {
   BABY_IMAGE_SCENE_IMAGE,
   BABY_IMAGE_SCENE_TEXT,
   BabyImageResolution,
+  isBabyImageResolution,
 } from '@/shared/services/baby-image/config';
 import {
   BABY_STYLE_IDS,
   BabyStyleId,
+  isBabyStyleId,
 } from '@/shared/services/baby-image/styles';
 import {
   BABY_SAFETY_CONFIRMATION_OPTION,
@@ -87,6 +95,15 @@ const STYLE_THUMB_FILES: Record<BabyStyleId, string> = {
 
 const STYLE_THUMB_URL = (id: BabyStyleId) =>
   `https://r2.babyboogey.com/assets/imgs/showcases/ai-baby-image-generator/${STYLE_THUMB_FILES[id]}`;
+
+function isBabyImageAspectRatio(
+  value: unknown
+): value is (typeof ASPECT_RATIO_OPTIONS)[number] {
+  return (
+    typeof value === 'string' &&
+    (ASPECT_RATIO_OPTIONS as readonly string[]).includes(value)
+  );
+}
 
 // Emoji + AI prompt are locale-independent; label/subtitle are read from i18n
 // (ai.baby-image.generator.suggestions[i]) and kept in sync by index.
@@ -296,13 +313,16 @@ export function BabyImageGenerator({
   /* -------- state -------- */
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [prompt, setPrompt] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState<BabyStyleId>(DEFAULT_STYLE);
+  const [selectedStyle, setSelectedStyle] =
+    useState<BabyStyleId>(DEFAULT_STYLE);
   const [aspectRatio, setAspectRatio] =
     useState<(typeof ASPECT_RATIO_OPTIONS)[number]>('1:1');
   const [resolution, setResolution] = useState<BabyImageResolution>(
     BABY_IMAGE_DEFAULT_RESOLUTION
   );
-  const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(null);
+  const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(
+    null
+  );
   const [stylePopoverOpen, setStylePopoverOpen] = useState(false);
   const [aspectPopoverOpen, setAspectPopoverOpen] = useState(false);
   const [resolutionPopoverOpen, setResolutionPopoverOpen] = useState(false);
@@ -321,6 +341,60 @@ export function BabyImageGenerator({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    const handoff = consumeAITaskReuseHandoff();
+    if (!handoff || handoff.mediaType !== AIMediaType.IMAGE) {
+      return;
+    }
+
+    const options = handoff.options;
+    const styleId = readStringOption(options, ['styleId', 'style_id']);
+    const nextAspectRatio = readStringOption(options, [
+      'aspect_ratio',
+      'aspectRatio',
+    ]);
+    const nextResolution = readStringOption(options, ['resolution']);
+    const referenceImageInput = readFirstStringFromOptionArray(options, [
+      'image_input',
+      'input_images',
+      'referenceImageUrl',
+      'reference_image',
+    ]);
+    const referenceImage = normalizeRestoredMediaReference(referenceImageInput);
+
+    if (handoff.prompt) {
+      setPrompt(handoff.prompt);
+    }
+    if (isBabyStyleId(styleId)) {
+      setSelectedStyle(styleId);
+    }
+    if (isBabyImageAspectRatio(nextAspectRatio)) {
+      setAspectRatio(nextAspectRatio);
+    }
+    if (isBabyImageResolution(nextResolution)) {
+      setResolution(nextResolution);
+    }
+    if (referenceImage) {
+      setAttachedImage({
+        assetId: '',
+        assetRef: referenceImage.assetRef,
+        previewUrl: referenceImage.previewUrl,
+        fileName: t('restore.reference_filename'),
+        uploading: false,
+      });
+    }
+
+    toast.success(t('restore.ready'));
+    const expectsReferenceImage =
+      handoff.scene === BABY_IMAGE_SCENE_IMAGE || Boolean(referenceImageInput);
+    if (
+      expectsReferenceImage &&
+      (!referenceImage || !referenceImage.recoveredAssetRef)
+    ) {
+      toast(t('restore.media_unavailable'));
+    }
+  }, [t]);
 
   useEffect(() => {
     if (!isCardFullscreen) return;
@@ -474,9 +548,8 @@ export function BabyImageGenerator({
         return false;
       } catch (error: UnsafeAny) {
         console.error('Error polling baby image task:', error);
-        const mapped = mapBabyImageErrorToUserMessage(
-          error?.message,
-          (key) => t(key as UnsafeAny)
+        const mapped = mapBabyImageErrorToUserMessage(error?.message, (key) =>
+          t(key as UnsafeAny)
         );
         const friendly =
           mapped === error?.message ? t('errors.query_failed') : mapped;
@@ -655,9 +728,7 @@ export function BabyImageGenerator({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             mediaType: AIMediaType.IMAGE,
-            scene: sendRefUrl
-              ? BABY_IMAGE_SCENE_IMAGE
-              : BABY_IMAGE_SCENE_TEXT,
+            scene: sendRefUrl ? BABY_IMAGE_SCENE_IMAGE : BABY_IMAGE_SCENE_TEXT,
             provider: BABY_IMAGE_PROVIDER,
             model: BABY_IMAGE_DEFAULT_MODEL,
             prompt: sendPrompt,
@@ -878,7 +949,9 @@ export function BabyImageGenerator({
                 <span className="bb-credits-pill">
                   <span className="bb-credits-pill-star" aria-hidden="true" />
                   <span>{remainingCredits}</span>
-                  <span className="bb-credits-pill-unit">{t('credits_unit')}</span>
+                  <span className="bb-credits-pill-unit">
+                    {t('credits_unit')}
+                  </span>
                 </span>
               ) : (
                 <span className="bb-credits-pill">
@@ -889,8 +962,12 @@ export function BabyImageGenerator({
               <button
                 type="button"
                 className="bb-head-icon-btn"
-                aria-label={isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-                title={isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                aria-label={
+                  isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'
+                }
+                title={
+                  isCardFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'
+                }
                 onClick={() => setIsCardFullscreen((v) => !v)}
               >
                 {isCardFullscreen ? (
@@ -943,17 +1020,21 @@ export function BabyImageGenerator({
             {attachedImage && (
               <div className="bb-attach-preview">
                 {attachedImage.uploading ? (
-                  <div className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-muted">
-                    <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                  <div className="bg-muted flex h-[26px] w-[26px] items-center justify-center rounded-full">
+                    <Loader2 className="text-muted-foreground h-3 w-3 animate-spin" />
                   </div>
                 ) : (
                   <div
                     className="bb-attach-preview-thumb"
-                    style={{ backgroundImage: `url(${attachedImage.previewUrl})` }}
+                    style={{
+                      backgroundImage: `url(${attachedImage.previewUrl})`,
+                    }}
                   />
                 )}
                 <span className="bb-attach-preview-name">
-                  {attachedImage.error ? t('form.some_images_failed_to_upload') : attachedImage.fileName}
+                  {attachedImage.error
+                    ? t('form.some_images_failed_to_upload')
+                    : attachedImage.fileName}
                 </span>
                 <button
                   type="button"
@@ -1010,7 +1091,7 @@ export function BabyImageGenerator({
                           }}
                         />
                         <span>{t(`styles.${selectedStyle}.label`)}</span>
-                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
+                        <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -1018,7 +1099,7 @@ export function BabyImageGenerator({
                       align="start"
                       className="w-80 p-1.5"
                     >
-                      <div className="px-2 pt-1 pb-2 text-[0.7rem] font-bold uppercase tracking-wider text-muted-foreground">
+                      <div className="text-muted-foreground px-2 pt-1 pb-2 text-[0.7rem] font-bold tracking-wider uppercase">
                         {t('form.style_label')}
                       </div>
                       <div className="max-h-80 overflow-y-auto">
@@ -1036,7 +1117,9 @@ export function BabyImageGenerator({
                           >
                             <span
                               className="bb-popover-item-thumb"
-                              style={{ backgroundImage: `url(${STYLE_THUMB_URL(id)})` }}
+                              style={{
+                                backgroundImage: `url(${STYLE_THUMB_URL(id)})`,
+                              }}
                             />
                             <span className="flex min-w-0 flex-col gap-0.5">
                               <span className="bb-popover-item-name">
@@ -1047,7 +1130,7 @@ export function BabyImageGenerator({
                               </span>
                             </span>
                             {id === selectedStyle && (
-                              <Check className="h-4 w-4 text-primary" />
+                              <Check className="text-primary h-4 w-4" />
                             )}
                           </DropdownMenuItem>
                         ))}
@@ -1062,9 +1145,15 @@ export function BabyImageGenerator({
                   >
                     <DropdownMenuTrigger asChild>
                       <button type="button" className="bb-rail-chip">
-                        <span className={cn('bb-ar-icon', aspectRatioIconClass(aspectRatio))} aria-hidden="true" />
+                        <span
+                          className={cn(
+                            'bb-ar-icon',
+                            aspectRatioIconClass(aspectRatio)
+                          )}
+                          aria-hidden="true"
+                        />
                         <span>{aspectRatio}</span>
-                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
+                        <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -1077,7 +1166,8 @@ export function BabyImageGenerator({
                           key={ratio}
                           className={cn(
                             'flex w-full items-center justify-between rounded-md px-3 py-1.5 text-sm font-semibold',
-                            ratio === aspectRatio && 'bg-primary/20 text-foreground'
+                            ratio === aspectRatio &&
+                              'bg-primary/20 text-foreground'
                           )}
                           onSelect={() => {
                             setAspectRatio(ratio);
@@ -1085,11 +1175,17 @@ export function BabyImageGenerator({
                           }}
                         >
                           <span className="inline-flex items-center gap-2">
-                            <span className={cn('bb-ar-icon', aspectRatioIconClass(ratio))} aria-hidden="true" />
+                            <span
+                              className={cn(
+                                'bb-ar-icon',
+                                aspectRatioIconClass(ratio)
+                              )}
+                              aria-hidden="true"
+                            />
                             <span>{ratio}</span>
                           </span>
                           {ratio === aspectRatio && (
-                            <Check className="h-3.5 w-3.5 text-primary" />
+                            <Check className="text-primary h-3.5 w-3.5" />
                           )}
                         </DropdownMenuItem>
                       ))}
@@ -1103,8 +1199,10 @@ export function BabyImageGenerator({
                   >
                     <DropdownMenuTrigger asChild>
                       <button type="button" className="bb-rail-chip">
-                        <span>{t(`form.resolution_${resolution}` as UnsafeAny)}</span>
-                        <ChevronDown className="h-3 w-3 bb-rail-chip-caret" />
+                        <span>
+                          {t(`form.resolution_${resolution}` as UnsafeAny)}
+                        </span>
+                        <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -1125,15 +1223,17 @@ export function BabyImageGenerator({
                           }}
                         >
                           <span className="inline-flex flex-col">
-                            <span>{t(`form.resolution_${r}` as UnsafeAny)}</span>
-                            <span className="text-[11px] font-normal text-muted-foreground">
+                            <span>
+                              {t(`form.resolution_${r}` as UnsafeAny)}
+                            </span>
+                            <span className="text-muted-foreground text-[11px] font-normal">
                               {t('form.resolution_credits', {
                                 credits: BABY_IMAGE_COST_CREDITS[r],
                               })}
                             </span>
                           </span>
                           {r === resolution && (
-                            <Check className="h-3.5 w-3.5 text-primary" />
+                            <Check className="text-primary h-3.5 w-3.5" />
                           )}
                         </DropdownMenuItem>
                       ))}
@@ -1143,7 +1243,12 @@ export function BabyImageGenerator({
 
                 {/* right: inline char count + send */}
                 <div className="bb-bar-right">
-                  <span className={cn('bb-char-count', isPromptTooLong && 'is-over')}>
+                  <span
+                    className={cn(
+                      'bb-char-count',
+                      isPromptTooLong && 'is-over'
+                    )}
+                  >
                     <b>{promptLength}</b>
                     <span>/{MAX_PROMPT_LENGTH}</span>
                   </span>
@@ -1189,27 +1294,30 @@ export function BabyImageGenerator({
               </div>
             </div>
 
-            <label className="mt-3 flex cursor-pointer items-start gap-2 rounded-md border border-border/70 bg-background/80 px-3 py-2 text-[11px] font-medium leading-snug text-muted-foreground">
+            <label className="border-border/70 bg-background/80 text-muted-foreground mt-3 flex cursor-pointer items-start gap-2 rounded-md border px-3 py-2 text-[11px] leading-snug font-medium">
               <input
                 type="checkbox"
                 checked={safetyConfirmed}
                 onChange={(event) => setSafetyConfirmed(event.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+                className="border-border accent-primary mt-0.5 h-4 w-4 shrink-0 rounded"
               />
               <span>{t('safety.confirmation')}</span>
             </label>
 
-            <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
+            <div className="text-muted-foreground mt-2 flex items-center justify-between text-[11px] font-semibold">
               <span>
                 {t('credits_cost', { credits: currentCostCredits })}
                 {isPromptTooLong && (
-                  <span className="ml-2 text-destructive">
+                  <span className="text-destructive ml-2">
                     {t('form.prompt_too_long')}
                   </span>
                 )}
               </span>
               {isMounted && user && remainingCredits < currentCostCredits ? (
-                <Link href="/pricing" className="text-primary underline-offset-2 hover:underline">
+                <Link
+                  href="/pricing"
+                  className="text-primary underline-offset-2 hover:underline"
+                >
                   {t('buy_credits')}
                 </Link>
               ) : (
@@ -1281,7 +1389,9 @@ function EmptyState({
 
 function UserBubble({ msg }: { msg: UserChatMessage }) {
   const t = useTranslations('ai.baby-image.generator');
-  const [relTime, setRelTime] = useState(() => formatRelativeTime(msg.timestamp));
+  const [relTime, setRelTime] = useState(() =>
+    formatRelativeTime(msg.timestamp)
+  );
   useEffect(() => {
     const id = window.setInterval(() => {
       setRelTime(formatRelativeTime(msg.timestamp));
@@ -1292,9 +1402,11 @@ function UserBubble({ msg }: { msg: UserChatMessage }) {
   return (
     <div className="flex justify-end">
       <div className="bb-user-bubble">
-        <span className="bb-user-time" aria-hidden="true">{relTime}</span>
+        <span className="bb-user-time" aria-hidden="true">
+          {relTime}
+        </span>
         {msg.prompt || (
-          <span className="italic text-muted-foreground">
+          <span className="text-muted-foreground italic">
             (reference photo only)
           </span>
         )}
@@ -1343,7 +1455,8 @@ function AssistantCard({
   const t = useTranslations('ai.baby-image.generator');
 
   const isLoading =
-    msg.status === AITaskStatus.PENDING || msg.status === AITaskStatus.PROCESSING;
+    msg.status === AITaskStatus.PENDING ||
+    msg.status === AITaskStatus.PROCESSING;
   const hasImages = msg.images.length > 0;
   const renderSeconds =
     msg.endTime && msg.startTime
@@ -1448,7 +1561,8 @@ function AssistantCard({
                 style={
                   userMsg?.aspectRatio
                     ? ({
-                        ['--bb-result-ar' as UnsafeAny]: userMsg.aspectRatio.replace(':', ' / '),
+                        ['--bb-result-ar' as UnsafeAny]:
+                          userMsg.aspectRatio.replace(':', ' / '),
                       } as UnsafeAny)
                     : undefined
                 }

@@ -42,20 +42,53 @@
       "blocked": "このリクエストは生成できません。赤ちゃんのコンテンツは安全で、性的・暴力的・違法ではない内容にしてください。"
     },
     "styles": {
-      "pixar-3d": { "label": "3Dアニメーション", "description": "大きな瞳、映画級ライティング、作品クオリティ" },
-      "ghibli": { "label": "手描きファンタジー", "description": "ドリーミーな水彩、柔らかな光" },
-      "anime": { "label": "クラシックアニメ", "description": "力強い線画、鮮やかなセル塗り" },
-      "claymation": { "label": "クレイアニメ", "description": "ストップモーションの温もりと粘土の継ぎ目" },
-      "chibi": { "label": "ちびキュート", "description": "かわいい、ステッカー風、ほっぺの赤み" },
-      "watercolor": { "label": "水彩画", "description": "柔らかな滲み、絵本の紙質感" },
-      "plush": { "label": "ぬいぐるみ", "description": "フェルト、ふわふわ、縫い目のディテール" },
-      "pixel-art": { "label": "ピクセルアート", "description": "16 ビットのノスタルジー、限定パレット" }
+      "pixar-3d": {
+        "label": "3Dアニメーション",
+        "description": "大きな瞳、映画級ライティング、作品クオリティ"
+      },
+      "ghibli": {
+        "label": "手描きファンタジー",
+        "description": "ドリーミーな水彩、柔らかな光"
+      },
+      "anime": {
+        "label": "クラシックアニメ",
+        "description": "力強い線画、鮮やかなセル塗り"
+      },
+      "claymation": {
+        "label": "クレイアニメ",
+        "description": "ストップモーションの温もりと粘土の継ぎ目"
+      },
+      "chibi": {
+        "label": "ちびキュート",
+        "description": "かわいい、ステッカー風、ほっぺの赤み"
+      },
+      "watercolor": {
+        "label": "水彩画",
+        "description": "柔らかな滲み、絵本の紙質感"
+      },
+      "plush": {
+        "label": "ぬいぐるみ",
+        "description": "フェルト、ふわふわ、縫い目のディテール"
+      },
+      "pixel-art": {
+        "label": "ピクセルアート",
+        "description": "16 ビットのノスタルジー、限定パレット"
+      }
     },
     "suggestions": [
-      { "label": "庭で迎える初めての誕生日", "subtitle": "日差しと風船・ソフトフォーカス" },
+      {
+        "label": "庭で迎える初めての誕生日",
+        "subtitle": "日差しと風船・ソフトフォーカス"
+      },
       { "label": "森の小さな魔法使い", "subtitle": "苔むした丸太・日の出の光" },
-      { "label": "貝殻を拾うビーチの一日", "subtitle": "ゴールデンアワー・穏やかな波" },
-      { "label": "星々の間の宇宙飛行士", "subtitle": "夢のような宇宙・星明かり" }
+      {
+        "label": "貝殻を拾うビーチの一日",
+        "subtitle": "ゴールデンアワー・穏やかな波"
+      },
+      {
+        "label": "星々の間の宇宙飛行士",
+        "subtitle": "夢のような宇宙・星明かり"
+      }
     ],
     "status": {
       "pending": "モデルの起動を待っています",
@@ -66,6 +99,11 @@
     "toasts": {
       "success": "ベビー画像を生成しました",
       "downloaded": "画像をダウンロードしました"
+    },
+    "restore": {
+      "ready": "履歴から下書きを復元しました。生成前に内容を確認してください。",
+      "media_unavailable": "プロンプトと設定を復元しました。元の参考メディアは再アップロードが必要な場合があります。",
+      "reference_filename": "履歴の参考画像"
     },
     "errors": {
       "timeout": "タイムアウトしました。もう一度お試しください。",

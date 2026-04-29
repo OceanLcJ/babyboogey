@@ -42,14 +42,32 @@
       "blocked": "无法生成这个请求。请保持宝宝内容安全、非性化、非暴力且合法。"
     },
     "styles": {
-      "pixar-3d": { "label": "3D 动画大片", "description": "大眼睛、电影级打光、动画工业级精致度" },
+      "pixar-3d": {
+        "label": "3D 动画大片",
+        "description": "大眼睛、电影级打光、动画工业级精致度"
+      },
       "ghibli": { "label": "手绘奇幻", "description": "梦幻水彩、柔和光线" },
-      "anime": { "label": "经典日漫", "description": "利落线条、鲜亮赛璐璐上色" },
-      "claymation": { "label": "黏土定格", "description": "定格动画的手作温度，可见塑形痕迹" },
-      "chibi": { "label": "Q 版萌娃", "description": "超萌比例、腮红、贴纸质感" },
-      "watercolor": { "label": "水彩插画", "description": "柔和晕染、绘本纸张质感" },
+      "anime": {
+        "label": "经典日漫",
+        "description": "利落线条、鲜亮赛璐璐上色"
+      },
+      "claymation": {
+        "label": "黏土定格",
+        "description": "定格动画的手作温度，可见塑形痕迹"
+      },
+      "chibi": {
+        "label": "Q 版萌娃",
+        "description": "超萌比例、腮红、贴纸质感"
+      },
+      "watercolor": {
+        "label": "水彩插画",
+        "description": "柔和晕染、绘本纸张质感"
+      },
       "plush": { "label": "毛绒玩偶", "description": "绒布、毛茸、缝线细节" },
-      "pixel-art": { "label": "像素风", "description": "16 位复古像素、有限配色" }
+      "pixel-art": {
+        "label": "像素风",
+        "description": "16 位复古像素、有限配色"
+      }
     },
     "suggestions": [
       { "label": "花园里的第一个生日", "subtitle": "阳光下的气球 · 柔焦" },
@@ -66,6 +84,11 @@
     "toasts": {
       "success": "宝宝图生成成功",
       "downloaded": "图片已下载"
+    },
+    "restore": {
+      "ready": "已从历史记录恢复草稿，请确认后再生成。",
+      "media_unavailable": "已恢复提示词和参数，原参考媒体可能需要重新上传。",
+      "reference_filename": "历史参考图"
     },
     "errors": {
       "timeout": "生成超时，请重试",

@@ -10,7 +10,8 @@ export const locales = ['en', 'zh', 'ja'];
 
 export const defaultLocale = envConfigs.locale;
 
-export const localePrefix = 'as-needed';
+export const localePrefix =
+  process.env.NODE_ENV === 'development' ? 'always' : 'as-needed';
 
 export const localeDetection = false;
 

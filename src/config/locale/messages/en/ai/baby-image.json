@@ -42,20 +42,56 @@
       "blocked": "We can't generate that request. Please keep baby images safe, non-sexual, non-violent, and lawful."
     },
     "styles": {
-      "pixar-3d": { "label": "3D Animation Studio", "description": "Big eyes, cinematic lighting, film polish" },
-      "ghibli": { "label": "Hand-drawn Fantasy", "description": "Dreamy watercolor, whimsical light" },
-      "anime": { "label": "Classic Anime", "description": "Bold line art, vibrant cel-shading" },
-      "claymation": { "label": "Clay Sculpt", "description": "Stop-motion warmth, clay seams" },
-      "chibi": { "label": "Chibi Cute", "description": "Kawaii, sticker-ready, blush cheeks" },
-      "watercolor": { "label": "Watercolor", "description": "Soft washes, storybook paper" },
-      "plush": { "label": "Plush Doll", "description": "Felt, fluff, stitched seams" },
-      "pixel-art": { "label": "Pixel Art", "description": "16-bit nostalgia, limited palette" }
+      "pixar-3d": {
+        "label": "3D Animation Studio",
+        "description": "Big eyes, cinematic lighting, film polish"
+      },
+      "ghibli": {
+        "label": "Hand-drawn Fantasy",
+        "description": "Dreamy watercolor, whimsical light"
+      },
+      "anime": {
+        "label": "Classic Anime",
+        "description": "Bold line art, vibrant cel-shading"
+      },
+      "claymation": {
+        "label": "Clay Sculpt",
+        "description": "Stop-motion warmth, clay seams"
+      },
+      "chibi": {
+        "label": "Chibi Cute",
+        "description": "Kawaii, sticker-ready, blush cheeks"
+      },
+      "watercolor": {
+        "label": "Watercolor",
+        "description": "Soft washes, storybook paper"
+      },
+      "plush": {
+        "label": "Plush Doll",
+        "description": "Felt, fluff, stitched seams"
+      },
+      "pixel-art": {
+        "label": "Pixel Art",
+        "description": "16-bit nostalgia, limited palette"
+      }
     },
     "suggestions": [
-      { "label": "First birthday in the garden", "subtitle": "Sunlit balloons · soft focus" },
-      { "label": "Tiny wizard in a forest", "subtitle": "Mossy log · sunrise glow" },
-      { "label": "Beach day with seashells", "subtitle": "Golden hour · gentle waves" },
-      { "label": "Astronaut among the stars", "subtitle": "Dreamy cosmos · starlight" }
+      {
+        "label": "First birthday in the garden",
+        "subtitle": "Sunlit balloons · soft focus"
+      },
+      {
+        "label": "Tiny wizard in a forest",
+        "subtitle": "Mossy log · sunrise glow"
+      },
+      {
+        "label": "Beach day with seashells",
+        "subtitle": "Golden hour · gentle waves"
+      },
+      {
+        "label": "Astronaut among the stars",
+        "subtitle": "Dreamy cosmos · starlight"
+      }
     ],
     "status": {
       "pending": "Waiting for the model to start",
@@ -66,6 +102,11 @@
     "toasts": {
       "success": "Baby image generated successfully",
       "downloaded": "Image downloaded"
+    },
+    "restore": {
+      "ready": "Draft restored from history. Review it before generating.",
+      "media_unavailable": "Prompt and settings were restored. The original reference media may need to be uploaded again.",
+      "reference_filename": "History reference"
     },
     "errors": {
       "timeout": "Generation timed out, please try again",
