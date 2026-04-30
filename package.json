@@ -51,7 +51,8 @@
     "images:prune:local": "node --import tsx scripts/images-prune-local.ts",
     "media:migrate": "node --import tsx scripts/migrate-media-assets.ts",
     "smoke:baby-image": "node --import tsx scripts/smoke-baby-image.ts",
-    "smoke:refund": "tsx scripts/with-env.ts tsx scripts/smoke-refund.ts"
+    "smoke:refund": "tsx scripts/with-env.ts tsx scripts/smoke-refund.ts",
+    "verify:payment-lifecycle": "tsx scripts/with-env.ts tsx scripts/verify-payment-lifecycle.ts"
   },
   "dependencies": {
     "@ai-sdk/react": "^2.0.89",

@@ -6,6 +6,7 @@ import {
   mysqlTable,
   text,
   timestamp,
+  uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core';
 
@@ -335,6 +336,107 @@ export const credit = table(
     index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
     // Anti-abuse: count first-login grants by claim IP in a time window
     index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
+  ]
+);
+
+export const paymentEvent = table(
+  'payment_event',
+  {
+    id: varchar191('id').primaryKey(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    eventId: varchar191('event_id').notNull(),
+    eventType: varchar('event_type', { length: 100 }).notNull(),
+    resourceId: varchar191('resource_id'),
+    status: varchar('status', { length: 50 }).notNull(),
+    orderNo: varchar191('order_no'),
+    subscriptionNo: varchar191('subscription_no'),
+    transactionId: varchar191('transaction_id'),
+    payload: longtext('payload'),
+    errorMessage: text('error_message'),
+    processedAt: timestamp('processed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_event_provider_event').on(
+      table.provider,
+      table.eventId
+    ),
+    index('idx_payment_event_resource').on(table.provider, table.resourceId),
+    index('idx_payment_event_status').on(table.status, table.createdAt),
+  ]
+);
+
+export const paymentRefund = table(
+  'payment_refund',
+  {
+    id: varchar191('id').primaryKey(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    refundId: varchar191('refund_id').notNull(),
+    orderNo: varchar191('order_no').notNull(),
+    transactionId: varchar191('transaction_id'),
+    amount: int('amount'),
+    currency: varchar('currency', { length: 10 }),
+    status: varchar('status', { length: 50 }).notNull(),
+    reason: text('reason'),
+    metadata: longtext('metadata'),
+    reversedAt: timestamp('reversed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_refund_provider_refund').on(
+      table.provider,
+      table.refundId
+    ),
+    index('idx_payment_refund_order').on(table.orderNo),
+  ]
+);
+
+export const subscriptionPlanChange = table(
+  'subscription_plan_change',
+  {
+    id: varchar191('id').primaryKey(),
+    subscriptionNo: varchar191('subscription_no').notNull(),
+    userId: varchar191('user_id').notNull(),
+    provider: varchar('provider', { length: 50 }).notNull(),
+    providerSubscriptionId: varchar191('provider_subscription_id').notNull(),
+    fromProductId: varchar191('from_product_id'),
+    toProductId: varchar191('to_product_id').notNull(),
+    fromPaymentProductId: varchar191('from_payment_product_id'),
+    toPaymentProductId: varchar191('to_payment_product_id').notNull(),
+    changeType: varchar('change_type', { length: 50 }).notNull(),
+    status: varchar('status', { length: 50 }).notNull(),
+    approvalUrl: text('approval_url'),
+    effectiveAt: timestamp('effective_at'),
+    metadata: longtext('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index('idx_subscription_plan_change_subscription').on(
+      table.subscriptionNo,
+      table.status
+    ),
+    index('idx_subscription_plan_change_effective').on(table.effectiveAt),
+  ]
+);
+
+export const paymentAuditLog = table(
+  'payment_audit_log',
+  {
+    id: varchar191('id').primaryKey(),
+    actorUserId: varchar191('actor_user_id'),
+    action: varchar('action', { length: 100 }).notNull(),
+    targetType: varchar('target_type', { length: 50 }).notNull(),
+    targetId: varchar191('target_id').notNull(),
+    provider: varchar('provider', { length: 50 }),
+    payload: longtext('payload'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('idx_payment_audit_target').on(table.targetType, table.targetId),
+    index('idx_payment_audit_actor').on(table.actorUserId, table.createdAt),
   ]
 );
 

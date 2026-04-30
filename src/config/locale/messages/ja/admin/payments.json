@@ -29,7 +29,8 @@
           "all": "全て",
           "paid": "有料",
           "created": "作成されました",
-          "failed": "失敗した"
+          "failed": "失敗した",
+          "refunded": "返金済み"
         }
       },
       "provider": {
@@ -49,5 +50,11 @@
         "placeholder": "注文番号"
       }
     }
+  },
+  "actions": {
+    "refund": "返金",
+    "refund_confirm": "この注文を返金し、付与済みクレジットを取り消しますか？",
+    "reason_prompt": "返金理由",
+    "refund_success": "返金を記録しました"
   }
 }

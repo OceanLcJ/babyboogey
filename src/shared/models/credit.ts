@@ -42,6 +42,7 @@ export enum CreditTransactionScene {
   PAYMENT = 'payment', // payment
   SUBSCRIPTION = 'subscription', // subscription
   RENEWAL = 'renewal', // renewal
+  REFUND = 'refund', // refund/reversal adjustment
   GIFT = 'gift', // gift
   REWARD = 'reward', // reward
 }
@@ -110,6 +111,21 @@ export async function findCreditByTransactionNo(transactionNo: string) {
     .from(credit)
     .where(eq(credit.transactionNo, normalized))
     .limit(1);
+
+  return result;
+}
+
+export async function updateCreditById(
+  id: string,
+  updateCredit: UpdateCredit,
+  tx?: UnsafeAny
+) {
+  const executor = tx || db();
+  const [result] = await executor
+    .update(credit)
+    .set(updateCredit)
+    .where(eq(credit.id, id))
+    .returning();
 
   return result;
 }
@@ -210,7 +226,6 @@ export async function consumeCredits({
           eq(credit.userId, userId),
           eq(credit.transactionType, CreditTransactionType.GRANT),
           eq(credit.status, CreditStatus.ACTIVE),
-          gt(credit.remainingCredits, 0),
           or(
             isNull(credit.expiresAt), // Never expires
             gt(credit.expiresAt, currentTime) // Not yet expired
@@ -365,7 +380,6 @@ export async function getRemainingCredits(userId: string): Promise<number> {
         eq(credit.userId, userId),
         eq(credit.transactionType, CreditTransactionType.GRANT),
         eq(credit.status, CreditStatus.ACTIVE),
-        gt(credit.remainingCredits, 0),
         or(
           isNull(credit.expiresAt), // Never expires
           gt(credit.expiresAt, currentTime) // Not yet expired

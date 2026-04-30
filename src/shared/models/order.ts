@@ -28,6 +28,7 @@ export enum OrderStatus {
   COMPLETED = 'completed', // checkout completed, but failed
   PAID = 'paid', // order paid success
   FAILED = 'failed', // order paid, but failed
+  REFUNDED = 'refunded', // order refunded after successful payment
 }
 
 /**
@@ -194,6 +195,68 @@ export async function findOrderByTransactionId({
         eq(order.paymentProvider, paymentProvider)
       )
     );
+
+  return result;
+}
+
+export async function findOrderByPaymentSessionId({
+  paymentSessionId,
+  paymentProvider,
+}: {
+  paymentSessionId: string;
+  paymentProvider?: string;
+}) {
+  const [result] = await db()
+    .select()
+    .from(order)
+    .where(
+      and(
+        eq(order.paymentSessionId, paymentSessionId),
+        paymentProvider
+          ? eq(order.paymentProvider, paymentProvider)
+          : undefined
+      )
+    );
+
+  return result;
+}
+
+export async function findOrderByInvoiceId({
+  invoiceId,
+  paymentProvider,
+}: {
+  invoiceId: string;
+  paymentProvider?: string;
+}) {
+  const [result] = await db()
+    .select()
+    .from(order)
+    .where(
+      and(
+        eq(order.invoiceId, invoiceId),
+        paymentProvider
+          ? eq(order.paymentProvider, paymentProvider)
+          : undefined
+      )
+    );
+
+  return result;
+}
+
+export async function findLatestPaidOrderBySubscriptionNo(
+  subscriptionNo: string
+) {
+  const [result] = await db()
+    .select()
+    .from(order)
+    .where(
+      and(
+        eq(order.subscriptionNo, subscriptionNo),
+        eq(order.status, OrderStatus.PAID)
+      )
+    )
+    .orderBy(desc(order.createdAt))
+    .limit(1);
 
   return result;
 }

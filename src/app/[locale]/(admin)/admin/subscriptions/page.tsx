@@ -2,10 +2,12 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { PERMISSIONS, requirePermission } from '@/core/rbac';
 import { Header, Main, MainHeader } from '@/shared/blocks/dashboard';
+import { AdminSubscriptionActions } from '@/shared/blocks/payment/admin-subscription-actions';
 import { TableCard } from '@/shared/blocks/table';
 import {
   getSubscriptions,
   getSubscriptionsCount,
+  SubscriptionStatus,
 } from '@/shared/models/subscription';
 import { Crumb, Tab } from '@/shared/types/blocks/common';
 import { type Table } from '@/shared/types/blocks/table';
@@ -119,6 +121,30 @@ export default async function SubscriptionsPage({
       },
       { name: 'status', title: t('fields.status'), type: 'label' },
       { name: 'description', title: t('fields.description'), placeholder: '-' },
+      {
+        title: t('fields.action'),
+        callback: (item) => (
+          <AdminSubscriptionActions
+            subscriptionNo={item.subscriptionNo}
+            disabled={
+              item.status !== SubscriptionStatus.ACTIVE &&
+              item.status !== SubscriptionStatus.TRIALING
+            }
+            labels={{
+              cancel: t('actions.cancel'),
+              refund_cancel_now: t('actions.refund_cancel_now'),
+              cancel_at_period_end: t('actions.cancel_at_period_end'),
+            }}
+            confirmMessages={{
+              cancel: t('actions.cancel_confirm'),
+              refund_cancel_now: t('actions.refund_cancel_now_confirm'),
+              cancel_at_period_end: t('actions.cancel_at_period_end_confirm'),
+            }}
+            reasonPrompt={t('actions.reason_prompt')}
+            successMessage={t('actions.success')}
+          />
+        ),
+      },
     ],
     data: subscriptions,
     pagination: {

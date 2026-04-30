@@ -132,6 +132,27 @@ export interface PaymentInfo {
   subscriptionCycleType?: SubscriptionCycleType;
 }
 
+export interface PaymentRefundInfo {
+  refundId: string;
+  paymentTransactionId?: string;
+  paymentSessionId?: string;
+  invoiceId?: string;
+  orderNo?: string;
+  userId?: string;
+  amount?: number;
+  currency?: string;
+  status?: 'pending' | 'succeeded' | 'failed';
+  reason?: string;
+  refundedAt?: Date;
+  metadata?: Record<string, UnsafeAny>;
+}
+
+export interface PaymentRefundResult {
+  provider: string;
+  refundInfo: PaymentRefundInfo;
+  refundResult?: UnsafeAny;
+}
+
 export enum SubscriptionStatus {
   ACTIVE = 'active',
   PENDING_CANCEL = 'pending_cancel',
@@ -191,6 +212,10 @@ export interface PaymentSession {
   subscriptionInfo?: SubscriptionInfo; // subscription info after subscription success
   subscriptionResult?: UnsafeAny; // provider subscription result
 
+  // refund info
+  refundInfo?: PaymentRefundInfo;
+  refundResult?: UnsafeAny;
+
   metadata?: Record<string, UnsafeAny> | null;
 }
 
@@ -201,6 +226,7 @@ export enum PaymentEventType {
   PAYMENT_REFUNDED = 'payment.refunded', // payment refunded
   SUBSCRIBE_UPDATED = 'subscribe.updated', // subscription updated
   SUBSCRIBE_CANCELED = 'subscribe.canceled', // subscription canceled
+  UNKNOWN = 'unknown', // verified but not actionable
 }
 
 export type EventInfo = Record<string, never>;
@@ -209,10 +235,25 @@ export type EventInfo = Record<string, never>;
  * Payment event interface
  */
 export interface PaymentEvent {
+  eventId?: string;
+  resourceId?: string;
   eventType: PaymentEventType;
   eventResult: UnsafeAny; // provider event result
 
   paymentSession?: PaymentSession;
+}
+
+export interface ChangeSubscriptionPlanResult {
+  provider: string;
+  subscriptionId: string;
+  status:
+    | 'applied'
+    | 'pending_provider_approval'
+    | 'scheduled'
+    | 'failed';
+  approvalUrl?: string;
+  paymentSession?: PaymentSession;
+  result?: UnsafeAny;
 }
 
 export interface PaymentInvoice {
@@ -275,7 +316,41 @@ export interface PaymentProvider {
   // cancel subscription
   cancelSubscription?({
     subscriptionId,
+    cancelAtPeriodEnd,
+    reason,
   }: {
     subscriptionId: string;
+    cancelAtPeriodEnd?: boolean;
+    reason?: string;
   }): Promise<PaymentSession>;
+
+  // refund a successful payment
+  refundPayment?({
+    paymentSessionId,
+    transactionId,
+    invoiceId,
+    amount,
+    currency,
+    reason,
+    metadata,
+  }: {
+    paymentSessionId?: string;
+    transactionId?: string;
+    invoiceId?: string;
+    amount?: number;
+    currency?: string;
+    reason?: string;
+    metadata?: Record<string, UnsafeAny>;
+  }): Promise<PaymentRefundResult>;
+
+  // change subscription plan/price at the provider
+  changeSubscriptionPlan?({
+    subscriptionId,
+    providerPlanId,
+    changeType,
+  }: {
+    subscriptionId: string;
+    providerPlanId: string;
+    changeType: 'upgrade' | 'downgrade';
+  }): Promise<ChangeSubscriptionPlanResult>;
 }

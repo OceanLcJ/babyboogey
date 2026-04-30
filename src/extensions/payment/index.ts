@@ -24,13 +24,12 @@ export class PaymentManager {
 
   // get provider by name
   getProvider(name: string): PaymentProvider | undefined {
-    const provider = this.providers.find((p) => p.name === name);
-
-    if (!provider && this.defaultProvider) {
-      return this.defaultProvider;
+    const normalizedName = String(name || '').trim();
+    if (!normalizedName) {
+      return undefined;
     }
 
-    return provider;
+    return this.providers.find((p) => p.name === normalizedName);
   }
 
   // get all provider names

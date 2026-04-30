@@ -117,6 +117,13 @@ const defaultPermissions = [
     title: 'Read Payments',
     description: 'View payment list and details',
   },
+  {
+    code: 'admin.payments.write',
+    resource: 'payments',
+    action: 'write',
+    title: 'Write Payments',
+    description: 'Refund payments',
+  },
 
   // Subscriptions management
   {
@@ -125,6 +132,13 @@ const defaultPermissions = [
     action: 'read',
     title: 'Read Subscriptions',
     description: 'View subscription list and details',
+  },
+  {
+    code: 'admin.subscriptions.write',
+    resource: 'subscriptions',
+    action: 'write',
+    title: 'Write Subscriptions',
+    description: 'Cancel subscriptions and manage plan changes',
   },
 
   // Credits management

@@ -6,6 +6,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
 import { envConfigs } from '@/config';
@@ -360,6 +361,116 @@ export const credit = table(
     index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
     // Anti-abuse: count first-login grants by claim IP in a time window
     index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
+  ]
+);
+
+export const paymentEvent = table(
+  'payment_event',
+  {
+    id: text('id').primaryKey(),
+    provider: text('provider').notNull(),
+    eventId: text('event_id').notNull(),
+    eventType: text('event_type').notNull(),
+    resourceId: text('resource_id'),
+    status: text('status').notNull(),
+    orderNo: text('order_no'),
+    subscriptionNo: text('subscription_no'),
+    transactionId: text('transaction_id'),
+    payload: text('payload'),
+    errorMessage: text('error_message'),
+    processedAt: timestamp('processed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_event_provider_event').on(
+      table.provider,
+      table.eventId
+    ),
+    index('idx_payment_event_resource').on(table.provider, table.resourceId),
+    index('idx_payment_event_status').on(table.status, table.createdAt),
+  ]
+);
+
+export const paymentRefund = table(
+  'payment_refund',
+  {
+    id: text('id').primaryKey(),
+    provider: text('provider').notNull(),
+    refundId: text('refund_id').notNull(),
+    orderNo: text('order_no').notNull(),
+    transactionId: text('transaction_id'),
+    amount: integer('amount'),
+    currency: text('currency'),
+    status: text('status').notNull(),
+    reason: text('reason'),
+    metadata: text('metadata'),
+    reversedAt: timestamp('reversed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_refund_provider_refund').on(
+      table.provider,
+      table.refundId
+    ),
+    index('idx_payment_refund_order').on(table.orderNo),
+  ]
+);
+
+export const subscriptionPlanChange = table(
+  'subscription_plan_change',
+  {
+    id: text('id').primaryKey(),
+    subscriptionNo: text('subscription_no').notNull(),
+    userId: text('user_id').notNull(),
+    provider: text('provider').notNull(),
+    providerSubscriptionId: text('provider_subscription_id').notNull(),
+    fromProductId: text('from_product_id'),
+    toProductId: text('to_product_id').notNull(),
+    fromPaymentProductId: text('from_payment_product_id'),
+    toPaymentProductId: text('to_payment_product_id').notNull(),
+    changeType: text('change_type').notNull(),
+    status: text('status').notNull(),
+    approvalUrl: text('approval_url'),
+    effectiveAt: timestamp('effective_at'),
+    metadata: text('metadata'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index('idx_subscription_plan_change_subscription').on(
+      table.subscriptionNo,
+      table.status
+    ),
+    index('idx_subscription_plan_change_effective').on(table.effectiveAt),
+  ]
+);
+
+export const paymentAuditLog = table(
+  'payment_audit_log',
+  {
+    id: text('id').primaryKey(),
+    actorUserId: text('actor_user_id'),
+    action: text('action').notNull(),
+    targetType: text('target_type').notNull(),
+    targetId: text('target_id').notNull(),
+    provider: text('provider'),
+    payload: text('payload'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('idx_payment_audit_target').on(table.targetType, table.targetId),
+    index('idx_payment_audit_actor').on(table.actorUserId, table.createdAt),
   ]
 );
 

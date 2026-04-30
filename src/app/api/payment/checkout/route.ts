@@ -18,6 +18,12 @@ import {
 import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getPaymentService } from '@/shared/services/payment';
+import {
+  buildServerPaymentMetadata,
+  changeSubscriptionPlanWithProvider,
+  getSubscriptionCheckoutRouting,
+  PricingPlanSnapshot,
+} from '@/shared/services/payment-lifecycle';
 import { PricingCurrency } from '@/shared/types/blocks/pricing';
 
 export async function POST(req: Request) {
@@ -50,13 +56,6 @@ export async function POST(req: Request) {
     const user = await getUserInfo();
     if (!user || !user.email) {
       return respErr('no auth, please sign in');
-    }
-
-    if (pricingItem.group === 'credits') {
-      const currentSubscription = await getCurrentSubscription(user.id);
-      if (!currentSubscription) {
-        return respErr(t('messages.credit_pack_subscribers_only'));
-      }
     }
 
     // get configs
@@ -147,6 +146,11 @@ export async function POST(req: Request) {
         ? PaymentType.ONE_TIME
         : PaymentType.SUBSCRIPTION;
 
+    const currentSubscription = await getCurrentSubscription(user.id);
+    if (pricingItem.group === 'credits' && !currentSubscription) {
+      return respErr(t('messages.credit_pack_subscribers_only'));
+    }
+
     const orderNo = getSnowId();
 
     // get payment product id from pricing table in local file
@@ -210,20 +214,85 @@ export async function POST(req: Request) {
         ? `${callbackBaseUrl}/settings/billing`
         : `${callbackBaseUrl}/settings/payments`;
 
+    const subscriptionRouting = getSubscriptionCheckoutRouting({
+      hasCurrentSubscription: Boolean(currentSubscription),
+      currentProductId: currentSubscription?.productId,
+      targetProductId: pricingItem.product_id,
+      paymentType,
+    });
+
+    if (subscriptionRouting === 'current_plan') {
+      return respData({
+        checkoutUrl: callbackUrl,
+        planChange: {
+          status: 'current_plan',
+          subscriptionNo: currentSubscription?.subscriptionNo,
+        },
+      });
+    }
+
+    if (subscriptionRouting === 'change_plan') {
+      if (!currentSubscription) {
+        return respErr('subscription not found');
+      }
+
+      if (!paymentProductId) {
+        return respErr('missing provider plan/price/product mapping');
+      }
+
+      const currentProviderName =
+        currentSubscription.paymentProvider || paymentProvider.name;
+      const planChangeProvider =
+        paymentService.getProvider(currentProviderName);
+      if (
+        !planChangeProvider ||
+        !planChangeProvider.name ||
+        planChangeProvider.name !== currentProviderName
+      ) {
+        return respErr('subscription payment provider not configured');
+      }
+
+      const targetPlan: PricingPlanSnapshot = {
+        productId: pricingItem.product_id,
+        productName: pricingItem.product_name,
+        planName: pricingItem.plan_name || pricingItem.product_name,
+        amount: checkoutAmount,
+        currency: checkoutCurrency,
+        interval: paymentInterval,
+        intervalCount: pricingItem.interval_count || 1,
+        creditsAmount: pricingItem.credits,
+        creditsValidDays: pricingItem.valid_days,
+        paymentProductId,
+      };
+
+      const planChange = await changeSubscriptionPlanWithProvider({
+        subscription: currentSubscription,
+        target: targetPlan,
+        provider: planChangeProvider,
+        actorUserId: user.id,
+      });
+
+      return respData({
+        checkoutUrl: planChange.approvalUrl || callbackUrl,
+        planChange,
+      });
+    }
+
     // build checkout order
     const checkoutOrder: PaymentOrder = {
+      orderNo,
       description: pricingItem.product_name,
       customer: {
         name: user.name,
         email: user.email,
       },
       type: paymentType,
-      metadata: {
-        app_name: configs.app_name,
-        order_no: orderNo,
-        user_id: user.id,
-        ...(metadata || {}),
-      },
+      metadata: buildServerPaymentMetadata({
+        appName: configs.app_name,
+        orderNo,
+        userId: user.id,
+        metadata,
+      }),
       successUrl: `${configs.app_url}/api/payment/callback?order_no=${orderNo}`,
       cancelUrl: `${callbackBaseUrl}/pricing`,
     };

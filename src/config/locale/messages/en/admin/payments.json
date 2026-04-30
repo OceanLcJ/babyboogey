@@ -29,7 +29,8 @@
           "all": "All",
           "paid": "Paid",
           "created": "Created",
-          "failed": "Failed"
+          "failed": "Failed",
+          "refunded": "Refunded"
         }
       },
       "provider": {
@@ -49,5 +50,11 @@
         "placeholder": "Order No"
       }
     }
+  },
+  "actions": {
+    "refund": "Refund",
+    "refund_confirm": "Refund this order and reverse granted credits?",
+    "reason_prompt": "Refund reason",
+    "refund_success": "Refund recorded"
   }
 }

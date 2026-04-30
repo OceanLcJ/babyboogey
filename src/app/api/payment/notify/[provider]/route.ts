@@ -6,6 +6,11 @@ import {
   findOrderByOrderNo,
   findOrderByTransactionId,
 } from '@/shared/models/order';
+import {
+  beginPaymentEvent,
+  PaymentEventLedgerStatus,
+  updatePaymentEvent,
+} from '@/shared/models/payment-lifecycle';
 import { findSubscriptionByProviderSubscriptionId } from '@/shared/models/subscription';
 import {
   getPaymentService,
@@ -15,11 +20,16 @@ import {
   handleSubscriptionRenewal,
   handleSubscriptionUpdated,
 } from '@/shared/services/payment';
+import {
+  buildPaymentEventLedgerKey,
+  handlePaymentRefunded,
+} from '@/shared/services/payment-lifecycle';
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ provider: string }> }
 ) {
+  let activeLedgerId: string | undefined;
   try {
     const { provider } = await params;
 
@@ -44,13 +54,74 @@ export async function POST(
       throw new Error('event type not found');
     }
 
+    const { eventId, resourceId } = buildPaymentEventLedgerKey({
+      provider,
+      event,
+    });
+    const ledger = await beginPaymentEvent({
+      provider,
+      eventId,
+      eventType,
+      resourceId,
+      payload: JSON.stringify(event.eventResult),
+    });
+    activeLedgerId = ledger.event.id;
+
+    if (
+      ledger.duplicate &&
+      ledger.event.status !== PaymentEventLedgerStatus.FAILED
+    ) {
+      return Response.json({
+        message: 'success',
+        duplicate: true,
+      });
+    }
+
+    if (ledger.duplicate) {
+      await updatePaymentEvent(ledger.event.id, {
+        status: PaymentEventLedgerStatus.PROCESSING,
+        errorMessage: null,
+      });
+    }
+
     // payment session
     const session = event.paymentSession;
+    if (eventType === PaymentEventType.UNKNOWN) {
+      await updatePaymentEvent(ledger.event.id, {
+        status: PaymentEventLedgerStatus.IGNORED,
+        processedAt: new Date(),
+      });
+      return Response.json({ message: 'success' });
+    }
+
     if (!session) {
       throw new Error('payment session not found');
     }
 
     // console.log('notify payment session', session);
+
+    const markEventSucceeded = async (
+      extra: {
+        orderNo?: string;
+        subscriptionNo?: string;
+        transactionId?: string;
+      } = {}
+    ) => {
+      await updatePaymentEvent(ledger.event.id, {
+        status: PaymentEventLedgerStatus.SUCCEEDED,
+        orderNo:
+          extra.orderNo ||
+          (typeof session.metadata?.order_no === 'string'
+            ? session.metadata.order_no
+            : session.refundInfo?.orderNo),
+        subscriptionNo: extra.subscriptionNo,
+        transactionId:
+          extra.transactionId ||
+          session.paymentInfo?.transactionId ||
+          session.refundInfo?.paymentTransactionId,
+        processedAt: new Date(),
+      });
+    };
 
     if (eventType === PaymentEventType.CHECKOUT_SUCCESS) {
       // one-time payment or subscription first payment
@@ -95,6 +166,10 @@ export async function POST(
                 `Subscription ${session.subscriptionId}: subscriptionCycleType is CREATE, ` +
                   'skipping PAYMENT_SUCCESS as this is the first payment (already handled)'
               );
+              await markEventSucceeded({
+                subscriptionNo: existingSubscription.subscriptionNo,
+                transactionId,
+              });
               return Response.json({ message: 'success' });
             }
 
@@ -110,6 +185,11 @@ export async function POST(
                     `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
                   );
                   await ensureCreditForOrder({ order: existingOrder, session });
+                  await markEventSucceeded({
+                    orderNo: existingOrder.orderNo,
+                    subscriptionNo: existingSubscription.subscriptionNo,
+                    transactionId,
+                  });
                   return Response.json({ message: 'success' });
                 }
               }
@@ -121,6 +201,10 @@ export async function POST(
               await handleSubscriptionRenewal({
                 subscription: existingSubscription,
                 session,
+              });
+              await markEventSucceeded({
+                subscriptionNo: existingSubscription.subscriptionNo,
+                transactionId,
               });
               return Response.json({ message: 'success' });
             }
@@ -138,6 +222,11 @@ export async function POST(
                 `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
               );
               await ensureCreditForOrder({ order: existingOrder, session });
+              await markEventSucceeded({
+                orderNo: existingOrder.orderNo,
+                subscriptionNo: existingSubscription.subscriptionNo,
+                transactionId,
+              });
               return Response.json({ message: 'success' });
             }
 
@@ -170,6 +259,10 @@ export async function POST(
 
         if (!orderNo) {
           console.log('one-time payment: order_no not found in metadata, skipping');
+          await updatePaymentEvent(ledger.event.id, {
+            status: PaymentEventLedgerStatus.IGNORED,
+            processedAt: new Date(),
+          });
           return Response.json({ message: 'success' });
         }
 
@@ -222,14 +315,28 @@ export async function POST(
         subscription: existingSubscription,
         session,
       });
+    } else if (eventType === PaymentEventType.PAYMENT_REFUNDED) {
+      await handlePaymentRefunded({
+        provider,
+        session,
+      });
     } else {
       console.log('not handle other event type: ' + eventType);
     }
+
+    await markEventSucceeded();
 
     return Response.json({
       message: 'success',
     });
   } catch (err: UnsafeAny) {
+    if (activeLedgerId) {
+      await updatePaymentEvent(activeLedgerId, {
+        status: PaymentEventLedgerStatus.FAILED,
+        errorMessage: err.message || String(err),
+        processedAt: new Date(),
+      });
+    }
     console.log('handle payment notify failed', err);
     return Response.json(
       {

@@ -23,5 +23,15 @@
       "month": "Month",
       "year": "Year"
     }
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "refund_cancel_now": "Refund + cancel",
+    "cancel_at_period_end": "Cancel at period end",
+    "cancel_confirm": "Cancel this subscription now?",
+    "refund_cancel_now_confirm": "Refund the latest paid order and cancel this subscription now?",
+    "cancel_at_period_end_confirm": "Schedule this subscription to cancel at period end?",
+    "reason_prompt": "Action reason",
+    "success": "Subscription action recorded"
   }
 }

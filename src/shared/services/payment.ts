@@ -22,7 +22,6 @@ import {
   NewCredit,
 } from '../models/credit';
 import {
-  findOrderByOrderNo,
   NewOrder,
   Order,
   OrderStatus,
@@ -38,6 +37,15 @@ import {
   UpdateSubscription,
   updateSubscriptionBySubscriptionNo,
 } from '../models/subscription';
+import {
+  findLatestPendingPlanChange,
+  SubscriptionPlanChangeStatus,
+  updateSubscriptionPlanChange,
+} from '../models/payment-lifecycle';
+import {
+  safeJsonParse,
+  validatePaymentSessionForOrder,
+} from './payment-lifecycle';
 
 /**
  * get payment service with configs
@@ -135,6 +143,8 @@ export async function handleCheckoutSuccess({
   if (!orderNo) {
     throw new Error('invalid order');
   }
+
+  validatePaymentSessionForOrder({ order, session });
 
   // Idempotency/repair: if order is already paid, ensure side-effects exist (e.g. credits).
   if (order.status === OrderStatus.PAID) {
@@ -372,6 +382,8 @@ export async function handlePaymentSuccess({
     throw new Error('invalid order');
   }
 
+  validatePaymentSessionForOrder({ order, session });
+
   if (order.paymentType === PaymentType.SUBSCRIPTION) {
     if (!session.subscriptionId || !session.subscriptionInfo) {
       throw new Error('subscription id or subscription info not found');
@@ -458,9 +470,9 @@ export async function handlePaymentSuccess({
         transactionNo: getSnowId(),
         transactionType: CreditTransactionType.GRANT,
         transactionScene:
-          order.paymentType === PaymentType.SUBSCRIPTION
-            ? CreditTransactionScene.SUBSCRIPTION
-            : CreditTransactionScene.PAYMENT,
+          order.paymentType === PaymentType.RENEW
+            ? CreditTransactionScene.RENEWAL
+            : CreditTransactionScene.SUBSCRIPTION,
         credits: credits,
         remainingCredits: credits,
         description: `Grant credit`,
@@ -535,11 +547,50 @@ export async function handleSubscriptionRenewal({
 
   // payment success
   if (session.paymentStatus === PaymentStatus.SUCCESS) {
+    const pendingPlanChange =
+      await findLatestPendingPlanChange(subscriptionNo);
+    const pendingTarget = pendingPlanChange?.metadata
+      ? safeJsonParse(pendingPlanChange.metadata).target
+      : undefined;
+    const renewalPlan = pendingTarget || {};
+    const renewalAmount = Number(renewalPlan.amount ?? subscription.amount);
+    const renewalCurrency = String(
+      renewalPlan.currency || subscription.currency || ''
+    ).toUpperCase();
+    const paymentAmount = Number(session.paymentInfo?.paymentAmount ?? 0);
+    const discountAmount = Number(session.paymentInfo?.discountAmount ?? 0);
+
+    if (paymentAmount + discountAmount < renewalAmount) {
+      throw new Error('payment amount mismatch');
+    }
+    if (
+      session.paymentInfo?.paymentCurrency &&
+      String(session.paymentInfo.paymentCurrency).toUpperCase() !==
+        renewalCurrency
+    ) {
+      throw new Error('payment currency mismatch');
+    }
+
     // update subscription period
     const updateSubscription: UpdateSubscription = {
       currentPeriodStart: subscriptionInfo.currentPeriodStart,
       currentPeriodEnd: subscriptionInfo.currentPeriodEnd,
     };
+
+    if (pendingTarget) {
+      Object.assign(updateSubscription, {
+        productId: pendingTarget.productId,
+        productName: pendingTarget.productName,
+        planName: pendingTarget.planName,
+        amount: pendingTarget.amount,
+        currency: pendingTarget.currency,
+        interval: pendingTarget.interval,
+        intervalCount: pendingTarget.intervalCount,
+        creditsAmount: pendingTarget.creditsAmount,
+        creditsValidDays: pendingTarget.creditsValidDays,
+        paymentProductId: pendingTarget.paymentProductId,
+      });
+    }
 
     const orderNo = getSnowId();
     const currentTime = new Date();
@@ -551,21 +602,23 @@ export async function handleSubscriptionRenewal({
       userId: subscription.userId,
       userEmail: subscription.userEmail,
       status: OrderStatus.PAID,
-      amount: subscription.amount,
-      currency: subscription.currency,
-      productId: subscription.productId,
+      amount: renewalPlan.amount ?? subscription.amount,
+      currency: renewalPlan.currency ?? subscription.currency,
+      productId: renewalPlan.productId ?? subscription.productId,
       paymentType: PaymentType.RENEW,
-      paymentInterval: subscription.interval,
+      paymentInterval: renewalPlan.interval ?? subscription.interval,
       paymentProvider: session.provider || subscription.paymentProvider,
       checkoutInfo: '',
       createdAt: currentTime,
-      productName: subscription.productName,
+      productName: renewalPlan.productName ?? subscription.productName,
       description: 'Subscription Renewal',
       callbackUrl: '',
-      creditsAmount: subscription.creditsAmount,
-      creditsValidDays: subscription.creditsValidDays,
-      planName: subscription.planName || '',
-      paymentProductId: subscription.paymentProductId,
+      creditsAmount: renewalPlan.creditsAmount ?? subscription.creditsAmount,
+      creditsValidDays:
+        renewalPlan.creditsValidDays ?? subscription.creditsValidDays,
+      planName: renewalPlan.planName ?? subscription.planName ?? '',
+      paymentProductId:
+        renewalPlan.paymentProductId ?? subscription.paymentProductId,
       paymentResult: JSON.stringify(session.paymentResult),
       paymentAmount: session.paymentInfo?.paymentAmount,
       paymentCurrency: session.paymentInfo?.paymentCurrency,
@@ -643,6 +696,11 @@ export async function handleSubscriptionRenewal({
       }
 
       console.log(`[handleSubscriptionRenewal] Subscription ${subscriptionNo} processed successfully: subscription=${result.subscription?.status}, order=${result.order?.orderNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+      if (pendingPlanChange) {
+        await updateSubscriptionPlanChange(pendingPlanChange.id, {
+          status: SubscriptionPlanChangeStatus.APPLIED,
+        });
+      }
     } catch (error) {
       console.error(`[handleSubscriptionRenewal] Error processing subscription ${subscriptionNo}:`, error);
       throw error; // Re-throw to ensure the webhook/callback knows it failed
