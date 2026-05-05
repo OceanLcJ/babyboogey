@@ -18,6 +18,13 @@
     "use_as_template": "Use as template",
     "fix_and_retry": "Fix and retry"
   },
+  "unlock": {
+    "button": "Unlock this video - $2.99",
+    "processing": "Opening checkout...",
+    "error": "Checkout failed",
+    "free_notice": "Free preview includes a BabyBoogey watermark. Unlock this video for a clean HD download. No subscription.",
+    "download_clean": "Download clean video"
+  },
   "stats": {
     "total": "Total",
     "images": "Images",

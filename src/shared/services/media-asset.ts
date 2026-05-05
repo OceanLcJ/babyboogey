@@ -1,18 +1,21 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
 import { envConfigs } from '@/config';
-import { getUuid } from '@/shared/lib/hash';
 import { getAssetIdFromRef } from '@/shared/lib/asset-ref';
+import { getUuid } from '@/shared/lib/hash';
 import {
   findMediaAssetsByIds,
   MediaAsset,
   MediaAssetOwnerType,
   MediaAssetStatus,
 } from '@/shared/models/media_asset';
+import { findActiveVideoUnlock } from '@/shared/models/video_unlock';
+import { requiresVideoUnlockForOriginalAccess } from '@/shared/services/video-unlock';
 
 export const GUEST_UPLOAD_SESSION_COOKIE = 'guest_upload_session';
 export const DEFAULT_SIGNED_ASSET_EXPIRES_SECONDS = 60 * 10;
 export const GUEST_UPLOAD_EXPIRES_SECONDS = 60 * 60 * 24;
+export type MediaAssetAccessMode = 'preview' | 'original';
 
 function base64url(input: string | Buffer): string {
   return Buffer.from(input).toString('base64url');
@@ -76,28 +79,49 @@ export function buildMediaObjectKey({
 export function createSignedAssetToken({
   assetId,
   expiresAtEpochSeconds,
+  accessMode = 'preview',
 }: {
   assetId: string;
   expiresAtEpochSeconds: number;
+  accessMode?: MediaAssetAccessMode;
 }) {
-  const payload = `${assetId}.${expiresAtEpochSeconds}`;
+  const payload = `${assetId}.${expiresAtEpochSeconds}.${accessMode}`;
   const signature = signAssetPayload(payload);
-  return `v1.${expiresAtEpochSeconds}.${signature}`;
+  return `v2.${expiresAtEpochSeconds}.${accessMode}.${signature}`;
 }
 
 export function verifySignedAssetToken({
   assetId,
   token,
+  accessMode = 'original',
 }: {
   assetId: string;
   token?: string | null;
+  accessMode?: MediaAssetAccessMode;
 }) {
   if (!token) {
     return false;
   }
 
-  const [version, expiresAtRaw, signatureRaw] = String(token).split('.');
-  if (version !== 'v1' || !expiresAtRaw || !signatureRaw) {
+  const parts = String(token).split('.');
+  const [version, expiresAtRaw] = parts;
+  let tokenAccessMode: MediaAssetAccessMode = 'preview';
+  let signatureRaw = '';
+
+  if (version === 'v1') {
+    signatureRaw = parts[2] || '';
+  } else if (version === 'v2') {
+    tokenAccessMode = parts[2] === 'original' ? 'original' : 'preview';
+    signatureRaw = parts[3] || '';
+  } else {
+    return false;
+  }
+
+  if (!expiresAtRaw || !signatureRaw) {
+    return false;
+  }
+
+  if (tokenAccessMode !== accessMode) {
     return false;
   }
 
@@ -111,7 +135,10 @@ export function verifySignedAssetToken({
     return false;
   }
 
-  const payload = `${assetId}.${expiresAtEpochSeconds}`;
+  const payload =
+    version === 'v1'
+      ? `${assetId}.${expiresAtEpochSeconds}`
+      : `${assetId}.${expiresAtEpochSeconds}.${tokenAccessMode}`;
   const expectedSignature = signAssetPayload(payload);
 
   const actual = Buffer.from(signatureRaw);
@@ -127,18 +154,24 @@ export function createSignedAssetUrl({
   assetId,
   expiresInSeconds = DEFAULT_SIGNED_ASSET_EXPIRES_SECONDS,
   absolute = false,
+  accessMode = 'preview',
 }: {
   assetId: string;
   expiresInSeconds?: number;
   absolute?: boolean;
+  accessMode?: MediaAssetAccessMode;
 }) {
-  const ttl = Math.max(30, Math.min(60 * 60 * 24, Math.floor(expiresInSeconds)));
+  const ttl = Math.max(
+    30,
+    Math.min(60 * 60 * 24, Math.floor(expiresInSeconds))
+  );
   const expiresAtEpochSeconds = Math.floor(Date.now() / 1000) + ttl;
   const token = createSignedAssetToken({
     assetId,
     expiresAtEpochSeconds,
+    accessMode,
   });
-  const path = `/api/storage/assets/${encodeURIComponent(assetId)}?token=${encodeURIComponent(token)}`;
+  const path = `/api/storage/assets/${encodeURIComponent(assetId)}?access=${accessMode}&token=${encodeURIComponent(token)}`;
 
   if (!absolute) {
     return {
@@ -147,7 +180,9 @@ export function createSignedAssetUrl({
     };
   }
 
-  const baseUrl = trimTrailingSlash(envConfigs.app_url || 'http://localhost:3000');
+  const baseUrl = trimTrailingSlash(
+    envConfigs.app_url || 'http://localhost:3000'
+  );
   return {
     url: `${baseUrl}${path}`,
     expiresAtEpochSeconds,
@@ -184,6 +219,48 @@ export function canAccessMediaAsset({
   }
 
   return false;
+}
+
+export async function canAccessMediaAssetForRequest({
+  asset,
+  userId,
+  guestSessionId,
+  accessMode = 'original',
+}: {
+  asset: MediaAsset;
+  userId?: string | null;
+  guestSessionId?: string | null;
+  accessMode?: MediaAssetAccessMode;
+}) {
+  const baseAllowed = canAccessMediaAsset({
+    asset,
+    userId,
+    guestSessionId,
+  });
+  if (!baseAllowed) {
+    return false;
+  }
+
+  if (accessMode === 'preview') {
+    return true;
+  }
+
+  const unlockRequirement = await requiresVideoUnlockForOriginalAccess(asset);
+  if (!unlockRequirement.required || !unlockRequirement.task) {
+    return true;
+  }
+
+  if (!userId) {
+    return false;
+  }
+
+  const activeUnlock = await findActiveVideoUnlock({
+    userId,
+    taskId: unlockRequirement.task.id,
+    assetId: asset.id,
+  });
+
+  return Boolean(activeUnlock);
 }
 
 export function resolveMediaRefForDisplayUrl(value?: string | null): string {
@@ -269,12 +346,14 @@ export async function resolveAssetRefsWithSignedUrls({
   guestSessionId,
   expiresInSeconds = DEFAULT_SIGNED_ASSET_EXPIRES_SECONDS,
   absolute = false,
+  accessMode = 'preview',
 }: {
   value: unknown;
   userId?: string | null;
   guestSessionId?: string | null;
   expiresInSeconds?: number;
   absolute?: boolean;
+  accessMode?: MediaAssetAccessMode;
 }) {
   const assetIds = Array.from(collectAssetIdsFromValue(value));
   if (!assetIds.length) {
@@ -295,10 +374,11 @@ export async function resolveAssetRefsWithSignedUrls({
       continue;
     }
 
-    const allowed = canAccessMediaAsset({
+    const allowed = await canAccessMediaAssetForRequest({
       asset,
       userId,
       guestSessionId,
+      accessMode,
     });
     if (!allowed) {
       continue;
@@ -308,6 +388,7 @@ export async function resolveAssetRefsWithSignedUrls({
       assetId: asset.id,
       expiresInSeconds,
       absolute,
+      accessMode,
     });
     urlMap.set(asset.id, signed.url);
   }

@@ -18,6 +18,13 @@
     "use_as_template": "もう一度作る",
     "fix_and_retry": "修正して再試行"
   },
+  "unlock": {
+    "button": "この動画を解除 - $2.99",
+    "processing": "決済を開いています...",
+    "error": "決済を開始できません",
+    "free_notice": "無料プレビューには BabyBoogey の透かしが入ります。解除するとHDの透かしなし動画をダウンロードできます。サブスクは不要です。",
+    "download_clean": "透かしなし動画をダウンロード"
+  },
   "stats": {
     "total": "合計",
     "images": "画像",

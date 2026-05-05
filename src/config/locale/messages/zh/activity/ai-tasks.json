@@ -18,6 +18,13 @@
     "use_as_template": "再做一次",
     "fix_and_retry": "修正并重试"
   },
+  "unlock": {
+    "button": "解锁这个视频 - $2.99",
+    "processing": "正在打开支付...",
+    "error": "支付发起失败",
+    "free_notice": "免费预览带有 BabyBoogey 水印。解锁后可下载高清无水印版本，无需订阅。",
+    "download_clean": "下载无水印视频"
+  },
   "stats": {
     "total": "全部",
     "images": "图片",

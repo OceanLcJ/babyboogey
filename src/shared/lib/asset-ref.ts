@@ -17,12 +17,19 @@ export function getAssetIdFromRef(value: unknown): string | null {
   return assetId ? assetId : null;
 }
 
-export function assetRefToApiPath(assetRefOrId: string): string {
+export function assetRefToApiPath(
+  assetRefOrId: string,
+  accessMode?: 'preview' | 'original'
+): string {
   const assetId = getAssetIdFromRef(assetRefOrId) || assetRefOrId;
-  return `/api/storage/assets/${encodeURIComponent(assetId)}`;
+  const path = `/api/storage/assets/${encodeURIComponent(assetId)}`;
+  return accessMode ? `${path}?access=${accessMode}` : path;
 }
 
-export function resolveMediaValueToApiPath(value?: string | null): string {
+export function resolveMediaValueToApiPath(
+  value?: string | null,
+  accessMode?: 'preview' | 'original'
+): string {
   if (!value) {
     return '';
   }
@@ -32,7 +39,7 @@ export function resolveMediaValueToApiPath(value?: string | null): string {
     return value;
   }
 
-  return assetRefToApiPath(assetId);
+  return assetRefToApiPath(assetId, accessMode);
 }
 
 // Best-effort reverse of `assetRefToApiPath` — pulls the asset id out of a URL
@@ -51,9 +58,7 @@ export function extractAssetIdFromMediaUrl(url: string): string | null {
         ? window.location.origin
         : 'http://localhost'
     );
-    const matched = parsed.pathname.match(
-      /\/api\/storage\/assets\/([^/?#]+)/
-    );
+    const matched = parsed.pathname.match(/\/api\/storage\/assets\/([^/?#]+)/);
     if (!matched?.[1]) {
       return null;
     }

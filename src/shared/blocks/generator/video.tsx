@@ -23,6 +23,8 @@ import { toast } from 'sonner';
 import { Link, useRouter } from '@/core/i18n/navigation';
 import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
 import { Button } from '@/shared/components/ui/button';
+import { VideoUnlockButton } from '@/shared/components/video-unlock-button';
+import { VIDEO_UNLOCK_PRODUCT_ID } from '@/shared/constants/video-unlock';
 import {
   Card,
   CardContent,
@@ -64,6 +66,7 @@ import {
 } from '@/shared/lib/analytics-events';
 import {
   extractAssetIdFromMediaUrl,
+  getAssetIdFromRef,
   resolveMediaValueToApiPath,
 } from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
@@ -95,6 +98,8 @@ interface VideoGeneratorProps {
 interface GeneratedVideo {
   id: string;
   url: string;
+  taskId?: string;
+  assetId?: string | null;
   provider?: string;
   model?: string;
   prompt?: string;
@@ -121,6 +126,7 @@ interface BackendTask {
 
 interface TaskVideoMetadata {
   url: string;
+  assetId?: string | null;
   watermarkApplied: boolean;
   watermarkType: VideoWatermarkType;
   watermarkOpacity?: number;
@@ -170,6 +176,11 @@ const SUCCESS_HOLD_MS = 1200;
 const PROGRESS_CAP_BEFORE_SUCCESS = 95;
 const SHARE_LINK_EXPIRES_SECONDS = 60 * 60 * 24;
 const SHARE_LINK_CACHE_BUFFER_MS = 30 * 1000;
+const DEMO_VIDEO_UNLOCK_PARAM = 'demoUnlockVideo';
+const DEMO_VIDEO_UNLOCK_VISUAL_USER_ID =
+  'ec1c6e9e-c6e5-410e-b2f2-5d7822e8cf8f';
+const DEMO_VIDEO_UNLOCK_URL =
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
 
 const DEFAULT_NEGATIVE_PROMPT =
   'blurry, low quality, low-res, deformed face, warped hands, extra limbs, missing fingers, bad anatomy, flicker, jitter, morphing, distortion, artifacts, text, watermark, logo';
@@ -242,6 +253,10 @@ function getAbsoluteUrl(url: string): string {
   } catch {
     return url;
   }
+}
+
+function getDemoVideoUnlockId(prefix: string, userId: string) {
+  return `${prefix}-${userId.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
 }
 
 function buildPageShareUrl(templateId: string): string {
@@ -447,6 +462,7 @@ function toTaskVideoMetadata({
   if (typeof candidate === 'string') {
     return {
       url: candidate,
+      assetId: getAssetIdFromRef(candidate) || extractAssetIdFromMediaUrl(candidate),
       watermarkApplied: fallback.watermarkApplied,
       watermarkType: fallback.watermarkType,
     };
@@ -462,6 +478,12 @@ function toTaskVideoMetadata({
   if (typeof urlCandidate !== 'string' || !urlCandidate.trim()) {
     return null;
   }
+  const explicitAssetId = readFirstStringFromOptionArray(item, [
+    'assetId',
+    'asset_id',
+    'mediaAssetId',
+    'media_asset_id',
+  ]);
 
   const watermarkType = normalizeWatermarkType(
     String(item.watermarkType || fallback.watermarkType)
@@ -473,6 +495,10 @@ function toTaskVideoMetadata({
 
   return {
     url: urlCandidate,
+    assetId:
+      explicitAssetId ||
+      getAssetIdFromRef(urlCandidate) ||
+      extractAssetIdFromMediaUrl(urlCandidate),
     watermarkApplied: watermarkApplied && watermarkType !== 'none',
     watermarkType: watermarkApplied ? watermarkType : 'none',
     watermarkOpacity: Number.isFinite(Number(item.watermarkOpacity))
@@ -690,6 +716,7 @@ export function VideoGenerator({
   const shareUrlCacheRef = useRef<
     Record<string, { url: string; expiresAtMs: number }>
   >({});
+  const demoVideoUnlockInjectedRef = useRef(false);
 
   const {
     user,
@@ -1067,18 +1094,34 @@ export function VideoGenerator({
 
   const mapTaskVideos = useCallback(
     (task: BackendTask, videos: TaskVideoMetadata[]): GeneratedVideo[] =>
-      videos.map((video, index) => ({
-        id: `${task.id}-${index}`,
-        url: resolveMediaValueToApiPath(video.url),
-        provider: task.provider,
-        model: task.model,
-        prompt: task.prompt ?? undefined,
-        watermarkApplied: video.watermarkApplied,
-        watermarkType: video.watermarkType,
-        watermarkOpacity: video.watermarkOpacity,
-        watermarkIntervalSeconds: video.watermarkIntervalSeconds,
-        watermarkText: video.watermarkText,
-      })),
+      videos.map((video, index) => {
+        const assetId =
+          video.assetId ||
+          getAssetIdFromRef(video.url) ||
+          extractAssetIdFromMediaUrl(video.url);
+        const isLockedPreview =
+          Boolean(assetId) &&
+          video.watermarkApplied &&
+          video.watermarkType === 'dynamic_overlay';
+
+        return {
+          id: `${task.id}-${index}`,
+          taskId: task.id,
+          assetId,
+          url: resolveMediaValueToApiPath(
+            video.url,
+            isLockedPreview ? 'preview' : undefined
+          ),
+          provider: task.provider,
+          model: task.model,
+          prompt: task.prompt ?? undefined,
+          watermarkApplied: video.watermarkApplied,
+          watermarkType: video.watermarkType,
+          watermarkOpacity: video.watermarkOpacity,
+          watermarkIntervalSeconds: video.watermarkIntervalSeconds,
+          watermarkText: video.watermarkText,
+        };
+      }),
     []
   );
 
@@ -1109,7 +1152,7 @@ export function VideoGenerator({
     []
   );
 
-  const handleRemoveWatermarkClick = useCallback(
+  const handleUnlockCurrentVideoClick = useCallback(
     (video: GeneratedVideo) => {
       markWatermarkCtaClick();
       trackAnalyticsEvent('click_remove_watermark_cta', {
@@ -1117,10 +1160,60 @@ export function VideoGenerator({
         model: video.model || '',
         watermark_type: video.watermarkType || 'none',
       });
-      router.push('/pricing');
     },
-    [router]
+    []
   );
+
+  useEffect(() => {
+    if (
+      process.env.NODE_ENV === 'production' ||
+      searchParams.get(DEMO_VIDEO_UNLOCK_PARAM) !== '1' ||
+      demoVideoUnlockInjectedRef.current ||
+      isCheckSign
+    ) {
+      return;
+    }
+
+    const ownerId = user?.id || DEMO_VIDEO_UNLOCK_VISUAL_USER_ID;
+    const demoTaskId = getDemoVideoUnlockId(
+      'demo-video-unlock-task',
+      ownerId
+    );
+    const demoAssetId = getDemoVideoUnlockId(
+      'demo-video-unlock-asset',
+      ownerId
+    );
+    const demoVideo: GeneratedVideo = {
+      id: `${demoTaskId}-0`,
+      taskId: demoTaskId,
+      assetId: demoAssetId,
+      url: DEMO_VIDEO_UNLOCK_URL,
+      provider: 'demo',
+      model: 'demo-video-unlock-preview',
+      prompt: getDefaultDancePrompt(DANCE_TEMPLATES[0]),
+      watermarkApplied: true,
+      watermarkType: 'dynamic_overlay',
+      watermarkOpacity: 0.32,
+      watermarkIntervalSeconds: 2,
+      watermarkText: 'BabyBoogey',
+    };
+
+    demoVideoUnlockInjectedRef.current = true;
+    setSelectedTemplate(DANCE_TEMPLATES[0]);
+    setPrompt(getDefaultDancePrompt(DANCE_TEMPLATES[0]));
+    setPromptTouched(false);
+    setSafetyConfirmed(true);
+    setTaskId(demoTaskId);
+    setTaskStatus(AITaskStatus.SUCCESS);
+    setGenerationStage('success');
+    setProgress(100);
+    setProgressTarget(100);
+    setGenerationStartTime(Date.now() - 52000);
+    setElapsedSeconds(52);
+    setIsGenerating(false);
+    setGeneratedVideos([demoVideo]);
+    reportWatermarkShown(demoTaskId, [demoVideo]);
+  }, [isCheckSign, reportWatermarkShown, searchParams, user?.id]);
 
   const sharePlatforms = useMemo<SharePlatform[]>(
     () => (isZhLocale ? ['weibo'] : ['x', 'facebook', 'whatsapp']),
@@ -2575,10 +2668,13 @@ export function VideoGenerator({
                 <div className="space-y-4">
                   {generatedVideos.map((video) => {
                     const isWatermarked = isDynamicWatermarkedVideo(video);
+                    const canUnlockVideo = Boolean(
+                      isWatermarked && video.taskId && video.assetId
+                    );
                     const playbackState =
                       watermarkedPlaybackByVideoId[video.id];
                     const playbackUrl = isWatermarked
-                      ? playbackState?.blobUrl || ''
+                      ? playbackState?.blobUrl || video.url
                       : video.url;
                     const canRenderVideo = Boolean(playbackUrl);
                     const canShareVideoDirectly = !isWatermarked;
@@ -2681,16 +2777,8 @@ export function VideoGenerator({
                           )}
                         </div>
                         {isWatermarked && (
-                          <div className="flex items-center justify-between gap-2 rounded-xl border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">
+                          <div className="rounded-xl border border-amber-300/50 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">
                             <span>{t('watermark.free_notice')}</span>
-                            <Button
-                              variant="link"
-                              size="sm"
-                              className="h-auto px-0 text-xs font-semibold text-amber-900 dark:text-amber-200"
-                              onClick={() => handleRemoveWatermarkClick(video)}
-                            >
-                              {t('watermark.remove_cta')}
-                            </Button>
                           </div>
                         )}
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -2889,20 +2977,37 @@ export function VideoGenerator({
                               })}
                             </DropdownMenuContent>
                           </DropdownMenu>
-                          <Button
-                            variant="default"
-                            size="sm"
-                            className="w-full"
-                            onClick={() => handleDownloadVideo(video)}
-                            disabled={downloadingVideoId === video.id}
-                          >
-                            {downloadingVideoId === video.id ? (
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            ) : (
-                              <Download className="mr-2 h-4 w-4" />
-                            )}
-                            {t('download')}
-                          </Button>
+                          {canUnlockVideo && video.taskId && video.assetId ? (
+                            <VideoUnlockButton
+                              taskId={video.taskId}
+                              assetId={video.assetId}
+                              productId={VIDEO_UNLOCK_PRODUCT_ID}
+                              label={t('watermark.unlock_cta')}
+                              processingLabel={t(
+                                'watermark.unlock_processing'
+                              )}
+                              errorLabel={t('watermark.unlock_error')}
+                              className="w-full"
+                              onStart={() =>
+                                handleUnlockCurrentVideoClick(video)
+                              }
+                            />
+                          ) : (
+                            <Button
+                              variant="default"
+                              size="sm"
+                              className="w-full"
+                              onClick={() => handleDownloadVideo(video)}
+                              disabled={downloadingVideoId === video.id}
+                            >
+                              {downloadingVideoId === video.id ? (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              ) : (
+                                <Download className="mr-2 h-4 w-4" />
+                              )}
+                              {t('download')}
+                            </Button>
+                          )}
                         </div>
                       </div>
                     );

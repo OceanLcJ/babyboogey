@@ -212,9 +212,7 @@ export async function findOrderByPaymentSessionId({
     .where(
       and(
         eq(order.paymentSessionId, paymentSessionId),
-        paymentProvider
-          ? eq(order.paymentProvider, paymentProvider)
-          : undefined
+        paymentProvider ? eq(order.paymentProvider, paymentProvider) : undefined
       )
     );
 
@@ -234,9 +232,7 @@ export async function findOrderByInvoiceId({
     .where(
       and(
         eq(order.invoiceId, invoiceId),
-        paymentProvider
-          ? eq(order.paymentProvider, paymentProvider)
-          : undefined
+        paymentProvider ? eq(order.paymentProvider, paymentProvider) : undefined
       )
     );
 
@@ -319,18 +315,43 @@ export async function updateOrderInTransaction({
     throw new Error('orderNo and updateOrder are required');
   }
 
+  const emptyResult = () => ({
+    order: null as UnsafeAny,
+    subscription: null as UnsafeAny,
+    credit: null as UnsafeAny,
+  });
+
   // only update order, no need transaction
   if (!newSubscription && !newCredit) {
-    return updateOrderByOrderNo(orderNo, updateOrder);
+    const result = emptyResult();
+    result.order = await updateOrderByOrderNo(orderNo, updateOrder, {
+      expectedStatus:
+        updateOrder.status === OrderStatus.PAID
+          ? OrderStatus.CREATED
+          : undefined,
+    });
+
+    if (!result.order && updateOrder.status === OrderStatus.PAID) {
+      result.order = await updateOrderByOrderNo(orderNo, updateOrder, {
+        expectedStatus: OrderStatus.PENDING,
+      });
+    }
+
+    if (!result.order && updateOrder.status === OrderStatus.PAID) {
+      console.log(
+        `Order ${orderNo} already paid or not in CREATED/PENDING status`
+      );
+      throw new Error(
+        `Order ${orderNo} already processed or not in correct status`
+      );
+    }
+
+    return result;
   }
 
   // need transaction
   const result = await db().transaction(async (tx: UnsafeAny) => {
-    const result: UnsafeAny = {
-      order: null,
-      subscription: null,
-      credit: null,
-    };
+    const result: UnsafeAny = emptyResult();
 
     // CRITICAL FIX: Update order FIRST with optimistic lock
     // Only create subscription/credit if order update succeeds
@@ -354,15 +375,21 @@ export async function updateOrderInTransaction({
     // If no order was updated and we're trying to set status to PAID,
     // it means the order was already processed - abort the transaction
     if (!orderResult && updateOrder.status === OrderStatus.PAID) {
-      console.log(`Order ${orderNo} already paid or not in CREATED/PENDING status, aborting transaction`);
-      throw new Error(`Order ${orderNo} already processed or not in correct status`);
+      console.log(
+        `Order ${orderNo} already paid or not in CREATED/PENDING status, aborting transaction`
+      );
+      throw new Error(
+        `Order ${orderNo} already processed or not in correct status`
+      );
     }
 
     result.order = orderResult;
 
     // Only proceed with subscription/credit creation if order update succeeded
     if (!orderResult) {
-      console.log(`Order ${orderNo} not updated, skipping subscription and credit creation`);
+      console.log(
+        `Order ${orderNo} not updated, skipping subscription and credit creation`
+      );
       return result;
     }
 

@@ -333,7 +333,10 @@ export const credit = table(
     // Query credits by subscription number
     index('idx_credit_subscription_no').on(table.subscriptionNo),
     // Anti-abuse: count first-login grants by signup IP in a time window
-    index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
+    index('idx_credit_signup_ip_created_at').on(
+      table.signupIp,
+      table.createdAt
+    ),
     // Anti-abuse: count first-login grants by claim IP in a time window
     index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
   ]
@@ -614,6 +617,38 @@ export const mediaAsset = table(
     index('idx_media_asset_status_expires').on(table.status, table.expiresAt),
     index('idx_media_asset_checksum').on(table.checksumSha256),
     index('idx_media_asset_linked_task').on(table.linkedTaskId),
+  ]
+);
+
+export const videoUnlock = table(
+  'video_unlock',
+  {
+    id: varchar191('id').primaryKey(),
+    userId: varchar191('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    taskId: varchar191('task_id')
+      .notNull()
+      .references(() => aiTask.id, { onDelete: 'cascade' }),
+    assetId: varchar191('asset_id')
+      .notNull()
+      .references(() => mediaAsset.id, { onDelete: 'cascade' }),
+    orderNo: varchar191('order_no').notNull(),
+    productId: varchar191('product_id').notNull(),
+    status: varchar('status', { length: 20 }).notNull().default('pending'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+    unlockedAt: timestamp('unlocked_at'),
+  },
+  (table) => [
+    uniqueIndex('uidx_video_unlock_order').on(table.orderNo),
+    index('idx_video_unlock_user_task_asset').on(
+      table.userId,
+      table.taskId,
+      table.assetId
+    ),
+    index('idx_video_unlock_task').on(table.taskId, table.status),
+    index('idx_video_unlock_asset').on(table.assetId, table.status),
   ]
 );
 
