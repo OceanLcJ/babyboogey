@@ -18,11 +18,16 @@ import { AITaskStatus } from '@/extensions/ai';
 import { AudioPlayer, Empty, LazyImage } from '@/shared/blocks/common';
 import { Pagination } from '@/shared/blocks/common/pagination';
 import { WatermarkedVideoResult } from '@/shared/blocks/common/watermarked-video-result';
+import { VideoUnlockButton } from '@/shared/components/video-unlock-button';
 import {
   normalizeAITaskReuseOptions,
   type AITaskReuseHandoffDraft,
 } from '@/shared/lib/ai-task-reuse-handoff';
-import { resolveMediaValueToApiPath } from '@/shared/lib/asset-ref';
+import {
+  extractAssetIdFromMediaUrl,
+  getAssetIdFromRef,
+  resolveMediaValueToApiPath,
+} from '@/shared/lib/asset-ref';
 import { cn } from '@/shared/lib/utils';
 import { normalizeWatermarkType } from '@/shared/lib/watermark';
 import {
@@ -32,6 +37,8 @@ import {
   getAITasksCount,
 } from '@/shared/models/ai_task';
 import { getUserInfo } from '@/shared/models/user';
+import { getActiveVideoUnlocksForTasks } from '@/shared/models/video_unlock';
+import { VIDEO_UNLOCK_PRODUCT_ID } from '@/shared/services/video-unlock';
 import type { VideoWatermarkConfig } from '@/shared/types/watermark';
 
 import { AITaskReuseAction } from './reuse-action';
@@ -48,6 +55,7 @@ type TaskImage = {
 
 type TaskVideo = {
   videoUrl: string;
+  assetId: string | null;
   thumbnailUrl: string | undefined;
   watermark: VideoWatermarkConfig;
 };
@@ -130,6 +138,25 @@ function resolveVideoThumbnailFromTaskInfoItem(video: unknown): string | null {
     'poster',
     'cover',
   ]);
+}
+
+function resolveVideoAssetIdFromTaskInfoItem(
+  video: unknown,
+  videoUrl: string
+): string | null {
+  if (video && typeof video === 'object' && !Array.isArray(video)) {
+    const explicitAssetId = readFirstString(video as Record<string, unknown>, [
+      'assetId',
+      'asset_id',
+      'mediaAssetId',
+      'media_asset_id',
+    ]);
+    if (explicitAssetId) {
+      return explicitAssetId;
+    }
+  }
+
+  return getAssetIdFromRef(videoUrl) || extractAssetIdFromMediaUrl(videoUrl);
 }
 
 function getTaskWatermarkConfig(task: AITask): VideoWatermarkConfig {
@@ -265,6 +292,7 @@ function extractTaskResult(task: AITask): TaskResult {
       const thumbnailUrl = resolveVideoThumbnailFromTaskInfoItem(video);
       return {
         videoUrl,
+        assetId: resolveVideoAssetIdFromTaskInfoItem(video, videoUrl),
         thumbnailUrl: thumbnailUrl || undefined,
         watermark: mergeVideoWatermarkConfig({
           video,
@@ -444,10 +472,12 @@ function EmptyResult({ icon, label }: { icon: ReactNode; label: string }) {
 function TaskResultPreview({
   task,
   result,
+  unlockedAssetIds,
   t,
 }: {
   task: AITask;
   result: TaskResult;
+  unlockedAssetIds: Set<string>;
   t: Awaited<ReturnType<typeof getTranslations>>;
 }) {
   const isWaiting = isActiveTaskStatus(task.status);
@@ -498,24 +528,72 @@ function TaskResultPreview({
     return (
       <ResultShell className="bg-background/40 items-start justify-start p-3">
         <div className="flex w-full flex-wrap gap-3">
-          {result.videos.map((video, index) => (
-            <WatermarkedVideoResult
-              key={`${task.id}-video-${index}`}
-              videoUrl={resolveMediaValueToApiPath(video.videoUrl)}
-              thumbnailUrl={
-                video.thumbnailUrl
-                  ? resolveMediaValueToApiPath(video.thumbnailUrl)
-                  : undefined
-              }
-              watermark={video.watermark}
-              downloadLabel={t('actions.download')}
-              preparePreviewLabel={t('result.prepare_preview')}
-              retryPreviewLabel={t('result.retry_preview')}
-              previewOnDemandLabel={t('result.preview_on_demand')}
-              preparingPreviewLabel={t('result.preparing_preview')}
-              previewFailedLabel={t('result.preview_failed')}
-            />
-          ))}
+          {result.videos.map((video, index) => {
+            const isUnlocked = Boolean(
+              video.assetId && unlockedAssetIds.has(video.assetId)
+            );
+            const isUnlockable =
+              task.status === AITaskStatus.SUCCESS &&
+              Boolean(video.assetId) &&
+              Boolean(video.watermark.watermarkApplied);
+            const isLocked = isUnlockable && !isUnlocked;
+            const previewUrl = resolveMediaValueToApiPath(
+              video.videoUrl,
+              isLocked ? 'preview' : undefined
+            );
+            const downloadUrl = resolveMediaValueToApiPath(
+              video.videoUrl,
+              'original'
+            );
+            const effectiveWatermark: VideoWatermarkConfig = isUnlocked
+              ? {
+                  watermarkApplied: false,
+                  watermarkType: 'none',
+                }
+              : video.watermark;
+
+            return (
+              <div key={`${task.id}-video-${index}`} className="space-y-2">
+                <WatermarkedVideoResult
+                  videoUrl={previewUrl}
+                  downloadUrl={downloadUrl}
+                  thumbnailUrl={
+                    video.thumbnailUrl
+                      ? resolveMediaValueToApiPath(video.thumbnailUrl)
+                      : undefined
+                  }
+                  watermark={effectiveWatermark}
+                  showDownload={!isLocked}
+                  downloadLabel={
+                    isUnlocked
+                      ? t('unlock.download_clean')
+                      : t('actions.download')
+                  }
+                  preparePreviewLabel={t('result.prepare_preview')}
+                  retryPreviewLabel={t('result.retry_preview')}
+                  previewOnDemandLabel={t('result.preview_on_demand')}
+                  preparingPreviewLabel={t('result.preparing_preview')}
+                  previewFailedLabel={t('result.preview_failed')}
+                />
+
+                {isLocked && video.assetId ? (
+                  <div className="max-w-72 space-y-2 rounded-md border border-amber-300/50 bg-amber-50 px-2.5 py-2 text-amber-950">
+                    <p className="text-xs leading-5">
+                      {t('unlock.free_notice')}
+                    </p>
+                    <VideoUnlockButton
+                      taskId={task.id}
+                      assetId={video.assetId}
+                      productId={VIDEO_UNLOCK_PRODUCT_ID}
+                      label={t('unlock.button')}
+                      processingLabel={t('unlock.processing')}
+                      errorLabel={t('unlock.error')}
+                    />
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
       </ResultShell>
     );
@@ -708,10 +786,12 @@ function TaskDetails({
 function TaskCard({
   task,
   locale,
+  unlockedAssetIds,
   t,
 }: {
   task: AITask;
   locale: string;
+  unlockedAssetIds: Set<string>;
   t: Awaited<ReturnType<typeof getTranslations>>;
 }) {
   const result = extractTaskResult(task);
@@ -719,7 +799,12 @@ function TaskCard({
 
   return (
     <article className="bg-card/70 border-border grid gap-5 rounded-lg border p-4 shadow-sm md:grid-cols-[minmax(280px,420px)_1fr]">
-      <TaskResultPreview task={task} result={result} t={t} />
+      <TaskResultPreview
+        task={task}
+        result={result}
+        unlockedAssetIds={unlockedAssetIds}
+        t={t}
+      />
 
       <div className="flex min-w-0 flex-col justify-between gap-5">
         <div className="space-y-4">
@@ -932,12 +1017,21 @@ export default async function AiTasksPage({
   const activeTasks = [...pendingTasks, ...processingTasks]
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
     .slice(0, 4);
-  const highlightedActiveTaskIds = new Set(
-    activeTasks.map((task) => task.id)
-  );
+  const highlightedActiveTaskIds = new Set(activeTasks.map((task) => task.id));
   const historyTasks = aiTasks.filter(
     (task) => !highlightedActiveTaskIds.has(task.id)
   );
+  const activeUnlocks = await getActiveVideoUnlocksForTasks({
+    userId: user.id,
+    taskIds: historyTasks.map((task) => task.id),
+  });
+  const unlockedAssetIdsByTaskId = new Map<string, Set<string>>();
+  for (const unlock of activeUnlocks) {
+    const existing =
+      unlockedAssetIdsByTaskId.get(unlock.taskId) || new Set<string>();
+    existing.add(unlock.assetId);
+    unlockedAssetIdsByTaskId.set(unlock.taskId, existing);
+  }
 
   return (
     <div className="space-y-8">
@@ -1005,7 +1099,15 @@ export default async function AiTasksPage({
             </span>
           </div>
           {historyTasks.map((task) => (
-            <TaskCard key={task.id} task={task} locale={locale} t={t} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              locale={locale}
+              unlockedAssetIds={
+                unlockedAssetIdsByTaskId.get(task.id) || new Set<string>()
+              }
+              t={t}
+            />
           ))}
         </section>
       ) : aiTasks.length === 0 && activeTasks.length === 0 ? (

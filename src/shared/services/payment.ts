@@ -14,15 +14,14 @@ import { Configs, getAllConfigs } from '@/shared/models/config';
 
 import {
   calculateCreditExpirationTime,
+  createCredit,
   CreditStatus,
   CreditTransactionScene,
   CreditTransactionType,
-  createCredit,
   findCreditByOrderNo,
   NewCredit,
 } from '../models/credit';
 import {
-  findOrderByOrderNo,
   NewOrder,
   Order,
   OrderStatus,
@@ -32,12 +31,22 @@ import {
   updateSubscriptionInTransaction,
 } from '../models/order';
 import {
+  findLatestPendingPlanChange,
+  SubscriptionPlanChangeStatus,
+  updateSubscriptionPlanChange,
+} from '../models/payment-lifecycle';
+import {
   NewSubscription,
   Subscription,
   SubscriptionStatus,
   UpdateSubscription,
   updateSubscriptionBySubscriptionNo,
 } from '../models/subscription';
+import {
+  safeJsonParse,
+  validatePaymentSessionForOrder,
+} from './payment-lifecycle';
+import { ensureVideoUnlockForOrder } from './video-unlock';
 
 /**
  * get payment service with configs
@@ -136,15 +145,21 @@ export async function handleCheckoutSuccess({
     throw new Error('invalid order');
   }
 
+  validatePaymentSessionForOrder({ order, session });
+
   // Idempotency/repair: if order is already paid, ensure side-effects exist (e.g. credits).
   if (order.status === OrderStatus.PAID) {
     console.log(`Order ${orderNo} is already paid, ensuring side-effects`);
     await ensureCreditForOrder({ order, session });
+    await ensureVideoUnlockForOrder({ order, metadata: session.metadata });
     return;
   }
 
   // Only process orders in CREATED or PENDING status
-  if (order.status !== OrderStatus.CREATED && order.status !== OrderStatus.PENDING) {
+  if (
+    order.status !== OrderStatus.CREATED &&
+    order.status !== OrderStatus.PENDING
+  ) {
     console.log(`Order ${orderNo} status is ${order.status}, not processing`);
     return;
   }
@@ -263,25 +278,41 @@ export async function handleCheckoutSuccess({
 
       // Verify that the order was actually updated
       if (!result.order) {
-        console.error(`[handleCheckoutSuccess] Failed to update order ${orderNo} - order result is null`);
+        console.error(
+          `[handleCheckoutSuccess] Failed to update order ${orderNo} - order result is null`
+        );
         throw new Error(`Failed to update order ${orderNo}`);
       }
 
       // Verify subscription was created if expected
       if (newSubscription && !result.subscription) {
-        console.error(`[handleCheckoutSuccess] Failed to create subscription for order ${orderNo}`);
+        console.error(
+          `[handleCheckoutSuccess] Failed to create subscription for order ${orderNo}`
+        );
         throw new Error(`Failed to create subscription for order ${orderNo}`);
       }
 
       // Verify credit was created if expected
       if (newCredit && !result.credit) {
-        console.error(`[handleCheckoutSuccess] Failed to create credit for order ${orderNo}`);
+        console.error(
+          `[handleCheckoutSuccess] Failed to create credit for order ${orderNo}`
+        );
         throw new Error(`Failed to create credit for order ${orderNo}`);
       }
 
-      console.log(`[handleCheckoutSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+      const videoUnlock = await ensureVideoUnlockForOrder({
+        order: result.order,
+        metadata: session.metadata,
+      });
+
+      console.log(
+        `[handleCheckoutSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}, videoUnlock=${videoUnlock?.status || 'none'}`
+      );
     } catch (error) {
-      console.error(`[handleCheckoutSuccess] Error processing order ${orderNo}:`, error);
+      console.error(
+        `[handleCheckoutSuccess] Error processing order ${orderNo}:`,
+        error
+      );
       throw error; // Re-throw to ensure the webhook/callback knows it failed
     }
   } else if (
@@ -372,6 +403,8 @@ export async function handlePaymentSuccess({
     throw new Error('invalid order');
   }
 
+  validatePaymentSessionForOrder({ order, session });
+
   if (order.paymentType === PaymentType.SUBSCRIPTION) {
     if (!session.subscriptionId || !session.subscriptionInfo) {
       throw new Error('subscription id or subscription info not found');
@@ -458,9 +491,9 @@ export async function handlePaymentSuccess({
         transactionNo: getSnowId(),
         transactionType: CreditTransactionType.GRANT,
         transactionScene:
-          order.paymentType === PaymentType.SUBSCRIPTION
-            ? CreditTransactionScene.SUBSCRIPTION
-            : CreditTransactionScene.PAYMENT,
+          order.paymentType === PaymentType.RENEW
+            ? CreditTransactionScene.RENEWAL
+            : CreditTransactionScene.SUBSCRIPTION,
         credits: credits,
         remainingCredits: credits,
         description: `Grant credit`,
@@ -479,25 +512,36 @@ export async function handlePaymentSuccess({
 
       // Verify that the order was actually updated
       if (!result.order) {
-        console.error(`[handlePaymentSuccess] Failed to update order ${orderNo} - order result is null`);
+        console.error(
+          `[handlePaymentSuccess] Failed to update order ${orderNo} - order result is null`
+        );
         throw new Error(`Failed to update order ${orderNo}`);
       }
 
       // Verify subscription was created if expected
       if (newSubscription && !result.subscription) {
-        console.error(`[handlePaymentSuccess] Failed to create subscription for order ${orderNo}`);
+        console.error(
+          `[handlePaymentSuccess] Failed to create subscription for order ${orderNo}`
+        );
         throw new Error(`Failed to create subscription for order ${orderNo}`);
       }
 
       // Verify credit was created if expected
       if (newCredit && !result.credit) {
-        console.error(`[handlePaymentSuccess] Failed to create credit for order ${orderNo}`);
+        console.error(
+          `[handlePaymentSuccess] Failed to create credit for order ${orderNo}`
+        );
         throw new Error(`Failed to create credit for order ${orderNo}`);
       }
 
-      console.log(`[handlePaymentSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+      console.log(
+        `[handlePaymentSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`
+      );
     } catch (error) {
-      console.error(`[handlePaymentSuccess] Error processing order ${orderNo}:`, error);
+      console.error(
+        `[handlePaymentSuccess] Error processing order ${orderNo}:`,
+        error
+      );
       throw error; // Re-throw to ensure the webhook/callback knows it failed
     }
   } else {
@@ -535,11 +579,49 @@ export async function handleSubscriptionRenewal({
 
   // payment success
   if (session.paymentStatus === PaymentStatus.SUCCESS) {
+    const pendingPlanChange = await findLatestPendingPlanChange(subscriptionNo);
+    const pendingTarget = pendingPlanChange?.metadata
+      ? safeJsonParse(pendingPlanChange.metadata).target
+      : undefined;
+    const renewalPlan = pendingTarget || {};
+    const renewalAmount = Number(renewalPlan.amount ?? subscription.amount);
+    const renewalCurrency = String(
+      renewalPlan.currency || subscription.currency || ''
+    ).toUpperCase();
+    const paymentAmount = Number(session.paymentInfo?.paymentAmount ?? 0);
+    const discountAmount = Number(session.paymentInfo?.discountAmount ?? 0);
+
+    if (paymentAmount + discountAmount < renewalAmount) {
+      throw new Error('payment amount mismatch');
+    }
+    if (
+      session.paymentInfo?.paymentCurrency &&
+      String(session.paymentInfo.paymentCurrency).toUpperCase() !==
+        renewalCurrency
+    ) {
+      throw new Error('payment currency mismatch');
+    }
+
     // update subscription period
     const updateSubscription: UpdateSubscription = {
       currentPeriodStart: subscriptionInfo.currentPeriodStart,
       currentPeriodEnd: subscriptionInfo.currentPeriodEnd,
     };
+
+    if (pendingTarget) {
+      Object.assign(updateSubscription, {
+        productId: pendingTarget.productId,
+        productName: pendingTarget.productName,
+        planName: pendingTarget.planName,
+        amount: pendingTarget.amount,
+        currency: pendingTarget.currency,
+        interval: pendingTarget.interval,
+        intervalCount: pendingTarget.intervalCount,
+        creditsAmount: pendingTarget.creditsAmount,
+        creditsValidDays: pendingTarget.creditsValidDays,
+        paymentProductId: pendingTarget.paymentProductId,
+      });
+    }
 
     const orderNo = getSnowId();
     const currentTime = new Date();
@@ -551,21 +633,23 @@ export async function handleSubscriptionRenewal({
       userId: subscription.userId,
       userEmail: subscription.userEmail,
       status: OrderStatus.PAID,
-      amount: subscription.amount,
-      currency: subscription.currency,
-      productId: subscription.productId,
+      amount: renewalPlan.amount ?? subscription.amount,
+      currency: renewalPlan.currency ?? subscription.currency,
+      productId: renewalPlan.productId ?? subscription.productId,
       paymentType: PaymentType.RENEW,
-      paymentInterval: subscription.interval,
+      paymentInterval: renewalPlan.interval ?? subscription.interval,
       paymentProvider: session.provider || subscription.paymentProvider,
       checkoutInfo: '',
       createdAt: currentTime,
-      productName: subscription.productName,
+      productName: renewalPlan.productName ?? subscription.productName,
       description: 'Subscription Renewal',
       callbackUrl: '',
-      creditsAmount: subscription.creditsAmount,
-      creditsValidDays: subscription.creditsValidDays,
-      planName: subscription.planName || '',
-      paymentProductId: subscription.paymentProductId,
+      creditsAmount: renewalPlan.creditsAmount ?? subscription.creditsAmount,
+      creditsValidDays:
+        renewalPlan.creditsValidDays ?? subscription.creditsValidDays,
+      planName: renewalPlan.planName ?? subscription.planName ?? '',
+      paymentProductId:
+        renewalPlan.paymentProductId ?? subscription.paymentProductId,
       paymentResult: JSON.stringify(session.paymentResult),
       paymentAmount: session.paymentInfo?.paymentAmount,
       paymentCurrency: session.paymentInfo?.paymentCurrency,
@@ -626,25 +710,45 @@ export async function handleSubscriptionRenewal({
 
       // Verify that the subscription was actually updated
       if (!result.subscription) {
-        console.error(`[handleSubscriptionRenewal] Failed to update subscription ${subscriptionNo} - subscription result is null`);
+        console.error(
+          `[handleSubscriptionRenewal] Failed to update subscription ${subscriptionNo} - subscription result is null`
+        );
         throw new Error(`Failed to update subscription ${subscriptionNo}`);
       }
 
       // Verify order was created if expected
       if (order && !result.order) {
-        console.error(`[handleSubscriptionRenewal] Failed to create order for subscription ${subscriptionNo}`);
-        throw new Error(`Failed to create order for subscription ${subscriptionNo}`);
+        console.error(
+          `[handleSubscriptionRenewal] Failed to create order for subscription ${subscriptionNo}`
+        );
+        throw new Error(
+          `Failed to create order for subscription ${subscriptionNo}`
+        );
       }
 
       // Verify credit was created if expected
       if (newCredit && !result.credit) {
-        console.error(`[handleSubscriptionRenewal] Failed to create credit for subscription ${subscriptionNo}`);
-        throw new Error(`Failed to create credit for subscription ${subscriptionNo}`);
+        console.error(
+          `[handleSubscriptionRenewal] Failed to create credit for subscription ${subscriptionNo}`
+        );
+        throw new Error(
+          `Failed to create credit for subscription ${subscriptionNo}`
+        );
       }
 
-      console.log(`[handleSubscriptionRenewal] Subscription ${subscriptionNo} processed successfully: subscription=${result.subscription?.status}, order=${result.order?.orderNo || 'none'}, credit=${result.credit?.credits || 'none'}`);
+      console.log(
+        `[handleSubscriptionRenewal] Subscription ${subscriptionNo} processed successfully: subscription=${result.subscription?.status}, order=${result.order?.orderNo || 'none'}, credit=${result.credit?.credits || 'none'}`
+      );
+      if (pendingPlanChange) {
+        await updateSubscriptionPlanChange(pendingPlanChange.id, {
+          status: SubscriptionPlanChangeStatus.APPLIED,
+        });
+      }
     } catch (error) {
-      console.error(`[handleSubscriptionRenewal] Error processing subscription ${subscriptionNo}:`, error);
+      console.error(
+        `[handleSubscriptionRenewal] Error processing subscription ${subscriptionNo}:`,
+        error
+      );
       throw error; // Re-throw to ensure the webhook/callback knows it failed
     }
   } else {

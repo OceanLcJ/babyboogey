@@ -115,8 +115,11 @@
       "generic_retry_actionable": "生成失败，请稍后重试。"
     },
     "watermark": {
-      "free_notice": "免费导出会带动态 BabyBoogey 水印，升级后可去除。",
+      "free_notice": "免费预览包含动态 BabyBoogey 水印。解锁当前视频即可高清无水印下载，无需订阅。",
       "remove_cta": "去除水印",
+      "unlock_cta": "解锁当前视频 - $2.99",
+      "unlock_processing": "正在打开结账...",
+      "unlock_error": "结账失败",
       "download_failed": "当前浏览器不支持导出带动态水印的视频，请使用 Chrome/Edge，或升级后下载无水印版本。",
       "preparing_preview": "正在准备受保护预览...",
       "preview_failed": "受保护预览准备失败，请尝试下载或重新生成。"

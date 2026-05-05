@@ -23,5 +23,15 @@
       "month": "月",
       "year": "年"
     }
+  },
+  "actions": {
+    "cancel": "今すぐ解約",
+    "refund_cancel_now": "返金して解約",
+    "cancel_at_period_end": "期間末に解約",
+    "cancel_confirm": "この定期購入を今すぐ解約しますか？",
+    "refund_cancel_now_confirm": "最新の支払い済み注文を返金し、この定期購入を今すぐ解約しますか？",
+    "cancel_at_period_end_confirm": "この定期購入を現在の期間末に解約するよう設定しますか？",
+    "reason_prompt": "操作理由",
+    "success": "定期購入の操作を記録しました"
   }
 }

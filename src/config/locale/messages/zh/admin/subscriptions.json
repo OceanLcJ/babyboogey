@@ -23,5 +23,15 @@
       "month": "月付",
       "year": "年付"
     }
+  },
+  "actions": {
+    "cancel": "立即取消",
+    "refund_cancel_now": "退款并取消",
+    "cancel_at_period_end": "周期末取消",
+    "cancel_confirm": "确认立即取消此订阅？",
+    "refund_cancel_now_confirm": "确认退款最近一笔已支付订单并立即取消此订阅？",
+    "cancel_at_period_end_confirm": "确认安排此订阅在当前周期结束时取消？",
+    "reason_prompt": "操作原因",
+    "success": "订阅操作已记录"
   }
 }

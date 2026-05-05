@@ -1,5 +1,11 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  index,
+  integer,
+  sqliteTable,
+  text,
+  uniqueIndex,
+} from 'drizzle-orm/sqlite-core';
 
 // SQLite has no schema concept like Postgres. Keep a `table` alias to minimize diff with pg schema.
 const table = sqliteTable;
@@ -377,9 +383,130 @@ export const credit = table(
     // Query credits by subscription number
     index('idx_credit_subscription_no').on(table.subscriptionNo),
     // Anti-abuse: count first-login grants by signup IP in a time window
-    index('idx_credit_signup_ip_created_at').on(table.signupIp, table.createdAt),
+    index('idx_credit_signup_ip_created_at').on(
+      table.signupIp,
+      table.createdAt
+    ),
     // Anti-abuse: count first-login grants by claim IP in a time window
     index('idx_credit_claim_ip_created_at').on(table.claimIp, table.createdAt),
+  ]
+);
+
+export const paymentEvent = table(
+  'payment_event',
+  {
+    id: text('id').primaryKey(),
+    provider: text('provider').notNull(),
+    eventId: text('event_id').notNull(),
+    eventType: text('event_type').notNull(),
+    resourceId: text('resource_id'),
+    status: text('status').notNull(),
+    orderNo: text('order_no'),
+    subscriptionNo: text('subscription_no'),
+    transactionId: text('transaction_id'),
+    payload: text('payload'),
+    errorMessage: text('error_message'),
+    processedAt: integer('processed_at', { mode: 'timestamp_ms' }),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_event_provider_event').on(
+      table.provider,
+      table.eventId
+    ),
+    index('idx_payment_event_resource').on(table.provider, table.resourceId),
+    index('idx_payment_event_status').on(table.status, table.createdAt),
+  ]
+);
+
+export const paymentRefund = table(
+  'payment_refund',
+  {
+    id: text('id').primaryKey(),
+    provider: text('provider').notNull(),
+    refundId: text('refund_id').notNull(),
+    orderNo: text('order_no').notNull(),
+    transactionId: text('transaction_id'),
+    amount: integer('amount'),
+    currency: text('currency'),
+    status: text('status').notNull(),
+    reason: text('reason'),
+    metadata: text('metadata'),
+    reversedAt: integer('reversed_at', { mode: 'timestamp_ms' }),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_payment_refund_provider_refund').on(
+      table.provider,
+      table.refundId
+    ),
+    index('idx_payment_refund_order').on(table.orderNo),
+  ]
+);
+
+export const subscriptionPlanChange = table(
+  'subscription_plan_change',
+  {
+    id: text('id').primaryKey(),
+    subscriptionNo: text('subscription_no').notNull(),
+    userId: text('user_id').notNull(),
+    provider: text('provider').notNull(),
+    providerSubscriptionId: text('provider_subscription_id').notNull(),
+    fromProductId: text('from_product_id'),
+    toProductId: text('to_product_id').notNull(),
+    fromPaymentProductId: text('from_payment_product_id'),
+    toPaymentProductId: text('to_payment_product_id').notNull(),
+    changeType: text('change_type').notNull(),
+    status: text('status').notNull(),
+    approvalUrl: text('approval_url'),
+    effectiveAt: integer('effective_at', { mode: 'timestamp_ms' }),
+    metadata: text('metadata'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index('idx_subscription_plan_change_subscription').on(
+      table.subscriptionNo,
+      table.status
+    ),
+    index('idx_subscription_plan_change_effective').on(table.effectiveAt),
+  ]
+);
+
+export const paymentAuditLog = table(
+  'payment_audit_log',
+  {
+    id: text('id').primaryKey(),
+    actorUserId: text('actor_user_id'),
+    action: text('action').notNull(),
+    targetType: text('target_type').notNull(),
+    targetId: text('target_id').notNull(),
+    provider: text('provider'),
+    payload: text('payload'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+  },
+  (table) => [
+    index('idx_payment_audit_target').on(table.targetType, table.targetId),
+    index('idx_payment_audit_actor').on(table.actorUserId, table.createdAt),
   ]
 );
 
@@ -592,6 +719,43 @@ export const mediaAsset = table(
     index('idx_media_asset_status_expires').on(table.status, table.expiresAt),
     index('idx_media_asset_checksum').on(table.checksumSha256),
     index('idx_media_asset_linked_task').on(table.linkedTaskId),
+  ]
+);
+
+export const videoUnlock = table(
+  'video_unlock',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    taskId: text('task_id')
+      .notNull()
+      .references(() => aiTask.id, { onDelete: 'cascade' }),
+    assetId: text('asset_id')
+      .notNull()
+      .references(() => mediaAsset.id, { onDelete: 'cascade' }),
+    orderNo: text('order_no').notNull(),
+    productId: text('product_id').notNull(),
+    status: text('status').notNull().default('pending'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    unlockedAt: integer('unlocked_at', { mode: 'timestamp_ms' }),
+  },
+  (table) => [
+    uniqueIndex('uidx_video_unlock_order').on(table.orderNo),
+    index('idx_video_unlock_user_task_asset').on(
+      table.userId,
+      table.taskId,
+      table.assetId
+    ),
+    index('idx_video_unlock_task').on(table.taskId, table.status),
+    index('idx_video_unlock_asset').on(table.assetId, table.status),
   ]
 );
 

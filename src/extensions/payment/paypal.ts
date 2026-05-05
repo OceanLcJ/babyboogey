@@ -1,9 +1,11 @@
 import {
   CheckoutSession,
+  ChangeSubscriptionPlanResult,
   PaymentBilling,
   PaymentEventType,
   PaymentInterval,
   PaymentInvoice,
+  PaymentRefundResult,
   PaymentStatus,
   PaymentType,
   SubscriptionCycleType,
@@ -513,6 +515,10 @@ export class PayPalProvider implements PaymentProvider {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.resource
         );
+      } else if (eventType === PaymentEventType.PAYMENT_REFUNDED) {
+        paymentSession = await this.buildPaymentSessionFromRefund(
+          event.resource
+        );
       } else if (eventType === PaymentEventType.PAYMENT_FAILED) {
         paymentSession = {
           provider: this.name,
@@ -522,6 +528,8 @@ export class PayPalProvider implements PaymentProvider {
       }
 
       return {
+        eventId: event.id,
+        resourceId: event.resource?.id,
         eventType,
         eventResult: event,
         paymentSession,
@@ -594,8 +602,11 @@ export class PayPalProvider implements PaymentProvider {
    */
   async cancelSubscription({
     subscriptionId,
+    reason,
   }: {
     subscriptionId: string;
+    cancelAtPeriodEnd?: boolean;
+    reason?: string;
   }): Promise<PaymentSession> {
     if (!subscriptionId) {
       throw new Error('subscriptionId is required');
@@ -606,7 +617,7 @@ export class PayPalProvider implements PaymentProvider {
     await this.makeRequest(
       `/v1/billing/subscriptions/${subscriptionId}/cancel`,
       'POST',
-      { reason: 'Customer requested cancellation' }
+      { reason: reason || 'Customer requested cancellation' }
     );
 
     const subscription = await this.makeRequest(
@@ -615,6 +626,111 @@ export class PayPalProvider implements PaymentProvider {
     );
 
     return await this.buildPaymentSessionFromSubscription(subscription);
+  }
+
+  async refundPayment({
+    transactionId,
+    invoiceId,
+    amount,
+    currency,
+    reason,
+    metadata,
+  }: {
+    paymentSessionId?: string;
+    transactionId?: string;
+    invoiceId?: string;
+    amount?: number;
+    currency?: string;
+    reason?: string;
+    metadata?: Record<string, UnsafeAny>;
+  }): Promise<PaymentRefundResult> {
+    await this.ensureAccessToken();
+
+    const captureId = invoiceId || transactionId;
+    if (!captureId) {
+      throw new Error('PayPal refund requires a capture id');
+    }
+
+    const payload: UnsafeAny = {};
+    if (amount && amount > 0 && currency) {
+      payload.amount = {
+        value: (amount / 100).toFixed(2),
+        currency_code: currency.toUpperCase(),
+      };
+    }
+    if (reason) {
+      payload.note_to_payer = reason;
+    }
+    if (metadata) {
+      payload.custom_id = JSON.stringify(metadata);
+    }
+
+    const refund = await this.makeRequest(
+      `/v2/payments/captures/${captureId}/refund`,
+      'POST',
+      payload
+    );
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: refund.id,
+        paymentTransactionId: captureId,
+        amount: refund.amount?.value
+          ? Math.round(parseFloat(refund.amount.value) * 100)
+          : amount,
+        currency: refund.amount?.currency_code || currency,
+        status:
+          refund.status === 'FAILED'
+            ? 'failed'
+            : refund.status === 'PENDING'
+              ? 'pending'
+              : 'succeeded',
+        reason,
+        refundedAt: refund.create_time ? new Date(refund.create_time) : new Date(),
+        metadata,
+      },
+      refundResult: refund,
+    };
+  }
+
+  async changeSubscriptionPlan({
+    subscriptionId,
+    providerPlanId,
+  }: {
+    subscriptionId: string;
+    providerPlanId: string;
+    changeType: 'upgrade' | 'downgrade';
+  }): Promise<ChangeSubscriptionPlanResult> {
+    await this.ensureAccessToken();
+
+    const result = await this.makeRequest(
+      `/v1/billing/subscriptions/${subscriptionId}/revise`,
+      'POST',
+      {
+        plan_id: providerPlanId,
+      }
+    );
+
+    const approvalUrl = result.links?.find(
+      (link: UnsafeAny) => link.rel === 'approve'
+    )?.href;
+
+    const subscription = await this.makeRequest(
+      `/v1/billing/subscriptions/${subscriptionId}`,
+      'GET'
+    );
+
+    return {
+      provider: this.name,
+      subscriptionId,
+      status: approvalUrl ? 'pending_provider_approval' : 'applied',
+      approvalUrl,
+      paymentSession: await this.buildPaymentSessionFromSubscription(
+        subscription
+      ),
+      result,
+    };
   }
 
   /**
@@ -737,7 +853,7 @@ export class PayPalProvider implements PaymentProvider {
 
       // Subscription payment events
       default:
-        throw new Error(`Unknown PayPal event type: ${eventType}`);
+        return PaymentEventType.UNKNOWN;
     }
   }
 
@@ -962,6 +1078,53 @@ export class PayPalProvider implements PaymentProvider {
     };
 
     return result;
+  }
+
+  private async buildPaymentSessionFromRefund(
+    refund: UnsafeAny
+  ): Promise<PaymentSession> {
+    let metadata: UnsafeAny = {};
+    if (refund.custom_id) {
+      try {
+        metadata = JSON.parse(refund.custom_id);
+      } catch {
+        metadata = { custom_id: refund.custom_id };
+      }
+    }
+
+    const upLink = refund.links?.find(
+      (link: UnsafeAny) => link.rel === 'up' && link.href
+    )?.href;
+    const paymentTransactionId =
+      refund.sale_id ||
+      refund.capture_id ||
+      upLink?.match(/\/(?:captures|sale)\/([^/?]+)/)?.[1];
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: refund.id,
+        paymentTransactionId,
+        orderNo: metadata.order_no,
+        userId: metadata.user_id,
+        amount: refund.amount?.value
+          ? Math.round(parseFloat(refund.amount.value) * 100)
+          : undefined,
+        currency: refund.amount?.currency_code,
+        status:
+          refund.status === 'FAILED'
+            ? 'failed'
+            : refund.status === 'PENDING'
+              ? 'pending'
+              : 'succeeded',
+        refundedAt: refund.create_time
+          ? new Date(refund.create_time)
+          : undefined,
+        metadata,
+      },
+      refundResult: refund,
+      metadata,
+    };
   }
 
   // Build payment session from subscription

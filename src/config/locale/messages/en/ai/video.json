@@ -115,8 +115,11 @@
       "generic_retry_actionable": "Generation failed. Please retry in a moment."
     },
     "watermark": {
-      "free_notice": "Free exports include a dynamic BabyBoogey watermark. Upgrade to remove it.",
+      "free_notice": "Free preview includes a dynamic BabyBoogey watermark. Unlock this video for a clean HD download. No subscription.",
       "remove_cta": "Remove Watermark",
+      "unlock_cta": "Unlock this video - $2.99",
+      "unlock_processing": "Opening checkout...",
+      "unlock_error": "Checkout failed",
       "download_failed": "Your browser cannot export a watermarked video. Please try Chrome/Edge, or upgrade to remove the watermark.",
       "preparing_preview": "Preparing protected preview...",
       "preview_failed": "Unable to prepare protected preview. Please try downloading or regenerate."

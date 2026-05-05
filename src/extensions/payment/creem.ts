@@ -1,5 +1,6 @@
 import {
   CheckoutSession,
+  ChangeSubscriptionPlanResult,
   PaymentBilling,
   PaymentConfigs,
   PaymentCustomField,
@@ -8,6 +9,7 @@ import {
   PaymentInterval,
   PaymentOrder,
   PaymentProvider,
+  PaymentRefundResult,
   PaymentSession,
   PaymentStatus,
   SubscriptionCycleType,
@@ -179,13 +181,19 @@ export class CreemProvider implements PaymentProvider {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.object as UnsafeAny
         );
+      } else if (eventType === PaymentEventType.PAYMENT_REFUNDED) {
+        paymentSession = await this.buildPaymentSessionFromRefund(
+          event.object as UnsafeAny
+        );
       }
 
-      if (!paymentSession) {
+      if (!paymentSession && eventType !== PaymentEventType.UNKNOWN) {
         throw new Error('Invalid webhook event');
       }
 
       return {
+        eventId: event.id || event.eventId,
+        resourceId: event.object?.id,
         eventType: eventType,
         eventResult: event,
         paymentSession: paymentSession,
@@ -221,16 +229,31 @@ export class CreemProvider implements PaymentProvider {
 
   async cancelSubscription({
     subscriptionId,
+    cancelAtPeriodEnd,
   }: {
     subscriptionId: string;
+    cancelAtPeriodEnd?: boolean;
+    reason?: string;
   }): Promise<PaymentSession> {
     try {
       const result = await this.makeRequest(
         `/v1/subscriptions/${subscriptionId}/cancel`,
-        'POST'
+        'POST',
+        cancelAtPeriodEnd
+          ? {
+              mode: 'scheduled',
+              onExecute: 'cancel',
+            }
+          : {
+              mode: 'immediate',
+            }
       );
 
-      if (!result.canceled_at) {
+      if (
+        !result.canceled_at &&
+        result.status !== 'scheduled_cancel' &&
+        !result.current_period_end_date
+      ) {
         throw new Error('cancel subscription failed');
       }
 
@@ -238,6 +261,86 @@ export class CreemProvider implements PaymentProvider {
     } catch (error) {
       throw error;
     }
+  }
+
+  async refundPayment({
+    transactionId,
+    invoiceId,
+    amount,
+    currency,
+    reason,
+    metadata,
+  }: {
+    paymentSessionId?: string;
+    transactionId?: string;
+    invoiceId?: string;
+    amount?: number;
+    currency?: string;
+    reason?: string;
+    metadata?: Record<string, UnsafeAny>;
+  }): Promise<PaymentRefundResult> {
+    const targetTransactionId = transactionId || invoiceId;
+    if (!targetTransactionId) {
+      throw new Error('Creem refund requires a transaction id');
+    }
+
+    const result = await this.makeRequest('/v1/refunds', 'POST', {
+      transaction_id: targetTransactionId,
+      amount,
+      currency,
+      reason,
+      metadata,
+    });
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: result.id || result.refund_id,
+        paymentTransactionId: targetTransactionId,
+        amount: result.amount || amount,
+        currency: result.currency || currency,
+        status:
+          result.status === 'failed'
+            ? 'failed'
+            : result.status === 'pending'
+              ? 'pending'
+              : 'succeeded',
+        reason,
+        refundedAt: result.created_at ? new Date(result.created_at) : new Date(),
+        metadata,
+      },
+      refundResult: result,
+    };
+  }
+
+  async changeSubscriptionPlan({
+    subscriptionId,
+    providerPlanId,
+    changeType,
+  }: {
+    subscriptionId: string;
+    providerPlanId: string;
+    changeType: 'upgrade' | 'downgrade';
+  }): Promise<ChangeSubscriptionPlanResult> {
+    const result = await this.makeRequest(
+      `/v1/subscriptions/${subscriptionId}/upgrade`,
+      'POST',
+      {
+        product_id: providerPlanId,
+        update_behavior:
+          changeType === 'upgrade'
+            ? 'proration-charge-immediately'
+            : 'proration-none',
+      }
+    );
+
+    return {
+      provider: this.name,
+      subscriptionId: result.id || subscriptionId,
+      status: 'applied',
+      paymentSession: await this.buildPaymentSessionFromSubscription(result),
+      result,
+    };
   }
 
   private async generateSignature(
@@ -308,13 +411,14 @@ export class CreemProvider implements PaymentProvider {
         return PaymentEventType.SUBSCRIBE_UPDATED;
       case 'subscription.canceled':
         return PaymentEventType.SUBSCRIBE_CANCELED;
+      case 'refund.created':
+        return PaymentEventType.PAYMENT_REFUNDED;
       default:
         // not handle other event type
         // subscription.expired
         // subscription.trialing
-        // refund.created
         // dispute.created
-        throw new Error(`Not handle creem event type: ${eventType}`);
+        return PaymentEventType.UNKNOWN;
     }
   }
 
@@ -456,6 +560,50 @@ export class CreemProvider implements PaymentProvider {
     return result;
   }
 
+  private async buildPaymentSessionFromRefund(
+    refund: UnsafeAny
+  ): Promise<PaymentSession> {
+    const transaction = refund.transaction || refund.order || {};
+    const metadata =
+      refund.metadata ||
+      transaction.metadata ||
+      (typeof refund.custom_id === 'string'
+        ? (() => {
+            try {
+              return JSON.parse(refund.custom_id);
+            } catch {
+              return { custom_id: refund.custom_id };
+            }
+          })()
+        : {});
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: refund.id || refund.refund_id,
+        paymentTransactionId:
+          refund.transaction_id ||
+          transaction.id ||
+          transaction.transaction ||
+          refund.order_id,
+        orderNo: metadata?.order_no,
+        userId: metadata?.user_id,
+        amount: refund.amount || refund.refunded_amount,
+        currency: refund.currency || transaction.currency,
+        status:
+          refund.status === 'failed'
+            ? 'failed'
+            : refund.status === 'pending'
+              ? 'pending'
+              : 'succeeded',
+        refundedAt: refund.created_at ? new Date(refund.created_at) : undefined,
+        metadata,
+      },
+      refundResult: refund,
+      metadata,
+    };
+  }
+
   // build subscription info from subscription
   private async buildSubscriptionInfo(
     subscription: UnsafeAny,
@@ -489,6 +637,11 @@ export class CreemProvider implements PaymentProvider {
       // subscription canceled
       subscriptionInfo.status = SubscriptionStatus.CANCELED;
       subscriptionInfo.canceledAt = new Date(subscription.canceled_at);
+    } else if (subscription.status === 'scheduled_cancel') {
+      subscriptionInfo.status = SubscriptionStatus.PENDING_CANCEL;
+      subscriptionInfo.canceledEndAt = new Date(
+        subscription.current_period_end_date
+      );
     } else if (subscription.status === 'trialing') {
       subscriptionInfo.status = SubscriptionStatus.TRIALING;
     } else if (subscription.status === 'paused') {

@@ -15,8 +15,10 @@ import type {
 
 interface WatermarkedVideoResultProps {
   videoUrl: string;
+  downloadUrl?: string;
   thumbnailUrl?: string;
   watermark?: VideoWatermarkConfig;
+  showDownload?: boolean;
   downloadLabel?: string;
   preparePreviewLabel?: string;
   retryPreviewLabel?: string;
@@ -37,8 +39,10 @@ function triggerDownload(url: string, filename: string) {
 
 export function WatermarkedVideoResult({
   videoUrl,
+  downloadUrl,
   thumbnailUrl,
   watermark,
+  showDownload = true,
   downloadLabel = 'Download',
   preparePreviewLabel = 'Prepare protected preview',
   retryPreviewLabel = 'Retry preview',
@@ -49,12 +53,14 @@ export function WatermarkedVideoResult({
 }: WatermarkedVideoResultProps) {
   const isAliveRef = useRef(true);
   const renderInFlightRef = useRef(false);
+  const autoPrepareKeyRef = useRef<string | null>(null);
   const [playbackState, setPlaybackState] = useState<WatermarkedPlaybackState>({
     status: 'idle',
   });
   const playbackStateRef = useRef<WatermarkedPlaybackState>({ status: 'idle' });
 
   const dynamicWatermarked = isDynamicWatermarkedVideo(watermark);
+  const resolvedDownloadUrl = downloadUrl || videoUrl;
   const watermarkText = watermark?.watermarkText;
   const watermarkOpacity = watermark?.watermarkOpacity;
   const watermarkIntervalSeconds = watermark?.watermarkIntervalSeconds;
@@ -152,6 +158,7 @@ export function WatermarkedVideoResult({
   );
 
   useEffect(() => {
+    playbackStateRef.current = { status: 'idle' };
     setPlaybackState((prev) => {
       if (prev.status === 'idle' && !prev.blobUrl) {
         return prev;
@@ -168,7 +175,34 @@ export function WatermarkedVideoResult({
     watermark?.watermarkType,
     watermark?.watermarkOpacity,
     watermark?.watermarkIntervalSeconds,
-    watermark?.watermarkText,
+      watermark?.watermarkText,
+  ]);
+
+  useEffect(() => {
+    if (!dynamicWatermarked || !videoUrl) {
+      autoPrepareKeyRef.current = null;
+      return;
+    }
+
+    const autoPrepareKey = [
+      videoUrl,
+      watermarkText || '',
+      watermarkOpacity ?? '',
+      watermarkIntervalSeconds ?? '',
+    ].join('|');
+    if (autoPrepareKeyRef.current === autoPrepareKey) {
+      return;
+    }
+
+    autoPrepareKeyRef.current = autoPrepareKey;
+    void prepareWatermarkedPlayback().catch(() => {});
+  }, [
+    dynamicWatermarked,
+    prepareWatermarkedPlayback,
+    videoUrl,
+    watermarkIntervalSeconds,
+    watermarkOpacity,
+    watermarkText,
   ]);
 
   const handlePreparePreview = useCallback(() => {
@@ -178,12 +212,15 @@ export function WatermarkedVideoResult({
   }, [prepareWatermarkedPlayback]);
 
   const handleDownload = useCallback(async () => {
-    if (!videoUrl) {
+    if (!resolvedDownloadUrl) {
       return;
     }
 
     if (!dynamicWatermarked) {
-      triggerDownload(videoUrl, `video.${inferExtensionFromMimeType('video/mp4')}`);
+      triggerDownload(
+        resolvedDownloadUrl,
+        `video.${inferExtensionFromMimeType('video/mp4')}`
+      );
       return;
     }
 
@@ -205,9 +242,11 @@ export function WatermarkedVideoResult({
     }
 
     triggerDownload(prepared.blobUrl, `video.${prepared.extension || 'mp4'}`);
-  }, [dynamicWatermarked, prepareWatermarkedPlayback, videoUrl]);
+  }, [dynamicWatermarked, prepareWatermarkedPlayback, resolvedDownloadUrl]);
 
-  const playbackUrl = dynamicWatermarked ? playbackState.blobUrl || '' : videoUrl;
+  const playbackUrl = dynamicWatermarked
+    ? playbackState.blobUrl || videoUrl
+    : videoUrl;
   const canRenderVideo = Boolean(playbackUrl);
 
   return (
@@ -218,7 +257,9 @@ export function WatermarkedVideoResult({
             src={playbackUrl}
             poster={thumbnailUrl || undefined}
             controls
-            controlsList={dynamicWatermarked ? 'nodownload noremoteplayback' : undefined}
+            controlsList={
+              dynamicWatermarked ? 'nodownload noremoteplayback' : undefined
+            }
             disablePictureInPicture={dynamicWatermarked}
             className="h-40 w-72 rounded-md border bg-black/70 object-cover"
             preload="metadata"
@@ -302,7 +343,7 @@ export function WatermarkedVideoResult({
         </div>
       ) : null}
 
-      {dynamicWatermarked ? (
+      {showDownload && dynamicWatermarked ? (
         <button
           type="button"
           onClick={() => {
@@ -318,16 +359,16 @@ export function WatermarkedVideoResult({
           )}
           {downloadLabel}
         </button>
-      ) : (
+      ) : showDownload ? (
         <a
-          href={videoUrl}
+          href={resolvedDownloadUrl}
           download
           className="inline-flex w-fit items-center gap-1 rounded border px-2 py-1 text-xs hover:bg-black/5"
         >
           <Download className="h-3.5 w-3.5" />
           {downloadLabel}
         </a>
-      )}
+      ) : null}
     </div>
   );
 }

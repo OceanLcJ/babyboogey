@@ -18,12 +18,33 @@ import {
 import { getCurrentSubscription } from '@/shared/models/subscription';
 import { getUserInfo } from '@/shared/models/user';
 import { getPaymentService } from '@/shared/services/payment';
+import {
+  buildServerPaymentMetadata,
+  changeSubscriptionPlanWithProvider,
+  getSubscriptionCheckoutRouting,
+  PricingPlanSnapshot,
+} from '@/shared/services/payment-lifecycle';
+import {
+  buildVideoUnlockCheckoutMetadata,
+  createPendingVideoUnlock,
+  getVideoUnlockPricingItem,
+  getVideoUnlockReturnPath,
+  isVideoUnlockProductId,
+  resolveVideoUnlockCheckoutTarget,
+} from '@/shared/services/video-unlock';
 import { PricingCurrency } from '@/shared/types/blocks/pricing';
 
 export async function POST(req: Request) {
   try {
-    const { product_id, currency, locale, payment_provider, metadata } =
-      await req.json();
+    const {
+      product_id,
+      currency,
+      locale,
+      payment_provider,
+      metadata,
+      task_id,
+      asset_id,
+    } = await req.json();
     if (!product_id) {
       return respErr('product_id is required');
     }
@@ -34,9 +55,10 @@ export async function POST(req: Request) {
     });
     const pricing = t.raw('page.sections.pricing');
 
-    const pricingItem = pricing.items.find(
-      (item: UnsafeAny) => item.product_id === product_id
-    );
+    const isVideoUnlockCheckout = isVideoUnlockProductId(product_id);
+    const pricingItem = isVideoUnlockCheckout
+      ? getVideoUnlockPricingItem()
+      : pricing.items.find((item: UnsafeAny) => item.product_id === product_id);
 
     if (!pricingItem) {
       return respErr('pricing item not found');
@@ -52,12 +74,13 @@ export async function POST(req: Request) {
       return respErr('no auth, please sign in');
     }
 
-    if (pricingItem.group === 'credits') {
-      const currentSubscription = await getCurrentSubscription(user.id);
-      if (!currentSubscription) {
-        return respErr(t('messages.credit_pack_subscribers_only'));
-      }
-    }
+    const videoUnlockTarget = isVideoUnlockCheckout
+      ? await resolveVideoUnlockCheckoutTarget({
+          userId: user.id,
+          taskId: task_id,
+          assetId: asset_id,
+        })
+      : null;
 
     // get configs
     const configs = await getAllConfigs();
@@ -147,6 +170,11 @@ export async function POST(req: Request) {
         ? PaymentType.ONE_TIME
         : PaymentType.SUBSCRIPTION;
 
+    const currentSubscription = await getCurrentSubscription(user.id);
+    if (pricingItem.group === 'credits' && !currentSubscription) {
+      return respErr(t('messages.credit_pack_subscribers_only'));
+    }
+
     const orderNo = getSnowId();
 
     // get payment product id from pricing table in local file
@@ -205,27 +233,110 @@ export async function POST(req: Request) {
       callbackBaseUrl += `/${locale}`;
     }
 
-    const callbackUrl =
-      paymentType === PaymentType.SUBSCRIPTION
+    const callbackUrl = videoUnlockTarget
+      ? `${callbackBaseUrl}${getVideoUnlockReturnPath(videoUnlockTarget.task.id)}`
+      : paymentType === PaymentType.SUBSCRIPTION
         ? `${callbackBaseUrl}/settings/billing`
         : `${callbackBaseUrl}/settings/payments`;
 
+    if (videoUnlockTarget?.activeUnlock) {
+      return respData({
+        checkoutUrl: callbackUrl,
+        videoUnlock: {
+          status: videoUnlockTarget.activeUnlock.status,
+          taskId: videoUnlockTarget.task.id,
+          assetId: videoUnlockTarget.asset.id,
+        },
+      });
+    }
+
+    const subscriptionRouting = getSubscriptionCheckoutRouting({
+      hasCurrentSubscription: Boolean(currentSubscription),
+      currentProductId: currentSubscription?.productId,
+      targetProductId: pricingItem.product_id,
+      paymentType,
+    });
+
+    if (subscriptionRouting === 'current_plan') {
+      return respData({
+        checkoutUrl: callbackUrl,
+        planChange: {
+          status: 'current_plan',
+          subscriptionNo: currentSubscription?.subscriptionNo,
+        },
+      });
+    }
+
+    if (subscriptionRouting === 'change_plan') {
+      if (!currentSubscription) {
+        return respErr('subscription not found');
+      }
+
+      if (!paymentProductId) {
+        return respErr('missing provider plan/price/product mapping');
+      }
+
+      const currentProviderName =
+        currentSubscription.paymentProvider || paymentProvider.name;
+      const planChangeProvider =
+        paymentService.getProvider(currentProviderName);
+      if (
+        !planChangeProvider ||
+        !planChangeProvider.name ||
+        planChangeProvider.name !== currentProviderName
+      ) {
+        return respErr('subscription payment provider not configured');
+      }
+
+      const targetPlan: PricingPlanSnapshot = {
+        productId: pricingItem.product_id,
+        productName: pricingItem.product_name,
+        planName: pricingItem.plan_name || pricingItem.product_name,
+        amount: checkoutAmount,
+        currency: checkoutCurrency,
+        interval: paymentInterval,
+        intervalCount: pricingItem.interval_count || 1,
+        creditsAmount: pricingItem.credits,
+        creditsValidDays: pricingItem.valid_days,
+        paymentProductId,
+      };
+
+      const planChange = await changeSubscriptionPlanWithProvider({
+        subscription: currentSubscription,
+        target: targetPlan,
+        provider: planChangeProvider,
+        actorUserId: user.id,
+      });
+
+      return respData({
+        checkoutUrl: planChange.approvalUrl || callbackUrl,
+        planChange,
+      });
+    }
+
     // build checkout order
     const checkoutOrder: PaymentOrder = {
+      orderNo,
       description: pricingItem.product_name,
       customer: {
         name: user.name,
         email: user.email,
       },
       type: paymentType,
-      metadata: {
-        app_name: configs.app_name,
-        order_no: orderNo,
-        user_id: user.id,
-        ...(metadata || {}),
-      },
+      metadata: buildServerPaymentMetadata({
+        appName: configs.app_name,
+        orderNo,
+        userId: user.id,
+        metadata: videoUnlockTarget
+          ? buildVideoUnlockCheckoutMetadata({
+              clientMetadata: metadata,
+              taskId: videoUnlockTarget.task.id,
+              assetId: videoUnlockTarget.asset.id,
+            })
+          : metadata,
+      }),
       successUrl: `${configs.app_url}/api/payment/callback?order_no=${orderNo}`,
-      cancelUrl: `${callbackBaseUrl}/pricing`,
+      cancelUrl: videoUnlockTarget ? callbackUrl : `${callbackBaseUrl}/pricing`,
     };
 
     // checkout with predefined product
@@ -280,6 +391,15 @@ export async function POST(req: Request) {
 
     // create order
     await createOrder(order);
+    if (videoUnlockTarget) {
+      await createPendingVideoUnlock({
+        userId: user.id,
+        taskId: videoUnlockTarget.task.id,
+        assetId: videoUnlockTarget.asset.id,
+        orderNo,
+        productId: pricingItem.product_id,
+      });
+    }
 
     try {
       // create payment

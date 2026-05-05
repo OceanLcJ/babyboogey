@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getUserInfo } from '@/shared/models/user';
-import { findMediaAssetById, MediaAssetStatus } from '@/shared/models/media_asset';
 import {
-  canAccessMediaAsset,
+  findMediaAssetById,
+  MediaAssetStatus,
+} from '@/shared/models/media_asset';
+import { getUserInfo } from '@/shared/models/user';
+import {
+  canAccessMediaAssetForRequest,
   GUEST_UPLOAD_SESSION_COOKIE,
   verifySignedAssetToken,
 } from '@/shared/services/media-asset';
@@ -28,15 +31,24 @@ export async function GET(
       return new NextResponse('Asset expired', { status: 410 });
     }
 
+    const accessMode =
+      req.nextUrl.searchParams.get('access') === 'preview'
+        ? 'preview'
+        : 'original';
     const token = req.nextUrl.searchParams.get('token');
-    const tokenAuthorized = verifySignedAssetToken({ assetId, token });
+    const tokenAuthorized = verifySignedAssetToken({
+      assetId,
+      token,
+      accessMode,
+    });
     const guestSessionId =
       req.cookies.get(GUEST_UPLOAD_SESSION_COOKIE)?.value || null;
     const user = await getUserInfo();
-    const ownerAuthorized = canAccessMediaAsset({
+    const ownerAuthorized = await canAccessMediaAssetForRequest({
       asset,
       userId: user?.id,
       guestSessionId,
+      accessMode,
     });
 
     if (!tokenAuthorized && !ownerAuthorized) {
@@ -83,7 +95,10 @@ export async function GET(
     }
 
     if (asset.ownerType === 'system') {
-      headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+      headers.set(
+        'Cache-Control',
+        'public, max-age=3600, stale-while-revalidate=86400'
+      );
     } else {
       headers.set('Cache-Control', 'private, no-store');
     }

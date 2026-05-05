@@ -29,7 +29,8 @@
           "all": "全部",
           "paid": "已支付",
           "created": "已创建",
-          "failed": "支付失败"
+          "failed": "支付失败",
+          "refunded": "已退款"
         }
       },
       "provider": {
@@ -49,5 +50,11 @@
         "placeholder": "订单号"
       }
     }
+  },
+  "actions": {
+    "refund": "退款",
+    "refund_confirm": "确认退款并撤回已发放积分？",
+    "reason_prompt": "退款原因",
+    "refund_success": "退款已记录"
   }
 }

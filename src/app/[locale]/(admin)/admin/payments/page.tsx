@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { PERMISSIONS, requirePermission } from '@/core/rbac';
 import { PaymentType } from '@/extensions/payment/types';
 import { Header, Main, MainHeader } from '@/shared/blocks/dashboard';
+import { AdminPaymentRefundButton } from '@/shared/blocks/payment/admin-payment-actions';
 import { TableCard } from '@/shared/blocks/table';
 import { getOrders, getOrdersCount, OrderStatus } from '@/shared/models/order';
 import { Crumb, Filter, Search, Tab } from '@/shared/types/blocks/common';
@@ -89,6 +90,10 @@ export default async function PaymentsPage({
         {
           value: OrderStatus.FAILED,
           label: t('list.filters.status.options.failed'),
+        },
+        {
+          value: OrderStatus.REFUNDED,
+          label: t('list.filters.status.options.refunded'),
         },
       ],
     },
@@ -179,6 +184,19 @@ export default async function PaymentsPage({
         type: 'label',
       },
       { name: 'createdAt', title: t('fields.created_at'), type: 'time' },
+      {
+        title: t('fields.action'),
+        callback: (item) => (
+          <AdminPaymentRefundButton
+            orderNo={item.orderNo}
+            disabled={item.status !== OrderStatus.PAID}
+            label={t('actions.refund')}
+            confirmMessage={t('actions.refund_confirm')}
+            reasonPrompt={t('actions.reason_prompt')}
+            successMessage={t('actions.refund_success')}
+          />
+        ),
+      },
     ],
     data: payments,
     pagination: {

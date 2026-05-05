@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getAssetIdFromRef, toAssetRef } from '@/shared/lib/asset-ref';
-import { getUserInfo } from '@/shared/models/user';
-import { findMediaAssetById, MediaAssetStatus } from '@/shared/models/media_asset';
 import {
-  canAccessMediaAsset,
+  findMediaAssetById,
+  MediaAssetStatus,
+} from '@/shared/models/media_asset';
+import { getUserInfo } from '@/shared/models/user';
+import {
+  canAccessMediaAssetForRequest,
   createSignedAssetUrl,
   DEFAULT_SIGNED_ASSET_EXPIRES_SECONDS,
   GUEST_UPLOAD_SESSION_COOKIE,
+  MediaAssetAccessMode,
 } from '@/shared/services/media-asset';
 
 export async function POST(req: NextRequest) {
@@ -17,7 +21,12 @@ export async function POST(req: NextRequest) {
     const inputAssetRefs = Array.isArray(body?.assetRefs) ? body.assetRefs : [];
     const expiresInSecondsRaw =
       Number(body?.expiresInSeconds) || DEFAULT_SIGNED_ASSET_EXPIRES_SECONDS;
-    const expiresInSeconds = Math.max(30, Math.min(60 * 60 * 24, expiresInSecondsRaw));
+    const expiresInSeconds = Math.max(
+      30,
+      Math.min(60 * 60 * 24, expiresInSecondsRaw)
+    );
+    const accessMode: MediaAssetAccessMode =
+      body?.accessMode === 'original' ? 'original' : 'preview';
 
     const assetIdsFromRefs = inputAssetRefs
       .map((item: unknown) => getAssetIdFromRef(item))
@@ -70,10 +79,11 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
-      const allowed = canAccessMediaAsset({
+      const allowed = await canAccessMediaAssetForRequest({
         asset,
         userId: user?.id,
         guestSessionId,
+        accessMode,
       });
       if (!allowed) {
         results.push({
@@ -87,6 +97,7 @@ export async function POST(req: NextRequest) {
       const signed = createSignedAssetUrl({
         assetId,
         expiresInSeconds,
+        accessMode,
       });
       results.push({
         assetId,

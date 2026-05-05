@@ -30,9 +30,11 @@ export const PERMISSIONS = {
 
   // Payments
   PAYMENTS_READ: 'admin.payments.read',
+  PAYMENTS_WRITE: 'admin.payments.write',
 
   // Subscriptions
   SUBSCRIPTIONS_READ: 'admin.subscriptions.read',
+  SUBSCRIPTIONS_WRITE: 'admin.subscriptions.write',
 
   // Credits
   CREDITS_READ: 'admin.credits.read',

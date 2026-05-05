@@ -2,10 +2,12 @@ import Stripe from 'stripe';
 
 import {
   CheckoutSession,
+  ChangeSubscriptionPlanResult,
   PaymentBilling,
   PaymentEventType,
   PaymentInterval,
   PaymentInvoice,
+  PaymentRefundResult,
   PaymentStatus,
   PaymentType,
   SubscriptionCycleType,
@@ -220,7 +222,9 @@ export class StripeProvider implements PaymentProvider {
         throw new Error('sessionId is required');
       }
 
-      const session = await this.client.checkout.sessions.retrieve(sessionId);
+      const session = await this.client.checkout.sessions.retrieve(sessionId, {
+        expand: ['payment_intent'],
+      });
 
       return await this.buildPaymentSessionFromCheckoutSession(session);
     } catch (error) {
@@ -262,6 +266,13 @@ export class StripeProvider implements PaymentProvider {
         paymentSession = await this.buildPaymentSessionFromInvoice(
           event.data.object as Stripe.Response<Stripe.Invoice>
         );
+      } else if (eventType === PaymentEventType.PAYMENT_FAILED) {
+        paymentSession = {
+          provider: this.name,
+          paymentStatus: PaymentStatus.FAILED,
+          paymentResult: event.data.object,
+          metadata: (event.data.object as UnsafeAny)?.metadata,
+        };
       } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.data.object as Stripe.Response<Stripe.Subscription>
@@ -270,13 +281,19 @@ export class StripeProvider implements PaymentProvider {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.data.object as Stripe.Response<Stripe.Subscription>
         );
+      } else if (eventType === PaymentEventType.PAYMENT_REFUNDED) {
+        paymentSession = await this.buildPaymentSessionFromRefund(
+          event.data.object as UnsafeAny
+        );
       }
 
-      if (!paymentSession) {
+      if (!paymentSession && eventType !== PaymentEventType.UNKNOWN) {
         throw new Error('Invalid webhook event');
       }
 
       return {
+        eventId: event.id,
+        resourceId: (event.data.object as UnsafeAny)?.id,
         eventType: eventType,
         eventResult: event,
         paymentSession: paymentSession,
@@ -335,18 +352,28 @@ export class StripeProvider implements PaymentProvider {
 
   async cancelSubscription({
     subscriptionId,
+    cancelAtPeriodEnd,
+    reason,
   }: {
     subscriptionId: string;
+    cancelAtPeriodEnd?: boolean;
+    reason?: string;
   }): Promise<PaymentSession> {
     try {
       if (!subscriptionId) {
         throw new Error('subscriptionId is required');
       }
 
-      const subscription =
-        await this.client.subscriptions.cancel(subscriptionId);
+      const subscription = cancelAtPeriodEnd
+        ? await this.client.subscriptions.update(subscriptionId, {
+            cancel_at_period_end: true,
+            cancellation_details: reason ? { comment: reason } : undefined,
+          })
+        : await this.client.subscriptions.cancel(subscriptionId, {
+            cancellation_details: reason ? { comment: reason } : undefined,
+          });
 
-      if (!subscription.canceled_at) {
+      if (!subscription.canceled_at && !subscription.cancel_at_period_end) {
         throw new Error('Cancel subscription failed');
       }
 
@@ -354,6 +381,131 @@ export class StripeProvider implements PaymentProvider {
     } catch (error) {
       throw error;
     }
+  }
+
+  async refundPayment({
+    paymentSessionId,
+    transactionId,
+    invoiceId,
+    amount,
+    reason,
+    metadata,
+  }: {
+    paymentSessionId?: string;
+    transactionId?: string;
+    invoiceId?: string;
+    amount?: number;
+    currency?: string;
+    reason?: string;
+    metadata?: Record<string, UnsafeAny>;
+  }): Promise<PaymentRefundResult> {
+    const refundParams: Stripe.RefundCreateParams = {};
+
+    if (transactionId?.startsWith('pi_')) {
+      refundParams.payment_intent = transactionId;
+    } else if (transactionId?.startsWith('ch_')) {
+      refundParams.charge = transactionId;
+    } else if (paymentSessionId?.startsWith('cs_')) {
+      const session = await this.client.checkout.sessions.retrieve(
+        paymentSessionId,
+        { expand: ['payment_intent'] }
+      );
+      const paymentIntent = session.payment_intent;
+      if (typeof paymentIntent === 'string') {
+        refundParams.payment_intent = paymentIntent;
+      } else if (paymentIntent?.id) {
+        refundParams.payment_intent = paymentIntent.id;
+      }
+    } else if (invoiceId?.startsWith('in_')) {
+      const invoice = await this.client.invoices.retrieve(invoiceId);
+      const paymentIntent = (invoice as UnsafeAny).payment_intent;
+      if (typeof paymentIntent === 'string') {
+        refundParams.payment_intent = paymentIntent;
+      } else if (paymentIntent?.id) {
+        refundParams.payment_intent = paymentIntent.id;
+      }
+    }
+
+    if (!refundParams.payment_intent && !refundParams.charge) {
+      throw new Error('Stripe refund requires a payment intent or charge');
+    }
+
+    if (amount && amount > 0) {
+      refundParams.amount = amount;
+    }
+    if (metadata) {
+      refundParams.metadata = metadata;
+    }
+    if (reason) {
+      refundParams.metadata = {
+        ...(refundParams.metadata || {}),
+        refund_reason: reason,
+      };
+    }
+
+    const refund = await this.client.refunds.create(refundParams);
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: refund.id,
+        paymentTransactionId:
+          typeof refund.payment_intent === 'string'
+            ? refund.payment_intent
+            : typeof refund.charge === 'string'
+              ? refund.charge
+              : refund.charge?.id || transactionId,
+        amount: refund.amount,
+        currency: refund.currency,
+        status:
+          refund.status === 'failed'
+            ? 'failed'
+            : refund.status === 'pending'
+              ? 'pending'
+              : 'succeeded',
+        reason,
+        refundedAt: new Date(),
+        metadata,
+      },
+      refundResult: refund,
+    };
+  }
+
+  async changeSubscriptionPlan({
+    subscriptionId,
+    providerPlanId,
+    changeType,
+  }: {
+    subscriptionId: string;
+    providerPlanId: string;
+    changeType: 'upgrade' | 'downgrade';
+  }): Promise<ChangeSubscriptionPlanResult> {
+    const subscription = await this.client.subscriptions.retrieve(
+      subscriptionId
+    );
+    const item = subscription.items.data[0];
+    if (!item?.id) {
+      throw new Error('Stripe subscription item not found');
+    }
+
+    const updated = await this.client.subscriptions.update(subscriptionId, {
+      items: [
+        {
+          id: item.id,
+          price: providerPlanId,
+        },
+      ],
+      proration_behavior:
+        changeType === 'upgrade' ? 'always_invoice' : 'none',
+    });
+
+    return {
+      provider: this.name,
+      subscriptionId: updated.id,
+      status: 'applied',
+      paymentSession: await this.buildPaymentSessionFromSubscription(updated),
+      result: updated,
+    };
   }
 
   private mapStripeEventType(eventType: string): PaymentEventType {
@@ -368,8 +520,13 @@ export class StripeProvider implements PaymentProvider {
         return PaymentEventType.SUBSCRIBE_UPDATED;
       case 'customer.subscription.deleted':
         return PaymentEventType.SUBSCRIBE_CANCELED;
+      case 'charge.refunded':
+      case 'charge.refund.updated':
+      case 'refund.created':
+      case 'refund.updated':
+        return PaymentEventType.PAYMENT_REFUNDED;
       default:
-        throw new Error(`Unknown Stripe event type: ${eventType}`);
+        return PaymentEventType.UNKNOWN;
     }
   }
 
@@ -422,7 +579,10 @@ export class StripeProvider implements PaymentProvider {
       provider: this.name,
       paymentStatus: this.mapStripeStatus(session),
       paymentInfo: {
-        transactionId: session.id,
+        transactionId:
+          typeof session.payment_intent === 'string'
+            ? session.payment_intent
+            : (session.payment_intent as UnsafeAny)?.id || session.id,
         discountCode: session.discounts?.find(
           (discount) => discount.promotion_code
         )?.promotion_code as string,
@@ -544,6 +704,54 @@ export class StripeProvider implements PaymentProvider {
     return result;
   }
 
+  private async buildPaymentSessionFromRefund(
+    resource: Stripe.Response<Stripe.Refund> | Stripe.Response<Stripe.Charge>
+  ): Promise<PaymentSession> {
+    const charge = resource.object === 'charge' ? (resource as Stripe.Charge) : undefined;
+    const refund =
+      resource.object === 'refund'
+        ? (resource as Stripe.Refund)
+        : charge?.refunds?.data?.[0];
+
+    if (!refund) {
+      throw new Error('Stripe refund not found');
+    }
+
+    return {
+      provider: this.name,
+      refundInfo: {
+        refundId: refund.id,
+        paymentTransactionId:
+          typeof refund.payment_intent === 'string'
+            ? refund.payment_intent
+            : charge?.payment_intent
+              ? String(charge.payment_intent)
+              : refund.charge
+                ? String(refund.charge)
+                : undefined,
+        invoiceId: (charge as UnsafeAny)?.invoice
+          ? String((charge as UnsafeAny).invoice)
+          : undefined,
+        amount: refund.amount,
+        currency: refund.currency,
+        status:
+          refund.status === 'failed'
+            ? 'failed'
+            : refund.status === 'pending'
+              ? 'pending'
+              : 'succeeded',
+        refundedAt: refund.created
+          ? new Date(refund.created * 1000)
+          : undefined,
+        metadata: refund.metadata || undefined,
+        orderNo: refund.metadata?.order_no,
+        userId: refund.metadata?.user_id,
+      },
+      refundResult: resource,
+      metadata: refund.metadata || charge?.metadata,
+    };
+  }
+
   // build subscription info from subscription
   private async buildSubscriptionInfo(
     subscription: Stripe.Response<Stripe.Subscription>
@@ -583,6 +791,8 @@ export class StripeProvider implements PaymentProvider {
       } else {
         subscriptionInfo.status = SubscriptionStatus.ACTIVE;
       }
+    } else if (subscription.status === 'trialing') {
+      subscriptionInfo.status = SubscriptionStatus.TRIALING;
     } else if (subscription.status === 'canceled') {
       // subscription canceled
       subscriptionInfo.status = SubscriptionStatus.CANCELED;
