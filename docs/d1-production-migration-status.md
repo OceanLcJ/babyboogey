@@ -6,6 +6,7 @@
 - D1 binding：`DB`
 - Wrangler migration 状态：无待应用迁移
 - 最近整理时间：2026-05-05
+- 最终结构快照：[d1-production-schema-2026-05-05.sql](./d1-production-schema-2026-05-05.sql)
 
 ## 生产迁移记录
 
@@ -66,6 +67,7 @@ duplicate column name: refunded_at
 
 ## 操作守则
 
+- `d1-production-schema-2026-05-05.sql` 是生产库结构快照，只用于审计和人工对照；它不是迁移文件，不应通过 Wrangler migrations apply 执行。
 - 不要重命名已经应用过的迁移文件。
 - 不要删除 `d1_migrations` 里的历史记录，即使本地迁移目录没有早期 `0000_*` / `0001_*` / `0002_media_asset.sql` 文件。
 - 后续新增 D1 迁移时，继续放在 `src/config/db/migrations-d1/`，并在部署前执行：
