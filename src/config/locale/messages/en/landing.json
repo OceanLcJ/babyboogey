@@ -25,7 +25,7 @@
         },
         {
           "title": "Pricing",
-          "url": "/#pricing",
+          "url": "/pricing",
           "icon": "CreditCard"
         },
         {
@@ -98,7 +98,7 @@
             },
             {
               "title": "Pricing",
-              "url": "/#pricing",
+              "url": "/pricing",
               "target": "_self"
             },
             {

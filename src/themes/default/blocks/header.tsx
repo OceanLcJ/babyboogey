@@ -93,7 +93,7 @@ export function Header({ header }: { header: HeaderType }) {
                 Boolean(item.is_active) ||
                 pathname.endsWith(item.url as string);
               return (
-                <NavigationMenuLink key={idx} asChild>
+                <NavigationMenuItem key={idx}>
                   <Link
                     href={item.url || ''}
                     target={item.target || '_self'}
@@ -105,7 +105,7 @@ export function Header({ header }: { header: HeaderType }) {
                     {item.icon && <SmartIcon name={item.icon as string} />}
                     {item.title}
                   </Link>
-                </NavigationMenuLink>
+                </NavigationMenuItem>
               );
             }
 

@@ -25,7 +25,7 @@
         },
         {
           "title": "料金",
-          "url": "/#pricing",
+          "url": "/pricing",
           "icon": "CreditCard"
         },
         {
@@ -98,7 +98,7 @@
             },
             {
               "title": "料金",
-              "url": "/#pricing",
+              "url": "/pricing",
               "target": "_self"
             },
             {

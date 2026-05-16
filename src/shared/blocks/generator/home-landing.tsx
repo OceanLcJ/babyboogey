@@ -114,6 +114,15 @@ interface PricingSection extends Section {
   items?: PricingItem[];
 }
 
+function resolvePricingCtaUrl(button?: Button): string {
+  const url = button?.url;
+  if (!url || url === '#pricing' || url === '/#pricing') {
+    return '/pricing';
+  }
+
+  return url;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Introduce — features-list (3 cards)                                         */
 /* -------------------------------------------------------------------------- */
@@ -445,6 +454,7 @@ export function HomePricing({ section }: { section?: PricingSection }) {
                 <LandingCta
                   button={{
                     ...item.button,
+                    url: resolvePricingCtaUrl(item.button),
                     variant: item.is_featured ? 'default' : 'outline',
                   }}
                   index={i}
@@ -607,4 +617,3 @@ export function HomeCta({ section }: { section?: Section }) {
     </section>
   );
 }
-
