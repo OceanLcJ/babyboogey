@@ -10,9 +10,14 @@ import {
 import type { ComponentType, ReactNode } from 'react';
 
 import { Link } from '@/core/i18n/navigation';
+import { HomePricingGrid } from '@/shared/blocks/generator/home-pricing-grid';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/types/blocks/common';
 import { FAQItem, Section } from '@/shared/types/blocks/landing';
+import type {
+  PricingGroup,
+  PricingItem as CheckoutPricingItem,
+} from '@/shared/types/blocks/pricing';
 
 /* -------------------------------------------------------------------------- */
 /* Shared helpers                                                              */
@@ -94,34 +99,10 @@ interface TestimonialItem {
   image?: { src?: string; alt?: string };
 }
 
-interface PricingItem {
-  title?: string;
-  description?: string;
-  label?: string;
-  features_title?: string;
-  features?: string[];
-  price?: string;
-  original_price?: string;
-  unit?: string;
-  is_featured?: boolean;
-  button?: Button;
-  group?: string;
-  interval?: string;
-}
-
-interface PricingSection extends Section {
-  groups?: { name: string; title?: string; is_featured?: boolean }[];
-  items?: PricingItem[];
-}
-
-function resolvePricingCtaUrl(button?: Button): string {
-  const url = button?.url;
-  if (!url || url === '#pricing' || url === '/#pricing') {
-    return '/pricing';
-  }
-
-  return url;
-}
+type PricingSection = Section & {
+  groups?: PricingGroup[];
+  items?: CheckoutPricingItem[];
+};
 
 /* -------------------------------------------------------------------------- */
 /* Introduce — features-list (3 cards)                                         */
@@ -395,10 +376,11 @@ export function HomeTestimonials({ section }: { section?: Section }) {
 /* Pricing — credit-pack group only (landing preview)                          */
 /* -------------------------------------------------------------------------- */
 
-export function HomePricing({ section }: { section?: PricingSection }) {
+export function HomePricing({ section }: { section?: Section }) {
   if (!section) return null;
-  const items = (section.items || []) as PricingItem[];
-  const featuredGroup = section.groups?.find((g) => g.is_featured);
+  const pricingSection = section as PricingSection;
+  const items = (pricingSection.items || []) as CheckoutPricingItem[];
+  const featuredGroup = pricingSection.groups?.find((g) => g.is_featured);
   const groupName = featuredGroup?.name;
   const groupItems = groupName
     ? items.filter((it) => it.group === groupName)
@@ -424,45 +406,10 @@ export function HomePricing({ section }: { section?: PricingSection }) {
           )}
         </div>
 
-        <div className="bb-home-price-grid">
-          {groupItems.map((item, i) => (
-            <article
-              key={i}
-              className={cn(
-                'bb-home-price-card',
-                item.is_featured && 'featured'
-              )}
-              data-label={item.label || section.popular_label || 'Popular'}
-            >
-              <p className="bb-home-price-name">{item.title}</p>
-              <div className="bb-home-price-amt">
-                <b>{item.price}</b>
-                {item.unit && <span>{item.unit}</span>}
-                {item.original_price && <s>{item.original_price}</s>}
-              </div>
-              {item.description && (
-                <p className="bb-home-price-desc">{item.description}</p>
-              )}
-              {item.features && item.features.length > 0 && (
-                <ul className="bb-home-price-feats">
-                  {item.features.map((f, j) => (
-                    <li key={j}>{f}</li>
-                  ))}
-                </ul>
-              )}
-              {item.button?.title && (
-                <LandingCta
-                  button={{
-                    ...item.button,
-                    url: resolvePricingCtaUrl(item.button),
-                    variant: item.is_featured ? 'default' : 'outline',
-                  }}
-                  index={i}
-                />
-              )}
-            </article>
-          ))}
-        </div>
+        <HomePricingGrid
+          items={groupItems}
+          popularLabel={section.popular_label}
+        />
       </div>
     </section>
   );

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
 import { SmartIcon } from '@/shared/blocks/common';
 import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
@@ -25,13 +24,7 @@ import {
 } from '@/shared/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { useAppContext } from '@/shared/contexts/app';
-import {
-  clearWatermarkAttribution,
-  getWatermarkAttributionAgeMs,
-  hasRecentWatermarkAttribution,
-  trackAnalyticsEvent,
-} from '@/shared/lib/analytics-events';
-import { getCookie } from '@/shared/lib/cookie';
+import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
 import { cn } from '@/shared/lib/utils';
 import { Subscription } from '@/shared/models/subscription';
 import {
@@ -119,13 +112,9 @@ export function Pricing({
   const locale = useLocale();
   const t = useTranslations('pages.pricing.messages');
 
-  const {
-    user,
-    isShowPaymentModal,
-    setIsShowSignModal,
-    setIsShowPaymentModal,
-    configs,
-  } = useAppContext();
+  const { user } = useAppContext();
+  const { pricingItem, isLoading, productId, checkout, startPayment } =
+    usePricingCheckout();
 
   const hasSubscriptionAccess = Boolean(
     currentSubscription || user?.membership?.hasSubscription
@@ -189,12 +178,6 @@ export function Pricing({
     visibleItems,
     currentSubscription?.productId,
   ]);
-
-  // current pricing item
-  const [pricingItem, setPricingItem] = useState<PricingItem | null>(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [productId, setProductId] = useState<string | null>(null);
 
   // Currency state management for each item
   // Store selected currency and displayed item for each product_id
@@ -283,140 +266,11 @@ export function Pricing({
   };
 
   const handlePayment = async (item: PricingItem) => {
-    if (!user) {
-      setIsShowSignModal(true);
-      return;
-    }
-
-    // Use displayed item with selected currency
     const displayedItem =
       itemCurrencies[item.product_id]?.displayedItem || item;
 
-    if (configs.select_payment_enabled === 'true') {
-      setPricingItem(displayedItem);
-      setIsShowPaymentModal(true);
-    } else {
-      handleCheckout(displayedItem, configs.default_payment_provider);
-    }
+    await startPayment(displayedItem);
   };
-
-  const getAffiliateMetadata = ({
-    paymentProvider,
-  }: {
-    paymentProvider: string;
-  }) => {
-    const affiliateMetadata: Record<string, string> = {};
-
-    // get Affonso referral
-    if (
-      configs.affonso_enabled === 'true' &&
-      ['stripe', 'creem'].includes(paymentProvider)
-    ) {
-      const affonsoReferral = getCookie('affonso_referral') || '';
-      affiliateMetadata.affonso_referral = affonsoReferral;
-    }
-
-    // get PromoteKit referral
-    if (
-      configs.promotekit_enabled === 'true' &&
-      ['stripe'].includes(paymentProvider)
-    ) {
-      const promotekitReferral =
-        typeof window !== 'undefined' && (window as UnsafeAny).promotekit_referral
-          ? (window as UnsafeAny).promotekit_referral
-          : getCookie('promotekit_referral') || '';
-      affiliateMetadata.promotekit_referral = promotekitReferral;
-    }
-
-    return affiliateMetadata;
-  };
-
-  const handleCheckout = async (
-    item: PricingItem,
-    paymentProvider?: string
-  ) => {
-    try {
-      if (!user) {
-        setIsShowSignModal(true);
-        return;
-      }
-
-      const affiliateMetadata = getAffiliateMetadata({
-        paymentProvider: paymentProvider || '',
-      });
-
-      const params = {
-        product_id: item.product_id,
-        currency: item.currency,
-        locale: locale || 'en',
-        payment_provider: paymentProvider || '',
-        metadata: affiliateMetadata,
-      };
-      const shouldTrackWatermarkAttribution = hasRecentWatermarkAttribution();
-      const watermarkAttributionAgeMs = shouldTrackWatermarkAttribution
-        ? getWatermarkAttributionAgeMs()
-        : null;
-
-      setIsLoading(true);
-      setProductId(item.product_id);
-
-      const response = await fetch('/api/payment/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(params),
-      });
-
-      if (response.status === 401) {
-        setIsLoading(false);
-        setProductId(null);
-        setPricingItem(null);
-        setIsShowSignModal(true);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`request failed with status ${response.status}`);
-      }
-
-      const { code, message, data } = await response.json();
-      if (code !== 0) {
-        throw new Error(message);
-      }
-
-      const { checkoutUrl } = data;
-      if (!checkoutUrl) {
-        throw new Error('checkout url not found');
-      }
-
-      if (shouldTrackWatermarkAttribution) {
-        trackAnalyticsEvent('upgrade_from_watermark', {
-          product_id: item.product_id,
-          currency: item.currency,
-          payment_provider: paymentProvider || '',
-          attribution_age_ms: watermarkAttributionAgeMs ?? undefined,
-        });
-        clearWatermarkAttribution();
-      }
-
-      window.location.href = checkoutUrl;
-    } catch (e: UnsafeAny) {
-      console.log('checkout failed: ', e);
-      toast.error('checkout failed: ' + e.message);
-
-      setIsLoading(false);
-      setProductId(null);
-    }
-  };
-
-  useEffect(() => {
-    if (visibleItems.length > 0) {
-      const featuredItem = visibleItems.find((i) => i.is_featured);
-      setProductId(featuredItem?.product_id || visibleItems[0]?.product_id);
-      setIsLoading(false);
-    }
-  }, [visibleItems]);
 
   return (
     <section
@@ -610,9 +464,7 @@ export function Pricing({
       <PaymentModal
         isLoading={isLoading}
         pricingItem={pricingItem}
-        onCheckout={(item, paymentProvider) =>
-          handleCheckout(item, paymentProvider)
-        }
+        onCheckout={(item, paymentProvider) => checkout(item, paymentProvider)}
       />
     </section>
   );
