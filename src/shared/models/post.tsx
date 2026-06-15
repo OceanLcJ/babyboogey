@@ -181,6 +181,7 @@ export async function getPost({
             created_at: postData.createdAt.toISOString(),
             locale,
           }) || '',
+        image: resolveMediaValueToApiPath(postData.image || ''),
         author_name: postData.authorName || '',
         author_image: resolveMediaValueToApiPath(postData.authorImage || ''),
         author_role: '',
@@ -247,7 +248,8 @@ export async function getLocalPost({
       : '',
     author_name: frontmatter.author_name || '',
     author_image: frontmatter.author_image || '',
-    author_role: '',
+    author_role: frontmatter.author_role || '',
+    image: frontmatter.image || '',
     url: `${postPrefix}${slug}`,
   };
 
@@ -373,7 +375,10 @@ export async function getPostsAndCategories({
   posts = Array.from(postsMap.values()).sort((a, b) => {
     const timeA = a.date ? Date.parse(a.date) : 0;
     const timeB = b.date ? Date.parse(b.date) : 0;
-    return (Number.isFinite(timeB) ? timeB : 0) - (Number.isFinite(timeA) ? timeA : 0);
+    return (
+      (Number.isFinite(timeB) ? timeB : 0) -
+      (Number.isFinite(timeA) ? timeA : 0)
+    );
   });
 
   return {
@@ -529,6 +534,7 @@ export async function getLocalPostsAndCategories({
         description: post.data.description || '',
         author_name: frontmatter.author_name || '',
         author_image: frontmatter.author_image || '',
+        author_role: frontmatter.author_role || '',
         created_at: createdAt,
         date,
         image: frontmatter.image || '',

@@ -10,6 +10,43 @@ import {
 } from '@/shared/components/ui/accordion';
 import { cn } from '@/shared/lib/utils';
 
+type FAQAccordionItem = {
+  question: React.ReactNode;
+  answer: React.ReactNode;
+};
+
+function FAQAccordion({
+  items,
+  className,
+}: {
+  items: FAQAccordionItem[];
+  className?: string;
+}) {
+  return (
+    <Accordion
+      type="single"
+      collapsible
+      defaultValue={items[0] ? 'item-1' : undefined}
+      className={cn('not-prose my-6 rounded-lg border px-4', className)}
+    >
+      {items.map((item, index) => (
+        <AccordionItem key={index} value={`item-${index + 1}`}>
+          <AccordionTrigger className="text-base font-semibold hover:no-underline">
+            {item.question}
+          </AccordionTrigger>
+          <AccordionContent
+            forceMount
+            rootClassName="data-[state=closed]:invisible data-[state=closed]:h-0 data-[state=closed]:pointer-events-none data-[state=closed]:opacity-0 data-[state=open]:visible data-[state=open]:opacity-100"
+            className="text-muted-foreground [&_a]:text-primary text-sm leading-relaxed [&_a]:underline"
+          >
+            {item.answer}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+}
+
 // Custom link component with nofollow for external links
 const CustomLink = ({
   href,
@@ -118,6 +155,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     AccordionItem,
     AccordionTrigger,
     AccordionContent,
+    FAQAccordion,
     ...components,
   };
 
