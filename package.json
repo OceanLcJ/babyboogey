@@ -52,6 +52,7 @@
     "media:migrate": "node --import tsx scripts/migrate-media-assets.ts",
     "smoke:baby-image": "node --import tsx scripts/smoke-baby-image.ts",
     "smoke:refund": "tsx scripts/with-env.ts tsx scripts/smoke-refund.ts",
+    "verify:public-configs": "tsx scripts/verify-public-configs.ts",
     "verify:payment-lifecycle": "tsx scripts/with-env.ts tsx scripts/verify-payment-lifecycle.ts"
   },
   "dependencies": {

@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server';
 
 import { Tab } from '@/shared/types/blocks/common';
 
+export { publicSettingNames } from '@/shared/lib/config-safety';
+
 export interface Setting {
   name: string;
   title: string;
@@ -1067,23 +1069,6 @@ export async function getSettings() {
 
   return settings;
 }
-
-export const publicSettingNames = [
-  'email_auth_enabled',
-  'google_auth_enabled',
-  'google_one_tap_enabled',
-  'google_client_id',
-  'github_auth_enabled',
-  'select_payment_enabled',
-  'default_payment_provider',
-  'stripe_enabled',
-  'creem_enabled',
-  'paypal_enabled',
-  'affonso_enabled',
-  'promotekit_enabled',
-  'crisp_enabled',
-  'tawk_enabled',
-];
 
 export async function getAllSettingNames() {
   const settings = await getSettings();

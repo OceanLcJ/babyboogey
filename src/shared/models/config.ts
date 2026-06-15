@@ -3,11 +3,9 @@ import { revalidateTag, unstable_cache } from 'next/cache';
 import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import { config } from '@/config/db/schema';
+import { toPublicConfigs } from '@/shared/lib/config-safety';
 import { isCloudflareWorker } from '@/shared/lib/env';
-import {
-  getAllSettingNames,
-  publicSettingNames,
-} from '@/shared/services/settings';
+import { getAllSettingNames } from '@/shared/services/settings';
 
 export type Config = typeof config.$inferSelect;
 export type NewConfig = typeof config.$inferInsert;
@@ -112,19 +110,5 @@ export async function getAllConfigs(): Promise<Configs> {
 
 export async function getPublicConfigs(): Promise<Configs> {
   const allConfigs = await getAllConfigs();
-
-  const publicConfigs: Record<string, string> = {};
-
-  // get public configs
-  for (const key in allConfigs) {
-    if (publicSettingNames.includes(key)) {
-      publicConfigs[key] = String(allConfigs[key]);
-    }
-  }
-
-  const configs = {
-    ...publicConfigs,
-  };
-
-  return configs;
+  return toPublicConfigs(allConfigs);
 }
