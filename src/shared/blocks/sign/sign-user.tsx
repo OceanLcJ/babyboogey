@@ -6,7 +6,7 @@ import { Coins, LayoutDashboard, Loader2, LogOut, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { authClient, signOut, useSession } from '@/core/auth/client';
-import { Link, useRouter } from '@/core/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/core/i18n/navigation';
 import {
   Avatar,
   AvatarFallback,
@@ -45,6 +45,12 @@ export function SignUser({
 }) {
   const t = useTranslations('common.sign');
   const router = useRouter();
+  const pathname = usePathname();
+  const isConsolePath =
+    pathname === '/activity' ||
+    pathname.startsWith('/activity/') ||
+    pathname === '/settings' ||
+    pathname.startsWith('/settings/');
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -91,6 +97,7 @@ export function SignUser({
       configs &&
       configs.google_client_id &&
       configs.google_one_tap_enabled === 'true' &&
+      !isConsolePath &&
       !session &&
       !isPending &&
       !oneTapInitialized.current
@@ -98,7 +105,7 @@ export function SignUser({
       oneTapInitialized.current = true;
       showOneTap(configs);
     }
-  }, [configs, session, isPending]);
+  }, [configs, session, isPending, isConsolePath, showOneTap]);
 
   // set user
   useEffect(() => {
