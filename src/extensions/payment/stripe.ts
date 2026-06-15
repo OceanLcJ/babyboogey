@@ -1,8 +1,8 @@
 import Stripe from 'stripe';
 
 import {
-  CheckoutSession,
   ChangeSubscriptionPlanResult,
+  CheckoutSession,
   PaymentBilling,
   PaymentEventType,
   PaymentInterval,
@@ -267,12 +267,18 @@ export class StripeProvider implements PaymentProvider {
           event.data.object as Stripe.Response<Stripe.Invoice>
         );
       } else if (eventType === PaymentEventType.PAYMENT_FAILED) {
-        paymentSession = {
-          provider: this.name,
-          paymentStatus: PaymentStatus.FAILED,
-          paymentResult: event.data.object,
-          metadata: (event.data.object as UnsafeAny)?.metadata,
-        };
+        if (event.type === 'checkout.session.expired') {
+          paymentSession = await this.buildPaymentSessionFromCheckoutSession(
+            event.data.object as Stripe.Response<Stripe.Checkout.Session>
+          );
+        } else {
+          paymentSession = {
+            provider: this.name,
+            paymentStatus: PaymentStatus.FAILED,
+            paymentResult: event.data.object,
+            metadata: (event.data.object as UnsafeAny)?.metadata,
+          };
+        }
       } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
         paymentSession = await this.buildPaymentSessionFromSubscription(
           event.data.object as Stripe.Response<Stripe.Subscription>
@@ -480,9 +486,8 @@ export class StripeProvider implements PaymentProvider {
     providerPlanId: string;
     changeType: 'upgrade' | 'downgrade';
   }): Promise<ChangeSubscriptionPlanResult> {
-    const subscription = await this.client.subscriptions.retrieve(
-      subscriptionId
-    );
+    const subscription =
+      await this.client.subscriptions.retrieve(subscriptionId);
     const item = subscription.items.data[0];
     if (!item?.id) {
       throw new Error('Stripe subscription item not found');
@@ -495,8 +500,7 @@ export class StripeProvider implements PaymentProvider {
           price: providerPlanId,
         },
       ],
-      proration_behavior:
-        changeType === 'upgrade' ? 'always_invoice' : 'none',
+      proration_behavior: changeType === 'upgrade' ? 'always_invoice' : 'none',
     });
 
     return {
@@ -512,6 +516,8 @@ export class StripeProvider implements PaymentProvider {
     switch (eventType) {
       case 'checkout.session.completed':
         return PaymentEventType.CHECKOUT_SUCCESS;
+      case 'checkout.session.expired':
+        return PaymentEventType.PAYMENT_FAILED;
       case 'invoice.payment_succeeded':
         return PaymentEventType.PAYMENT_SUCCESS;
       case 'invoice.payment_failed':
@@ -707,7 +713,8 @@ export class StripeProvider implements PaymentProvider {
   private async buildPaymentSessionFromRefund(
     resource: Stripe.Response<Stripe.Refund> | Stripe.Response<Stripe.Charge>
   ): Promise<PaymentSession> {
-    const charge = resource.object === 'charge' ? (resource as Stripe.Charge) : undefined;
+    const charge =
+      resource.object === 'charge' ? (resource as Stripe.Charge) : undefined;
     const refund =
       resource.object === 'refund'
         ? (resource as Stripe.Refund)

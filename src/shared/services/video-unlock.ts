@@ -364,6 +364,25 @@ export async function ensureVideoUnlockForOrder({
   });
 }
 
+export async function cancelPendingVideoUnlockForOrder(orderNo: string) {
+  const normalizedOrderNo = String(orderNo || '').trim();
+  if (!normalizedOrderNo) {
+    return;
+  }
+
+  const existing = await findVideoUnlockByOrderNo(normalizedOrderNo);
+  if (!existing || existing.status !== VideoUnlockStatus.PENDING) {
+    return existing;
+  }
+
+  return updateVideoUnlockByOrderNo({
+    orderNo: normalizedOrderNo,
+    updateVideoUnlock: {
+      status: VideoUnlockStatus.CANCELED,
+    },
+  });
+}
+
 export async function findAITaskForGeneratedVideoAsset(asset: MediaAsset) {
   if (
     asset.purpose !== MediaAssetPurpose.GENERATED_VIDEO ||

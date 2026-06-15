@@ -1,5 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 
+import { db } from '@/core/db';
 import { credit, order as orderTable, paymentRefund } from '@/config/db/schema';
 import {
   PaymentEvent,
@@ -9,7 +10,6 @@ import {
   PaymentStatus,
   PaymentType,
 } from '@/extensions/payment/types';
-import { db } from '@/core/db';
 import { getUuid } from '@/shared/lib/hash';
 import {
   CreditStatus,
@@ -141,10 +141,14 @@ export function buildServerPaymentMetadata({
 }
 
 function normalizeCurrency(value?: string | null) {
-  return String(value || '').trim().toUpperCase();
+  return String(value || '')
+    .trim()
+    .toUpperCase();
 }
 
-function metadataString(metadata: Record<string, UnsafeAny> | null | undefined) {
+function metadataString(
+  metadata: Record<string, UnsafeAny> | null | undefined
+) {
   return metadata && typeof metadata === 'object' ? metadata : {};
 }
 
@@ -205,6 +209,7 @@ export function validatePaymentSessionForOrder({
   }
 
   if (
+    session.paymentStatus === PaymentStatus.SUCCESS &&
     order.paymentType === PaymentType.SUBSCRIPTION &&
     (!session.subscriptionId || !session.subscriptionInfo)
   ) {
@@ -503,7 +508,9 @@ export async function refundOrderWithProvider({
   actorUserId?: string;
 }) {
   if (!provider.refundPayment) {
-    throw new Error(`payment provider ${provider.name} does not support refunds`);
+    throw new Error(
+      `payment provider ${provider.name} does not support refunds`
+    );
   }
 
   if (order.status !== OrderStatus.PAID) {
@@ -659,24 +666,27 @@ export async function changeSubscriptionPlanWithProvider({
     });
 
     const creditDiff =
-      Number(target.creditsAmount || 0) - Number(subscription.creditsAmount || 0);
+      Number(target.creditsAmount || 0) -
+      Number(subscription.creditsAmount || 0);
     if (creditDiff > 0) {
-      await db().insert(credit).values({
-        id: getUuid(),
-        userId: subscription.userId,
-        userEmail: subscription.userEmail,
-        orderNo: '',
-        subscriptionNo: subscription.subscriptionNo,
-        transactionNo: `plan_change:${planChange.id}`,
-        transactionType: CreditTransactionType.GRANT,
-        transactionScene: CreditTransactionScene.SUBSCRIPTION,
-        credits: creditDiff,
-        remainingCredits: creditDiff,
-        description: `Plan upgrade credit difference`,
-        expiresAt: subscription.currentPeriodEnd,
-        status: CreditStatus.ACTIVE,
-        metadata: JSON.stringify({ planChangeId: planChange.id }),
-      });
+      await db()
+        .insert(credit)
+        .values({
+          id: getUuid(),
+          userId: subscription.userId,
+          userEmail: subscription.userEmail,
+          orderNo: '',
+          subscriptionNo: subscription.subscriptionNo,
+          transactionNo: `plan_change:${planChange.id}`,
+          transactionType: CreditTransactionType.GRANT,
+          transactionScene: CreditTransactionScene.SUBSCRIPTION,
+          credits: creditDiff,
+          remainingCredits: creditDiff,
+          description: `Plan upgrade credit difference`,
+          expiresAt: subscription.currentPeriodEnd,
+          status: CreditStatus.ACTIVE,
+          metadata: JSON.stringify({ planChangeId: planChange.id }),
+        });
     }
   }
 

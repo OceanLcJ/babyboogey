@@ -46,7 +46,10 @@ import {
   safeJsonParse,
   validatePaymentSessionForOrder,
 } from './payment-lifecycle';
-import { ensureVideoUnlockForOrder } from './video-unlock';
+import {
+  cancelPendingVideoUnlockForOrder,
+  ensureVideoUnlockForOrder,
+} from './video-unlock';
 
 /**
  * get payment service with configs
@@ -164,7 +167,10 @@ export async function handleCheckoutSuccess({
     return;
   }
 
-  if (order.paymentType === PaymentType.SUBSCRIPTION) {
+  if (
+    session.paymentStatus === PaymentStatus.SUCCESS &&
+    order.paymentType === PaymentType.SUBSCRIPTION
+  ) {
     if (!session.subscriptionId || !session.subscriptionInfo) {
       throw new Error('subscription id or subscription info not found');
     }
@@ -324,6 +330,7 @@ export async function handleCheckoutSuccess({
       status: OrderStatus.FAILED,
       paymentResult: JSON.stringify(session.paymentResult),
     });
+    await cancelPendingVideoUnlockForOrder(orderNo);
   } else if (session.paymentStatus === PaymentStatus.PROCESSING) {
     // update order payment result
     await updateOrderByOrderNo(orderNo, {

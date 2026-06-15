@@ -13,9 +13,9 @@ import {
 } from '@/shared/models/payment-lifecycle';
 import { findSubscriptionByProviderSubscriptionId } from '@/shared/models/subscription';
 import {
+  ensureCreditForOrder,
   getPaymentService,
   handleCheckoutSuccess,
-  ensureCreditForOrder,
   handleSubscriptionCanceled,
   handleSubscriptionRenewal,
   handleSubscriptionUpdated,
@@ -258,7 +258,9 @@ export async function POST(
         const orderNo = session.metadata?.order_no;
 
         if (!orderNo) {
-          console.log('one-time payment: order_no not found in metadata, skipping');
+          console.log(
+            'one-time payment: order_no not found in metadata, skipping'
+          );
           await updatePaymentEvent(ledger.event.id, {
             status: PaymentEventLedgerStatus.IGNORED,
             processedAt: new Date(),
@@ -277,6 +279,30 @@ export async function POST(
           session,
         });
       }
+    } else if (eventType === PaymentEventType.PAYMENT_FAILED) {
+      const orderNo =
+        typeof session.metadata?.order_no === 'string'
+          ? session.metadata.order_no
+          : '';
+
+      if (!orderNo) {
+        console.log('payment failed: order_no not found in metadata, skipping');
+        await updatePaymentEvent(ledger.event.id, {
+          status: PaymentEventLedgerStatus.IGNORED,
+          processedAt: new Date(),
+        });
+        return Response.json({ message: 'success' });
+      }
+
+      const order = await findOrderByOrderNo(orderNo);
+      if (!order) {
+        throw new Error('order not found');
+      }
+
+      await handleCheckoutSuccess({
+        order,
+        session,
+      });
     } else if (eventType === PaymentEventType.SUBSCRIBE_UPDATED) {
       // only handle subscription update
       if (!session.subscriptionId || !session.subscriptionInfo) {
