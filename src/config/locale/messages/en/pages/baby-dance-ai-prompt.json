@@ -1,22 +1,16 @@
 {
   "metadata": {
-    "title": "Baby Dance AI Prompt Guide — Best Prompts for AI Baby Dance Videos",
-    "description": "Discover the best baby dance AI prompt ideas to create adorable dancing baby videos. Copy-paste ready prompts for every style, mood, and occasion — or skip prompts entirely with BabyBoogey."
+    "title": "Baby Dance AI Prompt Guide | 50+ Copy-Paste Ideas",
+    "description": "Copy baby dance AI prompts for Seedance, Kling, Sora, Runway, and TikTok-style baby boogie videos, or skip prompts and create with BabyBoogey."
   },
   "page": {
-    "title": "Baby Dance AI Prompt Guide — Best Prompts for AI Baby Dance Videos",
-    "show_sections": [
-      "hero",
-      "introduce",
-      "features",
-      "faq",
-      "cta"
-    ],
+    "title": "Baby Dance AI Prompt Guide | 50+ Copy-Paste Ideas",
+    "show_sections": ["hero", "introduce", "features", "faq", "cta"],
     "sections": {
       "hero": {
         "id": "hero",
         "title": "The Ultimate Baby Dance AI Prompt Guide",
-        "description": "Looking for the perfect baby dance AI prompt? We collected the best prompts for creating hilarious, heartwarming, and viral-worthy AI baby dance videos. Browse our curated categories below, copy any prompt, and bring your baby photos to life — or let BabyBoogey do the work for you with zero prompts needed.",
+        "description": "Looking for the perfect baby dance AI prompt? Copy prompts for hilarious, heartwarming, and viral-worthy baby boogie videos, or let BabyBoogey create the dance with zero prompting.",
         "buttons": [
           {
             "title": "Try BabyBoogey Free",
@@ -174,6 +168,10 @@
           {
             "question": "Are AI baby dance videos safe and appropriate?",
             "answer": "Yes. All prompts in this guide are designed to produce wholesome, family-friendly content. AI baby dance videos use your photo as a visual reference — no real babies are made to dance. The AI generates movement digitally, creating an animated effect that is cute and harmless. BabyBoogey specifically filters all outputs for family-appropriate content, so you can share your creations with complete confidence."
+          },
+          {
+            "question": "What prompt should I use for a baby boo dance AI or baby boogie video?",
+            "answer": "Use a clear subject, a dance style, and a playful setting. For example: \"adorable baby doing a baby boogie dance, cheerful smile, colorful party background, smooth motion, family-friendly, HD quality.\" If you do not want to write prompts, BabyBoogey turns your uploaded photo into a dancing baby video with prebuilt templates."
           }
         ]
       },

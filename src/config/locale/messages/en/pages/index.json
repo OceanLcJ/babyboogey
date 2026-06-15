@@ -3,7 +3,7 @@
     "eyebrow": "AI Baby Dance Studio",
     "title_line1": "Make Your Photos",
     "title_line2": "Dance & Boogie!",
-    "description": "The #1 AI baby dance generator — animate baby photos into cheerful, bouncing videos with one click. From 75 credits per short render.",
+    "description": "The AI baby dance generator for baby boogie videos — animate baby photos into cheerful, bouncing clips with one click. From 75 credits per short render.",
     "cta_button": "Start Dancing",
     "card_static": "Static Photo",
     "card_boogie": "Boogie Mode!"
@@ -61,7 +61,7 @@
         "id": "introduce",
         "title": "The Easiest Baby Dance Video Maker Online",
         "label": "What is BabyBoogey",
-        "description": "BabyBoogey is the simplest way to animate baby photos into hilarious singing & dancing videos. No editing skills required.",
+        "description": "BabyBoogey is the simplest way to animate baby photos into hilarious baby boogie, singing, and dancing videos. No editing skills required.",
         "items": [
           {
             "title": "Animate Baby Photos",
@@ -607,6 +607,10 @@
           {
             "question": "How do I share my baby dance video on TikTok or Instagram?",
             "answer": "After generating your video, click the download button to save it to your device. Then simply upload it to TikTok, Instagram Reels, or any social media platform directly from your gallery."
+          },
+          {
+            "question": "Is BabyBoogey the same as a baby boogie AI or baby boo dance AI tool?",
+            "answer": "Yes. People search for this idea in different ways, including baby boogie AI, baby boo dance AI, dancing baby maker, and AI baby dance generator. BabyBoogey is built for that exact workflow: upload a baby photo, choose a dance template, and create a shareable boogie video in seconds."
           }
         ]
       },

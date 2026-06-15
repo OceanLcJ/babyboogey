@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "Seedance 2.0 Online Free Generator — BabyBoogey (Powered by ByteDance AI)",
-    "description": "Use Seedance 2.0 online for free! BabyBoogey integrates ByteDance's official Seedance 2.0 model. No download required. Generate viral AI baby dance videos instantly."
+    "title": "Seedance Baby Dance Generator | Seedance 2.0 Online",
+    "description": "Use Seedance 2.0 online to make AI baby dance videos with BabyBoogey. Upload a photo, choose a baby-specific template, and generate a shareable dance clip."
   },
   "page": {
-    "title": "Seedance 2.0 Online Free Generator — BabyBoogey",
+    "title": "Seedance Baby Dance Generator — BabyBoogey",
     "show_sections": [
       "hero",
       "introduce",
@@ -16,9 +16,9 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "Use Seedance 2.0 Online for Free — One-Click Baby Dance Video",
+        "title": "Seedance Baby Dance Generator — One-Click AI Video",
         "highlight_text": "Seedance 2.0",
-        "description": "No App download required. No complex setup. BabyBoogey integrates directly with ByteDance's official Seedance 2.0 model. Combined with 50+ baby-specific templates, we offer the ultimate AI dance generation experience. Upload a photo and get results instantly.",
+        "description": "No app download or complex setup required. BabyBoogey pairs Seedance 2.0 video generation with 50+ baby-specific dance templates, so you can upload a photo and create a baby dance video instantly.",
         "buttons": [
           {
             "title": "Try Seedance 2.0 Online Free",
