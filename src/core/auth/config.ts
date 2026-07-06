@@ -144,6 +144,13 @@ const authOptions = {
       : {
           enabled: false,
         },
+    // Rate limiting keys by client IP. better-auth only reads x-forwarded-for
+    // by default, which is absent on Cloudflare Workers — the real client IP is
+    // in cf-connecting-ip. Without this the limiter can't build a key and skips
+    // every request. Order mirrors src/shared/lib/ip.ts.
+    ipAddress: {
+      ipAddressHeaders: ['cf-connecting-ip', 'x-real-ip', 'x-forwarded-for'],
+    },
     database: {
       generateId: () => getUuid(),
     },
