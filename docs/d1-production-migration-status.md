@@ -5,8 +5,8 @@
 - 数据库：`babyboogey-db`
 - D1 binding：`DB`
 - Wrangler migration 状态：无待应用迁移
-- 最近整理时间：2026-05-05
-- 最终结构快照：[d1-production-schema-2026-05-05.sql](./d1-production-schema-2026-05-05.sql)
+- 最近整理时间：2026-07-06
+- 最终结构快照：[d1-production-schema-2026-05-05.sql](./d1-production-schema-2026-05-05.sql)（不含 2026-07-06 新增的 `rate_limit` 表）
 
 ## 生产迁移记录
 
@@ -20,6 +20,16 @@
 | 4 | `0001_ai_task_refund_fields.sql` | 字段已先手动存在，2026-05-05 补录迁移记录 |
 | 5 | `0002_payment_lifecycle_hardening.sql` | 2026-05-05 通过 Wrangler 应用 |
 | 6 | `0003_video_unlock.sql` | 2026-05-05 通过 Wrangler 应用 |
+| 7 | `0004_rate_limit.sql` | 2026-07-06 通过 Wrangler 应用，新增 better-auth 限流表 |
+
+## 2026-07-06 处理记录
+
+新增 better-auth 共享限流存储表 `rate_limit`（跨 Workers isolate 全局一致的限流计数）。
+
+- 迁移文件：`src/config/db/migrations-d1/0004_rate_limit.sql`（幂等 `CREATE TABLE IF NOT EXISTS`）。
+- `wrangler d1 migrations list --remote` 确认仅 `0004_rate_limit.sql` 待应用后，通过 `apply --remote` 正常应用。
+- 只读校验：`rate_limit` 表与 `idx_rate_limit_key` 索引已存在且可读写。
+- 详见 [SECURITY_HARDENING_2026-07-06.md](./SECURITY_HARDENING_2026-07-06.md)。
 
 ## 2026-05-05 处理记录
 
