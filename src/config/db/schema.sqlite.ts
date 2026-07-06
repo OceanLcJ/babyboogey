@@ -127,6 +127,20 @@ export const verification = table(
   ]
 );
 
+// better-auth rate limiter store (storage: 'database').
+// Property names must stay id/key/count/lastRequest (the drizzle adapter maps
+// better-auth fields by these names). lastRequest holds epoch milliseconds.
+export const rateLimit = table(
+  'rate_limit',
+  {
+    id: text('id').primaryKey(),
+    key: text('key').notNull(),
+    count: integer('count').notNull().default(0),
+    lastRequest: integer('last_request').notNull().default(0),
+  },
+  (table) => [index('idx_rate_limit_key').on(table.key)]
+);
+
 export const config = table('config', {
   name: text('name').unique().notNull(),
   value: text('value'),

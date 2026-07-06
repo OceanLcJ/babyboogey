@@ -40,6 +40,7 @@ export const user = schemaModule.user;
 export const session = schemaModule.session;
 export const account = schemaModule.account;
 export const verification = schemaModule.verification;
+export const rateLimit = schemaModule.rateLimit;
 export const config = schemaModule.config;
 export const taxonomy = schemaModule.taxonomy;
 export const post = schemaModule.post;

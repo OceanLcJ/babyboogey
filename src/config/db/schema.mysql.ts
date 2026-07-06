@@ -1,4 +1,5 @@
 import {
+  bigint,
   boolean,
   index,
   int,
@@ -102,6 +103,23 @@ export const verification = table(
     // Find verification code by identifier (e.g., find code by email)
     index('idx_verification_identifier').on(table.identifier),
   ]
+);
+
+// better-auth rate limiter store (storage: 'database').
+// Property names must stay id/key/count/lastRequest (the drizzle adapter maps
+// better-auth fields by these names). lastRequest holds epoch milliseconds,
+// so it must be bigint (exceeds 32-bit int range).
+export const rateLimit = table(
+  'rate_limit',
+  {
+    id: varchar191('id').primaryKey(),
+    key: varchar191('key').notNull(),
+    count: int('count').notNull().default(0),
+    lastRequest: bigint('last_request', { mode: 'number' })
+      .notNull()
+      .default(0),
+  },
+  (table) => [index('idx_rate_limit_key').on(table.key)]
 );
 
 export const config = table('config', {
