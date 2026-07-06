@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { safeErrorMessage } from '@/shared/lib/resp';
+
 // Legacy compatibility endpoint.
 // New clients should use /api/storage/upload-media with explicit purpose/source.
 export async function POST(req: NextRequest) {
@@ -61,10 +63,9 @@ export async function POST(req: NextRequest) {
     response.headers.set('x-deprecated-endpoint', '/api/storage/upload-image');
     return response;
   } catch (e: UnsafeAny) {
-    console.error('upload image (legacy) failed:', e);
     return NextResponse.json({
       code: -1,
-      message: e?.message || 'upload image failed',
+      message: safeErrorMessage(e, 'upload image failed'),
     });
   }
 }

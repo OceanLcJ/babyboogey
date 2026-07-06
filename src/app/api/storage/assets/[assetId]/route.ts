@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { safeErrorMessage } from '@/shared/lib/resp';
 import {
   findMediaAssetById,
   MediaAssetStatus,
@@ -64,10 +65,9 @@ export async function GET(
     });
 
     if (!objectResp.ok && objectResp.status !== 206) {
-      const errorText = await objectResp
-        .text()
-        .catch(() => 'Failed to fetch object');
-      return new NextResponse(errorText || 'Failed to fetch object', {
+      const errorText = await objectResp.text().catch(() => '');
+      console.error('get asset object failed:', objectResp.status, errorText);
+      return new NextResponse('Failed to fetch object', {
         status: objectResp.status || 502,
       });
     }
@@ -94,6 +94,11 @@ export async function GET(
       }
     }
 
+    // Harden user-controlled content: block MIME sniffing and neuter any
+    // script execution (e.g. legacy SVG/HTML) on direct navigation.
+    headers.set('X-Content-Type-Options', 'nosniff');
+    headers.set('Content-Security-Policy', 'sandbox');
+
     if (asset.ownerType === 'system') {
       headers.set(
         'Cache-Control',
@@ -108,8 +113,7 @@ export async function GET(
       headers,
     });
   } catch (error: UnsafeAny) {
-    console.error('get asset failed:', error);
-    return new NextResponse(error?.message || 'Internal Server Error', {
+    return new NextResponse(safeErrorMessage(error, 'Internal Server Error'), {
       status: 500,
     });
   }

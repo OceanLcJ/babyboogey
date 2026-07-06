@@ -1,4 +1,4 @@
-import { respData, respErr } from '@/shared/lib/resp';
+import { respData, respErr, safeErrorMessage } from '@/shared/lib/resp';
 import { getPublicConfigs } from '@/shared/models/config';
 
 export async function POST(req: Request) {
@@ -7,7 +7,6 @@ export async function POST(req: Request) {
 
     return respData(configs);
   } catch (e: UnsafeAny) {
-    console.log('get configs failed', e);
-    return respErr(e.message);
+    return respErr(safeErrorMessage(e, 'get configs failed'));
   }
 }

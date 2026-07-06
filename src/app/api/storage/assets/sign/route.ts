@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getAssetIdFromRef, toAssetRef } from '@/shared/lib/asset-ref';
+import { safeErrorMessage } from '@/shared/lib/resp';
 import {
   findMediaAssetById,
   MediaAssetStatus,
@@ -115,10 +116,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: UnsafeAny) {
-    console.error('sign assets failed:', error);
     return NextResponse.json({
       code: -1,
-      message: error?.message || 'sign assets failed',
+      message: safeErrorMessage(error, 'sign assets failed'),
     });
   }
 }

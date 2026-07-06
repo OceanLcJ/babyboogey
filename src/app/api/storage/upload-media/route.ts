@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { getUuid } from '@/shared/lib/hash';
+import { safeErrorMessage } from '@/shared/lib/resp';
 import { toAssetRef } from '@/shared/lib/asset-ref';
 import {
   createMediaAsset,
@@ -21,6 +22,30 @@ import {
 } from '@/shared/services/media-asset';
 import { getStorageService } from '@/shared/services/storage';
 
+// SVG is intentionally excluded: it can carry inline scripts (stored XSS when
+// served with an image/svg+xml content-type). Only inert media is accepted.
+const ALLOWED_UPLOAD_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'image/avif',
+  'image/heic',
+  'image/heif',
+  'video/mp4',
+  'video/webm',
+  'audio/mpeg',
+  'audio/mp3',
+  'audio/wav',
+]);
+
+const MAX_UPLOAD_BYTES: Record<string, number> = {
+  image: 20 * 1024 * 1024,
+  video: 200 * 1024 * 1024,
+  audio: 50 * 1024 * 1024,
+};
+
 const extFromMime = (mimeType: string) => {
   const map: Record<string, string> = {
     'image/jpeg': 'jpg',
@@ -28,7 +53,6 @@ const extFromMime = (mimeType: string) => {
     'image/png': 'png',
     'image/webp': 'webp',
     'image/gif': 'gif',
-    'image/svg+xml': 'svg',
     'image/avif': 'avif',
     'image/heic': 'heic',
     'image/heif': 'heif',
@@ -152,11 +176,23 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
+      const mimeType = file.type || 'application/octet-stream';
+      if (!ALLOWED_UPLOAD_MIME_TYPES.has(mimeType)) {
+        return NextResponse.json({
+          code: -1,
+          message: 'Unsupported file type',
+        });
+      }
+
+      const mediaType = inferMediaTypeFromMime(mimeType);
+      const maxBytes = MAX_UPLOAD_BYTES[mediaType] ?? MAX_UPLOAD_BYTES.image;
+      if (file.size > maxBytes) {
+        return NextResponse.json({ code: -1, message: 'File too large' });
+      }
+
       const arrayBuffer = await file.arrayBuffer();
       const body = new Uint8Array(arrayBuffer);
-      const mimeType = file.type || 'application/octet-stream';
       const ext = extFromMime(mimeType) || file.name.split('.').pop() || 'bin';
-      const mediaType = inferMediaTypeFromMime(mimeType);
       const objectKey = buildMediaObjectKey({
         ownerType: owner.ownerType,
         ownerId: owner.ownerId,
@@ -259,10 +295,9 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error: UnsafeAny) {
-    console.error('upload media failed:', error);
     return NextResponse.json({
       code: -1,
-      message: error?.message || 'upload media failed',
+      message: safeErrorMessage(error, 'upload media failed'),
     });
   }
 }

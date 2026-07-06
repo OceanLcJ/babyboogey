@@ -366,7 +366,7 @@ export async function POST(
     console.log('handle payment notify failed', err);
     return Response.json(
       {
-        message: `handle payment notify failed: ${err.message}`,
+        message: 'handle payment notify failed',
       },
       {
         status: 500,
