@@ -84,6 +84,22 @@ const authOptions = {
     // Refresh session at most once per day.
     updateAge: SESSION_UPDATE_AGE_SECONDS,
   },
+  // Rate limiting (better-auth enables this in production by default, using the
+  // in-memory store). On Workers the memory store is per-isolate — not globally
+  // consistent — but Cloudflare isolates are long-lived and reused, so it still
+  // throttles single-source brute force. Tighten the credential endpoints that
+  // matter for credential stuffing / account-creation abuse. For globally
+  // consistent limits, back this with a shared store (D1 `rateLimit` table).
+  rateLimit: {
+    window: 60,
+    max: 100,
+    customRules: {
+      '/sign-in/email': { window: 60, max: 5 },
+      '/sign-up/email': { window: 3600, max: 10 },
+      '/forget-password': { window: 3600, max: 5 },
+      '/reset-password': { window: 3600, max: 5 },
+    },
+  },
   user: {
     // Allow persisting custom columns on user table.
     // Without this, better-auth may ignore extra properties during create/update.
