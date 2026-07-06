@@ -42,3 +42,7 @@ NEXT_PUBLIC_APP_PREVIEW_IMAGE = "https://r2.babyboogey.com/assets/imgs/preview.w
 DATABASE_PROVIDER = "d1"
 DB_SINGLETON_ENABLED = "true"
 DB_MAX_CONNECTIONS = "1"
+
+# auth: use the shared D1 rate_limit table for globally-consistent rate limiting
+# (requires the 0004_rate_limit migration, already applied)
+AUTH_RATE_LIMIT_STORAGE = "database"
