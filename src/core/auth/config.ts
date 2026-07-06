@@ -94,6 +94,11 @@ const authOptions = {
   // customRules tighten the endpoints that matter for credential stuffing and
   // account-creation abuse regardless of the storage backend.
   rateLimit: {
+    // Enable explicitly: better-auth's default only turns rate limiting on when
+    // it detects NODE_ENV==='production', but that env var is not populated at
+    // module-eval time on the Workers runtime (OpenNext injects it per-request),
+    // so the auto-detection reads undefined and leaves the limiter off.
+    enabled: true,
     storage:
       process.env.AUTH_RATE_LIMIT_STORAGE === 'database' ? 'database' : 'memory',
     window: 60,
