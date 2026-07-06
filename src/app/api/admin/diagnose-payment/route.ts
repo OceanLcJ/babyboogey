@@ -11,19 +11,29 @@
 import { desc, eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
+import { PERMISSIONS } from '@/core/rbac';
 import { db } from '@/core/db';
 import { order, credit, user } from '@/config/db/schema';
 import { OrderStatus } from '@/shared/models/order';
 import { getUserInfo } from '@/shared/models/user';
+import { hasPermission } from '@/shared/services/rbac';
 
 export async function GET() {
   try {
-    // Check if user is admin (optional - remove if you want to allow any user)
+    // Require admin access - this endpoint exposes orders, credits and user data
     const currentUser = await getUserInfo();
     if (!currentUser) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    const isAdmin = await hasPermission(currentUser.id, PERMISSIONS.ADMIN_ACCESS);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: 'Forbidden' },
+        { status: 403 }
       );
     }
 

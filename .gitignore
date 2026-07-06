@@ -38,6 +38,10 @@ wrangler-login-test*.log
 .env.test
 .env.production
 
+# cloudflare wrangler local secrets (never commit)
+.dev.vars
+.dev.vars.*
+
 # vercel
 .vercel
 
