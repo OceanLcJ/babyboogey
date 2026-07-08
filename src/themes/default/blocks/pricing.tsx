@@ -116,23 +116,15 @@ export function Pricing({
   const { pricingItem, isLoading, productId, checkout, startPayment } =
     usePricingCheckout();
 
-  const hasSubscriptionAccess = Boolean(
-    currentSubscription || user?.membership?.hasSubscription
-  );
-
   const visibleGroups = useMemo(() => {
     if (!section.groups) return [];
-    return hasSubscriptionAccess
-      ? section.groups
-      : section.groups.filter((groupItem) => groupItem.name !== 'credits');
-  }, [section.groups, hasSubscriptionAccess]);
+    return section.groups;
+  }, [section.groups]);
 
   const visibleItems = useMemo(() => {
     if (!section.items) return [];
-    return hasSubscriptionAccess
-      ? section.items
-      : section.items.filter((item) => item.group !== 'credits');
-  }, [section.items, hasSubscriptionAccess]);
+    return section.items;
+  }, [section.items]);
 
   const [group, setGroup] = useState(() => {
     return resolveDefaultGroup({

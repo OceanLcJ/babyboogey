@@ -29,6 +29,34 @@
         ],
         "items": [
           {
+            "title": "Single Video",
+            "description": "Just enough for one dance video",
+            "features_title": "Includes:",
+            "features": [
+              "75 credits (never expire)",
+              "1 short dance video (5s, 720p)",
+              "No watermark",
+              "Commercial license",
+              "Private storage"
+            ],
+            "interval": "one-time",
+            "amount": 299,
+            "currency": "USD",
+            "price": "$2.99",
+            "original_price": "$4.36",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "Buy Now",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "single-video",
+            "product_name": "Single Video Credit Pack",
+            "credits": 75,
+            "group": "credits"
+          },
+          {
             "title": "Starter",
             "description": "Perfect for getting started",
             "features_title": "Includes:",

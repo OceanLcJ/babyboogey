@@ -29,6 +29,34 @@
         ],
         "items": [
           {
+            "title": "单视频包",
+            "description": "刚好够生成一个舞蹈视频",
+            "features_title": "包含内容：",
+            "features": [
+              "75积分（永久有效）",
+              "1个短舞蹈视频（5秒, 720p）",
+              "无水印",
+              "商业授权",
+              "私有存储"
+            ],
+            "interval": "one-time",
+            "amount": 299,
+            "currency": "USD",
+            "price": "$2.99",
+            "original_price": "$4.36",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "立即购买",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "single-video",
+            "product_name": "单视频积分包",
+            "credits": 75,
+            "group": "credits"
+          },
+          {
             "title": "入门包",
             "description": "完美的入门体验",
             "features_title": "包含内容：",

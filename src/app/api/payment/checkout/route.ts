@@ -171,9 +171,6 @@ export async function POST(req: Request) {
         : PaymentType.SUBSCRIPTION;
 
     const currentSubscription = await getCurrentSubscription(user.id);
-    if (pricingItem.group === 'credits' && !currentSubscription) {
-      return respErr(t('messages.credit_pack_subscribers_only'));
-    }
 
     const orderNo = getSnowId();
 

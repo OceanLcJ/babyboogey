@@ -29,6 +29,34 @@
         ],
         "items": [
           {
+            "title": "シングル動画",
+            "description": "ダンス動画1本分のクレジット",
+            "features_title": "含まれるもの:",
+            "features": [
+              "75 クレジット (無期限)",
+              "短尺ダンス動画 1本 (5秒, 720p)",
+              "透かしなし",
+              "商用ライセンス",
+              "プライベートストレージ"
+            ],
+            "interval": "one-time",
+            "amount": 299,
+            "currency": "米ドル",
+            "price": "$2.99",
+            "original_price": "$4.36",
+            "unit": "",
+            "is_featured": false,
+            "button": {
+              "title": "今すぐ購入",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "シングルビデオ",
+            "product_name": "シングル動画クレジットパック",
+            "credits": 75,
+            "group": "クレジット"
+          },
+          {
             "title": "スターター",
             "description": "始めるのに最適",
             "features_title": "含まれるもの:",
