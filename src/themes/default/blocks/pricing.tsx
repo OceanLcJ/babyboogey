@@ -1,27 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Check, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+
 import { useLocale, useTranslations } from 'next-intl';
 
-import { SmartIcon } from '@/shared/blocks/common';
 import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/shared/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { useAppContext } from '@/shared/contexts/app';
 import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
@@ -97,6 +83,150 @@ function resolveDefaultGroup({
     groups?.[0]?.name ||
     items[0]?.group ||
     ''
+  );
+}
+
+function PricingCardGrid({
+  items,
+  itemCurrencies,
+  handlePayment,
+  isLoading,
+  activeProductId,
+  processingText,
+  currentPlanText,
+  currentSubscription,
+}: {
+  items: PricingItem[];
+  itemCurrencies: Record<string, { selectedCurrency: string; displayedItem: PricingItem }>;
+  handlePayment: (item: PricingItem) => void;
+  isLoading: boolean;
+  activeProductId: string | undefined;
+  processingText: string;
+  currentPlanText: string;
+  currentSubscription?: Subscription;
+}) {
+  const svPerCr = useMemo(() => {
+    const sv = items.find((i) => i.product_id === 'single-video');
+    if (!sv?.credits || !sv.amount) return 0;
+    return sv.amount / 100 / sv.credits;
+  }, [items]);
+
+  const gridClass =
+    items.length <= 3 ? 'bb-credit-grid bb-credit-grid--3' : 'bb-credit-grid';
+
+  return (
+    <div className={cn(gridClass, 'mx-auto w-full')}>
+      {items.map((item) => {
+        const displayedItem = itemCurrencies[item.product_id]?.displayedItem || item;
+        const isSubscription = item.interval !== 'one-time';
+        const rawCredits = item.credits ?? 0;
+        const displayCredits =
+          item.interval === 'year' ? Math.round(rawCredits / 12) : rawCredits;
+        const creditUnit = isSubscription ? 'credits/mo' : 'credits';
+
+        const dollarAmt = displayedItem.amount / 100;
+        const perCreditCents = rawCredits > 0 ? (dollarAmt / rawCredits) * 100 : 0;
+
+        let savingsPct = 0;
+        if (displayedItem.original_price) {
+          const origNum = parseFloat(
+            displayedItem.original_price.replace(/[^0-9.]/g, '')
+          );
+          if (origNum > dollarAmt)
+            savingsPct = Math.round((1 - dollarAmt / origNum) * 100);
+        }
+
+        const cheaperPct =
+          !isSubscription &&
+          item.product_id !== 'single-video' &&
+          svPerCr > 0 &&
+          perCreditCents > 0
+            ? Math.round((1 - dollarAmt / rawCredits / svPerCr) * 100)
+            : 0;
+
+        const isCurrentPlan =
+          !!currentSubscription &&
+          currentSubscription.productId === item.product_id;
+
+        return (
+          <div
+            key={item.product_id}
+            className={cn(
+              'bb-credit-card',
+              item.is_featured && 'bb-credit-card--featured'
+            )}
+            data-label={item.label}
+          >
+            <div className="bb-credit-count">{displayCredits.toLocaleString()}</div>
+            <div className="bb-credit-unit">{creditUnit}</div>
+
+            {perCreditCents > 0 && (
+              <div className="bb-credit-per">
+                {perCreditCents.toFixed(1)}¢<span>/cr</span>
+                {cheaperPct > 0 && (
+                  <span className="bb-credit-cheaper">{cheaperPct}% cheaper</span>
+                )}
+              </div>
+            )}
+
+            <div className="bb-credit-price-row">
+              <span className="bb-credit-price">{displayedItem.price}</span>
+              {displayedItem.unit && (
+                <span className="bb-credit-period">{displayedItem.unit}</span>
+              )}
+              {displayedItem.original_price && (
+                <span className="bb-credit-orig">{displayedItem.original_price}</span>
+              )}
+              {savingsPct > 0 && (
+                <span className="bb-credit-save">Save {savingsPct}%</span>
+              )}
+            </div>
+
+            <div className="bb-credit-name">{item.title}</div>
+            {item.description && (
+              <div className="bb-credit-desc">{item.description}</div>
+            )}
+
+            {item.features && item.features.length > 0 && (
+              <>
+                <hr className="bb-credit-divider" />
+                <ul className="bb-credit-feats">
+                  {item.features.map((feat, i) => (
+                    <li key={i}>{feat}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {isCurrentPlan ? (
+              <Button variant="outline" className="mt-auto w-full" disabled>
+                <span>{currentPlanText}</span>
+              </Button>
+            ) : (
+              <Button
+                onClick={() => handlePayment(item)}
+                disabled={isLoading}
+                variant={item.is_featured ? 'default' : 'outline'}
+                className={cn(
+                  'mt-auto w-full',
+                  item.is_featured &&
+                    'border-[0.5px] border-white/25 shadow-md shadow-black/20'
+                )}
+              >
+                {isLoading && item.product_id === activeProductId ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span>{processingText}</span>
+                  </>
+                ) : (
+                  <span>{item.button?.title ?? 'Buy Now'}</span>
+                )}
+              </Button>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -301,156 +431,16 @@ export function Pricing({
           </div>
         )}
 
-        <div
-          className={`mx-auto mt-0 grid w-full gap-6 md:grid-cols-${
-            filteredItems.length || 1
-          }`}
-        >
-          {filteredItems.map((item: PricingItem) => {
-            let isCurrentPlan = false;
-            if (
-              currentSubscription &&
-              currentSubscription.productId === item.product_id
-            ) {
-              isCurrentPlan = true;
-            }
-
-            // Get currency state for this item
-            const currencyState = itemCurrencies[item.product_id];
-            const displayedItem = currencyState?.displayedItem || item;
-            const selectedCurrency =
-              currencyState?.selectedCurrency || item.currency;
-            const currencies = getCurrenciesFromItem(item);
-
-            return (
-              <Card key={item.product_id} className="relative">
-                {item.label && (
-                  <span className="absolute inset-x-0 -top-3 mx-auto flex h-6 w-fit items-center rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground ring-1 ring-white/20 ring-offset-1 ring-offset-gray-950/5 ring-inset">
-                    {item.label}
-                  </span>
-                )}
-
-                <CardHeader>
-                  <CardTitle className="font-medium">
-                    <h3 className="text-sm font-medium">{item.title}</h3>
-                  </CardTitle>
-
-                  <div className="my-3 flex items-baseline gap-2">
-                    {displayedItem.original_price && (
-                      <span className="text-muted-foreground text-sm line-through">
-                        {displayedItem.original_price}
-                      </span>
-                    )}
-
-                    <div className="my-3 block text-2xl font-semibold">
-                      <span className="text-primary">
-                        {displayedItem.price}
-                      </span>{' '}
-                      {displayedItem.unit ? (
-                        <span className="text-muted-foreground text-sm font-normal">
-                          {displayedItem.unit}
-                        </span>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-
-                    {currencies.length > 1 && (
-                      <Select
-                        value={selectedCurrency}
-                        onValueChange={(currency) =>
-                          handleCurrencyChange(item.product_id, currency)
-                        }
-                      >
-                        <SelectTrigger
-                          size="sm"
-                          className="border-muted-foreground/30 bg-background/50 h-6 min-w-[60px] px-2 text-xs"
-                        >
-                          <SelectValue placeholder="Currency" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {currencies.map((currency) => (
-                            <SelectItem
-                              key={currency.currency}
-                              value={currency.currency}
-                              className="text-xs"
-                            >
-                              {currency.currency.toUpperCase()}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
-
-                  <CardDescription className="text-sm">
-                    {item.description}
-                  </CardDescription>
-                  {item.tip && (
-                    <span className="text-muted-foreground text-sm">
-                      {item.tip}
-                    </span>
-                  )}
-
-                  {isCurrentPlan ? (
-                    <Button
-                      variant="outline"
-                      className="mt-4 h-9 w-full px-4 py-2"
-                      disabled
-                    >
-                      <span className="hidden text-sm md:block">
-                        {t('current_plan')}
-                      </span>
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => handlePayment(item)}
-                      disabled={isLoading}
-                      className={cn(
-                        'focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
-                        'mt-4 h-9 w-full px-4 py-2',
-                        'bg-primary text-primary-foreground hover:bg-primary/90 border-[0.5px] border-white/25 shadow-md shadow-black/20'
-                      )}
-                    >
-                      {isLoading && item.product_id === productId ? (
-                        <>
-                          <Loader2 className="size-4 animate-spin" />
-                          <span className="block">{t('processing')}</span>
-                        </>
-                      ) : (
-                        <>
-                          {item.button?.icon && (
-                            <SmartIcon
-                              name={item.button?.icon as string}
-                              className="size-4"
-                            />
-                          )}
-                          <span className="block">{item.button?.title}</span>
-                        </>
-                      )}
-                    </Button>
-                  )}
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <hr className="border-dashed" />
-
-                  {item.features_title && (
-                    <p className="text-sm font-medium">{item.features_title}</p>
-                  )}
-                  <ul className="list-outside space-y-3 text-sm">
-                    {item.features?.map((item, index) => (
-                      <li key={index} className="flex items-center gap-2">
-                        <Check className="size-3" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        <PricingCardGrid
+          items={filteredItems}
+          itemCurrencies={itemCurrencies}
+          handlePayment={handlePayment}
+          isLoading={isLoading}
+          activeProductId={productId ?? undefined}
+          processingText={t('processing')}
+          currentPlanText={t('current_plan')}
+          currentSubscription={currentSubscription}
+        />
       </div>
 
       <PaymentModal

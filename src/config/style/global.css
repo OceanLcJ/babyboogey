@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './theme.css';
 
+
 @custom-variant dark (&:is(.dark *));
 
 @keyframes bb-watermark-drift {
@@ -341,3 +342,211 @@ pre {
   transform: translateY(-1px);
 }
 .bb-sign-btn:active { transform: translateY(0); }
+/* ─── Credit Pack Grid ─── */
+
+.bb-credit-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .bb-credit-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .bb-credit-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.bb-credit-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 4px);
+  padding: 26px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s, box-shadow 0.3s;
+}
+
+.bb-credit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px -16px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+.bb-credit-card--featured {
+  background: color-mix(in srgb, var(--primary) 9%, var(--card));
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  box-shadow:
+    0 28px 56px -22px color-mix(in srgb, var(--primary) 40%, transparent),
+    0 8px 22px -8px color-mix(in srgb, var(--foreground) 14%, transparent);
+}
+
+@media (min-width: 1024px) {
+  .bb-credit-card--featured { transform: translateY(-10px); }
+  .bb-credit-card--featured:hover { transform: translateY(-13px); }
+}
+
+.bb-credit-card--featured::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 14px;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+.bb-credit-count {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--foreground);
+  margin-bottom: 2px;
+}
+
+.bb-credit-unit {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--primary) 70%, var(--foreground));
+  margin-bottom: 14px;
+}
+
+.bb-credit-per {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--foreground) 75%, transparent);
+  margin-bottom: 14px;
+}
+
+.bb-credit-per span {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--foreground) 55%, transparent);
+}
+
+.bb-credit-cheaper {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  color: color-mix(in srgb, var(--primary) 80%, var(--foreground));
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.bb-credit-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.bb-credit-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--foreground);
+}
+
+.bb-credit-orig {
+  font-size: 0.88rem;
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+  font-weight: 600;
+}
+
+.bb-credit-save {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, oklch(0.65 0.2 145) 16%, transparent);
+  color: oklch(0.48 0.18 145);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.bb-credit-name {
+  margin-top: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--primary) 55%, var(--foreground));
+}
+
+.bb-credit-desc {
+  font-size: 0.8rem;
+  color: color-mix(in srgb, var(--foreground) 60%, transparent);
+  margin-top: 3px;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.bb-credit-divider {
+  border: 0;
+  border-top: 1px dashed color-mix(in srgb, var(--border) 70%, transparent);
+  margin: 14px 0;
+}
+
+.bb-credit-feats {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  font-size: 0.83rem;
+  flex: 1;
+}
+
+.bb-credit-feats li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 5px 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--border) 55%, transparent);
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+  line-height: 1.4;
+}
+
+.bb-credit-feats li:last-child { border-bottom: 0; }
+
+.bb-credit-feats li::before {
+  content: "✓";
+  font-weight: 900;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--primary) 78%, var(--foreground));
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* 3-column variant (monthly / yearly) */
+@media (min-width: 768px) {
+  .bb-credit-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .bb-credit-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+.bb-credit-period {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--foreground) 55%, transparent);
+  margin-left: -2px;
+}

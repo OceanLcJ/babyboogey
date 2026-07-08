@@ -59,6 +59,8 @@
           {
             "title": "入门包",
             "description": "完美的入门体验",
+            "label": "热门",
+            "is_featured": true,
             "features_title": "包含内容：",
             "features": [
               "410积分（永久有效）",
@@ -74,7 +76,6 @@
             "price": "$9.99",
             "original_price": "$19.82",
             "unit": "",
-            "is_featured": false,
             "button": {
               "title": "立即购买",
               "url": "/pricing",
@@ -88,7 +89,7 @@
           {
             "title": "标准包",
             "description": "休闲创作超值之选",
-            "label": "热门",
+            "is_featured": false,
             "features_title": "包含内容：",
             "features": [
               "1170积分（永久有效）",
@@ -104,7 +105,6 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
             "button": {
               "title": "立即购买",
               "url": "/pricing",
@@ -113,35 +113,6 @@
             "product_id": "standard",
             "product_name": "标准积分包",
             "credits": 1170,
-            "group": "credits"
-          },
-          {
-            "title": "超大包",
-            "description": "批量创作最佳选择",
-            "features_title": "包含内容：",
-            "features": [
-              "3040积分（永久有效）",
-              "~250张AI宝宝照片（2K）",
-              "~40个短舞蹈视频（5秒, 720p）",
-              "无水印",
-              "商业授权",
-              "私有存储"
-            ],
-            "interval": "one-time",
-            "amount": 3999,
-            "currency": "USD",
-            "price": "$39.99",
-            "original_price": "$79.82",
-            "unit": "",
-            "is_featured": false,
-            "button": {
-              "title": "立即购买",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "premium",
-            "product_name": "超大积分包",
-            "credits": 3040,
             "group": "credits"
           },
           {

@@ -59,6 +59,8 @@
           {
             "title": "スターター",
             "description": "始めるのに最適",
+            "label": "人気",
+            "is_featured": true,
             "features_title": "含まれるもの:",
             "features": [
               "410 クレジット (無期限)",
@@ -74,7 +76,6 @@
             "price": "$9.99",
             "original_price": "$19.82",
             "unit": "",
-            "is_featured": false,
             "button": {
               "title": "今すぐ購入",
               "url": "/pricing",
@@ -88,7 +89,7 @@
           {
             "title": "スタンダード",
             "description": "カジュアルなクリエイターに最適",
-            "label": "人気",
+            "is_featured": false,
             "features_title": "含まれるもの:",
             "features": [
               "1170 クレジット (無期限)",
@@ -104,7 +105,6 @@
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
-            "is_featured": true,
             "button": {
               "title": "今すぐ購入",
               "url": "/pricing",
@@ -113,35 +113,6 @@
             "product_id": "標準",
             "product_name": "スタンダードクレジットパック",
             "credits": 1170,
-            "group": "クレジット"
-          },
-          {
-            "title": "プレミアム",
-            "description": "大量作成に最適",
-            "features_title": "含まれるもの:",
-            "features": [
-              "3040 クレジット (無期限)",
-              "AI 赤ちゃん写真 約250枚 (2K)",
-              "短尺ダンス動画 約40本 (5秒, 720p)",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
-            ],
-            "interval": "one-time",
-            "amount": 3999,
-            "currency": "米ドル",
-            "price": "$39.99",
-            "original_price": "$79.82",
-            "unit": "",
-            "is_featured": false,
-            "button": {
-              "title": "今すぐ購入",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "プレミアム",
-            "product_name": "プレミアムクレジットパック",
-            "credits": 3040,
             "group": "クレジット"
           },
           {

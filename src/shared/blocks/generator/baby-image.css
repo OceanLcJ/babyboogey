@@ -1020,6 +1020,115 @@
   padding: 1rem clamp(1.5rem, 6vw, 4rem) 1.25rem;
 }
 
+/* ══════════ Elapsed time counter ══════════ */
+.bb-elapsed {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  padding: 1px 6px;
+  background: color-mix(in srgb, var(--muted) 55%, transparent);
+  border-radius: 6px;
+}
+
+/* ══════════ Safety confirmation shake ══════════ */
+@keyframes bb-safety-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-5px); }
+  40%      { transform: translateX(5px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
+}
+.bb-safety-attention {
+  animation: bb-safety-shake 0.55s ease;
+  border-color: color-mix(in srgb, var(--destructive) 60%, transparent) !important;
+  background: color-mix(in srgb, var(--destructive) 7%, var(--background)) !important;
+}
+
+/* ══════════ Mobile chip labels ══════════ */
+.bb-chip-label-short { display: none; }
+@media (max-width: 480px) {
+  .bb-chip-label { display: none; }
+  .bb-chip-label-short { display: inline; }
+  .bb-rail-chip {
+    padding: 0 0.6rem;
+    gap: 0.25rem;
+  }
+}
+
+/* ══════════ Lightbox ══════════ */
+.bb-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: bb-fade-in 0.18s ease;
+}
+@keyframes bb-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.bb-lightbox {
+  position: relative;
+  max-width: min(90vw, 720px);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: bb-scale-in 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes bb-scale-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.bb-lightbox-close {
+  position: absolute;
+  top: -2.6rem;
+  right: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+}
+.bb-lightbox-close:hover { background: rgba(255, 255, 255, 0.26); }
+.bb-lightbox-close:active { transform: scale(0.92); }
+.bb-lightbox-img {
+  max-width: 100%;
+  max-height: calc(92vh - 7rem);
+  object-fit: contain;
+  border-radius: 1rem;
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  display: block;
+}
+.bb-lightbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.bb-lightbox-actions .bb-ov-btn {
+  width: 44px;
+  height: 44px;
+}
+
 /* Small KBD-ish label */
 .bb-kbd {
   display: inline-block;

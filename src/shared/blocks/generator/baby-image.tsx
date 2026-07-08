@@ -81,6 +81,7 @@ const ASPECT_RATIO_OPTIONS = ['1:1', '3:4', '4:3', '9:16', '16:9'] as const;
 const HANDOFF_STORAGE_KEY = 'babyboogey:baby-image-handoff';
 const HANDOFF_TTL_MS = 30 * 60 * 1000;
 const MAX_UPLOAD_MB = 10;
+const SAFETY_CONFIRMED_KEY = 'babyboogey:safety-confirmed';
 
 const STYLE_THUMB_FILES: Record<BabyStyleId, string> = {
   'pixar-3d': 'ai-baby-photo-pixar-3d-animation-style.webp',
@@ -333,6 +334,9 @@ export function BabyImageGenerator({
   const [isCardFullscreen, setIsCardFullscreen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [safetyConfirmed, setSafetyConfirmed] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<GeneratedImage | null>(null);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [attemptedWithoutSafety, setAttemptedWithoutSafety] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const streamRef = useRef<HTMLDivElement | null>(null);
@@ -340,6 +344,7 @@ export function BabyImageGenerator({
 
   useEffect(() => {
     setIsMounted(true);
+    setSafetyConfirmed(localStorage.getItem(SAFETY_CONFIRMED_KEY) === '1');
   }, []);
 
   useEffect(() => {
@@ -435,7 +440,6 @@ export function BabyImageGenerator({
     !isPromptTooLong &&
     !attachedImage?.uploading &&
     !attachedImage?.error &&
-    safetyConfirmed &&
     (prompt.trim().length > 0 || Boolean(attachedImage));
 
   /* -------- message updaters -------- */
@@ -449,6 +453,25 @@ export function BabyImageGenerator({
     },
     []
   );
+
+  useEffect(() => {
+    if (!isGenerating) {
+      setElapsedSeconds(0);
+      return;
+    }
+    setElapsedSeconds(0);
+    const id = window.setInterval(() => setElapsedSeconds((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [isGenerating]);
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxImage(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightboxImage]);
 
   /* -------- scroll on new messages -------- */
   useEffect(() => {
@@ -667,6 +690,8 @@ export function BabyImageGenerator({
 
       if (!safetyConfirmed) {
         toast.error(t('safety.required'));
+        setAttemptedWithoutSafety(true);
+        window.setTimeout(() => setAttemptedWithoutSafety(false), 650);
         return;
       }
 
@@ -1000,8 +1025,10 @@ export function BabyImageGenerator({
                       isLast={idx === messages.length - 1}
                       downloadingImageId={downloadingImageId}
                       handoffImageId={handoffImageId}
+                      elapsedSeconds={elapsedSeconds}
                       onDownload={handleDownloadImage}
                       onDance={handleMakeThemDance}
+                      onOpenLightbox={setLightboxImage}
                       onRegenerate={handleRegenerate}
                       onAspectChange={handleChangeAspectFollowup}
                       onTryStyle={() => {
@@ -1067,7 +1094,7 @@ export function BabyImageGenerator({
                     title={t('form.reference_image')}
                   >
                     <Paperclip className="h-3.5 w-3.5" />
-                    <span>{t('form.reference_image')}</span>
+                    <span className="bb-chip-label">{t('form.reference_image')}</span>
                   </button>
                   <input
                     ref={fileInputRef}
@@ -1090,7 +1117,7 @@ export function BabyImageGenerator({
                             backgroundImage: `url(${STYLE_THUMB_URL(selectedStyle)})`,
                           }}
                         />
-                        <span>{t(`styles.${selectedStyle}.label`)}</span>
+                        <span className="bb-chip-label">{t(`styles.${selectedStyle}.label`)}</span>
                         <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
                     </DropdownMenuTrigger>
@@ -1152,7 +1179,7 @@ export function BabyImageGenerator({
                           )}
                           aria-hidden="true"
                         />
-                        <span>{aspectRatio}</span>
+                        <span className="bb-chip-label">{aspectRatio}</span>
                         <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
                     </DropdownMenuTrigger>
@@ -1199,8 +1226,11 @@ export function BabyImageGenerator({
                   >
                     <DropdownMenuTrigger asChild>
                       <button type="button" className="bb-rail-chip">
-                        <span>
+                        <span className="bb-chip-label">
                           {t(`form.resolution_${resolution}` as UnsafeAny)}
+                        </span>
+                        <span className="bb-chip-label-short" aria-hidden="true">
+                          {resolution.toUpperCase()}
                         </span>
                         <ChevronDown className="bb-rail-chip-caret h-3 w-3" />
                       </button>
@@ -1294,11 +1324,25 @@ export function BabyImageGenerator({
               </div>
             </div>
 
-            <label className="border-border/70 bg-background/80 text-muted-foreground mt-3 flex cursor-pointer items-start gap-2 rounded-md border px-3 py-2 text-[11px] leading-snug font-medium">
+            <label
+              className={cn(
+                'border-border/70 bg-background/80 text-muted-foreground mt-3 flex cursor-pointer items-start gap-2 rounded-md border px-3 py-2 text-[11px] leading-snug font-medium transition-colors',
+                attemptedWithoutSafety && 'bb-safety-attention'
+              )}
+            >
               <input
                 type="checkbox"
                 checked={safetyConfirmed}
-                onChange={(event) => setSafetyConfirmed(event.target.checked)}
+                onChange={(event) => {
+                  const checked = event.target.checked;
+                  setSafetyConfirmed(checked);
+                  if (checked) {
+                    localStorage.setItem(SAFETY_CONFIRMED_KEY, '1');
+                    setAttemptedWithoutSafety(false);
+                  } else {
+                    localStorage.removeItem(SAFETY_CONFIRMED_KEY);
+                  }
+                }}
                 className="border-border accent-primary mt-0.5 h-4 w-4 shrink-0 rounded"
               />
               <span>{t('safety.confirmation')}</span>
@@ -1335,6 +1379,17 @@ export function BabyImageGenerator({
           <span>{t('footer_hint', { credits: currentCostCredits })}</span>
         </p>
       </div>
+
+      {lightboxImage && (
+        <ImageLightbox
+          image={lightboxImage}
+          downloadingImageId={downloadingImageId}
+          handoffImageId={handoffImageId}
+          onClose={() => setLightboxImage(null)}
+          onDownload={handleDownloadImage}
+          onDance={handleMakeThemDance}
+        />
+      )}
     </section>
   );
 }
@@ -1435,8 +1490,10 @@ function AssistantCard({
   isLast,
   downloadingImageId,
   handoffImageId,
+  elapsedSeconds,
   onDownload,
   onDance,
+  onOpenLightbox,
   onRegenerate,
   onAspectChange,
   onTryStyle,
@@ -1446,8 +1503,10 @@ function AssistantCard({
   isLast: boolean;
   downloadingImageId: string | null;
   handoffImageId: string | null;
+  elapsedSeconds?: number;
   onDownload: (img: GeneratedImage) => void;
   onDance: (img: GeneratedImage) => void;
+  onOpenLightbox?: (img: GeneratedImage) => void;
   onRegenerate: (user: UserChatMessage) => void;
   onAspectChange: (aspect: string, user: UserChatMessage) => void;
   onTryStyle: () => void;
@@ -1489,6 +1548,9 @@ function AssistantCard({
                 <span />
                 <span />
               </span>
+              {elapsedSeconds != null && elapsedSeconds > 0 && (
+                <span className="bb-elapsed">{elapsedSeconds}s</span>
+              )}
             </div>
           ) : msg.status === AITaskStatus.FAILED ? (
             <div className="bb-assist-title bb-assist-error">
@@ -1572,6 +1634,8 @@ function AssistantCard({
                   className="bb-result-photo"
                   src={image.url}
                   alt={image.prompt || 'Generated baby image'}
+                  onClick={() => onOpenLightbox?.(image)}
+                  style={{ cursor: 'zoom-in' }}
                 />
                 <div className="bb-result-grain" aria-hidden="true" />
                 <div className="bb-result-vignette" aria-hidden="true" />
@@ -1579,6 +1643,20 @@ function AssistantCard({
                   {toRomanLower(index + 1)}.
                 </span>
                 <div className="bb-result-overlay">
+                  <button
+                    type="button"
+                    className="bb-ov-btn"
+                    aria-label="Make them dance"
+                    title="Make them dance"
+                    onClick={() => onDance(image)}
+                    disabled={handoffImageId === image.id}
+                  >
+                    {handoffImageId === image.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="bb-ov-dancer" aria-hidden="true">💃</span>
+                    )}
+                  </button>
                   <button
                     type="button"
                     className="bb-ov-btn bb-ov-primary"
@@ -1659,6 +1737,85 @@ function AssistantCard({
             )}
           </div>
         )}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Image Lightbox                                                              */
+/* -------------------------------------------------------------------------- */
+
+function ImageLightbox({
+  image,
+  downloadingImageId,
+  handoffImageId,
+  onClose,
+  onDownload,
+  onDance,
+}: {
+  image: GeneratedImage;
+  downloadingImageId: string | null;
+  handoffImageId: string | null;
+  onClose: () => void;
+  onDownload: (img: GeneratedImage) => void;
+  onDance: (img: GeneratedImage) => void;
+}) {
+  const t = useTranslations('ai.baby-image.generator');
+  return (
+    <div
+      className="bb-lightbox-backdrop"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <div className="bb-lightbox" onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="bb-lightbox-close"
+          aria-label="Close"
+          onClick={onClose}
+        >
+          <X className="h-5 w-5" />
+        </button>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="bb-lightbox-img"
+          src={image.url}
+          alt={image.prompt || 'Generated baby image'}
+        />
+        <div className="bb-lightbox-actions">
+          <button
+            type="button"
+            className="bb-ov-btn bb-ov-primary"
+            aria-label="Download"
+            title="Download"
+            onClick={() => onDownload(image)}
+            disabled={downloadingImageId === image.id}
+          >
+            {downloadingImageId === image.id ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4" strokeWidth={1.9} />
+            )}
+          </button>
+          <button
+            type="button"
+            className="bb-dance-btn"
+            onClick={() => onDance(image)}
+            disabled={handoffImageId === image.id}
+          >
+            {handoffImageId === image.id ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <span className="bb-dancer" aria-hidden="true">💃</span>
+                <span>{t('make_them_dance')}</span>
+                <span className="bb-arrow" aria-hidden="true">→</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
