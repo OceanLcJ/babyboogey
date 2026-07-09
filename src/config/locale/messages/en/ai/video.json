@@ -104,6 +104,12 @@
       "ready": "Draft restored from history. Review it before generating.",
       "media_unavailable": "Prompt and settings were restored. The original input image may need to be uploaded again."
     },
+    "insufficient_credits_modal": {
+      "title": "Not enough credits",
+      "description": "This video needs {required} credits, but you only have {remaining}.",
+      "cta_buy": "Get 75 Credits — $2.99",
+      "cta_plans": "View all plans"
+    },
     "errors": {
       "timeout_actionable": "Generation timed out. Please try again, switch template, or choose 720p for faster results.",
       "empty_result_actionable": "The model returned no video. Please retry or switch to another dance template.",

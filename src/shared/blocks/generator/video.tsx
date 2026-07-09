@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { Link, useRouter } from '@/core/i18n/navigation';
 import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
 import { Button } from '@/shared/components/ui/button';
+import { InsufficientCreditsModal } from '@/shared/components/insufficient-credits-modal';
 import { VideoUnlockButton } from '@/shared/components/video-unlock-button';
 import { VIDEO_UNLOCK_PRODUCT_ID } from '@/shared/constants/video-unlock';
 import {
@@ -700,6 +701,8 @@ export function VideoGenerator({
     useState<Record<string, WatermarkedPlaybackState>>({});
   const [isMounted, setIsMounted] = useState(false);
   const [showHandoffBanner, setShowHandoffBanner] = useState(false);
+  const [showInsufficientCreditsModal, setShowInsufficientCreditsModal] =
+    useState(false);
   const [pendingAITaskReuseHandoff, setPendingAITaskReuseHandoff] =
     useState<AITaskReuseHandoffPayload | null>(null);
   const isPollingRef = useRef(false);
@@ -2033,12 +2036,7 @@ export function VideoGenerator({
     }
 
     if (remainingCredits < currentCost) {
-      toast.error(
-        mapVideoErrorToUserMessage('insufficient credits', {
-          t: translateError,
-          locale,
-        })
-      );
+      setShowInsufficientCreditsModal(true);
       return;
     }
 
@@ -2243,6 +2241,7 @@ export function VideoGenerator({
   };
 
   return (
+    <>
     <section className="container">
       {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
       <div className="mx-auto mb-12 max-w-2xl text-center">
@@ -3058,5 +3057,13 @@ export function VideoGenerator({
         </div>
       </div>
     </section>
+
+    <InsufficientCreditsModal
+      open={showInsufficientCreditsModal}
+      onClose={() => setShowInsufficientCreditsModal(false)}
+      requiredCredits={currentCost}
+      remainingCredits={remainingCredits}
+    />
+    </>
   );
 }
