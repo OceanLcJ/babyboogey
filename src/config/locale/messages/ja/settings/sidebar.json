@@ -23,6 +23,11 @@
         "icon": "Coins"
       },
       {
+        "title": "チェックイン履歴",
+        "url": "/settings/checkins",
+        "icon": "Gift"
+      },
+      {
         "title": "APIキー",
         "url": "/settings/apikeys",
         "icon": "RiKeyLine"

@@ -1,0 +1,21 @@
+{
+  "calendar": {
+    "title": "每日签到日历",
+    "description": "每天签到会推进 7 天奖励周期；中断后从第 1 天重新开始。",
+    "month_checked": "本月签到",
+    "month_credits": "获得积分",
+    "today_status": "今日状态",
+    "today_checked": "已签到",
+    "today_pending": "未签到",
+    "previous_month": "上个月",
+    "next_month": "下个月",
+    "checked": "已签到",
+    "today": "今天",
+    "legend_checked": "已签到日期",
+    "legend_today": "今天",
+    "streak_cycle": "7 天连续奖励",
+    "day_short": "第{day}天",
+    "reward": "奖励从 +{min} 到 +{max} 积分递增",
+    "weekdays": ["日", "一", "二", "三", "四", "五", "六"]
+  }
+}

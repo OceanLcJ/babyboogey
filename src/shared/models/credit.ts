@@ -136,6 +136,8 @@ export async function getCredits({
   userId,
   status,
   transactionType,
+  transactionScene,
+  transactionNoPrefix,
   getUser = false,
   page = 1,
   limit = 30,
@@ -143,6 +145,8 @@ export async function getCredits({
   userId?: string;
   status?: CreditStatus;
   transactionType?: CreditTransactionType;
+  transactionScene?: CreditTransactionScene;
+  transactionNoPrefix?: string;
   getUser?: boolean;
   page?: number;
   limit?: number;
@@ -156,6 +160,12 @@ export async function getCredits({
         status ? eq(credit.status, status) : undefined,
         transactionType
           ? eq(credit.transactionType, transactionType)
+          : undefined,
+        transactionScene
+          ? eq(credit.transactionScene, transactionScene)
+          : undefined,
+        transactionNoPrefix
+          ? like(credit.transactionNo, `${transactionNoPrefix}%`)
           : undefined
       )
     )
@@ -175,10 +185,14 @@ export async function getCreditsCount({
   userId,
   status,
   transactionType,
+  transactionScene,
+  transactionNoPrefix,
 }: {
   userId?: string;
   status?: CreditStatus;
   transactionType?: CreditTransactionType;
+  transactionScene?: CreditTransactionScene;
+  transactionNoPrefix?: string;
 }): Promise<number> {
   const [result] = await db()
     .select({ count: count() })
@@ -189,6 +203,12 @@ export async function getCreditsCount({
         status ? eq(credit.status, status) : undefined,
         transactionType
           ? eq(credit.transactionType, transactionType)
+          : undefined,
+        transactionScene
+          ? eq(credit.transactionScene, transactionScene)
+          : undefined,
+        transactionNoPrefix
+          ? like(credit.transactionNo, `${transactionNoPrefix}%`)
           : undefined
       )
     );
@@ -541,9 +561,7 @@ export async function grantCreditsForFirstLogin(
   const country = normalizeCountry(ctx.country);
 
   // Country rules (best-effort; never blocks login, only affects the bonus).
-  const countryMode = String(
-    configs.initial_credits_country_mode || 'denylist'
-  )
+  const countryMode = String(configs.initial_credits_country_mode || 'denylist')
     .trim()
     .toLowerCase();
   const countryList = parseIso2CountryList(
@@ -589,7 +607,9 @@ export async function grantCreditsForFirstLogin(
     parseInt(String(configs.initial_credits_ip_limit_window_days ?? '7'), 10) ||
       7
   );
-  const ipLimitSource = String(configs.initial_credits_ip_limit_source || 'both')
+  const ipLimitSource = String(
+    configs.initial_credits_ip_limit_source || 'both'
+  )
     .trim()
     .toLowerCase();
 
@@ -722,21 +742,154 @@ export async function grantCreditsForUser({
   return newCredit;
 }
 
-const CHECKIN_CREDITS = 12;
+export const CHECKIN_REWARD_SCHEDULE = [2, 3, 4, 5, 6, 8, 12] as const;
 const CHECKIN_VALID_DAYS = 7;
 
 function todayDateKey(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+function buildCheckinTransactionNo(userId: string, dateKey: string) {
+  return `checkin:${userId}:${dateKey}`;
+}
+
+function addDaysToDateKey(dateKey: string, amount: number) {
+  const [year, month, day] = dateKey.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day + amount));
+
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(
+    2,
+    '0'
+  )}-${String(date.getUTCDate()).padStart(2, '0')}`;
+}
+
+export function getCheckinCycleDay(streakDay: number) {
+  const normalizedStreakDay = Math.max(1, Math.floor(streakDay || 1));
+
+  return ((normalizedStreakDay - 1) % CHECKIN_REWARD_SCHEDULE.length) + 1;
+}
+
+export function getCheckinRewardForStreak(streakDay: number) {
+  return CHECKIN_REWARD_SCHEDULE[getCheckinCycleDay(streakDay) - 1];
+}
+
+type CheckinRewardState = {
+  streakDay: number;
+  cycleDay: number;
+  credits: number;
+  nextRewardCredits: number;
+};
+
+type CheckinMetadata = {
+  type?: string;
+  date?: string;
+  streakDay?: number;
+  cycleDay?: number;
+  rewardCredits?: number;
+};
+
+function parseCheckinMetadata(raw: string | null | undefined): CheckinMetadata {
+  if (!raw) return {};
+
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+async function calculateCheckinRewardState(
+  userId: string,
+  dateKey: string
+): Promise<CheckinRewardState> {
+  let streakDay = 1;
+  const previousDateKey = addDaysToDateKey(dateKey, -1);
+  const previous = await findCreditByTransactionNo(
+    buildCheckinTransactionNo(userId, previousDateKey)
+  );
+
+  if (previous) {
+    const previousMetadata = parseCheckinMetadata(previous.metadata);
+    const previousStreakDay = Number(previousMetadata.streakDay || 0);
+
+    if (Number.isFinite(previousStreakDay) && previousStreakDay > 0) {
+      streakDay = previousStreakDay + 1;
+    } else {
+      streakDay = 2;
+
+      for (
+        let offset = 2;
+        offset < CHECKIN_REWARD_SCHEDULE.length;
+        offset += 1
+      ) {
+        const legacyDateKey = addDaysToDateKey(dateKey, -offset);
+        const legacyPrevious = await findCreditByTransactionNo(
+          buildCheckinTransactionNo(userId, legacyDateKey)
+        );
+
+        if (!legacyPrevious) break;
+
+        streakDay += 1;
+      }
+    }
+  }
+
+  const cycleDay = getCheckinCycleDay(streakDay);
+  const credits = getCheckinRewardForStreak(streakDay);
+
+  return {
+    streakDay,
+    cycleDay,
+    credits,
+    nextRewardCredits: getCheckinRewardForStreak(streakDay + 1),
+  };
+}
+
+async function getExistingCheckinRewardState(
+  userId: string,
+  dateKey: string,
+  item: Credit
+): Promise<CheckinRewardState> {
+  const metadata = parseCheckinMetadata(item.metadata);
+  const fallback = await calculateCheckinRewardState(userId, dateKey);
+  const metadataStreakDay = Number(metadata.streakDay || 0);
+  const streakDay =
+    Number.isFinite(metadataStreakDay) && metadataStreakDay > 0
+      ? metadataStreakDay
+      : fallback.streakDay;
+  const cycleDay = getCheckinCycleDay(streakDay);
+  const credits = Number(item.credits || metadata.rewardCredits || 0);
+
+  return {
+    streakDay,
+    cycleDay,
+    credits: credits > 0 ? credits : getCheckinRewardForStreak(streakDay),
+    nextRewardCredits: getCheckinRewardForStreak(streakDay + 1),
+  };
+}
+
 export async function claimDailyCheckin(user: User) {
   const dateKey = todayDateKey();
-  const transactionNo = `checkin:${user.id}:${dateKey}`;
+  const transactionNo = buildCheckinTransactionNo(user.id, dateKey);
 
   const existing = await findCreditByTransactionNo(transactionNo);
   if (existing) {
-    return { alreadyClaimed: true, credit: existing };
+    const rewardState = await getExistingCheckinRewardState(
+      user.id,
+      dateKey,
+      existing
+    );
+
+    return {
+      alreadyClaimed: true,
+      credit: existing,
+      rewardSchedule: CHECKIN_REWARD_SCHEDULE,
+      ...rewardState,
+    };
   }
+
+  const rewardState = await calculateCheckinRewardState(user.id, dateKey);
 
   const expiresAt = calculateCreditExpirationTime({
     creditsValidDays: CHECKIN_VALID_DAYS,
@@ -751,20 +904,45 @@ export async function claimDailyCheckin(user: User) {
     transactionNo,
     transactionType: CreditTransactionType.GRANT,
     transactionScene: CreditTransactionScene.CHECKIN,
-    credits: CHECKIN_CREDITS,
-    remainingCredits: CHECKIN_CREDITS,
-    description: `daily check-in ${dateKey}`,
+    credits: rewardState.credits,
+    remainingCredits: rewardState.credits,
+    description: `daily check-in ${dateKey} day ${rewardState.cycleDay}`,
     expiresAt,
     status: CreditStatus.ACTIVE,
-    metadata: JSON.stringify({ type: 'checkin', date: dateKey }),
+    metadata: JSON.stringify({
+      type: 'checkin',
+      date: dateKey,
+      streakDay: rewardState.streakDay,
+      cycleDay: rewardState.cycleDay,
+      rewardCredits: rewardState.credits,
+      rewardSchedule: CHECKIN_REWARD_SCHEDULE,
+    }),
   };
 
   try {
     const created = await createCredit(newCredit);
-    return { alreadyClaimed: false, credit: created };
+    return {
+      alreadyClaimed: false,
+      credit: created,
+      rewardSchedule: CHECKIN_REWARD_SCHEDULE,
+      ...rewardState,
+    };
   } catch {
     const after = await findCreditByTransactionNo(transactionNo);
-    if (after) return { alreadyClaimed: true, credit: after };
+    if (after) {
+      const afterRewardState = await getExistingCheckinRewardState(
+        user.id,
+        dateKey,
+        after
+      );
+
+      return {
+        alreadyClaimed: true,
+        credit: after,
+        rewardSchedule: CHECKIN_REWARD_SCHEDULE,
+        ...afterRewardState,
+      };
+    }
     throw new Error('daily check-in failed');
   }
 }

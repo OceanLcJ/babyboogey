@@ -344,14 +344,14 @@ function formatRelativeDate(value: string | Date | null, locale: string) {
 function getStatusClasses(status?: string | null) {
   switch (status) {
     case AITaskStatus.SUCCESS:
-      return 'border-emerald-400/25 bg-emerald-500/10 text-emerald-300';
+      return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 dark:text-emerald-300';
     case AITaskStatus.FAILED:
-      return 'border-rose-400/25 bg-rose-500/10 text-rose-300';
+      return 'border-rose-500/30 bg-rose-500/10 text-rose-400 dark:text-rose-300';
     case AITaskStatus.PENDING:
     case AITaskStatus.PROCESSING:
-      return 'border-sky-400/25 bg-sky-500/10 text-sky-300';
+      return 'border-sky-500/30 bg-sky-500/10 text-sky-400 dark:text-sky-300';
     case AITaskStatus.CANCELED:
-      return 'border-zinc-400/25 bg-zinc-500/10 text-zinc-300';
+      return 'border-zinc-500/30 bg-zinc-500/10 text-zinc-400 dark:text-zinc-300';
     default:
       return 'border-border bg-secondary text-secondary-foreground';
   }
@@ -449,7 +449,7 @@ function ResultShell({
   return (
     <div
       className={cn(
-        'bg-muted/30 border-border flex min-h-[220px] items-center justify-center overflow-hidden rounded-lg border',
+        'bg-muted/20 border-border/60 flex min-h-[220px] items-center justify-center overflow-hidden rounded-xl border',
         className
       )}
     >
@@ -461,10 +461,10 @@ function ResultShell({
 function EmptyResult({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <div className="text-muted-foreground flex flex-col items-center gap-3 px-6 text-center text-sm">
-      <div className="bg-background/70 border-border flex h-11 w-11 items-center justify-center rounded-lg border">
+      <div className="bg-background/80 border-border/60 flex h-12 w-12 items-center justify-center rounded-xl border shadow-sm">
         {icon}
       </div>
-      <span>{label}</span>
+      <span className="max-w-[240px] leading-relaxed">{label}</span>
     </div>
   );
 }
@@ -731,9 +731,9 @@ function TaskMetaGrid({
       {items.map((item) => (
         <div
           key={item.label}
-          className="border-border bg-background/50 rounded-md border px-3 py-2"
+          className="border-border/50 bg-muted/30 rounded-lg px-3 py-2"
         >
-          <dt className="text-muted-foreground text-[11px] font-medium tracking-wide uppercase">
+          <dt className="text-muted-foreground text-[11px] font-medium tracking-wider uppercase">
             {item.label}
           </dt>
           <dd className="text-foreground mt-1 truncate text-sm font-medium">
@@ -755,7 +755,7 @@ function TaskDetails({
   t: Awaited<ReturnType<typeof getTranslations>>;
 }) {
   return (
-    <details className="border-border bg-background/40 rounded-md border px-3 py-2">
+    <details className="border-border/50 bg-muted/20 group rounded-lg px-3 py-2.5">
       <summary className="text-muted-foreground hover:text-foreground cursor-pointer text-sm font-medium transition-colors">
         {t('details.title')}
       </summary>
@@ -798,7 +798,7 @@ function TaskCard({
   const createdAt = formatRelativeDate(task.createdAt, locale);
 
   return (
-    <article className="bg-card/70 border-border grid gap-5 rounded-lg border p-4 shadow-sm md:grid-cols-[minmax(280px,420px)_1fr]">
+    <article className="bg-card/70 border-border/60 grid gap-5 rounded-xl border p-5 shadow-sm transition-shadow duration-200 hover:shadow-md md:grid-cols-[minmax(280px,420px)_1fr]">
       <TaskResultPreview
         task={task}
         result={result}
@@ -853,7 +853,7 @@ function ActiveTaskCard({
   const createdAt = formatRelativeDate(task.createdAt, locale);
 
   return (
-    <article className="border-border bg-card/60 flex min-w-[280px] flex-1 items-center gap-4 rounded-lg border p-4">
+    <article className="border-border/60 bg-card/60 flex min-w-[280px] flex-1 items-center gap-4 rounded-xl border p-4 transition-shadow duration-200 hover:shadow-sm">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-sky-400/25 bg-sky-500/10 text-sky-300">
         <Loader2 className="h-5 w-5 animate-spin" />
       </div>
@@ -909,17 +909,17 @@ function FilterLink({
     <Link
       href={href}
       className={cn(
-        'inline-flex min-h-10 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+        'inline-flex min-h-10 items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200',
         active
-          ? 'bg-foreground text-background'
+          ? 'bg-primary text-primary-foreground shadow-sm'
           : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
       )}
     >
       <span>{title}</span>
       <span
         className={cn(
-          'rounded px-1.5 py-0.5 text-xs',
-          active ? 'bg-background/15' : 'bg-secondary'
+          'rounded-md px-1.5 py-0.5 text-xs tabular-nums',
+          active ? 'bg-primary-foreground/15' : 'bg-secondary'
         )}
       >
         {count}
@@ -930,9 +930,11 @@ function FilterLink({
 
 function StatPill({ label, value }: { label: string; value: number }) {
   return (
-    <div className="border-border bg-card/60 flex min-w-28 items-center justify-between gap-4 rounded-lg border px-3 py-2">
-      <span className="text-muted-foreground text-sm">{label}</span>
-      <span className="text-foreground text-lg font-semibold">{value}</span>
+    <div className="border-border/60 bg-card/60 flex min-w-28 flex-col gap-1 rounded-xl border px-4 py-3">
+      <span className="text-muted-foreground text-xs font-medium">{label}</span>
+      <span className="text-foreground text-xl font-bold tabular-nums">
+        {value}
+      </span>
     </div>
   );
 }
@@ -1111,7 +1113,7 @@ export default async function AiTasksPage({
           ))}
         </section>
       ) : aiTasks.length === 0 && activeTasks.length === 0 ? (
-        <section className="border-border bg-card/60 flex min-h-72 items-center justify-center rounded-lg border">
+        <section className="border-border/60 bg-card/40 flex min-h-72 items-center justify-center rounded-xl border border-dashed">
           <EmptyResult
             icon={<FileQuestion className="h-5 w-5" />}
             label={t('list.empty_message')}

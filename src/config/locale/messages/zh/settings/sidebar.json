@@ -23,6 +23,11 @@
         "icon": "Coins"
       },
       {
+        "title": "签到记录",
+        "url": "/settings/checkins",
+        "icon": "Gift"
+      },
+      {
         "title": "API 密钥",
         "url": "/settings/apikeys",
         "icon": "RiKeyLine"

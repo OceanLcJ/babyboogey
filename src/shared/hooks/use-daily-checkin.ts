@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { useAppContext } from '@/shared/contexts/app';
 
@@ -68,7 +68,10 @@ export function useDailyCheckin() {
         toast(t('daily_checkin_already_claimed'));
       } else {
         toast.success(
-          t('daily_checkin_success', { credits: res.data?.credits || 0 })
+          t('daily_checkin_success', {
+            credits: res.data?.credits || 0,
+            day: res.data?.cycleDay || 1,
+          })
         );
         void fetchUserCredits();
       }

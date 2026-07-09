@@ -1,0 +1,21 @@
+{
+  "calendar": {
+    "title": "Daily Check-in Calendar",
+    "description": "Keep checking in daily to move through a 7-day reward cycle. Miss a day and the cycle starts over.",
+    "month_checked": "Checked this month",
+    "month_credits": "Credits earned",
+    "today_status": "Today",
+    "today_checked": "Checked in",
+    "today_pending": "Not checked yet",
+    "previous_month": "Previous month",
+    "next_month": "Next month",
+    "checked": "Checked in",
+    "today": "Today",
+    "legend_checked": "Checked-in day",
+    "legend_today": "Today",
+    "streak_cycle": "7-day streak cycle",
+    "day_short": "D{day}",
+    "reward": "Rewards scale from +{min} to +{max} credits",
+    "weekdays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+  }
+}

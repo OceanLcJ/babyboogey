@@ -1,0 +1,21 @@
+{
+  "calendar": {
+    "title": "毎日のチェックインカレンダー",
+    "description": "毎日チェックインすると7日間の報酬サイクルが進みます。1日逃すと1日目から再開します。",
+    "month_checked": "今月のチェックイン",
+    "month_credits": "獲得クレジット",
+    "today_status": "今日の状態",
+    "today_checked": "チェックイン済み",
+    "today_pending": "未チェックイン",
+    "previous_month": "前の月",
+    "next_month": "次の月",
+    "checked": "チェックイン済み",
+    "today": "今日",
+    "legend_checked": "チェックイン済みの日",
+    "legend_today": "今日",
+    "streak_cycle": "7日間の連続報酬",
+    "day_short": "{day}日目",
+    "reward": "+{min} から +{max} クレジットまで増加",
+    "weekdays": ["日", "月", "火", "水", "木", "金", "土"]
+  }
+}

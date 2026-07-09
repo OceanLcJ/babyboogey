@@ -1,5 +1,5 @@
-import { claimDailyCheckin } from '@/shared/models/credit';
 import { respData, respErr } from '@/shared/lib/resp';
+import { claimDailyCheckin } from '@/shared/models/credit';
 import { getUserInfo } from '@/shared/models/user';
 
 export async function POST() {
@@ -14,6 +14,10 @@ export async function POST() {
     return respData({
       alreadyClaimed: result.alreadyClaimed,
       credits: result.credit?.credits ?? 0,
+      cycleDay: result.cycleDay,
+      nextRewardCredits: result.nextRewardCredits,
+      rewardSchedule: result.rewardSchedule,
+      streakDay: result.streakDay,
     });
   } catch (e) {
     console.error('checkin failed:', e);
