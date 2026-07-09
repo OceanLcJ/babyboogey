@@ -45,6 +45,7 @@ export enum CreditTransactionScene {
   REFUND = 'refund', // refund/reversal adjustment
   GIFT = 'gift', // gift
   REWARD = 'reward', // reward
+  CHECKIN = 'checkin', // daily check-in
 }
 
 // Calculate credit expiration time based on order and subscription info
@@ -719,4 +720,51 @@ export async function grantCreditsForUser({
   await createCredit(newCredit);
 
   return newCredit;
+}
+
+const CHECKIN_CREDITS = 12;
+const CHECKIN_VALID_DAYS = 7;
+
+function todayDateKey(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export async function claimDailyCheckin(user: User) {
+  const dateKey = todayDateKey();
+  const transactionNo = `checkin:${user.id}:${dateKey}`;
+
+  const existing = await findCreditByTransactionNo(transactionNo);
+  if (existing) {
+    return { alreadyClaimed: true, credit: existing };
+  }
+
+  const expiresAt = calculateCreditExpirationTime({
+    creditsValidDays: CHECKIN_VALID_DAYS,
+  });
+
+  const newCredit: NewCredit = {
+    id: getUuid(),
+    userId: user.id,
+    userEmail: user.email,
+    orderNo: '',
+    subscriptionNo: '',
+    transactionNo,
+    transactionType: CreditTransactionType.GRANT,
+    transactionScene: CreditTransactionScene.CHECKIN,
+    credits: CHECKIN_CREDITS,
+    remainingCredits: CHECKIN_CREDITS,
+    description: `daily check-in ${dateKey}`,
+    expiresAt,
+    status: CreditStatus.ACTIVE,
+    metadata: JSON.stringify({ type: 'checkin', date: dateKey }),
+  };
+
+  try {
+    const created = await createCredit(newCredit);
+    return { alreadyClaimed: false, credit: created };
+  } catch {
+    const after = await findCreditByTransactionNo(transactionNo);
+    if (after) return { alreadyClaimed: true, credit: after };
+    throw new Error('daily check-in failed');
+  }
 }

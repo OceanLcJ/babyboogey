@@ -54,6 +54,7 @@ import {
 } from '@/shared/components/ui/select';
 import { Switch } from '@/shared/components/ui/switch';
 import { useAppContext } from '@/shared/contexts/app';
+import { useDailyCheckin } from '@/shared/hooks/use-daily-checkin';
 import {
   type AITaskReuseHandoffPayload,
   consumeAITaskReuseHandoff,
@@ -728,6 +729,7 @@ export function VideoGenerator({
     fetchUserCredits,
     fetchUserInfo,
   } = useAppContext();
+  useDailyCheckin();
   const searchParams = useSearchParams();
   const isZhLocale = locale.toLowerCase().startsWith('zh');
 
