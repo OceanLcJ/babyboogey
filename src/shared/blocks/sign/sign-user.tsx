@@ -26,6 +26,7 @@ import { cn } from '@/shared/lib/utils';
 import { User as UserType } from '@/shared/models/user';
 import { NavItem, UserNav } from '@/shared/types/blocks/common';
 
+import { DailyCheckinMenuItem } from './daily-checkin-menu-item';
 import { SmartIcon } from '../common/smart-icon';
 import { SignModal } from './sign-modal';
 
@@ -176,6 +177,7 @@ export function SignUser({
                     {displayUser.name}
                   </Link>
                 </DropdownMenuItem>
+                <DailyCheckinMenuItem />
                 <DropdownMenuSeparator />
               </>
             )}

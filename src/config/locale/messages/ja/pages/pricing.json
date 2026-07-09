@@ -13,16 +13,16 @@
         "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
         "groups": [
           {
-            "name": "クレジット",
+            "name": "credits",
             "title": "クレジットパック",
             "is_featured": true
           },
           {
-            "name": "毎月",
+            "name": "monthly",
             "title": "月額"
           },
           {
-            "name": "毎年",
+            "name": "yearly",
             "title": "年額",
             "label": "30%お得"
           }
@@ -41,7 +41,7 @@
             ],
             "interval": "one-time",
             "amount": 299,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$2.99",
             "original_price": "$4.36",
             "unit": "",
@@ -51,10 +51,10 @@
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "シングルビデオ",
+            "product_id": "single-video",
             "product_name": "シングル動画クレジットパック",
             "credits": 75,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スターター",
@@ -72,7 +72,7 @@
             ],
             "interval": "one-time",
             "amount": 999,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$9.99",
             "original_price": "$19.82",
             "unit": "",
@@ -81,10 +81,10 @@
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "スターター",
+            "product_id": "starter",
             "product_name": "スタータークレジットパック",
             "credits": 410,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スタンダード",
@@ -101,7 +101,7 @@
             ],
             "interval": "one-time",
             "amount": 1999,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$19.99",
             "original_price": "$39.82",
             "unit": "",
@@ -110,10 +110,10 @@
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "標準",
+            "product_id": "standard",
             "product_name": "スタンダードクレジットパック",
             "credits": 1170,
-            "group": "クレジット"
+            "group": "credits"
           },
           {
             "title": "スターター",
@@ -127,9 +127,9 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 999,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$9.99",
             "original_price": "$14.28",
             "unit": "/ 月",
@@ -143,7 +143,7 @@
             "product_name": "スターター月額",
             "credits": 430,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スターター"
           },
           {
@@ -160,9 +160,9 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 1899,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$18.99",
             "original_price": "$29.22",
             "unit": "/ 月",
@@ -176,7 +176,7 @@
             "product_name": "スタンダード月額",
             "credits": 1170,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "スタンダード"
           },
           {
@@ -192,9 +192,9 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "月",
+            "interval": "month",
             "amount": 3599,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$35.99",
             "original_price": "$57.59",
             "unit": "/ 月",
@@ -208,7 +208,7 @@
             "product_name": "プレミアム月額",
             "credits": 2880,
             "valid_days": 30,
-            "group": "毎月",
+            "group": "monthly",
             "plan_name": "プレミアム"
           },
           {
@@ -223,9 +223,9 @@
               "商用ライセンス",
               "プライベートストレージ"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 10788,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$8.99",
             "original_price": "$12.82",
             "unit": "/ 月",
@@ -239,7 +239,7 @@
             "product_name": "スターター年額",
             "credits": 5160,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スターター"
           },
           {
@@ -256,9 +256,9 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 20388,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$16.99",
             "original_price": "$24.25",
             "unit": "/ 月",
@@ -272,7 +272,7 @@
             "product_name": "スタンダード年額",
             "credits": 14040,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "スタンダード"
           },
           {
@@ -288,9 +288,9 @@
               "プライベートストレージ",
               "優先サポート"
             ],
-            "interval": "年",
+            "interval": "year",
             "amount": 38388,
-            "currency": "米ドル",
+            "currency": "USD",
             "price": "$31.99",
             "original_price": "$45.94",
             "unit": "/ 月",
@@ -304,7 +304,7 @@
             "product_name": "プレミアム年額",
             "credits": 34560,
             "valid_days": 365,
-            "group": "毎年",
+            "group": "yearly",
             "plan_name": "プレミアム"
           }
         ]

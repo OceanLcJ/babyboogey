@@ -4,6 +4,7 @@ import { Loader2, Zap } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Link } from '@/core/i18n/navigation';
+import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
 import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
 import type { PricingItem } from '@/shared/types/blocks/pricing';
 import { Button } from './ui/button';
@@ -40,46 +41,62 @@ export function InsufficientCreditsModal({
   remainingCredits,
 }: InsufficientCreditsModalProps) {
   const t = useTranslations('ai.video.generator.insufficient_credits_modal');
-  const { isLoading, productId, checkout } = usePricingCheckout();
+  const { pricingItem, isLoading, productId, checkout, startPayment } =
+    usePricingCheckout();
 
   const isBuying = isLoading && productId === SINGLE_VIDEO_ITEM.product_id;
+  const handleBuy = () => {
+    onClose();
+    void startPayment(SINGLE_VIDEO_ITEM);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription>
-            {t('description', { required: requiredCredits, remaining: remainingCredits })}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t('title')}</DialogTitle>
+            <DialogDescription>
+              {t('description', {
+                required: requiredCredits,
+                remaining: remainingCredits,
+              })}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="bg-primary/5 border-primary/20 rounded-lg border p-4 text-center">
-          <p className="text-muted-foreground mb-1 text-xs">Single Video Pack</p>
-          <p className="text-2xl font-bold">$2.99</p>
-          <p className="text-muted-foreground text-sm">75 credits · never expire</p>
-        </div>
+          <div className="bg-primary/5 border-primary/20 rounded-lg border p-4 text-center">
+            <p className="text-muted-foreground mb-1 text-xs">
+              Single Video Pack
+            </p>
+            <p className="text-2xl font-bold">$2.99</p>
+            <p className="text-muted-foreground text-sm">
+              75 credits · never expire
+            </p>
+          </div>
 
-        <DialogFooter className="flex-col gap-2 sm:flex-col">
-          <Button
-            className="w-full"
-            onClick={() => checkout(SINGLE_VIDEO_ITEM)}
-            disabled={isBuying}
-          >
-            {isBuying ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Zap className="mr-2 h-4 w-4" />
-            )}
-            {t('cta_buy')}
-          </Button>
-          <Button variant="ghost" size="sm" className="w-full" asChild>
-            <Link href="/pricing" onClick={onClose}>
-              {t('cta_plans')}
-            </Link>
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter className="flex-col gap-2 sm:flex-col">
+            <Button className="w-full" onClick={handleBuy} disabled={isBuying}>
+              {isBuying ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Zap className="mr-2 h-4 w-4" />
+              )}
+              {t('cta_buy')}
+            </Button>
+            <Button variant="ghost" size="sm" className="w-full" asChild>
+              <Link href="/pricing" onClick={onClose}>
+                {t('cta_plans')}
+              </Link>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <PaymentModal
+        isLoading={isLoading}
+        pricingItem={pricingItem}
+        onCheckout={(item, paymentProvider) => checkout(item, paymentProvider)}
+      />
+    </>
   );
 }

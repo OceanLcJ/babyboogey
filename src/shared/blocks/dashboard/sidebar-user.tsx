@@ -35,6 +35,8 @@ import { User as UserType } from '@/shared/models/user';
 import { NavItem } from '@/shared/types/blocks/common';
 import { SidebarUser as SidebarUserType } from '@/shared/types/blocks/dashboard';
 
+import { DailyCheckinMenuItem } from '../sign/daily-checkin-menu-item';
+
 // SSR/CSR hydration bug fix: Avoid rendering session-dependent UI until mounted on client
 export function SidebarUser({ user }: { user: SidebarUserType }) {
   const t = useTranslations('common.sign');
@@ -200,6 +202,8 @@ export function SidebarUser({ user }: { user: SidebarUserType }) {
                     <DropdownMenuSeparator />
                   </Fragment>
                 ))}
+                <DailyCheckinMenuItem />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={handleSignOut}
