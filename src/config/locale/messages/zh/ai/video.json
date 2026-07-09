@@ -87,7 +87,8 @@
       "share_failed": "分享失败，请稍后重试",
       "share_video_link_expire_24h": "作品视频分享链接有效期为 24 小时。",
       "video_link_may_expire_soon": "已使用降级链接，可能更快失效。",
-      "default_text": "看看我做的 AI 宝宝跳舞视频：{template}"
+      "default_text": "看看我做的 AI 宝宝跳舞视频：{template}",
+      "reward_hint": "在社交媒体上分享你的视频，获取额外积分！标记 @babyboogey 有机会被推荐。"
     },
     "status": {
       "submitting": "正在提交生成请求...",

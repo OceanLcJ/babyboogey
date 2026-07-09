@@ -87,7 +87,8 @@
       "share_failed": "Share failed, please try again",
       "share_video_link_expire_24h": "Video share links expire in 24 hours.",
       "video_link_may_expire_soon": "Using fallback link. This video link may expire sooner.",
-      "default_text": "Check out this AI baby dance video: {template}"
+      "default_text": "Check out this AI baby dance video: {template}",
+      "reward_hint": "Share your video on social media and get bonus credits! Tag @babyboogey for a chance to be featured."
     },
     "status": {
       "submitting": "Sending your request...",

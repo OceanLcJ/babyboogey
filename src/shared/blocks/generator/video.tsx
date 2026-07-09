@@ -2976,6 +2976,12 @@ export function VideoGenerator({
                                   </DropdownMenuItem>
                                 );
                               })}
+                              <DropdownMenuSeparator />
+                              <div className="px-2 py-1.5">
+                                <p className="text-muted-foreground text-[11px] leading-relaxed">
+                                  {t('share.reward_hint')}
+                                </p>
+                              </div>
                             </DropdownMenuContent>
                           </DropdownMenu>
                           {canUnlockVideo && video.taskId && video.assetId ? (

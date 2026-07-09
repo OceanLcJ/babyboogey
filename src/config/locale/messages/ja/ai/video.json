@@ -87,7 +87,8 @@
       "share_failed": "共有に失敗しました。もう一度お試しください",
       "share_video_link_expire_24h": "動画共有リンクは24時間で期限切れになります。",
       "video_link_may_expire_soon": "フォールバックリンクを使用しています。この動画リンクは早く期限切れになる可能性があります。",
-      "default_text": "このAI赤ちゃんダンス動画をチェック: {template}"
+      "default_text": "このAI赤ちゃんダンス動画をチェック: {template}",
+      "reward_hint": "SNSで動画をシェアしてボーナスクレジットをゲット！@babyboogeyをタグ付けすると紹介されるチャンスも。"
     },
     "status": {
       "submitting": "リクエストを送信中...",
