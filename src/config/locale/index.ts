@@ -62,5 +62,6 @@ export const localeMessagesPaths = [
   'pages/ai-baby-dance-video-generator',
   'pages/seedance-baby-dance',
   'pages/babyboogey-vs-seedance',
+  'pages/baby-boo-dance-ai',
   'pages/ai-baby-image-generator',
 ];

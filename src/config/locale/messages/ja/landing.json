@@ -155,6 +155,11 @@
               "title": "BabyBoogey vs シーダンス",
               "url": "/babyboogey-vs-seedance",
               "target": "_self"
+            },
+            {
+              "title": "Baby Boo Dance AI",
+              "url": "/baby-boo-dance-ai",
+              "target": "_self"
             }
           ]
         }

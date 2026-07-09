@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "title": "Baby Boo Dance AI — 用 AI 制作超萌宝宝舞蹈视频",
+    "description": "使用 BabyBoogey AI 制作 Baby Boo Dance 舞蹈视频。上传宝宝照片，一键生成 TikTok 爆款宝宝跳舞视频！"
+  },
+  "page": {
+    "title": "Baby Boo Dance AI — 用 AI 制作超萌宝宝舞蹈视频",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "用 AI 制作 Baby Boo Dance 爆款视频",
+        "description": "Baby Boo Dance 正在席卷 TikTok，现在你也可以制作属于自己的！上传任意宝宝照片，BabyBoogey AI 将在几秒内将其变成超萌的 Baby Boo Dance 视频。无需任何编辑技巧。",
+        "buttons": [
+          {
+            "title": "制作 Baby Boo Dance 视频",
+            "url": "/#generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "查看示例",
+            "url": "/showcases"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "什么是 Baby Boo Dance？",
+        "description": "Baby Boo Dance 是一个热门的 TikTok 病毒趋势，父母使用 AI 将宝宝照片变成可爱的跳舞视频。这些视频在全球已获得数百万浏览量。",
+        "items": [
+          {
+            "title": "TikTok 爆款趋势",
+            "description": "Baby Boo Dance 趋势在社交媒体上已有数百万观看量。全球父母都在使用 AI 制作宝宝跳舞视频。BabyBoogey 让你轻松加入这一趋势——只需上传照片并选择舞蹈风格。",
+            "icon": "RiVideoFill"
+          },
+          {
+            "title": "AI 驱动动画",
+            "description": "BabyBoogey 使用先进的 AI 视频生成技术将宝宝照片变成逼真的跳舞视频。AI 会将自然的身体动作、面部表情和舞蹈编排映射到宝宝照片上，生成自然可爱的效果。",
+            "icon": "RiMagicFill"
+          },
+          {
+            "title": "安全私密",
+            "description": "您的宝宝照片在处理过程中会被加密，处理完成后自动删除。我们绝不会与第三方共享您的数据。安心制作 Baby Boo Dance 视频，家庭隐私是我们的首要任务。",
+            "icon": "RiShieldCheckFill"
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "如何制作 Baby Boo Dance 视频",
+        "description": "只需三步即可创建专属宝宝跳舞视频——无需任何编辑经验。",
+        "items": [
+          {
+            "title": "1. 上传宝宝照片",
+            "description": "选择一张清晰的宝宝正面照片。光线好的照片效果最佳。支持 JPG、PNG 和 WebP 格式，最大 10MB。",
+            "icon": "RiUploadFill"
+          },
+          {
+            "title": "2. 选择舞蹈模板",
+            "description": "从多种舞蹈模板中选择，包括病毒式 Baby Boo Dance、节奏律动、优雅摇摆等。每个模板都专为宝宝动作设计。",
+            "icon": "RiPlayFill"
+          },
+          {
+            "title": "3. 生成并分享",
+            "description": "点击生成，一分钟内即可获得 Baby Boo Dance 视频。高清质量下载后分享到 TikTok、微信或与家人朋友分享。",
+            "icon": "RiShareFill"
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "block": "faq",
+        "title": "Baby Boo Dance AI — 常见问题",
+        "items": [
+          {
+            "question": "什么是 Baby Boo Dance 趋势？",
+            "answer": "Baby Boo Dance 是一个热门社交媒体趋势，父母使用 AI 工具将宝宝照片变成可爱的跳舞视频。这些视频在 TikTok 和 Instagram 上非常受欢迎。"
+          },
+          {
+            "question": "如何制作 Baby Boo Dance 视频？",
+            "answer": "使用 BabyBoogey 制作非常简单：上传宝宝照片，选择舞蹈模板（推荐「Viral Dance」或「Rhythm Beat」），点击生成。一分钟内即可完成。"
+          },
+          {
+            "question": "制作 Baby Boo Dance 视频免费吗？",
+            "answer": "新用户注册即送 75 免费积分，足够制作一个 Baby Boo Dance 视频。更多视频可购买积分包，单个视频最低仅 $2.99。"
+          },
+          {
+            "question": "使用宝宝照片安全吗？",
+            "answer": "完全安全。BabyBoogey 在处理过程中加密所有照片，处理后自动删除。我们不会存储、分享或使用您的照片进行训练。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "block": "cta",
+        "title": "准备好让宝宝跳 Baby Boo Dance 了吗？",
+        "description": "加入百万父母，用 AI 制作超萌的 Baby Boo Dance 视频。上传照片，几秒即可开始！",
+        "buttons": [
+          {
+            "title": "制作 Baby Boo Dance 视频",
+            "url": "/#generator",
+            "icon": "Zap"
+          }
+        ]
+      }
+    }
+  }
+}

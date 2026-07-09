@@ -72,6 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/ai-baby-dance-video-generator',
     '/seedance-baby-dance',
     '/babyboogey-vs-seedance',
+    '/baby-boo-dance-ai',
   ];
 
   for (const path of staticPaths) {

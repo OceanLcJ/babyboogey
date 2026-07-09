@@ -1,0 +1,128 @@
+{
+  "metadata": {
+    "title": "Baby Boo Dance AI — Create Viral Baby Boo Dance Videos with AI",
+    "description": "Make adorable Baby Boo Dance videos with AI. Upload a baby photo and create viral baby boo dance clips in seconds. Join the TikTok baby boo dance trend with BabyBoogey!"
+  },
+  "page": {
+    "title": "Baby Boo Dance AI — Create Viral Baby Boo Dance Videos",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "Create Viral Baby Boo Dance Videos with AI",
+        "description": "The Baby Boo Dance trend is taking over TikTok — and now you can make your own! Upload any baby photo and BabyBoogey's AI will animate it into an adorable baby boo dance video in seconds. No editing skills needed.",
+        "buttons": [
+          {
+            "title": "Make Baby Boo Dance Video",
+            "url": "/#generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "See Examples",
+            "url": "/showcases"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "What Is the Baby Boo Dance Trend?",
+        "description": "The Baby Boo Dance is a viral TikTok trend where parents use AI to animate their baby photos into adorable dancing clips. The baby boo dance challenge features babies doing cute, bouncy dance moves to catchy music — and it has captured millions of hearts worldwide.",
+        "items": [
+          {
+            "title": "Viral TikTok Trend",
+            "description": "The baby boo dance trend has taken over social media with millions of views on TikTok. Parents everywhere are creating AI-animated baby dance videos that are adorable, shareable, and go viral. BabyBoogey makes it easy to join this trend — just upload a photo and pick a dance style.",
+            "icon": "RiVideoFill"
+          },
+          {
+            "title": "AI-Powered Animation",
+            "description": "BabyBoogey uses advanced AI video generation to animate baby photos into realistic dancing clips. The AI maps natural body movements, facial expressions, and dance choreography onto your baby's photo — creating results that look natural and incredibly cute.",
+            "icon": "RiMagicFill"
+          },
+          {
+            "title": "Safe and Private",
+            "description": "Your baby photos are encrypted during processing and automatically deleted afterward. We never share your data with third parties. Create baby boo dance videos with complete peace of mind — your family's privacy comes first.",
+            "icon": "RiShieldCheckFill"
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "How to Make a Baby Boo Dance Video",
+        "description": "Create your own baby boo dance video in three simple steps — no editing experience required.",
+        "items": [
+          {
+            "title": "1. Upload Your Baby Photo",
+            "description": "Choose any clear photo of your baby or toddler. Front-facing photos with good lighting work best. BabyBoogey supports JPG, PNG, and WebP formats up to 10MB.",
+            "icon": "RiUploadFill"
+          },
+          {
+            "title": "2. Pick a Dance Template",
+            "description": "Choose from multiple dance templates including the viral baby boo dance, rhythm beats, smooth sway, and more. Each template is designed to create natural-looking baby dance movements.",
+            "icon": "RiPlayFill"
+          },
+          {
+            "title": "3. Generate and Share",
+            "description": "Click generate and watch AI create your baby boo dance video in under a minute. Download in HD quality and share on TikTok, Instagram, or with family and friends.",
+            "icon": "RiShareFill"
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "block": "faq",
+        "title": "Baby Boo Dance AI — FAQ",
+        "items": [
+          {
+            "question": "What is the Baby Boo Dance trend?",
+            "answer": "The Baby Boo Dance is a viral social media trend where parents use AI tools to animate baby photos into adorable dancing videos. These baby boo dance clips feature babies doing cute dance moves and have become hugely popular on TikTok and Instagram."
+          },
+          {
+            "question": "How do I make a Baby Boo Dance video?",
+            "answer": "Making a baby boo dance video with BabyBoogey is simple: upload a baby photo, select a dance template (try the Viral Dance or Rhythm Beat), and click generate. Your AI baby boo dance video will be ready in under a minute."
+          },
+          {
+            "question": "Is it free to make a Baby Boo Dance video?",
+            "answer": "New users get 75 free credits when they sign up — enough to create one baby boo dance video for free. Additional videos can be created with credit packs starting at just $2.99 for a single video."
+          },
+          {
+            "question": "Is the AI baby boo dance safe for my baby's photo?",
+            "answer": "Yes. BabyBoogey encrypts all photos during processing and automatically deletes them afterward. We never store, share, or use your baby's photos for training. Your family's privacy is our top priority."
+          },
+          {
+            "question": "What is the best photo to use for a baby boo dance video?",
+            "answer": "For the best baby boo dance results, use a clear, front-facing photo of your baby with good lighting. The AI works best when the baby's face and body are clearly visible. Avoid blurry photos or heavy filters."
+          },
+          {
+            "question": "Can I share my baby boo dance video on TikTok?",
+            "answer": "Absolutely! Baby boo dance videos created with BabyBoogey are yours to share anywhere — TikTok, Instagram, Facebook, or privately with family. All plans include a commercial license, so you can post freely."
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "block": "cta",
+        "title": "Ready to Make Your Baby Boo Dance?",
+        "description": "Join millions of parents creating adorable AI baby boo dance videos. Upload a photo and get started in seconds!",
+        "buttons": [
+          {
+            "title": "Create Baby Boo Dance Video",
+            "url": "/#generator",
+            "icon": "Zap"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "metadata": {
+    "title": "Baby Boo Dance AI — AIで可愛い赤ちゃんダンス動画を作成",
+    "description": "BabyBoogey AIでBaby Boo Danceのバイラル動画を作成。赤ちゃんの写真をアップロードするだけで、TikTokで人気のBaby Boo Danceクリップが数秒で完成！"
+  },
+  "page": {
+    "title": "Baby Boo Dance AI — AIで可愛い赤ちゃんダンス動画を作成",
+    "show_sections": [
+      "hero",
+      "introduce",
+      "features",
+      "faq",
+      "cta"
+    ],
+    "sections": {
+      "hero": {
+        "id": "hero",
+        "title": "AIでBaby Boo Danceのバイラル動画を作成",
+        "description": "Baby Boo DanceトレンドがTikTokを席巻中！赤ちゃんの写真をアップロードするだけで、BabyBoogey AIが数秒で可愛いBaby Boo Dance動画を生成。編集スキル不要。",
+        "buttons": [
+          {
+            "title": "Baby Boo Dance動画を作る",
+            "url": "/#generator",
+            "icon": "Zap"
+          },
+          {
+            "title": "サンプルを見る",
+            "url": "/showcases"
+          }
+        ],
+        "background_image": {
+          "src": "https://r2.babyboogey.com/assets/imgs/bg/ai-hero-pastel.webp",
+          "alt": "background"
+        }
+      },
+      "introduce": {
+        "block": "features-list",
+        "id": "introduce",
+        "title": "Baby Boo Danceトレンドとは？",
+        "description": "Baby Boo Danceは、親がAIを使って赤ちゃんの写真を可愛いダンス動画にアニメーション化するバイラルTikTokトレンドです。世界中で数百万回再生されています。",
+        "items": [
+          {
+            "title": "TikTokバイラルトレンド",
+            "description": "Baby Boo Danceトレンドはソーシャルメディアで数百万回再生されています。BabyBoogeyなら簡単に参加できます。写真をアップロードしてダンススタイルを選ぶだけ。",
+            "icon": "RiVideoFill"
+          },
+          {
+            "title": "AI搭載アニメーション",
+            "description": "BabyBoogeyは高度なAI動画生成技術を使用して、赤ちゃんの写真をリアルなダンスクリップに変換します。自然な体の動き、表情、ダンスの振り付けをAIがマッピングします。",
+            "icon": "RiMagicFill"
+          },
+          {
+            "title": "安全でプライベート",
+            "description": "赤ちゃんの写真は処理中に暗号化され、処理後に自動削除されます。第三者とデータを共有することはありません。安心してBaby Boo Dance動画を作成できます。",
+            "icon": "RiShieldCheckFill"
+          }
+        ]
+      },
+      "features": {
+        "block": "features-accordion",
+        "id": "features",
+        "title": "Baby Boo Dance動画の作り方",
+        "description": "3つの簡単なステップで作成できます。編集経験は不要です。",
+        "items": [
+          {
+            "title": "1. 赤ちゃんの写真をアップロード",
+            "description": "赤ちゃんの鮮明な正面写真を選びます。明るい照明の写真が最適です。JPG、PNG、WebP形式、最大10MBに対応。",
+            "icon": "RiUploadFill"
+          },
+          {
+            "title": "2. ダンステンプレートを選択",
+            "description": "バイラルBaby Boo Dance、リズムビート、スムーズスウェイなど、複数のテンプレートから選択。各テンプレートは赤ちゃんの動きに最適化されています。",
+            "icon": "RiPlayFill"
+          },
+          {
+            "title": "3. 生成して共有",
+            "description": "生成をクリックすると、1分以内にBaby Boo Dance動画が完成。HD品質でダウンロードし、TikTok、Instagram、家族や友人と共有できます。",
+            "icon": "RiShareFill"
+          }
+        ]
+      },
+      "faq": {
+        "id": "faq",
+        "block": "faq",
+        "title": "Baby Boo Dance AI — よくある質問",
+        "items": [
+          {
+            "question": "Baby Boo Danceトレンドとは何ですか？",
+            "answer": "Baby Boo Danceは、親がAIツールを使って赤ちゃんの写真を可愛いダンス動画にするバイラルソーシャルメディアトレンドです。TikTokやInstagramで非常に人気があります。"
+          },
+          {
+            "question": "Baby Boo Dance動画はどうやって作りますか？",
+            "answer": "BabyBoogeyなら簡単です。赤ちゃんの写真をアップロードし、ダンステンプレートを選択（Viral DanceやRhythm Beatがおすすめ）、生成をクリック。1分以内に完成します。"
+          },
+          {
+            "question": "無料でBaby Boo Dance動画を作れますか？",
+            "answer": "新規ユーザーは登録時に75無料クレジットを獲得でき、Baby Boo Dance動画を1本無料で作成できます。追加の動画はクレジットパック（1本$2.99から）で作成できます。"
+          },
+          {
+            "question": "赤ちゃんの写真の使用は安全ですか？",
+            "answer": "はい。BabyBoogeyは処理中にすべての写真を暗号化し、処理後に自動削除します。写真をトレーニングに使用したり、第三者と共有することはありません。"
+          }
+        ]
+      },
+      "cta": {
+        "id": "cta",
+        "block": "cta",
+        "title": "Baby Boo Danceを作る準備はできましたか？",
+        "description": "世界中の親が作っている可愛いAI Baby Boo Dance動画に参加しましょう。写真をアップロードして数秒で開始！",
+        "buttons": [
+          {
+            "title": "Baby Boo Dance動画を作成",
+            "url": "/#generator",
+            "icon": "Zap"
+          }
+        ]
+      }
+    }
+  }
+}
