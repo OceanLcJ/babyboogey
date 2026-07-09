@@ -657,6 +657,61 @@ function mapVideoErrorToUserMessage(
   return t('errors.generic_retry_actionable');
 }
 
+const SHOWCASE_VIDEOS = [
+  { url: 'https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4', label: 'Rhythm Beat' },
+  { url: 'https://r2.babyboogey.com/assets/imgs/blog/effects_video_shortform_viral_dance.mp4', label: 'Viral Dance' },
+  { url: 'https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4', label: 'Cute Wiggle' },
+  { url: 'https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4', label: 'Fun Groove' },
+  { url: 'https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4', label: 'Happy Bounce' },
+];
+
+function ShowcaseCarousel() {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIdx((prev) => (prev + 1) % SHOWCASE_VIDEOS.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const current = SHOWCASE_VIDEOS[idx];
+
+  return (
+    <div className="space-y-3">
+      <div className="relative overflow-hidden rounded-2xl">
+        <video
+          key={current.url}
+          src={current.url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-auto max-h-[500px] w-full object-contain bg-black/30"
+        />
+        <div className="absolute inset-x-0 bottom-0 bg-black/60 px-4 py-3">
+          <p className="text-sm font-medium text-white">{current.label}</p>
+        </div>
+      </div>
+      <p className="text-muted-foreground text-center text-xs">
+        While you wait — other parents are making these! ({idx + 1}/{SHOWCASE_VIDEOS.length})
+      </p>
+      <div className="flex justify-center gap-1.5">
+        {SHOWCASE_VIDEOS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIdx(i)}
+            className={cn(
+              'h-1.5 rounded-full transition-all',
+              i === idx ? 'bg-primary w-4' : 'bg-muted w-1.5'
+            )}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function VideoGenerator({
   maxSizeMB = 10,
   srOnlyTitle,
@@ -3022,39 +3077,42 @@ export function VideoGenerator({
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="relative overflow-hidden rounded-2xl shadow-[0_0_24px_rgba(99,102,241,0.18),inset_0_0_0_1px_rgba(99,102,241,0.25)] dark:shadow-[0_0_28px_rgba(99,102,241,0.22),inset_0_0_0_1px_rgba(99,102,241,0.35)]">
-                    <div className="relative flex max-h-[600px] items-center justify-center bg-black/30">
-                      <video
-                        src={selectedTemplate.videoUrl}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="h-auto max-h-[600px] w-full object-contain"
-                        preload="auto"
-                      />
-                    </div>
-                    {/* Bottom readability overlay (flat, no gradient) */}
-                    <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pt-14 pb-5">
-                      <h3 className="text-xl leading-tight font-bold text-white">
-                        {locale === 'zh'
-                          ? selectedTemplate.nameZh
-                          : selectedTemplate.name}
-                      </h3>
-                      <div className="mt-2 flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                          <svg
-                            className="h-3 w-3 fill-white"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                          {selectedTemplate.duration}
-                        </span>
+                  {isGenerating ? (
+                    <ShowcaseCarousel />
+                  ) : (
+                    <div className="relative overflow-hidden rounded-2xl shadow-[0_0_24px_rgba(99,102,241,0.18),inset_0_0_0_1px_rgba(99,102,241,0.25)] dark:shadow-[0_0_28px_rgba(99,102,241,0.22),inset_0_0_0_1px_rgba(99,102,241,0.35)]">
+                      <div className="relative flex max-h-[600px] items-center justify-center bg-black/30">
+                        <video
+                          src={selectedTemplate.videoUrl}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="h-auto max-h-[600px] w-full object-contain"
+                          preload="auto"
+                        />
+                      </div>
+                      <div className="absolute inset-x-0 bottom-0 bg-black/60 px-5 pt-14 pb-5">
+                        <h3 className="text-xl leading-tight font-bold text-white">
+                          {locale === 'zh'
+                            ? selectedTemplate.nameZh
+                            : selectedTemplate.name}
+                        </h3>
+                        <div className="mt-2 flex items-center gap-2">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                            <svg
+                              className="h-3 w-3 fill-white"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                            {selectedTemplate.duration}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                   <p className="text-muted-foreground text-center text-xs leading-relaxed">
                     {t('privacy_notice')}
                   </p>
