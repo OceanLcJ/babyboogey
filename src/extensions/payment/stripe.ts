@@ -29,9 +29,19 @@ export interface StripeConfigs extends PaymentConfigs {
   publishableKey: string;
   signingSecret?: string;
   apiVersion?: string;
+  displayName?: string;
   allowedPaymentMethods?: string[];
   allowPromotionCodes?: boolean;
 }
+
+type BrandedCheckoutSessionCreateParams =
+  Stripe.Checkout.SessionCreateParams & {
+    branding_settings?: {
+      display_name: string;
+    };
+  };
+
+const CHECKOUT_BRANDING_API_VERSION = '2025-09-30.clover';
 
 /**
  * Stripe payment provider implementation
@@ -111,7 +121,7 @@ export class StripeProvider implements PaymentProvider {
       }
 
       // create payment session params
-      const sessionParams: Stripe.Checkout.SessionCreateParams = {
+      const sessionParams: BrandedCheckoutSessionCreateParams = {
         mode:
           order.type === PaymentType.SUBSCRIPTION ? 'subscription' : 'payment',
         line_items: [
@@ -121,6 +131,12 @@ export class StripeProvider implements PaymentProvider {
           },
         ],
       };
+
+      if (this.configs.displayName) {
+        sessionParams.branding_settings = {
+          display_name: this.configs.displayName,
+        };
+      }
 
       if (order.type === PaymentType.SUBSCRIPTION && order.metadata) {
         sessionParams.subscription_data = {
@@ -195,7 +211,12 @@ export class StripeProvider implements PaymentProvider {
         sessionParams.cancel_url = order.cancelUrl;
       }
 
-      const session = await this.client.checkout.sessions.create(sessionParams);
+      const session = await this.client.checkout.sessions.create(
+        sessionParams,
+        {
+          apiVersion: CHECKOUT_BRANDING_API_VERSION,
+        }
+      );
       if (!session.id || !session.url) {
         throw new Error('create payment failed');
       }

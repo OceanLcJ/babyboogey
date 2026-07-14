@@ -634,6 +634,16 @@ export async function getSettings() {
       tab: 'payment',
     },
     {
+      name: 'stripe_display_name',
+      title: 'Stripe Checkout Display Name',
+      type: 'text',
+      value: 'BabyBoogey',
+      placeholder: 'BabyBoogey',
+      tip: 'Overrides the business name shown at the top of new Stripe Checkout sessions.',
+      group: 'stripe',
+      tab: 'payment',
+    },
+    {
       name: 'stripe_payment_methods',
       title: 'Stripe Payment Methods',
       type: 'checkbox',

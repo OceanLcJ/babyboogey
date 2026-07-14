@@ -75,6 +75,7 @@ export function getPaymentServiceWithConfigs(configs: Configs) {
         secretKey: configs.stripe_secret_key,
         publishableKey: configs.stripe_publishable_key,
         signingSecret: configs.stripe_signing_secret,
+        displayName: configs.stripe_display_name || 'BabyBoogey',
         allowedPaymentMethods: allowedPaymentMethods as string[],
         allowPromotionCodes: configs.stripe_allow_promotion_codes === 'true',
       }),
