@@ -2,6 +2,7 @@ import {
   PaymentEventType,
   SubscriptionCycleType,
 } from '@/extensions/payment/types';
+import { getAllConfigs } from '@/shared/models/config';
 import {
   findOrderByOrderNo,
   findOrderByTransactionId,
@@ -23,6 +24,7 @@ import {
 import {
   buildPaymentEventLedgerKey,
   handlePaymentRefunded,
+  isForeignPaymentEvent,
 } from '@/shared/services/payment-lifecycle';
 
 export async function POST(
@@ -37,7 +39,8 @@ export async function POST(
       throw new Error('provider is required');
     }
 
-    const paymentService = await getPaymentService();
+    const configs = await getAllConfigs();
+    const paymentService = await getPaymentService(configs);
     const paymentProvider = paymentService.getProvider(provider);
     if (!paymentProvider) {
       throw new Error('payment provider not found');
@@ -52,6 +55,20 @@ export async function POST(
     const eventType = event.eventType;
     if (!eventType) {
       throw new Error('event type not found');
+    }
+
+    if (
+      isForeignPaymentEvent({
+        expectedAppName: configs.app_name,
+        metadata: event.paymentSession?.metadata,
+      })
+    ) {
+      console.info('Ignoring payment event for a different application');
+      return Response.json({
+        message: 'success',
+        ignored: true,
+        reason: 'foreign_app',
+      });
     }
 
     const { eventId, resourceId } = buildPaymentEventLedgerKey({

@@ -122,6 +122,12 @@ export class StripeProvider implements PaymentProvider {
         ],
       };
 
+      if (order.type === PaymentType.SUBSCRIPTION && order.metadata) {
+        sessionParams.subscription_data = {
+          metadata: order.metadata,
+        };
+      }
+
       // pre-set promotion code
       if (order.discount && order.discount.code) {
         sessionParams.discounts = [
@@ -681,7 +687,10 @@ export class StripeProvider implements PaymentProvider {
               : undefined,
       },
       paymentResult: invoice,
-      metadata: invoice.metadata,
+      metadata:
+        Object.keys(invoice.metadata || {}).length > 0
+          ? invoice.metadata
+          : subscription?.metadata,
     };
 
     if (subscription) {
@@ -699,6 +708,7 @@ export class StripeProvider implements PaymentProvider {
   ): Promise<PaymentSession> {
     const result: PaymentSession = {
       provider: this.name,
+      metadata: subscription.metadata,
     };
 
     if (subscription) {

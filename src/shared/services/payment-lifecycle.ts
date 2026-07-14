@@ -140,6 +140,22 @@ export function buildServerPaymentMetadata({
   };
 }
 
+export function isForeignPaymentEvent({
+  expectedAppName,
+  metadata,
+}: {
+  expectedAppName?: string | null;
+  metadata?: Record<string, UnsafeAny> | null;
+}) {
+  const expected = String(expectedAppName || '').trim();
+  const actual =
+    typeof metadata?.app_name === 'string' ? metadata.app_name.trim() : '';
+
+  // Legacy/provider events may not carry app metadata. Keep processing those;
+  // only reject events that explicitly identify a different application.
+  return Boolean(expected && actual && expected !== actual);
+}
+
 function normalizeCurrency(value?: string | null) {
   return String(value || '')
     .trim()

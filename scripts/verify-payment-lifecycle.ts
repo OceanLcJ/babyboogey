@@ -14,6 +14,7 @@ import {
   calculateRefundCreditReversal,
   classifyPlanChange,
   getSubscriptionCheckoutRouting,
+  isForeignPaymentEvent,
   validatePaymentSessionForOrder,
 } from '@/shared/services/payment-lifecycle';
 
@@ -125,6 +126,28 @@ assert.equal(metadata.order_no, 'server-order');
 assert.equal(metadata.user_id, 'server-user');
 assert.equal(metadata.app_name, 'BabyBoogey');
 assert.equal(metadata.affiliate, 'ok');
+
+assert.equal(
+  isForeignPaymentEvent({
+    expectedAppName: 'AI Baby Dance Generator',
+    metadata: { app_name: 'Foyria' },
+  }),
+  true
+);
+assert.equal(
+  isForeignPaymentEvent({
+    expectedAppName: 'AI Baby Dance Generator',
+    metadata: { app_name: 'AI Baby Dance Generator' },
+  }),
+  false
+);
+assert.equal(
+  isForeignPaymentEvent({
+    expectedAppName: 'AI Baby Dance Generator',
+    metadata: {},
+  }),
+  false
+);
 
 const paymentManager = new PaymentManager();
 paymentManager.addProvider({ name: 'stripe', configs: {} } as UnsafeAny, true);

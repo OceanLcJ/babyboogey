@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { envConfigs } from '@/config';
-import { PaymentType } from '@/extensions/payment/types';
+import { PaymentStatus, PaymentType } from '@/extensions/payment/types';
 import { findOrderByOrderNo } from '@/shared/models/order';
 import { getUserInfo } from '@/shared/models/user';
 import {
@@ -66,6 +66,25 @@ export async function GET(req: Request) {
       (order.paymentType === PaymentType.SUBSCRIPTION
         ? `${envConfigs.app_url}/settings/billing`
         : `${envConfigs.app_url}/settings/payments`);
+
+    if (session.paymentStatus === PaymentStatus.SUCCESS) {
+      const returnUrl = new URL(redirectUrl, envConfigs.app_url);
+      returnUrl.searchParams.set('payment_status', 'success');
+      returnUrl.searchParams.set('payment_order', order.orderNo);
+      if (order.productId) {
+        returnUrl.searchParams.set('payment_product', order.productId);
+      }
+      const paymentAmount = session.paymentInfo?.paymentAmount ?? order.amount;
+      returnUrl.searchParams.set(
+        'payment_value',
+        String(Number(paymentAmount || 0) / 100)
+      );
+      returnUrl.searchParams.set(
+        'payment_currency',
+        session.paymentInfo?.paymentCurrency || order.currency
+      );
+      redirectUrl = returnUrl.toString();
+    }
   } catch (e: UnsafeAny) {
     console.log('checkout callback failed:', e);
     redirectUrl = `${envConfigs.app_url}/pricing`;

@@ -6,6 +6,11 @@ import { useLocale } from 'next-intl';
 import { toast } from 'sonner';
 
 import { Button } from '@/shared/components/ui/button';
+import {
+  VIDEO_UNLOCK_AMOUNT_CENTS,
+  VIDEO_UNLOCK_CURRENCY,
+} from '@/shared/constants/video-unlock';
+import { trackAnalyticsEvent } from '@/shared/lib/analytics-events';
 import { cn } from '@/shared/lib/utils';
 
 type ButtonVariant = ComponentProps<typeof Button>['variant'];
@@ -45,6 +50,20 @@ export function VideoUnlockButton({
     try {
       setIsLoading(true);
       onStart?.();
+      const checkoutAnalytics = {
+        currency: VIDEO_UNLOCK_CURRENCY,
+        value: VIDEO_UNLOCK_AMOUNT_CENTS / 100,
+        source: 'video_unlock',
+        items: [
+          {
+            item_id: productId,
+            item_name: 'Clean HD Video Unlock',
+            price: VIDEO_UNLOCK_AMOUNT_CENTS / 100,
+            quantity: 1,
+          },
+        ],
+      };
+      trackAnalyticsEvent('begin_checkout', checkoutAnalytics);
 
       const response = await fetch('/api/payment/checkout', {
         method: 'POST',
@@ -72,9 +91,19 @@ export function VideoUnlockButton({
         throw new Error('checkout url not found');
       }
 
-      window.location.href = data.checkoutUrl;
+      trackAnalyticsEvent('checkout_session_created', {
+        ...checkoutAnalytics,
+        session_created: Boolean(data.sessionId),
+      });
+      trackAnalyticsEvent('checkout_redirected', checkoutAnalytics);
+      window.location.assign(data.checkoutUrl);
     } catch (error) {
       const message = error instanceof Error ? error.message : errorLabel;
+      trackAnalyticsEvent('checkout_error', {
+        item_id: productId,
+        source: 'video_unlock',
+        error_message: message,
+      });
       toast.error(`${errorLabel}: ${message}`);
       setIsLoading(false);
     }

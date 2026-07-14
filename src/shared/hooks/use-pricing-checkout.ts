@@ -53,13 +53,27 @@ export function usePricingCheckout() {
   };
 
   const checkout = async (item: PricingItem, paymentProvider?: string) => {
+    const selectedPaymentProvider = paymentProvider || '';
+    const checkoutAnalytics = {
+      currency: String(item.currency || 'USD').toUpperCase(),
+      value: Number(item.amount || 0) / 100,
+      payment_provider: selectedPaymentProvider,
+      items: [
+        {
+          item_id: item.product_id,
+          item_name: item.product_name || item.title || item.product_id,
+          price: Number(item.amount || 0) / 100,
+          quantity: 1,
+        },
+      ],
+    };
+
     try {
       if (!user) {
         setIsShowSignModal(true);
         return;
       }
 
-      const selectedPaymentProvider = paymentProvider || '';
       const affiliateMetadata = getAffiliateMetadata({
         paymentProvider: selectedPaymentProvider,
       });
@@ -70,6 +84,7 @@ export function usePricingCheckout() {
 
       setIsLoading(true);
       setProductId(item.product_id);
+      trackAnalyticsEvent('begin_checkout', checkoutAnalytics);
 
       const response = await fetch('/api/payment/checkout', {
         method: 'POST',
@@ -102,10 +117,15 @@ export function usePricingCheckout() {
         throw new Error(message);
       }
 
-      const { checkoutUrl } = data;
+      const { checkoutUrl, sessionId } = data;
       if (!checkoutUrl) {
         throw new Error('checkout url not found');
       }
+
+      trackAnalyticsEvent('checkout_session_created', {
+        ...checkoutAnalytics,
+        session_created: Boolean(sessionId),
+      });
 
       if (shouldTrackWatermarkAttribution) {
         trackAnalyticsEvent('upgrade_from_watermark', {
@@ -117,9 +137,14 @@ export function usePricingCheckout() {
         clearWatermarkAttribution();
       }
 
-      window.location.href = checkoutUrl;
+      trackAnalyticsEvent('checkout_redirected', checkoutAnalytics);
+      window.location.assign(checkoutUrl);
     } catch (e: UnsafeAny) {
       console.log('checkout failed: ', e);
+      trackAnalyticsEvent('checkout_error', {
+        ...checkoutAnalytics,
+        error_message: e instanceof Error ? e.message : String(e),
+      });
       toast.error('checkout failed: ' + e.message);
 
       setIsLoading(false);

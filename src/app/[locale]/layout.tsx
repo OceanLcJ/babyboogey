@@ -5,6 +5,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { routing } from '@/core/i18n/config';
 import { ThemeProvider } from '@/core/theme/provider';
 import { MouseSpotlight } from '@/shared/components/mouse-spotlight';
+import { PaymentReturnTracker } from '@/shared/components/payment-return-tracker';
 import { Toaster } from '@/shared/components/ui/sonner';
 import { AppContextProvider } from '@/shared/contexts/app';
 import { getMetadata } from '@/shared/lib/seo';
@@ -29,6 +30,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider>
       <ThemeProvider>
         <AppContextProvider>
+          <PaymentReturnTracker />
           {children}
           <MouseSpotlight />
           <Toaster position="top-center" richColors />
