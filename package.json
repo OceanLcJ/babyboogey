@@ -190,7 +190,8 @@
       "@types/react-dom": "19.2.1"
     },
     "patchedDependencies": {
-      "@opennextjs/cloudflare@1.16.1": "patches/@opennextjs__cloudflare@1.16.1.patch"
+      "@opennextjs/cloudflare@1.16.1": "patches/@opennextjs__cloudflare@1.16.1.patch",
+      "next-themes@0.4.6": "patches/next-themes@0.4.6.patch"
     }
   }
 }

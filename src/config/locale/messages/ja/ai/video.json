@@ -48,7 +48,8 @@
       "pro_template_sign_in_first": "Proテンプレートを使用するにはサインインしてください",
       "pro_template_member_only": "Proテンプレートはメンバー限定です。料金ページでアップグレードしてください。",
       "orientation_auto_switched_video": "このテンプレートは10秒を超えるため、向きは「動画に合わせる」に切り替えられました。",
-      "orientation_image_max_10s": "「写真に合わせる」は10秒までのテンプレートに対応しています。「動画に合わせる」を選択してください。"
+      "orientation_image_max_10s": "「写真に合わせる」は10秒までのテンプレートに対応しています。「動画に合わせる」を選択してください。",
+      "switched_to_720p": "この動画を {credits} クレジットで作成できるよう 720p に切り替えました。確認後、もう一度生成を押してください。"
     },
     "safety": {
       "confirmation": "保護者本人、または保護者の同意を得ており、アップロード写真/プロンプトに裸・性的・暴力的・違法な内容が含まれないことを確認します。",
@@ -59,7 +60,11 @@
     "checking_account": "アカウントを確認中...",
     "loading": "読み込み中...",
     "generating": "ダンス動画を作成中...",
-    "sign_in_to_generate": "サインインして生成",
+    "sign_in_to_generate": "サインインして最初の動画を無料作成",
+    "free_trial": {
+      "title": "最初の短いダンス動画は無料です",
+      "description": "サインインで75ウェルカムクレジットを付与。クレジットカード不要。無料動画にはBabyBoogeyの透かしが入ります。"
+    },
     "credits_cost": "コスト: {credits}",
     "credits_remaining": "残り: {credits}",
     "buy_credits": "クレジットを購入",
@@ -108,7 +113,11 @@
     "insufficient_credits_modal": {
       "title": "クレジットが不足しています",
       "description": "この動画の生成には {required} クレジットが必要ですが、残り {remaining} クレジットしかありません。",
-      "cta_buy": "75クレジットを取得 — $2.99",
+      "recommended": "この動画に必要な最小パック",
+      "pack_title": "{credits} クレジットパック",
+      "enough_for_video": "購入後は {available} クレジットになり、{required} クレジットのこの動画を作成できます",
+      "trust_note": "買い切り · クレジットは無期限 · 生成失敗時は自動返却",
+      "cta_buy": "{credits} クレジットを取得 — {price}",
       "cta_plans": "全プランを見る"
     },
     "errors": {

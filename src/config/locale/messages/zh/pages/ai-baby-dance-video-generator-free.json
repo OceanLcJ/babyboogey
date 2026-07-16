@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "免费AI宝宝跳舞视频生成器 — 免注册，免费导出含小水印",
-    "description": "最好用的免费AI宝宝跳舞视频生成器。将任意宝宝照片变成可爱的跳舞视频 — 完全免费试用，免费导出含小水印，无需信用卡，无需注册账号。"
+    "title": "免费AI宝宝跳舞视频生成器 — 第一条视频免费",
+    "description": "免费制作第一条AI宝宝跳舞视频。先上传照片、选择舞蹈，再登录领取75欢迎积分，无需信用卡。"
   },
   "page": {
-    "title": "免费AI宝宝跳舞视频生成器 — 免注册，免费导出含小水印",
+    "title": "免费AI宝宝跳舞视频生成器 — 第一条视频免费",
     "show_sections": [
       "hero",
       "introduce",
@@ -17,8 +17,8 @@
     "sections": {
       "hero": {
         "id": "hero",
-        "title": "免费AI宝宝跳舞视频生成器 — 免注册，免费导出含小水印",
-        "description": "最好用的免费AI宝宝跳舞视频生成器，在线即可使用。上传任意宝宝照片，几秒内生成超萌跳舞视频 — 完全免费试用，免费导出含小水印，无需信用卡。",
+        "title": "免费AI宝宝跳舞视频生成器 — 第一条视频免费",
+        "description": "先上传宝宝照片并选择舞蹈，再登录领取75欢迎积分，免费生成一条4–5秒720p水印视频，无需信用卡。",
         "buttons": [
           {
             "title": "立即免费制作",
@@ -40,20 +40,20 @@
       "introduce": {
         "block": "features-list",
         "id": "introduce",
-        "title": "每位家长都爱用的免费宝宝跳舞视频制作器",
-        "description": "BabyBoogey 是最简单好用的免费AI宝宝跳舞视频生成器。无需下载、无需注册、没有隐藏费用 — 上传照片就能看到奇迹发生。",
+        "title": "免费体验第一条宝宝跳舞视频",
+        "description": "BabyBoogey 允许你先上传照片、选择舞蹈，准备好生成时再登录。欢迎积分可生成一条短水印视频，喜欢后再决定是否购买。",
         "image": {
           "src": "https://picsum.photos/seed/ai-baby-dance-video-generator-free-introduce/1200/800",
           "alt": "免费宝宝跳舞视频制作器概览"
         },
         "items": [
           {
-            "title": "100% 免费使用",
-            "description": "我们的免费AI宝宝跳舞视频生成器为你提供真正可用的视频，没有任何附加条件。无试用限制、无隐形收费 — 只有纯粹的跳舞宝宝欢乐。",
+            "title": "第一条短视频免费",
+            "description": "新用户可领取75欢迎积分，足够使用免费模板生成一条4–5秒720p舞蹈视频，体验无需填写付款信息。",
             "icon": "Gift",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-1/800/600",
-              "alt": "完全免费制作宝宝跳舞视频"
+              "alt": "免费制作第一条宝宝跳舞视频"
             }
           },
           {
@@ -66,12 +66,12 @@
             }
           },
           {
-            "title": "无需注册账号",
-            "description": "想免费制作宝宝跳舞视频，又不想再注册一个新账号？直接打开 BabyBoogey，上传照片，即刻开始创作。就这么简单。",
-            "icon": "UserX",
+            "title": "快速登录，无需信用卡",
+            "description": "可以先上传照片并选好舞蹈，点击生成时再登录，让欢迎积分、临时照片和生成结果安全地关联到你的账号。",
+            "icon": "UserCheck",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-intro-3/800/600",
-              "alt": "无需注册即可免费制作宝宝跳舞视频"
+              "alt": "快速登录后免费制作宝宝跳舞视频"
             }
           },
           {
@@ -89,12 +89,12 @@
       "benefits": {
         "block": "features-list",
         "id": "benefits",
-        "title": "为什么千万家庭选择我们的免费AI宝宝视频生成器",
-        "description": "数以万计的家长选择 BabyBoogey 作为首选的免费AI宝宝视频生成器。以下是他们持续回来制作更多可爱跳舞视频的原因。",
+        "title": "为什么选择 BabyBoogey 的免费首次体验",
+        "description": "先获得一条完整短视频，而不是只能看的演示；看到结果后，再决定是否购买更多积分或无水印下载。",
         "items": [
           {
-            "title": "零成本，最大欢乐",
-            "description": "无需信用卡、没有订阅陷阱、没有先免费后收费的套路。我们的免费版让你不花一分钱就能创作令人开心的宝宝跳舞视频。随时随地想做就做。",
+            "title": "完整体验一条视频",
+            "description": "欢迎积分足够生成一条短720p舞蹈视频，无需信用卡，也不会自动开启任何订阅。",
             "icon": "DollarSign",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-benefit-1/800/600",
@@ -112,7 +112,7 @@
           },
           {
             "title": "安全私密，从设计开始",
-            "description": "你宝宝的照片会被安全处理，且不会被保留超过必要的时间。无需账号意味着没有数据追踪或用户画像。我们像你一样重视家庭隐私安全。",
+            "description": "宝宝照片会通过加密连接上传，作品默认私密。登录用于把临时照片、生成任务和作品记录关联到正确账号。",
             "icon": "Shield",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-benefit-3/800/600",
@@ -125,7 +125,7 @@
         "block": "features-step",
         "id": "usage",
         "title": "3 步免费制作宝宝跳舞视频",
-        "description": "用 BabyBoogey 免费在线制作宝宝跳舞视频只需不到一分钟。没有学习成本，没有复杂设置 — 人人都能上手。",
+        "description": "制作第一条宝宝跳舞视频只需三个清晰步骤：先准备照片和舞蹈，确认生成时再登录。",
         "image": {
           "src": "https://picsum.photos/seed/ai-baby-dance-free-usage/1200/800",
           "alt": "如何3步免费制作宝宝跳舞视频"
@@ -150,8 +150,8 @@
             }
           },
           {
-            "title": "免费下载分享",
-            "description": "点击生成，你的跳舞宝宝视频几秒就好。立即下载 — 免费导出含小水印，不收费、没有套路。把欢笑分享给你爱的每一个人！",
+            "title": "登录、生成并分享",
+            "description": "登录领取75欢迎积分，然后生成带水印的短视频。720p视频通常约45–120秒完成，可直接下载或分享。",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-step-3/800/600",
               "alt": "第3步：免费下载宝宝跳舞视频"
@@ -162,8 +162,8 @@
       "features": {
         "block": "features-accordion",
         "id": "features",
-        "title": "免费AI宝宝跳舞视频生成器的全部功能",
-        "description": "BabyBoogey 在免费版中提供了强大功能。以下是我们的免费AI宝宝跳舞视频生成器远超其他工具的亮点。",
+        "title": "第一条免费视频包含什么",
+        "description": "免费首次体验使用完整的上传、选模板和生成流程，所有限制都会在生成前清楚展示。",
         "items": [
           {
             "title": "AI 驱动的舞蹈动画",
@@ -175,17 +175,17 @@
             }
           },
           {
-            "title": "50+ 舞蹈模板",
-            "description": "从海量舞蹈风格和配乐库中选择。无论你想让宝宝跳恰恰、来段嘻哈，还是优雅华尔兹，每个心情和场景都有对应的模板 — 大量模板完全免费。",
+            "title": "精选舞蹈模板",
+            "description": "第一条视频可以选择短款免费舞蹈；需要更多变化时，再浏览更长时长和高级动作。",
             "icon": "Music",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-2/800/600",
-              "alt": "50+免费宝宝跳舞视频模板"
+              "alt": "精选宝宝跳舞视频模板"
             }
           },
           {
             "title": "自然面部保真",
-            "description": "其他工具最糟糕的地方就是面部变形和失真。BabyBoogey 让你宝宝的脸看起来 100% 自然，同时添加完美匹配舞蹈动作的趣味表情。你家宝宝永远还是你家宝宝的样子。",
+            "description": "BabyBoogey 会尽量保持宝宝的面部特征、服装和背景一致，并在舞蹈动作中减少常见的变形和闪烁。",
             "icon": "Smile",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-3/800/600",
@@ -193,8 +193,8 @@
             }
           },
           {
-            "title": "闪电般的生成速度",
-            "description": "大多数宝宝跳舞视频在 30 秒内就能完成。我们优化过的 AI 流水线意味着你花更少的时间等待，花更多的时间欣赏宝宝搞笑的舞蹈动作。",
+            "title": "清晰的生成进度",
+            "description": "生成过程中会显示排队、处理和渲染阶段。720p视频通常约45–120秒完成。",
             "icon": "Zap",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-4/800/600",
@@ -202,8 +202,8 @@
             }
           },
           {
-            "title": "高清视频导出",
-            "description": "免费不等于低质量。下载高清分辨率的宝宝跳舞视频，适合在社交媒体上分享，也适合在家庭聚会时投到大屏幕上播放。绝无难看的压缩失真。",
+            "title": "720p 免费预览",
+            "description": "第一条免费视频适合社交分享，并带 BabyBoogey 水印。购买积分后可获得无水印下载和1080p选项。",
             "icon": "Film",
             "image": {
               "src": "https://picsum.photos/seed/ai-baby-dance-free-feat-5/800/600",
@@ -218,12 +218,12 @@
         "description": "关于我们的免费AI宝宝跳舞视频生成器有疑问？这里有你需要的所有答案。",
         "items": [
           {
-            "question": "BabyBoogey 的 AI 宝宝跳舞视频生成器真的 100% 免费吗？",
-            "answer": "是的，真正免费！BabyBoogey 提供免费版本，让你无需信用卡、无需注册即可制作宝宝跳舞视频。免费导出会带小型 BabyBoogey 水印，升级付费后可去除。"
+            "question": "BabyBoogey 的第一条宝宝跳舞视频真的免费吗？",
+            "answer": "是的。新用户登录后可领取75欢迎积分，足够生成一条4–5秒720p视频。无需信用卡，免费视频会带 BabyBoogey 水印。"
           },
           {
             "question": "免费制作宝宝跳舞视频需要注册账号吗？",
-            "answer": "完全不需要！直接打开 BabyBoogey，上传宝宝照片，选择舞蹈模板，下载视频即可。我们把免费宝宝跳舞视频制作器设计得尽可能简单顺畅 — 打开网站就能开始创作。"
+            "answer": "可以在登录前上传照片并选择模板；点击生成时需要登录，以便发放欢迎积分、保护临时上传，并把结果保存到你的账号。"
           },
           {
             "question": "免费版的宝宝跳舞视频会有水印吗？",
@@ -235,11 +235,11 @@
           },
           {
             "question": "免费生成一个宝宝跳舞视频需要多久？",
-            "answer": "大多数视频在 30 秒内就能完成！我们的 AI 针对速度做了优化，让你几乎可以瞬间创建和分享宝宝跳舞视频。没有漫长的处理队列或等待 — 免费版享受与付费版相同的快速生成体验。"
+            "answer": "720p视频通常约45–120秒完成，具体取决于当时的队列和模板。等待时可以看到排队和渲染进度。"
           },
           {
             "question": "上传宝宝照片到 BabyBoogey 安全吗？",
-            "answer": "绝对安全。你的照片通过加密连接安全处理，绝不会与第三方共享。由于免费版无需注册账号，我们收集的用户数据极少。你可以放心将家庭珍贵时刻交给 BabyBoogey。"
+            "answer": "照片通过加密连接上传，作品默认私密。生成时需要登录，以便把临时照片和生成结果关联到正确账号。"
           },
           {
             "question": "免费版可以用大人或宠物的照片吗？",
@@ -254,7 +254,7 @@
       "cta": {
         "id": "cta",
         "title": "准备好让宝宝免费跳起来了吗？",
-        "description": "加入数千个开心家庭，使用 BabyBoogey 免费AI宝宝跳舞视频生成器。免费导出含小水印、无需注册、无需信用卡。上传一张照片，让欢乐开始！",
+        "description": "先上传照片并选择舞蹈，再登录领取75欢迎积分，免费生成一条带水印的短视频，无需信用卡。",
         "buttons": [
           {
             "title": "免费制作宝宝跳舞视频",

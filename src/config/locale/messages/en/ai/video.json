@@ -48,7 +48,8 @@
       "pro_template_sign_in_first": "Sign in to unlock Pro templates",
       "pro_template_member_only": "Pro templates are for members only. Please upgrade on the pricing page.",
       "orientation_auto_switched_video": "This template is longer than 10 seconds, so orientation was switched to Follow Video.",
-      "orientation_image_max_10s": "Follow Photo supports templates up to 10 seconds. Please choose Follow Video."
+      "orientation_image_max_10s": "Follow Photo supports templates up to 10 seconds. Please choose Follow Video.",
+      "switched_to_720p": "Switched to 720p so you can create this video with {credits} credits. Tap Generate again when ready."
     },
     "safety": {
       "confirmation": "I confirm I am the parent/guardian or have guardian consent, and the uploaded photo/prompt is not nude, sexualized, violent, or unlawful.",
@@ -59,7 +60,11 @@
     "checking_account": "Checking Account...",
     "loading": "Loading...",
     "generating": "Creating Dance Video...",
-    "sign_in_to_generate": "Sign In to Generate",
+    "sign_in_to_generate": "Sign In & Create My Free Video",
+    "free_trial": {
+      "title": "Your first short dance video is free",
+      "description": "Sign in to receive 75 welcome credits. No credit card required; free videos include a BabyBoogey watermark."
+    },
     "credits_cost": "Cost: {credits}",
     "credits_remaining": "Remaining: {credits}",
     "buy_credits": "Buy Credits",
@@ -108,7 +113,11 @@
     "insufficient_credits_modal": {
       "title": "Not enough credits",
       "description": "This video needs {required} credits, but you only have {remaining}.",
-      "cta_buy": "Get 75 Credits — $2.99",
+      "recommended": "Smallest pack that works",
+      "pack_title": "{credits} credit pack",
+      "enough_for_video": "{available} credits after purchase — enough for this {required}-credit video",
+      "trust_note": "One-time purchase · credits never expire · failed generations are refunded",
+      "cta_buy": "Get {credits} Credits — {price}",
       "cta_plans": "View all plans"
     },
     "errors": {

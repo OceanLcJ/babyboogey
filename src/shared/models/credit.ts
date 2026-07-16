@@ -565,7 +565,7 @@ export async function grantCreditsForFirstLogin(
     .trim()
     .toLowerCase();
   const countryList = parseIso2CountryList(
-    configs.initial_credits_country_list || 'KP,IR,MM,IN'
+    configs.initial_credits_country_list || 'KP,IR,MM'
   );
 
   if (countryMode === 'denylist') {
@@ -600,7 +600,7 @@ export async function grantCreditsForFirstLogin(
     String(configs.initial_credits_ip_limit_enabled ?? 'true') !== 'false';
   const ipLimitMax = Math.max(
     1,
-    parseInt(String(configs.initial_credits_ip_limit_max ?? '1'), 10) || 1
+    parseInt(String(configs.initial_credits_ip_limit_max ?? '3'), 10) || 3
   );
   const ipLimitWindowDays = Math.max(
     1,

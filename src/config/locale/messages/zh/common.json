@@ -6,9 +6,9 @@
   },
   "sign": {
     "sign_in_title": "登录",
-    "sign_in_description": "登录到您的账户",
+    "sign_in_description": "继续当前创作并领取首条视频积分",
     "sign_up_title": "注册",
-    "sign_up_description": "创建一个新账户",
+    "sign_up_description": "创建账户并领取75欢迎积分",
     "email_title": "邮箱",
     "email_placeholder": "请输入您的邮箱",
     "password_title": "密码",

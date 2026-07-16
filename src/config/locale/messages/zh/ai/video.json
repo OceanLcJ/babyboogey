@@ -48,7 +48,8 @@
       "pro_template_sign_in_first": "请先登录以解锁 Pro 模板",
       "pro_template_member_only": "Pro 模板仅限会员使用，请先购买套餐/订阅",
       "orientation_auto_switched_video": "当前模板时长超过 10 秒，已自动切换为“跟随视频”。",
-      "orientation_image_max_10s": "“跟随照片”仅支持 10 秒以内模板，请选择“跟随视频”。"
+      "orientation_image_max_10s": "“跟随照片”仅支持 10 秒以内模板，请选择“跟随视频”。",
+      "switched_to_720p": "已切换到 720p，这段视频只需 {credits} 积分。确认后再次点击生成即可。"
     },
     "safety": {
       "confirmation": "我确认自己是监护人或已获得监护人同意，且上传照片/提示词不包含裸露、性化、暴力或违法内容。",
@@ -59,7 +60,11 @@
     "checking_account": "检查账户中...",
     "loading": "加载中...",
     "generating": "正在制作跳舞视频...",
-    "sign_in_to_generate": "登录以生成视频",
+    "sign_in_to_generate": "登录并免费制作第一条视频",
+    "free_trial": {
+      "title": "第一条短舞蹈视频免费",
+      "description": "登录即得 75 欢迎积分，无需信用卡；免费视频会带 BabyBoogey 水印。"
+    },
     "credits_cost": "消耗积分: {credits}",
     "credits_remaining": "剩余积分: {credits}",
     "buy_credits": "购买积分",
@@ -108,7 +113,11 @@
     "insufficient_credits_modal": {
       "title": "积分不足",
       "description": "生成此视频需要 {required} 积分，当前仅剩 {remaining} 积分。",
-      "cta_buy": "获取 75 积分 — $2.99",
+      "recommended": "保证够用的最小积分包",
+      "pack_title": "{credits} 积分包",
+      "enough_for_video": "购买后共有 {available} 积分，足够生成当前这条 {required} 积分的视频",
+      "trust_note": "一次性购买 · 积分永久有效 · 生成失败自动退回",
+      "cta_buy": "获取 {credits} 积分 — {price}",
       "cta_plans": "查看全部方案"
     },
     "errors": {

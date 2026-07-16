@@ -9,6 +9,7 @@ import {
   CreditCard,
   Download,
   ExternalLink,
+  Gift,
   Image as ImageIcon,
   Link2,
   Loader2,
@@ -974,6 +975,9 @@ export function VideoGenerator({
     15;
   const currentCost =
     currentCreditsPerSecond * Math.max(1, selectedTemplateDurationSeconds);
+  const current720pCost =
+    RESOLUTION_OPTIONS[0].creditsPerSecond *
+    Math.max(1, selectedTemplateDurationSeconds);
   const canGenerate =
     !isGenerating &&
     uploadedImage?.status !== 'uploading' &&
@@ -1736,6 +1740,10 @@ export function VideoGenerator({
         url: uploaded.assetRef,
         status: 'uploaded',
       });
+      trackAnalyticsEvent('generator_photo_uploaded', {
+        signed_in: Boolean(user?.id),
+        source: 'upload',
+      });
     } catch (error: UnsafeAny) {
       console.error('Upload failed:', error);
       toast.error(error?.message || 'Upload failed');
@@ -1947,6 +1955,12 @@ export function VideoGenerator({
             const mappedVideos = mapTaskVideos(task, extractedVideos);
             setGeneratedVideos(mappedVideos);
             reportWatermarkShown(task.id, mappedVideos);
+            trackAnalyticsEvent('generate_video_success', {
+              task_id: task.id,
+              template_id: selectedTemplate.id,
+              resolution,
+              duration_seconds: selectedTemplateDurationSeconds,
+            });
             toast.success(t('status.success'));
             completeWithSuccess();
           }
@@ -1999,7 +2013,10 @@ export function VideoGenerator({
       locale,
       mapTaskVideos,
       reportWatermarkShown,
+      resolution,
       resetTaskState,
+      selectedTemplate.id,
+      selectedTemplateDurationSeconds,
       setGenerationProgressStage,
       t,
       translateError,
@@ -2081,6 +2098,11 @@ export function VideoGenerator({
 
   const handleGenerate = async () => {
     if (!user) {
+      trackAnalyticsEvent('generator_sign_in_prompt', {
+        source: 'generate_button',
+        template_id: selectedTemplate.id,
+        photo_ready: Boolean(uploadedImage?.url),
+      });
       setIsShowSignModal(true);
       return;
     }
@@ -2091,6 +2113,17 @@ export function VideoGenerator({
     }
 
     if (remainingCredits < currentCost) {
+      if (resolution === '1080p' && remainingCredits >= current720pCost) {
+        setResolution('720p');
+        trackAnalyticsEvent('generator_resolution_downgraded', {
+          from: '1080p',
+          to: '720p',
+          required_credits: currentCost,
+          available_credits: remainingCredits,
+        });
+        toast.success(t('form.switched_to_720p', { credits: current720pCost }));
+        return;
+      }
       setShowInsufficientCreditsModal(true);
       return;
     }
@@ -2132,6 +2165,12 @@ export function VideoGenerator({
     clearSuccessHoldTimer();
     clearPollingTimer();
     isPollingRef.current = false;
+    trackAnalyticsEvent('generate_video_started', {
+      template_id: selectedTemplate.id,
+      resolution,
+      duration_seconds: selectedTemplateDurationSeconds,
+      credits: currentCost,
+    });
 
     try {
       const resp = await fetch('/api/ai/generate', {
@@ -2200,6 +2239,12 @@ export function VideoGenerator({
           );
           setGeneratedVideos(mappedVideos);
           reportWatermarkShown(newTaskId, mappedVideos);
+          trackAnalyticsEvent('generate_video_success', {
+            task_id: newTaskId,
+            template_id: selectedTemplate.id,
+            resolution,
+            duration_seconds: selectedTemplateDurationSeconds,
+          });
           toast.success(t('status.success'));
           await fetchUserCredits();
           completeWithSuccess();
@@ -2436,7 +2481,7 @@ export function VideoGenerator({
                     })}
                   </span>
                 </div>
-                <div className="relative -mx-2 px-2">
+                <div className="relative min-w-0">
                   <div className="scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent flex gap-2 overflow-x-auto pb-2">
                     {DANCE_TEMPLATES.map((template) => {
                       const isLocked = !!template.isPro && !canUseProTemplates;
@@ -2538,12 +2583,18 @@ export function VideoGenerator({
                   <span className="text-muted-foreground">
                     {t('form.estimated_cost')}
                   </span>
-                  <span className="text-destructive font-medium">
+                  <span className="font-medium">
                     {t('form.resolution_credits', { credits: currentCost })}
                     <span className="text-muted-foreground ml-1 font-normal">
                       ({selectedTemplateDurationSeconds}s ×{' '}
-                      {currentCreditsPerSecond}/s ·{' '}
-                      {t('form.available_credits')}: {remainingCredits})
+                      {currentCreditsPerSecond}/s
+                      {user && (
+                        <>
+                          {' · '}
+                          {t('form.available_credits')}: {remainingCredits}
+                        </>
+                      )}
+                      )
                     </span>
                   </span>
                 </div>
@@ -2648,37 +2699,62 @@ export function VideoGenerator({
               ) : (
                 <Button
                   className="w-full"
-                  onClick={() => setIsShowSignModal(true)}
+                  onClick={() => {
+                    trackAnalyticsEvent('generator_sign_in_prompt', {
+                      source: 'generate_button',
+                      template_id: selectedTemplate.id,
+                      photo_ready: Boolean(uploadedImage?.url),
+                    });
+                    setIsShowSignModal(true);
+                  }}
                 >
                   <User className="mr-2 h-4 w-4" aria-hidden="true" />
                   {t('sign_in_to_generate')}
                 </Button>
               )}
 
-              {/* Credits Info */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-primary">
-                    {t('credits_cost', { credits: currentCost })}
-                  </span>
-                  <span>
-                    {t('credits_remaining', { credits: remainingCredits })}
-                  </span>
+              {!user && !isCheckSign && (
+                <div className="border-primary/20 bg-primary/5 flex items-start gap-3 rounded-xl border px-3 py-2.5">
+                  <div className="bg-primary/10 text-primary mt-0.5 rounded-full p-1.5">
+                    <Gift className="h-4 w-4" aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold">
+                      {t('free_trial.title')}
+                    </p>
+                    <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
+                      {t('free_trial.description')}
+                    </p>
+                  </div>
                 </div>
-                <Link href="/pricing">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full gap-1.5"
-                  >
-                    <CreditCard
-                      className="mr-2 h-3.5 w-3.5"
-                      aria-hidden="true"
-                    />
-                    {t('buy_credits')}
-                  </Button>
-                </Link>
-              </div>
+              )}
+
+              {/* Credits Info */}
+              {user && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-primary">
+                      {t('credits_cost', { credits: currentCost })}
+                    </span>
+                    <span>
+                      {t('credits_remaining', { credits: remainingCredits })}
+                    </span>
+                  </div>
+                  <Link href="/pricing">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-1.5"
+                    >
+                      <CreditCard
+                        className="mr-2 h-3.5 w-3.5"
+                        aria-hidden="true"
+                      />
+                      {t('buy_credits')}
+                    </Button>
+                  </Link>
+                </div>
+              )}
 
               {/* Progress */}
               {isGenerating && (

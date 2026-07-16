@@ -12,6 +12,9 @@ patchedDependencies:
   '@opennextjs/cloudflare@1.16.1':
     hash: cddbd2e897e2a8a9b7b376e609dc2ffeb4b3d1c03fb4e63c80b29e4d017c07ec
     path: patches/@opennextjs__cloudflare@1.16.1.patch
+  next-themes@0.4.6:
+    hash: e6bb1b560191a74947e1d7e266f7783bb82be631757203277f404c16d896cc2e
+    path: patches/next-themes@0.4.6.patch
 
 importers:
 
@@ -229,7 +232,7 @@ importers:
         version: 5.0.0(@types/react@19.2.2)(react@19.2.1)
       next-themes:
         specifier: ^0.4.6
-        version: 0.4.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 0.4.6(patch_hash=e6bb1b560191a74947e1d7e266f7783bb82be631757203277f404c16d896cc2e)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       nextjs-toploader:
         specifier: ^3.9.17
         version: 3.9.17(next@15.5.7(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
@@ -13473,7 +13476,7 @@ snapshots:
       class-variance-authority: 0.7.1
       fumadocs-core: 15.7.12(@types/react@19.2.2)(next@15.5.7(@opentelemetry/api@1.9.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       lodash.merge: 4.6.2
-      next-themes: 0.4.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      next-themes: 0.4.6(patch_hash=e6bb1b560191a74947e1d7e266f7783bb82be631757203277f404c16d896cc2e)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       postcss-selector-parser: 7.1.0
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
@@ -14859,7 +14862,7 @@ snapshots:
       - '@types/react'
       - supports-color
 
-  next-themes@0.4.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
+  next-themes@0.4.6(patch_hash=e6bb1b560191a74947e1d7e266f7783bb82be631757203277f404c16d896cc2e)(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
     dependencies:
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
