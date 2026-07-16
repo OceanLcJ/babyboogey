@@ -1,6 +1,11 @@
 import { AIMediaType, AITaskStatus } from '@/extensions/ai/types';
 import { respData, respErr } from '@/shared/lib/resp';
 import {
+  DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
+import {
   findAITaskById,
   UpdateAITask,
   updateAITaskById,
@@ -56,12 +61,14 @@ function getTaskWatermarkPolicy(task: {
     watermarkOpacity:
       Number.isFinite(Number(policy?.watermarkOpacity))
         ? Number(policy?.watermarkOpacity)
-        : 0.28,
+        : DEFAULT_VIDEO_WATERMARK_OPACITY,
     watermarkIntervalSeconds:
       Number.isFinite(Number(policy?.watermarkIntervalSeconds))
         ? Number(policy?.watermarkIntervalSeconds)
-        : 3,
-    watermarkText: String(policy?.watermarkText || 'BabyBoogey'),
+        : DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+    watermarkText: String(
+      policy?.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT
+    ),
   } as const;
 }
 

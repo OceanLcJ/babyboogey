@@ -1,0 +1,3 @@
+export const DEFAULT_VIDEO_WATERMARK_TEXT = 'BabyBoogey · Free Preview';
+export const DEFAULT_VIDEO_WATERMARK_OPACITY = 0.42;
+export const DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS = 3;

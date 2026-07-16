@@ -4,6 +4,11 @@ import { envConfigs } from '@/config';
 import { AIGenerateParams, AIMediaType } from '@/extensions/ai';
 import { getUuid } from '@/shared/lib/hash';
 import { respData, respErr } from '@/shared/lib/resp';
+import {
+  DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
 import { createAITask, NewAITask } from '@/shared/models/ai_task';
 import { getAllConfigs } from '@/shared/models/config';
 import { getRemainingCredits } from '@/shared/models/credit';
@@ -265,13 +270,13 @@ export async function POST(request: Request) {
       if (freeVideoWatermarkEnabled && configuredMode !== 'none' && !hasPaidMembership) {
         const watermarkOpacity = parseConfigNumber(
           configs.free_video_watermark_opacity,
-          0.28,
+          DEFAULT_VIDEO_WATERMARK_OPACITY,
           0.05,
           0.9
         );
         const watermarkIntervalSeconds = parseConfigNumber(
           configs.free_video_watermark_interval_sec,
-          3,
+          DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
           1,
           30
         );
@@ -282,7 +287,12 @@ export async function POST(request: Request) {
           watermarkType: configuredMode,
           watermarkOpacity,
           watermarkIntervalSeconds,
-          watermarkText: String(envConfigs.app_name || 'BabyBoogey').slice(0, 50),
+          watermarkText:
+            String(
+              configs.free_video_watermark_text || DEFAULT_VIDEO_WATERMARK_TEXT
+            )
+              .trim()
+              .slice(0, 64) || DEFAULT_VIDEO_WATERMARK_TEXT,
         };
       }
     } else if (mediaType === AIMediaType.MUSIC) {

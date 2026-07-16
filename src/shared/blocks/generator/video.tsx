@@ -79,6 +79,11 @@ import {
   renderWatermarkedVideoBlob,
 } from '@/shared/lib/watermark';
 import {
+  DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
+import {
   BABY_VIDEO_MOTION_MODEL,
   BABY_VIDEO_PROVIDER,
 } from '@/shared/services/baby-video/config';
@@ -1255,9 +1260,9 @@ export function VideoGenerator({
       prompt: getDefaultDancePrompt(DANCE_TEMPLATES[0]),
       watermarkApplied: true,
       watermarkType: 'dynamic_overlay',
-      watermarkOpacity: 0.32,
-      watermarkIntervalSeconds: 2,
-      watermarkText: 'BabyBoogey',
+      watermarkOpacity: DEFAULT_VIDEO_WATERMARK_OPACITY,
+      watermarkIntervalSeconds: DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+      watermarkText: DEFAULT_VIDEO_WATERMARK_TEXT,
     };
 
     demoVideoUnlockInjectedRef.current = true;
@@ -2342,7 +2347,7 @@ export function VideoGenerator({
 
   return (
     <>
-    <section className="container">
+    <section id="video-generator" className="container scroll-mt-24">
       {srOnlyTitle && <h2 className="sr-only">{srOnlyTitle}</h2>}
       <div className="mx-auto mb-12 max-w-2xl text-center">
         <h2 className="mb-4 text-3xl font-bold">{t('title')}</h2>
@@ -2784,7 +2789,10 @@ export function VideoGenerator({
           </Card>
 
           {/* Right Card - Preview */}
-          <Card className="self-start lg:sticky lg:top-24">
+          <Card
+            id="video-result"
+            className="scroll-mt-24 self-start lg:sticky lg:top-24"
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Video className="h-5 w-5" aria-hidden="true" />
@@ -2874,34 +2882,40 @@ export function VideoGenerator({
                           {isWatermarked && canRenderVideo && (
                             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                               <div
-                                className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+                                className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
                                 style={{
                                   position: 'absolute',
                                   left: '5%',
                                   top: '10%',
-                                  opacity: video.watermarkOpacity ?? 0.28,
+                                  opacity:
+                                    video.watermarkOpacity ??
+                                    DEFAULT_VIDEO_WATERMARK_OPACITY,
                                   animation: `bb-watermark-drift ${Math.max(
                                     5,
                                     (video.watermarkIntervalSeconds ?? 3) * 4
                                   )}s linear infinite`,
                                 }}
                               >
-                                {video.watermarkText || 'BabyBoogey'}
+                                {video.watermarkText ||
+                                  DEFAULT_VIDEO_WATERMARK_TEXT}
                               </div>
                               <div
-                                className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+                                className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
                                 style={{
                                   position: 'absolute',
                                   right: '6%',
                                   bottom: '10%',
-                                  opacity: video.watermarkOpacity ?? 0.28,
+                                  opacity:
+                                    video.watermarkOpacity ??
+                                    DEFAULT_VIDEO_WATERMARK_OPACITY,
                                   animation: `bb-watermark-drift-reverse ${Math.max(
                                     6,
                                     (video.watermarkIntervalSeconds ?? 3) * 5
                                   )}s linear infinite`,
                                 }}
                               >
-                                {video.watermarkText || 'BabyBoogey'}
+                                {video.watermarkText ||
+                                  DEFAULT_VIDEO_WATERMARK_TEXT}
                               </div>
                             </div>
                           )}

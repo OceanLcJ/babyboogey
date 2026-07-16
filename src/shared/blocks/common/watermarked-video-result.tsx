@@ -8,6 +8,10 @@ import {
   isDynamicWatermarkedVideo,
   renderWatermarkedVideoBlob,
 } from '@/shared/lib/watermark';
+import {
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
 import type {
   VideoWatermarkConfig,
   WatermarkedPlaybackState,
@@ -304,34 +308,38 @@ export function WatermarkedVideoResult({
         {dynamicWatermarked && canRenderVideo && (
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div
-              className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+              className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
               style={{
                 position: 'absolute',
                 left: '5%',
                 top: '12%',
-                opacity: watermark?.watermarkOpacity ?? 0.28,
+                opacity:
+                  watermark?.watermarkOpacity ??
+                  DEFAULT_VIDEO_WATERMARK_OPACITY,
                 animation: `bb-watermark-drift ${Math.max(
                   5,
                   (watermark?.watermarkIntervalSeconds ?? 3) * 4
                 )}s linear infinite`,
               }}
             >
-              {watermark?.watermarkText || 'BabyBoogey'}
+              {watermark?.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT}
             </div>
             <div
-              className="rounded bg-black/20 px-2 py-1 text-[11px] font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+              className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
               style={{
                 position: 'absolute',
                 right: '6%',
                 bottom: '12%',
-                opacity: watermark?.watermarkOpacity ?? 0.28,
+                opacity:
+                  watermark?.watermarkOpacity ??
+                  DEFAULT_VIDEO_WATERMARK_OPACITY,
                 animation: `bb-watermark-drift-reverse ${Math.max(
                   6,
                   (watermark?.watermarkIntervalSeconds ?? 3) * 5
                 )}s linear infinite`,
               }}
             >
-              {watermark?.watermarkText || 'BabyBoogey'}
+              {watermark?.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT}
             </div>
           </div>
         )}

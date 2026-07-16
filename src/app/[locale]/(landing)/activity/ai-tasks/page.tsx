@@ -31,6 +31,11 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { normalizeWatermarkType } from '@/shared/lib/watermark';
 import {
+  DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
+import {
   AITask,
   getAITaskMediaTypeCounts,
   getAITasks,
@@ -185,11 +190,13 @@ function getTaskWatermarkConfig(task: AITask): VideoWatermarkConfig {
     watermarkType: watermarkApplied ? watermarkType : 'none',
     watermarkOpacity: Number.isFinite(opacityRaw)
       ? Math.min(0.9, Math.max(0.05, opacityRaw))
-      : 0.28,
+      : DEFAULT_VIDEO_WATERMARK_OPACITY,
     watermarkIntervalSeconds: Number.isFinite(intervalRaw)
       ? Math.min(30, Math.max(1, intervalRaw))
-      : 3,
-    watermarkText: String(policy.watermarkText || 'BabyBoogey').slice(0, 64),
+      : DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+    watermarkText: String(
+      policy.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT
+    ).slice(0, 64),
   };
 }
 

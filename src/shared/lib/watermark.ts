@@ -1,3 +1,7 @@
+import {
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
 import type { VideoWatermarkType } from '@/shared/types/watermark';
 
 export function normalizeWatermarkType(value?: string | null): VideoWatermarkType {
@@ -205,8 +209,14 @@ export async function renderWatermarkedVideoBlob({
       };
 
       const intervalSeconds = Math.max(1, watermarkIntervalSeconds || 3);
-      const opacity = Math.min(0.9, Math.max(0.08, watermarkOpacity || 0.28));
-      const displayText = (watermarkText || 'BabyBoogey').slice(0, 64);
+      const opacity = Math.min(
+        0.9,
+        Math.max(0.08, watermarkOpacity || DEFAULT_VIDEO_WATERMARK_OPACITY)
+      );
+      const displayText = (watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT).slice(
+        0,
+        64
+      );
 
       const drawOverlay = () => {
         if (settled) {
@@ -216,7 +226,7 @@ export async function renderWatermarkedVideoBlob({
         context.clearRect(0, 0, width, height);
         context.drawImage(source, 0, 0, width, height);
 
-        const fontSize = Math.max(14, Math.round(Math.min(width, height) * 0.04));
+        const fontSize = Math.max(15, Math.round(Math.min(width, height) * 0.05));
         context.font = `600 ${fontSize}px sans-serif`;
         const horizontalPadding = Math.round(fontSize * 0.65);
         const verticalPadding = Math.round(fontSize * 0.45);
@@ -247,7 +257,7 @@ export async function renderWatermarkedVideoBlob({
 
           context.save();
           context.globalAlpha = opacity;
-          context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+          context.fillStyle = 'rgba(0, 0, 0, 0.68)';
           context.fillRect(x, yBottom - boxHeight, boxWidth, boxHeight);
           context.fillStyle = 'rgba(255, 255, 255, 0.95)';
           context.textBaseline = 'alphabetic';

@@ -1,5 +1,10 @@
 import { getTranslations } from 'next-intl/server';
 
+import {
+  DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS,
+  DEFAULT_VIDEO_WATERMARK_OPACITY,
+  DEFAULT_VIDEO_WATERMARK_TEXT,
+} from '@/shared/lib/watermark-config';
 import { Tab } from '@/shared/types/blocks/common';
 
 export { publicSettingNames } from '@/shared/lib/config-safety';
@@ -475,21 +480,31 @@ export async function getSettings() {
       tip: 'Current supported mode for free video watermarking',
     },
     {
+      name: 'free_video_watermark_text',
+      title: 'Free Video Watermark Text',
+      type: 'text',
+      placeholder: DEFAULT_VIDEO_WATERMARK_TEXT,
+      value: DEFAULT_VIDEO_WATERMARK_TEXT,
+      group: 'credit',
+      tab: 'general',
+      tip: 'Brand label rendered on free video previews and watermarked exports',
+    },
+    {
       name: 'free_video_watermark_opacity',
       title: 'Free Video Watermark Opacity',
       type: 'text',
-      placeholder: '0.28',
-      value: '0.28',
+      placeholder: String(DEFAULT_VIDEO_WATERMARK_OPACITY),
+      value: String(DEFAULT_VIDEO_WATERMARK_OPACITY),
       group: 'credit',
       tab: 'general',
-      tip: 'Opacity for free video watermark overlay. Suggested range: 0.15 - 0.5',
+      tip: 'Opacity for free video watermark overlay. Suggested range: 0.35 - 0.55',
     },
     {
       name: 'free_video_watermark_interval_sec',
       title: 'Free Video Watermark Interval (Seconds)',
       type: 'number',
-      placeholder: '3',
-      value: '3',
+      placeholder: String(DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS),
+      value: String(DEFAULT_VIDEO_WATERMARK_INTERVAL_SECONDS),
       group: 'credit',
       tab: 'general',
       tip: 'How often the dynamic watermark changes position in the preview',
