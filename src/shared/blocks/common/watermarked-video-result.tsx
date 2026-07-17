@@ -68,6 +68,13 @@ export function WatermarkedVideoResult({
   const watermarkText = watermark?.watermarkText;
   const watermarkOpacity = watermark?.watermarkOpacity;
   const watermarkIntervalSeconds = watermark?.watermarkIntervalSeconds;
+  const resolvedWatermarkText = watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT;
+  const resolvedWatermarkOpacity =
+    watermarkOpacity ?? DEFAULT_VIDEO_WATERMARK_OPACITY;
+  const centerWatermarkOpacity = Math.min(
+    0.46,
+    resolvedWatermarkOpacity * 0.72
+  );
 
   useEffect(() => {
     playbackStateRef.current = playbackState;
@@ -308,38 +315,40 @@ export function WatermarkedVideoResult({
         {dynamicWatermarked && canRenderVideo && (
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div
-              className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
+              className="absolute left-1/2 top-1/2 w-[118%] -translate-x-1/2 -translate-y-1/2 -rotate-[18deg] border-y border-white/40 bg-black/55 py-2 text-center text-xs font-black uppercase tracking-[0.16em] text-white shadow-2xl shadow-black/40"
+              style={{ opacity: centerWatermarkOpacity }}
+            >
+              {resolvedWatermarkText}
+            </div>
+            <div
+              className="max-w-[92%] whitespace-nowrap rounded-md border border-white/40 bg-black/75 px-2 py-1.5 text-[9px] font-extrabold tracking-[0.08em] text-white shadow-lg shadow-black/40 backdrop-blur-sm"
               style={{
                 position: 'absolute',
                 left: '5%',
                 top: '12%',
-                opacity:
-                  watermark?.watermarkOpacity ??
-                  DEFAULT_VIDEO_WATERMARK_OPACITY,
+                opacity: resolvedWatermarkOpacity,
                 animation: `bb-watermark-drift ${Math.max(
                   5,
                   (watermark?.watermarkIntervalSeconds ?? 3) * 4
                 )}s linear infinite`,
               }}
             >
-              {watermark?.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT}
+              {resolvedWatermarkText}
             </div>
             <div
-              className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
+              className="max-w-[92%] whitespace-nowrap rounded-md border border-white/40 bg-black/75 px-2 py-1.5 text-[9px] font-extrabold tracking-[0.08em] text-white shadow-lg shadow-black/40 backdrop-blur-sm"
               style={{
                 position: 'absolute',
                 right: '6%',
                 bottom: '12%',
-                opacity:
-                  watermark?.watermarkOpacity ??
-                  DEFAULT_VIDEO_WATERMARK_OPACITY,
+                opacity: resolvedWatermarkOpacity,
                 animation: `bb-watermark-drift-reverse ${Math.max(
                   6,
                   (watermark?.watermarkIntervalSeconds ?? 3) * 5
                 )}s linear infinite`,
               }}
             >
-              {watermark?.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT}
+              {resolvedWatermarkText}
             </div>
           </div>
         )}

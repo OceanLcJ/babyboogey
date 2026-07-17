@@ -2806,6 +2806,15 @@ export function VideoGenerator({
                 <div className="space-y-4">
                   {generatedVideos.map((video) => {
                     const isWatermarked = isDynamicWatermarkedVideo(video);
+                    const resolvedWatermarkText =
+                      video.watermarkText || DEFAULT_VIDEO_WATERMARK_TEXT;
+                    const resolvedWatermarkOpacity =
+                      video.watermarkOpacity ??
+                      DEFAULT_VIDEO_WATERMARK_OPACITY;
+                    const centerWatermarkOpacity = Math.min(
+                      0.46,
+                      resolvedWatermarkOpacity * 0.72
+                    );
                     const canUnlockVideo = Boolean(
                       isWatermarked && video.taskId && video.assetId
                     );
@@ -2882,40 +2891,40 @@ export function VideoGenerator({
                           {isWatermarked && canRenderVideo && (
                             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                               <div
-                                className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
+                                className="absolute left-1/2 top-1/2 w-[118%] -translate-x-1/2 -translate-y-1/2 -rotate-[18deg] border-y border-white/40 bg-black/55 py-2 text-center text-xs font-black uppercase tracking-[0.16em] text-white shadow-2xl shadow-black/40 sm:py-3 sm:text-base"
+                                style={{ opacity: centerWatermarkOpacity }}
+                              >
+                                {resolvedWatermarkText}
+                              </div>
+                              <div
+                                className="max-w-[92%] whitespace-nowrap rounded-md border border-white/40 bg-black/75 px-2 py-1.5 text-[10px] font-extrabold tracking-[0.08em] text-white shadow-lg shadow-black/40 backdrop-blur-sm sm:px-2.5 sm:text-xs"
                                 style={{
                                   position: 'absolute',
                                   left: '5%',
                                   top: '10%',
-                                  opacity:
-                                    video.watermarkOpacity ??
-                                    DEFAULT_VIDEO_WATERMARK_OPACITY,
+                                  opacity: resolvedWatermarkOpacity,
                                   animation: `bb-watermark-drift ${Math.max(
                                     5,
                                     (video.watermarkIntervalSeconds ?? 3) * 4
                                   )}s linear infinite`,
                                 }}
                               >
-                                {video.watermarkText ||
-                                  DEFAULT_VIDEO_WATERMARK_TEXT}
+                                {resolvedWatermarkText}
                               </div>
                               <div
-                                className="max-w-[82%] truncate rounded-md border border-white/25 bg-black/60 px-2.5 py-1.5 text-xs font-bold tracking-[0.08em] text-white shadow-lg shadow-black/30 backdrop-blur-sm"
+                                className="max-w-[92%] whitespace-nowrap rounded-md border border-white/40 bg-black/75 px-2 py-1.5 text-[10px] font-extrabold tracking-[0.08em] text-white shadow-lg shadow-black/40 backdrop-blur-sm sm:px-2.5 sm:text-xs"
                                 style={{
                                   position: 'absolute',
                                   right: '6%',
                                   bottom: '10%',
-                                  opacity:
-                                    video.watermarkOpacity ??
-                                    DEFAULT_VIDEO_WATERMARK_OPACITY,
+                                  opacity: resolvedWatermarkOpacity,
                                   animation: `bb-watermark-drift-reverse ${Math.max(
                                     6,
                                     (video.watermarkIntervalSeconds ?? 3) * 5
                                   )}s linear infinite`,
                                 }}
                               >
-                                {video.watermarkText ||
-                                  DEFAULT_VIDEO_WATERMARK_TEXT}
+                                {resolvedWatermarkText}
                               </div>
                             </div>
                           )}

@@ -497,7 +497,7 @@ export async function getSettings() {
       value: String(DEFAULT_VIDEO_WATERMARK_OPACITY),
       group: 'credit',
       tab: 'general',
-      tip: 'Opacity for free video watermark overlay. Suggested range: 0.35 - 0.55',
+      tip: 'Opacity for free video watermark overlay. Suggested range: 0.50 - 0.70',
     },
     {
       name: 'free_video_watermark_interval_sec',

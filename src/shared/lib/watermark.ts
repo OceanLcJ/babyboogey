@@ -226,12 +226,15 @@ export async function renderWatermarkedVideoBlob({
         context.clearRect(0, 0, width, height);
         context.drawImage(source, 0, 0, width, height);
 
-        const fontSize = Math.max(15, Math.round(Math.min(width, height) * 0.05));
-        context.font = `600 ${fontSize}px sans-serif`;
+        const fontSize = Math.max(16, Math.round(Math.min(width, height) * 0.055));
+        context.font = `700 ${fontSize}px sans-serif`;
         const horizontalPadding = Math.round(fontSize * 0.65);
         const verticalPadding = Math.round(fontSize * 0.45);
         const metrics = context.measureText(displayText);
-        const boxWidth = Math.round(metrics.width + horizontalPadding * 2);
+        const boxWidth = Math.min(
+          width - 20,
+          Math.round(metrics.width + horizontalPadding * 2)
+        );
         const boxHeight = Math.round(fontSize + verticalPadding * 2);
         const safeMargin = 10;
         const cycle = (source.currentTime / intervalSeconds) * Math.PI * 2;
@@ -257,14 +260,15 @@ export async function renderWatermarkedVideoBlob({
 
           context.save();
           context.globalAlpha = opacity;
-          context.fillStyle = 'rgba(0, 0, 0, 0.68)';
+          context.fillStyle = 'rgba(0, 0, 0, 0.78)';
           context.fillRect(x, yBottom - boxHeight, boxWidth, boxHeight);
-          context.fillStyle = 'rgba(255, 255, 255, 0.95)';
+          context.fillStyle = 'rgba(255, 255, 255, 0.98)';
           context.textBaseline = 'alphabetic';
           context.fillText(
             displayText,
             x + horizontalPadding,
-            yBottom - verticalPadding
+            yBottom - verticalPadding,
+            boxWidth - horizontalPadding * 2
           );
           context.restore();
         };
@@ -281,6 +285,40 @@ export async function renderWatermarkedVideoBlob({
           Math.cos(cycle * 1.1) * width * 0.09,
           Math.sin(cycle * 0.9) * height * 0.07
         );
+
+        const centerFontSize = Math.max(
+          18,
+          Math.round(Math.min(width, height) * 0.075)
+        );
+        const centerText = displayText.toUpperCase();
+        context.save();
+        context.translate(width / 2, height / 2);
+        context.rotate(-Math.PI / 10);
+        context.font = `800 ${centerFontSize}px sans-serif`;
+        const centerMetrics = context.measureText(centerText);
+        const centerBandWidth = Math.min(
+          width * 1.08,
+          centerMetrics.width + centerFontSize * 1.8
+        );
+        const centerBandHeight = centerFontSize * 2;
+        context.globalAlpha = Math.min(0.46, opacity * 0.72);
+        context.fillStyle = 'rgba(0, 0, 0, 0.74)';
+        context.fillRect(
+          -centerBandWidth / 2,
+          -centerBandHeight / 2,
+          centerBandWidth,
+          centerBandHeight
+        );
+        context.fillStyle = 'rgba(255, 255, 255, 0.98)';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(
+          centerText,
+          0,
+          0,
+          centerBandWidth - centerFontSize
+        );
+        context.restore();
 
         if (source.ended) {
           if (recorder && recorder.state !== 'inactive') {
