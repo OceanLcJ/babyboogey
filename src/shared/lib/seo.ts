@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { envConfigs } from '@/config';
-import { defaultLocale } from '@/config/locale';
+import { defaultLocale, locales } from '@/config/locale';
 
 // get metadata for page component
 export function getMetadata(
@@ -14,6 +14,7 @@ export function getMetadata(
     imageUrl?: string;
     appName?: string;
     noIndex?: boolean;
+    includeLanguageAlternates?: boolean;
   } = {}
 ) {
   return async function generateMetadata({
@@ -51,6 +52,20 @@ export function getMetadata(
       options.canonicalUrl || '',
       locale || ''
     );
+    const languageAlternates = options.includeLanguageAlternates
+      ? Object.fromEntries([
+          ...(await Promise.all(
+            locales.map(async (localeCode) => [
+              localeCode,
+              await getCanonicalUrl(options.canonicalUrl || '', localeCode),
+            ])
+          )),
+          [
+            'x-default',
+            await getCanonicalUrl(options.canonicalUrl || '', defaultLocale),
+          ],
+        ])
+      : undefined;
 
     const title =
       passedMetadata.title || translatedMetadata.title || defaultMetadata.title;
@@ -88,6 +103,7 @@ export function getMetadata(
         defaultMetadata.keywords,
       alternates: {
         canonical: canonicalUrl,
+        ...(languageAlternates ? { languages: languageAlternates } : {}),
       },
 
       openGraph: {

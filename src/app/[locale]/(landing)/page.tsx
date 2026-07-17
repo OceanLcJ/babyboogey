@@ -22,6 +22,7 @@ import type { DynamicPage } from '@/shared/types/blocks/landing';
 export const generateMetadata = getMetadata({
   metadataKey: 'common.metadata',
   canonicalUrl: '/',
+  includeLanguageAlternates: true,
 });
 
 export const revalidate = 3600;
@@ -75,6 +76,14 @@ export default async function LandingPage({
 
   const appUrl = envConfigs.app_url || '';
   const appName = envConfigs.app_name || 'BabyBoogey';
+  const languageTag =
+    locale === 'zh'
+      ? 'zh-CN'
+      : locale === 'ja'
+        ? 'ja-JP'
+        : locale === 'ko'
+          ? 'ko-KR'
+          : 'en-US';
 
   // JSON-LD structured data
   const jsonLd = {
@@ -86,7 +95,7 @@ export default async function LandingPage({
         url: appUrl,
         name: appName,
         description: tMeta('description'),
-        inLanguage: locale === 'zh' ? 'zh-CN' : 'en-US',
+        inLanguage: languageTag,
       },
       {
         '@type': 'Organization',

@@ -5,8 +5,24 @@ import packageJson from '../../package.json';
 
 export type ConfigMap = Record<string, string>;
 
+function normalizeAppUrl(value: string) {
+  return value
+    .replace(
+      /^https:\/\/babyboogey\.com(?=\/|$)/,
+      'https://www.babyboogey.com'
+    )
+    .replace(/\/$/, '');
+}
+
+const configuredAppUrl =
+  process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+const canonicalAppUrl = normalizeAppUrl(configuredAppUrl);
+const canonicalAuthUrl = normalizeAppUrl(
+  process.env.AUTH_URL || configuredAppUrl
+);
+
 export const envConfigs: ConfigMap = {
-  app_url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
+  app_url: canonicalAppUrl,
   app_name: process.env.NEXT_PUBLIC_APP_NAME ?? 'ShipAny App',
   app_description: process.env.NEXT_PUBLIC_APP_DESCRIPTION ?? '',
   app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/logo.png',
@@ -33,7 +49,7 @@ export const envConfigs: ConfigMap = {
     process.env.DB_MIGRATIONS_OUT ?? './src/config/db/migrations',
   db_singleton_enabled: process.env.DB_SINGLETON_ENABLED || 'false',
   db_max_connections: process.env.DB_MAX_CONNECTIONS || '1',
-  auth_url: process.env.AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || '',
+  auth_url: canonicalAuthUrl,
   auth_secret: process.env.AUTH_SECRET ?? '', // openssl rand -base64 32
   auth_trusted_origins: process.env.AUTH_TRUSTED_ORIGINS ?? '',
   openai_api_key: process.env.OPENAI_API_KEY ?? '',

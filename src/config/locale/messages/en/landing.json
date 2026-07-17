@@ -117,8 +117,8 @@
           "title": "Explore",
           "children": [
             {
-              "title": "AI Baby Dance",
-              "url": "/ai-baby-dance",
+              "title": "AI Baby Dance Generator",
+              "url": "/#generator",
               "target": "_self"
             },
             {
@@ -127,18 +127,8 @@
               "target": "_self"
             },
             {
-              "title": "AI Dance Video",
-              "url": "/ai-baby-dance-video",
-              "target": "_self"
-            },
-            {
               "title": "Dance AI Prompts",
               "url": "/baby-dance-ai-prompt",
-              "target": "_self"
-            },
-            {
-              "title": "Video Generator",
-              "url": "/ai-baby-dance-video-generator",
               "target": "_self"
             }
           ]

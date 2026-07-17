@@ -7,6 +7,11 @@ import { routing } from '@/core/i18n/config';
 const intlMiddleware = createIntlMiddleware(routing);
 const APEX_HOST = 'babyboogey.com';
 const CANONICAL_HOST = 'www.babyboogey.com';
+const CONSOLIDATED_GENERATOR_PATHS = new Set([
+  '/ai-baby-dance',
+  '/ai-baby-dance-video',
+  '/ai-baby-dance-video-generator',
+]);
 
 export async function middleware(request: NextRequest) {
   const hostname = request.nextUrl.hostname.toLowerCase();
@@ -25,6 +30,18 @@ export async function middleware(request: NextRequest) {
   const pathWithoutLocale = isValidLocale
     ? pathname.slice(locale.length + 1)
     : pathname;
+
+  // The homepage contains the real generator. Consolidate older keyword-only
+  // landing pages into that single product page while preserving the locale.
+  if (CONSOLIDATED_GENERATOR_PATHS.has(pathWithoutLocale)) {
+    const canonicalUrl = request.nextUrl.clone();
+    const shouldKeepLocalePrefix =
+      isValidLocale &&
+      (locale !== routing.defaultLocale ||
+        process.env.NODE_ENV === 'development');
+    canonicalUrl.pathname = shouldKeepLocalePrefix ? `/${locale}` : '/';
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
 
   // Handle internationalization first. In local development, Next's dev
   // proxy can recurse on same-URL middleware rewrites for already-prefixed
@@ -64,6 +81,16 @@ export async function middleware(request: NextRequest) {
 
   intlResponse.headers.set('x-pathname', request.nextUrl.pathname);
   intlResponse.headers.set('x-url', request.url);
+
+  // Korean is launching with one fully translated landing page. Keep English
+  // fallback routes usable without letting them enter the Korean search index.
+  if (
+    locale === 'ko' &&
+    pathWithoutLocale !== '' &&
+    pathWithoutLocale !== '/'
+  ) {
+    intlResponse.headers.set('X-Robots-Tag', 'noindex, follow');
+  }
 
   // Remove Set-Cookie from public pages to allow caching
   // We exclude admin, settings, activity, and auth pages from this behavior

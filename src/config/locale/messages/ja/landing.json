@@ -117,8 +117,8 @@
           "title": "検索",
           "children": [
             {
-              "title": "AI赤ちゃんダンス",
-              "url": "/ai-baby-dance",
+              "title": "AI赤ちゃんダンス生成",
+              "url": "/#generator",
               "target": "_self"
             },
             {
@@ -127,18 +127,8 @@
               "target": "_self"
             },
             {
-              "title": "AIダンス動画",
-              "url": "/ai-baby-dance-video",
-              "target": "_self"
-            },
-            {
               "title": "ダンスAIプロンプト",
               "url": "/baby-dance-ai-prompt",
-              "target": "_self"
-            },
-            {
-              "title": "動画ジェネレーター",
-              "url": "/ai-baby-dance-video-generator",
               "target": "_self"
             }
           ]

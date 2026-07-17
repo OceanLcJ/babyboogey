@@ -117,8 +117,8 @@
           "title": "探索",
           "children": [
             {
-              "title": "AI 宝宝跳舞",
-              "url": "/ai-baby-dance",
+              "title": "AI 宝宝跳舞生成器",
+              "url": "/#generator",
               "target": "_self"
             },
             {
@@ -127,18 +127,8 @@
               "target": "_self"
             },
             {
-              "title": "AI 跳舞视频",
-              "url": "/ai-baby-dance-video",
-              "target": "_self"
-            },
-            {
               "title": "跳舞 AI 提示词",
               "url": "/baby-dance-ai-prompt",
-              "target": "_self"
-            },
-            {
-              "title": "视频生成器",
-              "url": "/ai-baby-dance-video-generator",
               "target": "_self"
             }
           ]

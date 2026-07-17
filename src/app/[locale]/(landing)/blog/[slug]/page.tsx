@@ -166,7 +166,13 @@ function getBlogJsonLd({
         datePublished: post.date || undefined,
         dateModified: post.date || undefined,
         inLanguage:
-          locale === 'zh' ? 'zh-CN' : locale === 'ja' ? 'ja-JP' : 'en-US',
+          locale === 'zh'
+            ? 'zh-CN'
+            : locale === 'ja'
+              ? 'ja-JP'
+              : locale === 'ko'
+                ? 'ko-KR'
+                : 'en-US',
         mainEntityOfPage: {
           '@type': 'WebPage',
           '@id': canonicalUrl,

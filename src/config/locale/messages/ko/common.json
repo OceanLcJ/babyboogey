@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "title": "아기 춤추는 AI | AI 아기 댄스 영상 만들기 - BabyBoogey",
+    "description": "아기 사진 한 장으로 귀여운 AI 아기 댄스 영상을 만들어 보세요. 사진을 올리고 춤을 고르면 무료 워터마크 미리보기를 만들 수 있습니다.",
+    "keywords": "아기 춤추는 ai, ai 아기 댄스 영상, 아기 춤추는 AI 만들기, AI 아기 춤 영상, baby dance generator, ai baby video"
+  },
+  "sign": {
+    "sign_in_title": "로그인",
+    "sign_in_description": "계정에 로그인해 영상을 만들어 보세요",
+    "sign_up_title": "회원가입",
+    "sign_up_description": "계정을 만들고 첫 영상을 시작하세요",
+    "email_title": "이메일",
+    "email_placeholder": "이메일 주소를 입력하세요",
+    "password_title": "비밀번호",
+    "password_placeholder": "비밀번호를 입력하세요",
+    "forgot_password": "비밀번호를 잊으셨나요?",
+    "or": "또는",
+    "continue": "계속",
+    "no_account": "계정이 없으신가요?",
+    "already_have_account": "이미 계정이 있으신가요?",
+    "email_sign_in": "이메일로 로그인",
+    "google_sign_in_title": "Google로 계속",
+    "github_sign_in_title": "GitHub로 계속",
+    "close_title": "닫기",
+    "cancel_title": "취소",
+    "sign_out_title": "로그아웃",
+    "billing_title": "결제 관리",
+    "name_title": "이름",
+    "name_placeholder": "이름을 입력하세요",
+    "email_verification_hint": "영상을 만들기 전에 이메일 인증이 필요할 수 있습니다.",
+    "admin_title": "관리자",
+    "credits_title": "크레딧",
+    "daily_checkin_title": "매일 출석",
+    "daily_checkin_claiming": "받는 중...",
+    "daily_checkin_claimed": "오늘 수령 완료",
+    "daily_checkin_reward_hint": "매일 로그인하고 보너스 크레딧을 받으세요.",
+    "daily_checkin_success": "출석 보상을 받았습니다.",
+    "daily_checkin_already_claimed": "오늘 보상은 이미 받았습니다.",
+    "daily_checkin_error": "보상을 받지 못했습니다. 다시 시도해 주세요.",
+    "verify_email_sent": "인증 이메일을 보냈습니다.",
+    "verify_email_required": "계속하려면 이메일을 인증해 주세요.",
+    "resend_verification": "인증 이메일 다시 보내기",
+    "resend_verification_sent": "인증 이메일을 다시 보냈습니다.",
+    "verify_email_page_title": "이메일을 확인해 주세요",
+    "verify_email_page_description": "받은편지함의 인증 링크를 눌러 계정을 활성화하세요.",
+    "verify_email_continue": "인증 후 계속",
+    "verify_email_tip": "메일이 보이지 않으면 스팸함도 확인해 주세요.",
+    "verify_email_not_verified_yet": "아직 이메일 인증이 확인되지 않았습니다.",
+    "verify_email_account_mismatch": "현재 로그인한 계정과 인증 대상이 다릅니다.",
+    "resend_verification_countdown": "{seconds}초 후 다시 보내기",
+    "resend_verification_wait": "잠시 후 다시 시도해 주세요.",
+    "back_to_sign_in": "로그인으로 돌아가기"
+  },
+  "payment": {
+    "choose_payment_method": "결제 방법 선택",
+    "choose_payment_method_description": "안전한 결제 방법을 선택하세요.",
+    "cancel_title": "취소"
+  },
+  "locale_detector": {
+    "title": "언어를 변경하시겠어요?",
+    "switch_to": "한국어로 보기"
+  }
+}

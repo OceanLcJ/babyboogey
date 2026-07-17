@@ -1,8 +1,13 @@
 import { MetadataRoute } from 'next';
 
+import {
+  docsSource,
+  logsSource,
+  pagesSource,
+  postsSource,
+} from '@/core/docs/source';
 import { envConfigs } from '@/config';
-import { locales, defaultLocale } from '@/config/locale';
-import { docsSource, pagesSource, postsSource, logsSource } from '@/core/docs/source';
+import { defaultLocale, locales } from '@/config/locale';
 import {
   getTaxonomies,
   TaxonomyStatus,
@@ -13,14 +18,17 @@ const appUrl = envConfigs.app_url;
 const resolvedDefaultLocale = locales.includes(defaultLocale)
   ? defaultLocale
   : (locales[0] ?? 'en');
+const fullyLocalizedLocales = locales.filter((locale) => locale !== 'ko');
 
 function buildAbsoluteUrl(path: string, locale?: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
   // For static paths, localize from locale argument.
   if (locale) {
-    const localePrefix =
-      locale === resolvedDefaultLocale ? '' : `/${locale}`;
+    const localePrefix = locale === resolvedDefaultLocale ? '' : `/${locale}`;
+    if (normalizedPath === '/') {
+      return `${appUrl}${localePrefix || '/'}`;
+    }
     return `${appUrl}${localePrefix}${normalizedPath}`;
   }
 
@@ -39,9 +47,10 @@ function buildAbsoluteUrl(path: string, locale?: string): string {
 
 function buildLocaleUrls(
   path: string,
-  lastModified?: Date
+  lastModified?: Date,
+  requestedLocales = locales
 ): MetadataRoute.Sitemap {
-  return locales.map((locale) => ({
+  return requestedLocales.map((locale) => ({
     url: buildAbsoluteUrl(path, locale),
     lastModified: lastModified || new Date(),
     changeFrequency: 'weekly' as const,
@@ -65,23 +74,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 1b. Keyword landing pages (SEO inner pages)
   const keywordPages = [
-    '/ai-baby-dance',
     '/ai-baby-dance-video-generator-free',
-    '/ai-baby-dance-video',
     '/baby-dance-ai-prompt',
-    '/ai-baby-dance-video-generator',
     '/seedance-baby-dance',
     '/babyboogey-vs-seedance',
     '/baby-boo-dance-ai',
   ];
 
   for (const path of staticPaths) {
-    entries.push(...buildLocaleUrls(path));
+    entries.push(
+      ...buildLocaleUrls(
+        path,
+        undefined,
+        path === '/' ? locales : fullyLocalizedLocales
+      )
+    );
   }
 
   for (const path of keywordPages) {
     entries.push(
-      ...locales.map((locale) => ({
+      ...fullyLocalizedLocales.map((locale) => ({
         url: buildAbsoluteUrl(path, locale),
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
@@ -91,7 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 2. Local blog posts (from content/posts/*.mdx)
-  for (const locale of locales) {
+  for (const locale of fullyLocalizedLocales) {
     const localPosts = postsSource.getPages(locale);
     for (const post of localPosts) {
       entries.push({
@@ -104,7 +116,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 3. Docs pages (from content/docs/*.mdx)
-  for (const locale of locales) {
+  for (const locale of fullyLocalizedLocales) {
     const docPages = docsSource.getPages(locale);
     for (const doc of docPages) {
       entries.push({
@@ -117,7 +129,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 4. Static pages (from content/pages/*.mdx, e.g. privacy-policy, terms-of-service)
-  for (const locale of locales) {
+  for (const locale of fullyLocalizedLocales) {
     const staticPages = pagesSource.getPages(locale);
     for (const page of staticPages) {
       entries.push({
@@ -130,7 +142,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 5. Update logs (from content/logs/*.mdx)
-  for (const locale of locales) {
+  for (const locale of fullyLocalizedLocales) {
     const logPages = logsSource.getPages(locale);
     for (const log of logPages) {
       entries.push({
@@ -150,7 +162,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
     for (const category of categories) {
       if (category.slug) {
-        entries.push(...buildLocaleUrls(`/blog/category/${category.slug}`));
+        entries.push(
+          ...buildLocaleUrls(
+            `/blog/category/${category.slug}`,
+            undefined,
+            fullyLocalizedLocales
+          )
+        );
       }
     }
   } catch {
