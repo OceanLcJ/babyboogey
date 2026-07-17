@@ -42,6 +42,12 @@ export const VIDEO_TEMPLATE_DURATION_SECONDS: Record<string, number> = {
   'temp-11': 16,
   'temp-12': 14,
   'template-0': 14,
+  'ballet-leap': 8,
+  'red-groove': 8,
+  'breakdance-spin': 8,
+  'studio-freestyle': 8,
+  'floor-flow': 8,
+  'cozy-groove': 8,
 };
 
 // Hard cap used by getVideoCostCredits; bump this alongside

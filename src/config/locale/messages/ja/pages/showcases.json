@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "ショーケース",
-    "description": "AIベイビーで作られた素晴らしいダンス動画"
+    "description": "AI赤ちゃんダンスの作例とすぐに使える振付テンプレート"
   },
   "page": {
     "title": "ショーケース",
@@ -9,8 +9,8 @@
       "showcases": {
         "id": "showcases",
         "block": "showcases-flow",
-        "title": "AI赤ちゃんダンスギャラリー",
-        "description": "コミュニティによって作成されたキュートで面白い赤ちゃんダンス動画をチェックしてください！",
+        "title": "AI赤ちゃんダンスのテンプレート＆ギャラリー",
+        "description": "AI赤ちゃんダンスの作例とライセンス確認済みのモーション参考を見て、自分の写真でテンプレートを使えます。",
         "use_this_template": "このテンプレートを使用",
         "groups": [
           {
@@ -28,6 +28,10 @@
           {
             "name": "面白い",
             "title": "おもしろ"
+          },
+          {
+            "name": "モーション",
+            "title": "新モーション"
           }
         ],
         "items": [
@@ -128,6 +132,48 @@
             "description": "デフォルトテンプレート",
             "video": "https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4",
             "group": "熱い"
+          },
+          {
+            "id": "ballet-leap",
+            "title": "バレエジャンプ",
+            "description": "モーション参考・優雅なジャンプとターン",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-ballet-leap.mp4",
+            "group": "モーション"
+          },
+          {
+            "id": "red-groove",
+            "title": "レッドグルーヴ",
+            "description": "モーション参考・大胆な腕のウェーブとステップ",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-red-groove.mp4",
+            "group": "モーション"
+          },
+          {
+            "id": "breakdance-spin",
+            "title": "ブレイクダンススピン",
+            "description": "モーション参考・素早いフロア技とスピン",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-breakdance-spin.mp4",
+            "group": "モーション"
+          },
+          {
+            "id": "studio-freestyle",
+            "title": "スタジオフリースタイル",
+            "description": "モーション参考・キレのあるフリースタイル",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-studio-freestyle.mp4",
+            "group": "モーション"
+          },
+          {
+            "id": "floor-flow",
+            "title": "フロアフロー",
+            "description": "モーション参考・アクロバティックなコンテンポラリー",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-floor-flow.mp4",
+            "group": "モーション"
+          },
+          {
+            "id": "cozy-groove",
+            "title": "コージーグルーヴ",
+            "description": "モーション参考・楽しいステップと軽い膝上げ",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-cozy-groove.mp4",
+            "group": "モーション"
           }
         ]
       }

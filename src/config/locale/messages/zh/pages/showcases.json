@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "案例展示",
-    "description": "AI 宝贝生成的精彩舞蹈视频"
+    "description": "AI 宝宝舞蹈案例与可直接使用的编舞模板"
   },
   "page": {
     "title": "案例展示",
@@ -9,8 +9,8 @@
       "showcases": {
         "id": "showcases",
         "block": "showcases-flow",
-        "title": "AI 宝贝舞蹈精选",
-        "description": "看看大家创作的可爱、搞笑的宝宝跳舞视频！",
+        "title": "AI 宝宝舞蹈模板与案例",
+        "description": "浏览 AI 宝宝舞蹈案例和已授权的动作参考，然后用自己的照片直接套用模板。",
         "use_this_template": "使用这个模板",
         "groups": [
           {
@@ -28,6 +28,10 @@
           {
             "name": "funny",
             "title": "搞笑"
+          },
+          {
+            "name": "motion",
+            "title": "新动作"
           }
         ],
         "items": [
@@ -128,6 +132,48 @@
             "description": "默认模板",
             "video": "https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4",
             "group": "hot"
+          },
+          {
+            "id": "ballet-leap",
+            "title": "芭蕾跳跃",
+            "description": "动作参考 · 优雅的跳跃与转身",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-ballet-leap.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "red-groove",
+            "title": "红色律动",
+            "description": "动作参考 · 有力的手臂波浪与踏步",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-red-groove.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "breakdance-spin",
+            "title": "街舞旋转",
+            "description": "动作参考 · 快速地板动作与旋转",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-breakdance-spin.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "studio-freestyle",
+            "title": "棚拍自由舞",
+            "description": "动作参考 · 干净利落的自由舞步",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-studio-freestyle.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "floor-flow",
+            "title": "地板流动舞",
+            "description": "动作参考 · 杂技感当代舞组合",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-floor-flow.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "cozy-groove",
+            "title": "居家律动",
+            "description": "动作参考 · 俏皮踏步与轻快抬膝",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-cozy-groove.mp4",
+            "group": "motion"
           }
         ]
       }

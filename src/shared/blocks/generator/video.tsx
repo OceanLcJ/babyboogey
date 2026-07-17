@@ -224,6 +224,18 @@ const DANCE_TEMPLATE_PROMPTS: Record<string, string> = {
     'Animate the child in the photo doing a dynamic dance: varied moves, energetic transitions, and lively rhythm. Smooth motion, stable background, keep identity consistent. Locked-off medium shot, high quality.',
   'template-0':
     'Animate the child in the photo doing a cute upbeat dance in place. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off medium shot, high quality.',
+  'ballet-leap':
+    'Animate the child in the photo doing a graceful ballet-inspired dance: controlled turns, soft arm sweeps, pointed steps, and one light leap. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
+  'red-groove':
+    'Animate the child in the photo doing a confident groove dance: rhythmic arm waves, side-to-side steps, and playful shoulder hits. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
+  'breakdance-spin':
+    'Animate the child in the photo doing a playful breakdance-inspired routine: quick footwork, a low floor move, and a controlled spin. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
+  'studio-freestyle':
+    'Animate the child in the photo doing a clean studio freestyle: light footwork, angled arm hits, and rhythmic body turns. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
+  'floor-flow':
+    'Animate the child in the photo doing an acrobatic contemporary flow: sweeping steps, a gentle floor transition, and a controlled inverted pose. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
+  'cozy-groove':
+    'Animate the child in the photo doing a cozy playful groove: side-to-side steps, cheerful hand gestures, and light knee lifts. Smooth natural motion, stable background, keep identity and clothing consistent. Locked-off full-body shot, high quality.',
 };
 
 function getDefaultDancePrompt(template: DanceTemplate) {
@@ -408,6 +420,62 @@ const DANCE_TEMPLATES: DanceTemplate[] = [
     nameZh: '默认模板',
     videoUrl: 'https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4',
     duration: '0:14',
+    isPro: true,
+  },
+  {
+    id: 'ballet-leap',
+    name: 'Ballet Leap',
+    nameZh: '芭蕾跳跃',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-ballet-leap.mp4',
+    duration: '0:08',
+    isPro: true,
+    isHot: true,
+  },
+  {
+    id: 'red-groove',
+    name: 'Red Groove',
+    nameZh: '红色律动',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-red-groove.mp4',
+    duration: '0:08',
+    isPro: true,
+  },
+  {
+    id: 'breakdance-spin',
+    name: 'Breakdance Spin',
+    nameZh: '街舞旋转',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-breakdance-spin.mp4',
+    duration: '0:08',
+    isPro: true,
+    isHot: true,
+  },
+  {
+    id: 'studio-freestyle',
+    name: 'Studio Freestyle',
+    nameZh: '棚拍自由舞',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-studio-freestyle.mp4',
+    duration: '0:08',
+    isPro: true,
+  },
+  {
+    id: 'floor-flow',
+    name: 'Floor Flow',
+    nameZh: '地板流动舞',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-floor-flow.mp4',
+    duration: '0:08',
+    isPro: true,
+  },
+  {
+    id: 'cozy-groove',
+    name: 'Cozy Groove',
+    nameZh: '居家律动',
+    videoUrl:
+      'https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-cozy-groove.mp4',
+    duration: '0:08',
     isPro: true,
   },
 ];

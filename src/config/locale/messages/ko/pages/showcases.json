@@ -1,0 +1,182 @@
+{
+  "metadata": {
+    "title": "쇼케이스",
+    "description": "AI 아기 댄스 예시와 바로 사용할 수 있는 안무 템플릿"
+  },
+  "page": {
+    "title": "쇼케이스",
+    "sections": {
+      "showcases": {
+        "id": "showcases",
+        "block": "showcases-flow",
+        "title": "AI 아기 댄스 템플릿 & 갤러리",
+        "description": "AI 아기 댄스 예시와 라이선스가 확인된 모션 레퍼런스를 살펴보고 내 사진에 원하는 템플릿을 적용해 보세요.",
+        "use_this_template": "이 템플릿 사용하기",
+        "groups": [
+          {
+            "name": "all",
+            "title": "전체"
+          },
+          {
+            "name": "hot",
+            "title": "인기"
+          },
+          {
+            "name": "pro",
+            "title": "프로"
+          },
+          {
+            "name": "funny",
+            "title": "재미"
+          },
+          {
+            "name": "motion",
+            "title": "새 모션"
+          }
+        ],
+        "items": [
+          {
+            "id": "temp-05",
+            "title": "리듬 비트",
+            "description": "리드미컬한 스텝",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-05.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "viral-dance",
+            "title": "바이럴 댄스",
+            "description": "트렌디한 댄스",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/effects_video_shortform_viral_dance.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "temp-01",
+            "title": "쿨 무브",
+            "description": "멋진 스트리트 댄스",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-01.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-02",
+            "title": "펀 그루브",
+            "description": "즐거운 리듬",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-02.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-03",
+            "title": "해피 바운스",
+            "description": "신나는 바운스",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-03.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-04",
+            "title": "스무스 스웨이",
+            "description": "부드러운 흔들림",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-04.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-06",
+            "title": "큐트 위글",
+            "description": "귀여운 몸짓",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-06.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-07",
+            "title": "퀵 스텝",
+            "description": "빠른 스텝",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-07.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-08",
+            "title": "젠틀 웨이브",
+            "description": "부드러운 웨이브",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-08.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-09",
+            "title": "에너지 버스트",
+            "description": "에너지 넘치는 동작",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-09.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "temp-10",
+            "title": "플레이풀 스텝",
+            "description": "장난기 가득한 스텝",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-10.mp4",
+            "group": "funny"
+          },
+          {
+            "id": "temp-11",
+            "title": "스위트 무브",
+            "description": "사랑스러운 리듬",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-11.mp4",
+            "group": "pro"
+          },
+          {
+            "id": "temp-12",
+            "title": "다이내믹 댄스",
+            "description": "역동적인 댄스",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/temp-12.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "template-0",
+            "title": "큐트 보이",
+            "description": "기본 템플릿",
+            "video": "https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4",
+            "group": "hot"
+          },
+          {
+            "id": "ballet-leap",
+            "title": "발레 점프",
+            "description": "모션 레퍼런스 · 우아한 점프와 턴",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-ballet-leap.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "red-groove",
+            "title": "레드 그루브",
+            "description": "모션 레퍼런스 · 힘 있는 팔 웨이브와 스텝",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-red-groove.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "breakdance-spin",
+            "title": "브레이크댄스 스핀",
+            "description": "모션 레퍼런스 · 빠른 플로어워크와 스핀",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-breakdance-spin.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "studio-freestyle",
+            "title": "스튜디오 프리스타일",
+            "description": "모션 레퍼런스 · 깔끔한 프리스타일 풋워크",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-studio-freestyle.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "floor-flow",
+            "title": "플로어 플로우",
+            "description": "모션 레퍼런스 · 아크로바틱 컨템퍼러리 플로우",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-floor-flow.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "cozy-groove",
+            "title": "코지 그루브",
+            "description": "모션 레퍼런스 · 경쾌한 스텝과 무릎 들기",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-cozy-groove.mp4",
+            "group": "motion"
+          }
+        ]
+      }
+    }
+  }
+}

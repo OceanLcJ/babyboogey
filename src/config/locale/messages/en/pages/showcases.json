@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Showcases",
-    "description": "Amazing dance videos created with AI Baby"
+    "description": "AI baby dance examples and ready-to-use choreography templates"
   },
   "page": {
     "title": "Showcases",
@@ -9,8 +9,8 @@
       "showcases": {
         "id": "showcases",
         "block": "showcases-flow",
-        "title": "AI Baby Dance Gallery",
-        "description": "Check out the cute and funny baby dance videos created by our community!",
+        "title": "AI Baby Dance Templates & Gallery",
+        "description": "Browse AI baby dance examples and licensed choreography references, then use any template with your own photo.",
         "use_this_template": "Use This Template",
         "groups": [
           {
@@ -28,6 +28,10 @@
           {
             "name": "funny",
             "title": "Funny"
+          },
+          {
+            "name": "motion",
+            "title": "New Motions"
           }
         ],
         "items": [
@@ -128,6 +132,48 @@
             "description": "Default Template",
             "video": "https://r2.babyboogey.com/assets/imgs/blog/template-0.mp4",
             "group": "hot"
+          },
+          {
+            "id": "ballet-leap",
+            "title": "Ballet Leap",
+            "description": "Motion reference · graceful leaps and turns",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-ballet-leap.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "red-groove",
+            "title": "Red Groove",
+            "description": "Motion reference · bold arm waves and steps",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-red-groove.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "breakdance-spin",
+            "title": "Breakdance Spin",
+            "description": "Motion reference · fast floorwork and spins",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-breakdance-spin.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "studio-freestyle",
+            "title": "Studio Freestyle",
+            "description": "Motion reference · clean freestyle footwork",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-studio-freestyle.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "floor-flow",
+            "title": "Floor Flow",
+            "description": "Motion reference · acrobatic contemporary flow",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-floor-flow.mp4",
+            "group": "motion"
+          },
+          {
+            "id": "cozy-groove",
+            "title": "Cozy Groove",
+            "description": "Motion reference · playful steps and knee lifts",
+            "video": "https://r2.babyboogey.com/assets/videos/dance-templates/dance-template-cozy-groove.mp4",
+            "group": "motion"
           }
         ]
       }
