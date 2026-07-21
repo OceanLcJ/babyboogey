@@ -59,6 +59,10 @@ export async function GET(req: Request) {
     await handleCheckoutSuccess({
       order,
       session,
+      // The signed webhook is authoritative for lifecycle email. Keeping the
+      // browser callback fulfilment-only avoids turning an email queue issue
+      // into a failed customer redirect after payment already succeeded.
+      queueEmails: false,
     });
 
     redirectUrl =

@@ -13,6 +13,7 @@ import {
   updatePaymentEvent,
 } from '@/shared/models/payment-lifecycle';
 import { findSubscriptionByProviderSubscriptionId } from '@/shared/models/subscription';
+import { queuePaymentLifecycleEmails } from '@/shared/services/customer-lifecycle-email';
 import {
   ensureCreditForOrder,
   getPaymentService,
@@ -202,6 +203,10 @@ export async function POST(
                     `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
                   );
                   await ensureCreditForOrder({ order: existingOrder, session });
+                  await queuePaymentLifecycleEmails(
+                    existingOrder,
+                    session.subscriptionInfo?.currentPeriodEnd
+                  );
                   await markEventSucceeded({
                     orderNo: existingOrder.orderNo,
                     subscriptionNo: existingSubscription.subscriptionNo,
@@ -239,6 +244,10 @@ export async function POST(
                 `Subscription ${session.subscriptionId}: transaction ${transactionId} already processed, skipping`
               );
               await ensureCreditForOrder({ order: existingOrder, session });
+              await queuePaymentLifecycleEmails(
+                existingOrder,
+                session.subscriptionInfo?.currentPeriodEnd
+              );
               await markEventSucceeded({
                 orderNo: existingOrder.orderNo,
                 subscriptionNo: existingSubscription.subscriptionNo,

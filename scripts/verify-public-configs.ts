@@ -13,7 +13,7 @@ const sensitiveConfigs = {
   stripe_signing_secret: 'whsec_secret',
   creem_api_key: 'creem-secret',
   paypal_client_secret: 'paypal-secret',
-  resend_api_key: 're_secret',
+  payment_alert_email: 'operator@example.com',
   r2_access_key: 'r2-access-key',
   r2_secret_key: 'r2-secret-key',
   openrouter_api_key: 'sk-or-secret',

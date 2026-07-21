@@ -307,6 +307,41 @@ export const subscription = table(
   ]
 );
 
+export const customerEmailDelivery = table(
+  'customer_email_delivery',
+  {
+    id: varchar191('id').primaryKey(),
+    userId: varchar191('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    kind: varchar('kind', { length: 50 }).notNull(),
+    dedupeKey: varchar191('dedupe_key').notNull(),
+    referenceId: varchar191('reference_id'),
+    recipient: varchar('recipient', { length: 320 }).notNull(),
+    subject: varchar('subject', { length: 255 }).notNull(),
+    html: longtext('html').notNull(),
+    text: longtext('text').notNull(),
+    status: varchar('status', { length: 20 }).notNull().default('pending'),
+    attempts: int('attempts').notNull().default(0),
+    maxAttempts: int('max_attempts').notNull().default(5),
+    claimedAt: timestamp('claimed_at'),
+    sentAt: timestamp('sent_at'),
+    providerMessageId: varchar191('provider_message_id'),
+    lastError: text('last_error'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_customer_email_delivery_dedupe_key').on(table.dedupeKey),
+    index('idx_customer_email_delivery_status').on(
+      table.status,
+      table.attempts,
+      table.updatedAt
+    ),
+    index('idx_customer_email_delivery_user_kind').on(table.userId, table.kind),
+  ]
+);
+
 export const credit = table(
   'credit',
   {

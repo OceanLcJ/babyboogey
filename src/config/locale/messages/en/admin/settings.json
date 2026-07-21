@@ -7,7 +7,6 @@
     "stripe": "Stripe",
     "creem": "Creem",
     "paypal": "Paypal",
-    "resend": "Resend",
     "r2": "Cloudflare R2",
     "s3": "AWS S3",
     "openrouter": "OpenRouter",

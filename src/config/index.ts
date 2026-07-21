@@ -53,6 +53,11 @@ export const envConfigs: ConfigMap = {
   auth_secret: process.env.AUTH_SECRET ?? '', // openssl rand -base64 32
   auth_trusted_origins: process.env.AUTH_TRUSTED_ORIGINS ?? '',
   openai_api_key: process.env.OPENAI_API_KEY ?? '',
+  email_from_address:
+    process.env.EMAIL_FROM_ADDRESS ?? 'support@babyboogey.com',
+  email_from_name: process.env.EMAIL_FROM_NAME ?? 'BabyBoogey',
+  email_reply_to: process.env.EMAIL_REPLY_TO ?? 'support@babyboogey.com',
+  payment_alert_email: process.env.PAYMENT_ALERT_EMAIL ?? '',
   version: packageJson.version,
   locale_detect_enabled:
     process.env.NEXT_PUBLIC_LOCALE_DETECT_ENABLED ?? 'false',

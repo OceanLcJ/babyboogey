@@ -1,8 +1,8 @@
 name = "babyboogey"
-main = ".open-next/worker.js"
+main = "custom-worker.ts"
 workers_dev = true
 compatibility_date = "2025-01-01"
-compatibility_flags = ["nodejs_compat"]
+compatibility_flags = ["nodejs_compat", "nodejs_compat_populate_process_env"]
 
 [assets]
 binding = "ASSETS"
@@ -27,6 +27,10 @@ NEXT_PUBLIC_APP_URL = "https://www.babyboogey.com"
 AUTH_URL = "https://www.babyboogey.com"
 AUTH_TRUSTED_ORIGINS = "https://www.babyboogey.com,https://babyboogey.com,https://babyboogey.21131911496283.workers.dev"
 NEXT_PUBLIC_APP_NAME = "AI Baby Dance Generator"
+EMAIL_FROM_ADDRESS = "support@babyboogey.com"
+EMAIL_FROM_NAME = "BabyBoogey"
+EMAIL_REPLY_TO = "support@babyboogey.com"
+PAYMENT_ALERT_EMAIL = "2113191149@qq.com"
 
 # theme
 NEXT_PUBLIC_THEME = "default"
@@ -46,3 +50,11 @@ DB_MAX_CONNECTIONS = "1"
 # auth: use the shared D1 rate_limit table for globally-consistent rate limiting
 # (requires the 0004_rate_limit migration, already applied)
 AUTH_RATE_LIMIT_STORAGE = "database"
+
+[[send_email]]
+name = "EMAIL"
+remote = true
+allowed_sender_addresses = ["support@babyboogey.com"]
+
+[triggers]
+crons = ["0 * * * *"]

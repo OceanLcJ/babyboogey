@@ -46,6 +46,7 @@ export const taxonomy = schemaModule.taxonomy;
 export const post = schemaModule.post;
 export const order = schemaModule.order;
 export const subscription = schemaModule.subscription;
+export const customerEmailDelivery = schemaModule.customerEmailDelivery;
 export const credit = schemaModule.credit;
 export const paymentEvent = schemaModule.paymentEvent;
 export const paymentRefund = schemaModule.paymentRefund;

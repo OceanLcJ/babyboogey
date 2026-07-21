@@ -42,6 +42,7 @@ import {
   UpdateSubscription,
   updateSubscriptionBySubscriptionNo,
 } from '../models/subscription';
+import { queuePaymentLifecycleEmails } from './customer-lifecycle-email';
 import {
   safeJsonParse,
   validatePaymentSessionForOrder,
@@ -140,9 +141,11 @@ export async function getPaymentService(
 export async function handleCheckoutSuccess({
   order,
   session,
+  queueEmails = true,
 }: {
   order: Order; // checkout order
   session: PaymentSession; // payment session
+  queueEmails?: boolean;
 }) {
   const orderNo = order.orderNo;
   if (!orderNo) {
@@ -156,6 +159,12 @@ export async function handleCheckoutSuccess({
     console.log(`Order ${orderNo} is already paid, ensuring side-effects`);
     await ensureCreditForOrder({ order, session });
     await ensureVideoUnlockForOrder({ order, metadata: session.metadata });
+    if (queueEmails) {
+      await queuePaymentLifecycleEmails(
+        order,
+        session.subscriptionInfo?.currentPeriodEnd
+      );
+    }
     return;
   }
 
@@ -315,6 +324,12 @@ export async function handleCheckoutSuccess({
       console.log(
         `[handleCheckoutSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}, videoUnlock=${videoUnlock?.status || 'none'}`
       );
+      if (queueEmails) {
+        await queuePaymentLifecycleEmails(
+          result.order,
+          session.subscriptionInfo?.currentPeriodEnd
+        );
+      }
     } catch (error) {
       console.error(
         `[handleCheckoutSuccess] Error processing order ${orderNo}:`,
@@ -545,6 +560,10 @@ export async function handlePaymentSuccess({
       console.log(
         `[handlePaymentSuccess] Order ${orderNo} processed successfully: order=${result.order?.status}, subscription=${result.subscription?.subscriptionNo || 'none'}, credit=${result.credit?.credits || 'none'}`
       );
+      await queuePaymentLifecycleEmails(
+        result.order,
+        session.subscriptionInfo?.currentPeriodEnd
+      );
     } catch (error) {
       console.error(
         `[handlePaymentSuccess] Error processing order ${orderNo}:`,
@@ -752,6 +771,10 @@ export async function handleSubscriptionRenewal({
           status: SubscriptionPlanChangeStatus.APPLIED,
         });
       }
+      await queuePaymentLifecycleEmails(
+        result.order,
+        subscriptionInfo.currentPeriodEnd
+      );
     } catch (error) {
       console.error(
         `[handleSubscriptionRenewal] Error processing subscription ${subscriptionNo}:`,

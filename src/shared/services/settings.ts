@@ -204,12 +204,6 @@ export async function getSettingGroups() {
       tab: 'analytics',
     },
     {
-      name: 'resend',
-      title: t('groups.resend'),
-      description: 'custom your resend settings',
-      tab: 'email',
-    },
-    {
       name: 'r2',
       title: t('groups.r2'),
       description: 'custom your cloudflare r2 settings',
@@ -524,7 +518,7 @@ export async function getSettings() {
       value: 'false',
       group: 'email_auth',
       tab: 'auth',
-      tip: 'Require users to verify their email before they can sign in. Requires a configured email provider (e.g. Resend).',
+      tip: 'Require users to verify their email before they can sign in. Requires the Cloudflare EMAIL binding.',
     },
     {
       name: 'google_auth_enabled',
@@ -842,22 +836,6 @@ export async function getSettings() {
       value: 'false',
       group: 'vercel_analytics',
       tab: 'analytics',
-    },
-    {
-      name: 'resend_api_key',
-      title: 'Resend API Key',
-      type: 'password',
-      placeholder: '',
-      group: 'resend',
-      tab: 'email',
-    },
-    {
-      name: 'resend_sender_email',
-      title: 'Resend Sender Email',
-      type: 'text',
-      placeholder: 'ShipAny Two <no-reply@mail.shipany.site>',
-      group: 'resend',
-      tab: 'email',
     },
     {
       name: 'r2_access_key',

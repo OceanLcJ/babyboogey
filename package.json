@@ -44,7 +44,7 @@
     "cf:deploy:reuse": "opennextjs-cloudflare deploy --minify",
     "cf:upload:reuse": "opennextjs-cloudflare upload --minify",
     "cf:deploy:strict": "pnpm run check:deploy && pnpm run cf:deploy",
-    "cf:typegen": "wrangler types --env-interface CloudflareEnv src/shared/types/cloudflare.d.ts",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv --include-runtime false --strict-vars false src/shared/types/cloudflare.d.ts",
     "images:optimize": "node --import tsx scripts/images-optimize.ts",
     "images:upload:r2": "node --import tsx scripts/images-upload-r2.ts",
     "images:rewrite:refs": "node --import tsx scripts/images-rewrite-refs.ts",
@@ -53,7 +53,8 @@
     "smoke:baby-image": "node --import tsx scripts/smoke-baby-image.ts",
     "smoke:refund": "tsx scripts/with-env.ts tsx scripts/smoke-refund.ts",
     "verify:public-configs": "tsx scripts/verify-public-configs.ts",
-    "verify:payment-lifecycle": "tsx scripts/with-env.ts tsx scripts/verify-payment-lifecycle.ts"
+    "verify:payment-lifecycle": "tsx scripts/with-env.ts tsx scripts/verify-payment-lifecycle.ts",
+    "verify:customer-email": "tsx scripts/verify-customer-email.ts"
   },
   "dependencies": {
     "@ai-sdk/react": "^2.0.89",
@@ -94,7 +95,6 @@
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
-    "@react-email/components": "^1.0.2",
     "@tabler/icons-react": "^3.34.1",
     "@tanstack/react-table": "^8.21.3",
     "@types/mdx": "^2.0.13",
@@ -142,7 +142,6 @@
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
     "replicate": "^1.3.1",
-    "resend": "^6.0.3",
     "rough-notation": "^0.5.1",
     "shiki": "^3.20.0",
     "simple-flakeid": "^0.0.5",

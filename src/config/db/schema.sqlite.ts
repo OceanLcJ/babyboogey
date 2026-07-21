@@ -348,6 +348,46 @@ export const subscription = table(
   ]
 );
 
+export const customerEmailDelivery = table(
+  'customer_email_delivery',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    kind: text('kind').notNull(),
+    dedupeKey: text('dedupe_key').notNull(),
+    referenceId: text('reference_id'),
+    recipient: text('recipient').notNull(),
+    subject: text('subject').notNull(),
+    html: text('html').notNull(),
+    text: text('text').notNull(),
+    status: text('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    maxAttempts: integer('max_attempts').notNull().default(5),
+    claimedAt: integer('claimed_at', { mode: 'timestamp_ms' }),
+    sentAt: integer('sent_at', { mode: 'timestamp_ms' }),
+    providerMessageId: text('provider_message_id'),
+    lastError: text('last_error'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_customer_email_delivery_dedupe_key').on(table.dedupeKey),
+    index('idx_customer_email_delivery_status').on(
+      table.status,
+      table.attempts,
+      table.updatedAt
+    ),
+    index('idx_customer_email_delivery_user_kind').on(table.userId, table.kind),
+  ]
+);
+
 export const credit = table(
   'credit',
   {

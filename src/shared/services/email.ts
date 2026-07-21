@@ -1,20 +1,31 @@
-import { EmailManager, ResendProvider } from '@/extensions/email';
-import { Configs, getAllConfigs } from '@/shared/models/config';
+import { envConfigs } from '@/config';
+import {
+  CloudflareEmailBinding,
+  CloudflareEmailProvider,
+  EmailManager,
+} from '@/extensions/email';
 
 /**
  * get email service with configs
  */
-export function getEmailServiceWithConfigs(configs: Configs) {
+export function getEmailServiceWithBinding(
+  binding?: CloudflareEmailBinding,
+  overrides: {
+    fromEmail?: string;
+    fromName?: string;
+    replyTo?: string;
+  } = {}
+) {
   const emailManager = new EmailManager();
-
-  if (configs.resend_api_key) {
-    emailManager.addProvider(
-      new ResendProvider({
-        apiKey: configs.resend_api_key,
-        defaultFrom: configs.resend_sender_email,
-      })
-    );
-  }
+  emailManager.addProvider(
+    new CloudflareEmailProvider({
+      binding,
+      defaultFromEmail: overrides.fromEmail || envConfigs.email_from_address,
+      defaultFromName: overrides.fromName || envConfigs.email_from_name,
+      defaultReplyTo: overrides.replyTo || envConfigs.email_reply_to,
+    }),
+    true
+  );
 
   return emailManager;
 }
@@ -27,13 +38,8 @@ let emailService: EmailManager | null = null;
 /**
  * get email service instance
  */
-export async function getEmailService(
-  configs?: Configs
-): Promise<EmailManager> {
-  if (!configs) {
-    configs = await getAllConfigs();
-  }
-  emailService = getEmailServiceWithConfigs(configs);
+export async function getEmailService(): Promise<EmailManager> {
+  emailService = getEmailServiceWithBinding();
 
   return emailService;
 }

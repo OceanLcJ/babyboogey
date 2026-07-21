@@ -5,7 +5,6 @@ import { getLocale } from 'next-intl/server';
 import { db } from '@/core/db';
 import { envConfigs } from '@/config';
 import * as schema from '@/config/db/schema';
-import { VerifyEmail } from '@/shared/blocks/email/verify-email';
 import {
   getCookieFromCtx,
   getHeaderValue,
@@ -17,7 +16,10 @@ import { getUuid } from '@/shared/lib/hash';
 import { getClientIp } from '@/shared/lib/ip';
 import { grantCreditsForFirstLogin } from '@/shared/models/credit';
 import { findUserById } from '@/shared/models/user';
-import { getEmailService } from '@/shared/services/email';
+import {
+  queueVerificationCustomerEmail,
+  queueWelcomeCustomerEmail,
+} from '@/shared/services/customer-lifecycle-email';
 import { grantRoleForNewUser } from '@/shared/services/rbac';
 
 // Best-effort dedupe to prevent sending verification emails too frequently.
@@ -100,7 +102,9 @@ const authOptions = {
     // so the auto-detection reads undefined and leaves the limiter off.
     enabled: true,
     storage:
-      process.env.AUTH_RATE_LIMIT_STORAGE === 'database' ? 'database' : 'memory',
+      process.env.AUTH_RATE_LIMIT_STORAGE === 'database'
+        ? 'database'
+        : 'memory',
     window: 60,
     max: 100,
     customRules: {
@@ -167,8 +171,8 @@ const authOptions = {
 
 // get auth options with configs
 export async function getAuthOptions(configs: Record<string, string>) {
-  // Temporarily keep email verification off while the sign-in flow is being simplified.
-  const emailVerificationEnabled = false;
+  const emailVerificationEnabled =
+    configs.email_verification_enabled === 'true';
 
   return {
     ...authOptions,
@@ -264,11 +268,18 @@ export async function getAuthOptions(configs: Record<string, string>) {
                 getClientIpFromCtx(ctx);
               const country = getCountryFromCtx(ctx);
 
-              await grantCreditsForFirstLogin(user, {
+              const initialCredit = await grantCreditsForFirstLogin(user, {
                 signupIp,
                 claimIp,
                 country,
               });
+              if (initialCredit) {
+                await queueWelcomeCustomerEmail({
+                  id: user.id,
+                  name: user.name || '',
+                  email: user.email,
+                });
+              }
             } catch (e) {
               console.log('grant credits for first login failed', e);
             }
@@ -308,21 +319,10 @@ export async function getAuthOptions(configs: Record<string, string>) {
                   recentVerificationEmailSentAt.set(key, now);
                 }
 
-                const emailService = await getEmailService(
-                  configs as UnsafeAny
-                );
-                const logoUrl = envConfigs.app_logo?.startsWith('http')
-                  ? envConfigs.app_logo
-                  : `${envConfigs.app_url}${envConfigs.app_logo?.startsWith('/') ? '' : '/'}${envConfigs.app_logo || ''}`;
-                // Avoid blocking auth response on email sending.
-                await emailService.sendEmail({
-                  to: user.email,
-                  subject: `Verify your email - ${envConfigs.app_name}`,
-                  react: VerifyEmail({
-                    appName: envConfigs.app_name,
-                    logoUrl,
-                    url,
-                  }),
+                await queueVerificationCustomerEmail({
+                  userId: user.id,
+                  recipient: user.email,
+                  verificationUrl: url,
                 });
               } catch (e) {
                 console.log('send verification email failed:', e);

@@ -60,11 +60,14 @@ data*
 src/shared/types/cloudflare.d.ts
 
 src/config/db/migrations*
+!src/config/db/migrations-d1/
 
 .debug
 .test
 
 *.sql
+!src/config/db/migrations-d1/0005_customer_lifecycle_email.sql
+src/config/db/migrations-d1/meta/
 .source
 
 .chats

@@ -1,14 +1,3 @@
-import { ReactNode } from 'react';
-
-/**
- * Email attachment interface
- */
-export interface EmailAttachment {
-  filename: string;
-  content: Buffer | string;
-  contentType?: string;
-}
-
 /**
  * Email message interface
  */
@@ -18,14 +7,10 @@ export interface EmailMessage {
   cc?: string | string[];
   bcc?: string | string[];
   subject: string;
-  text?: string;
-  html?: string;
-  attachments?: EmailAttachment[];
+  text: string;
+  html: string;
   replyTo?: string;
-  priority?: 'high' | 'normal' | 'low';
-  tags?: string[];
   headers?: Record<string, string>;
-  react?: ReactNode;
 }
 
 /**
@@ -36,6 +21,7 @@ export interface EmailSendResult {
   messageId?: string;
   error?: string;
   provider: string;
+  skipped?: boolean;
 }
 
 /**
@@ -115,5 +101,5 @@ export class EmailManager {
 // Global email manager instance
 export const emailManager = new EmailManager();
 
-// Export all providers
-export * from './resend';
+// Export the single production provider.
+export * from './cloudflare';
