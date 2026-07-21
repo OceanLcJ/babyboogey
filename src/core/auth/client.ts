@@ -80,15 +80,14 @@ const AUTH_GET_SESSION_MIN_INTERVAL_MS =
   Number(process.env.NEXT_PUBLIC_AUTH_GET_SESSION_MIN_INTERVAL_MS) || 2000;
 
 function getAuthBaseURL() {
-  if (typeof window === 'undefined') {
-    return envConfigs.auth_url;
-  }
-
-  if (process.env.NODE_ENV === 'development') {
+  if (typeof window !== 'undefined') {
+    // Always keep browser auth calls on the page's current origin. Public env
+    // values are inlined at build time, so a reused or misconfigured build can
+    // otherwise ship a localhost auth URL to production.
     return window.location.origin;
   }
 
-  return envConfigs.auth_url || window.location.origin;
+  return envConfigs.auth_url;
 }
 
 // create default auth client, without plugins
