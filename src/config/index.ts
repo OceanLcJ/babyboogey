@@ -7,10 +7,7 @@ export type ConfigMap = Record<string, string>;
 
 function normalizeAppUrl(value: string) {
   return value
-    .replace(
-      /^https:\/\/babyboogey\.com(?=\/|$)/,
-      'https://www.babyboogey.com'
-    )
+    .replace(/^https:\/\/babyboogey\.com(?=\/|$)/, 'https://www.babyboogey.com')
     .replace(/\/$/, '');
 }
 
@@ -28,7 +25,8 @@ export const envConfigs: ConfigMap = {
   app_logo: process.env.NEXT_PUBLIC_APP_LOGO ?? '/logo.png',
   app_favicon: process.env.NEXT_PUBLIC_APP_FAVICON ?? '/favicon.ico',
   app_preview_image:
-    process.env.NEXT_PUBLIC_APP_PREVIEW_IMAGE ?? 'https://r2.babyboogey.com/assets/imgs/preview.webp',
+    process.env.NEXT_PUBLIC_APP_PREVIEW_IMAGE ??
+    'https://r2.babyboogey.com/assets/imgs/preview.webp',
   theme: process.env.NEXT_PUBLIC_THEME ?? 'default',
   appearance: process.env.NEXT_PUBLIC_APPEARANCE ?? 'system',
   locale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',
@@ -58,6 +56,16 @@ export const envConfigs: ConfigMap = {
   email_from_name: process.env.EMAIL_FROM_NAME ?? 'BabyBoogey',
   email_reply_to: process.env.EMAIL_REPLY_TO ?? 'support@babyboogey.com',
   payment_alert_email: process.env.PAYMENT_ALERT_EMAIL ?? '',
+  daily_report_email:
+    process.env.DAILY_REPORT_EMAIL ?? process.env.PAYMENT_ALERT_EMAIL ?? '',
+  ga4_property_id: process.env.GA4_PROPERTY_ID ?? '',
+  ga4_service_account_json: process.env.GA4_SERVICE_ACCOUNT_JSON ?? '',
+  reactivation_emails_enabled:
+    process.env.REACTIVATION_EMAILS_ENABLED ?? 'false',
+  email_marketing_postal_address:
+    process.env.EMAIL_MARKETING_POSTAL_ADDRESS ?? '',
+  email_unsubscribe_secret:
+    process.env.EMAIL_UNSUBSCRIBE_SECRET ?? process.env.AUTH_SECRET ?? '',
   version: packageJson.version,
   locale_detect_enabled:
     process.env.NEXT_PUBLIC_LOCALE_DETECT_ENABLED ?? 'false',

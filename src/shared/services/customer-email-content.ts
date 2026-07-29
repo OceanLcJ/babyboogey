@@ -8,6 +8,7 @@ export type CustomerEmailContent = {
   text: string;
 };
 
+export type CustomerEmailLocale = 'en' | 'ja' | 'zh';
 export type SubscriptionReminderMilestone = 1 | 7;
 export type SubscriptionReminderMode = 'ending' | 'renewal' | 'trial';
 
@@ -28,6 +29,9 @@ function renderEmailShell({
   ctaLabel,
   ctaUrl,
   footer,
+  locale = 'en',
+  marketingPostalAddress,
+  unsubscribe,
 }: {
   preheader: string;
   title: string;
@@ -36,6 +40,12 @@ function renderEmailShell({
   ctaLabel: string;
   ctaUrl: string;
   footer: string;
+  locale?: CustomerEmailLocale;
+  marketingPostalAddress?: string;
+  unsubscribe?: {
+    label: string;
+    url: string;
+  };
 }): { html: string; text: string } {
   const paragraphs = body
     .map(
@@ -51,7 +61,7 @@ function renderEmailShell({
     .join('');
 
   const html = [
-    '<!doctype html><html lang="en"><head><meta charset="utf-8"></head>',
+    `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"></head>`,
     '<body style="margin:0;background:#f3f4f6;font-family:Inter,Arial,sans-serif">',
     `<span style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeEmailHtml(preheader)}</span>`,
     '<div style="max-width:600px;margin:0 auto;padding:32px 16px">',
@@ -65,6 +75,12 @@ function renderEmailShell({
     `<a href="${escapeEmailHtml(ctaUrl)}" style="display:inline-block;border-radius:10px;background:${BRAND_COLOR};padding:12px 20px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none">${escapeEmailHtml(ctaLabel)}</a>`,
     '<hr style="margin:32px 0 20px;border:0;border-top:1px solid #e5e7eb">',
     `<p style="margin:0;color:#9ca3af;font-size:12px;line-height:1.5">${escapeEmailHtml(footer)}</p>`,
+    marketingPostalAddress
+      ? `<p style="margin:8px 0 0;color:#9ca3af;font-size:12px;line-height:1.5">${escapeEmailHtml(marketingPostalAddress)}</p>`
+      : '',
+    unsubscribe
+      ? `<p style="margin:8px 0 0;font-size:12px;line-height:1.5"><a href="${escapeEmailHtml(unsubscribe.url)}" style="color:#6b7280">${escapeEmailHtml(unsubscribe.label)}</a></p>`
+      : '',
     '</div></div></body></html>',
   ].join('');
 
@@ -79,11 +95,24 @@ function renderEmailShell({
     `${ctaLabel}: ${ctaUrl}`,
     '',
     footer,
+    marketingPostalAddress || undefined,
+    unsubscribe ? `${unsubscribe.label}: ${unsubscribe.url}` : undefined,
   ]
     .filter((line): line is string => line !== undefined)
     .join('\n');
 
   return { html, text };
+}
+
+export function normalizeCustomerEmailLocale(
+  locale: string | null | undefined
+): CustomerEmailLocale {
+  const normalized = String(locale || '')
+    .trim()
+    .toLowerCase();
+  if (normalized.startsWith('zh')) return 'zh';
+  if (normalized.startsWith('ja')) return 'ja';
+  return 'en';
 }
 
 export function formatCustomerPaymentAmount(
@@ -327,6 +356,182 @@ export function buildSubscriptionReminderEmail({
       ctaUrl: billingUrl,
       footer:
         'This is a transactional reminder about your BabyBoogey subscription.',
+    }),
+  };
+}
+
+export function buildUnusedCreditsReactivationEmail({
+  customerName,
+  remainingCredits,
+  createUrl,
+  unsubscribeUrl,
+  marketingPostalAddress,
+  locale: rawLocale,
+}: {
+  customerName: string;
+  remainingCredits: number;
+  createUrl: string;
+  unsubscribeUrl: string;
+  marketingPostalAddress: string;
+  locale?: string | null;
+}): CustomerEmailContent {
+  const locale = normalizeCustomerEmailLocale(rawLocale);
+  const greeting =
+    customerName.trim() ||
+    (locale === 'zh' ? '你好' : locale === 'ja' ? 'お客様' : 'there');
+  const credits = Math.max(0, Math.floor(remainingCredits)).toLocaleString(
+    locale === 'zh' ? 'zh-CN' : locale === 'ja' ? 'ja-JP' : 'en-US'
+  );
+  const copy = {
+    en: {
+      subject: `You still have ${credits} BabyBoogey credits`,
+      preheader: `Your ${credits} remaining credits are ready for your next creation.`,
+      title: 'Your BabyBoogey credits are waiting',
+      body: [
+        `Hi ${greeting}, you still have ${credits} credits available in your account.`,
+        'Come back when you are ready to turn a baby photo into a short dance video. Your saved credits will be applied automatically.',
+      ],
+      cta: 'Use my credits',
+      footer:
+        'You are receiving this occasional product reminder because you have a BabyBoogey account.',
+      unsubscribe: 'Unsubscribe from product reminders',
+    },
+    ja: {
+      subject: `BabyBoogey のクレジットが ${credits} 残っています`,
+      preheader: `残り ${credits} クレジットを次の作品に利用できます。`,
+      title: 'クレジットを使って、続きを作りませんか？',
+      body: [
+        `${greeting}さん、アカウントには現在 ${credits} クレジットが残っています。`,
+        '赤ちゃんの写真を短いダンス動画にしたくなったら、いつでも戻ってきてください。保存済みのクレジットは自動で適用されます。',
+      ],
+      cta: 'クレジットを使う',
+      footer:
+        'BabyBoogey アカウントをお持ちの方へ、プロダクトのお知らせとしてお送りしています。',
+      unsubscribe: 'プロダクトのお知らせを停止',
+    },
+    zh: {
+      subject: `你的 BabyBoogey 账户还有 ${credits} 积分可用`,
+      preheader: `剩余 ${credits} 积分，可以继续创作宝宝跳舞视频。`,
+      title: '你的 BabyBoogey 积分还在等你',
+      body: [
+        `${greeting}，你的账户目前还有 ${credits} 积分可用。`,
+        '想继续把宝宝照片变成跳舞短视频时，随时回来创作；系统会自动使用账户中的剩余积分。',
+      ],
+      cta: '使用我的积分',
+      footer: '你收到这封产品提醒，是因为你注册了 BabyBoogey 账户。',
+      unsubscribe: '退订产品提醒',
+    },
+  }[locale];
+
+  return {
+    subject: copy.subject,
+    ...renderEmailShell({
+      preheader: copy.preheader,
+      title: copy.title,
+      body: copy.body,
+      ctaLabel: copy.cta,
+      ctaUrl: createUrl,
+      footer: copy.footer,
+      locale,
+      marketingPostalAddress,
+      unsubscribe: {
+        label: copy.unsubscribe,
+        url: unsubscribeUrl,
+      },
+    }),
+  };
+}
+
+export function buildCheckoutAbandonedReactivationEmail({
+  customerName,
+  purchaseName,
+  amount,
+  currency,
+  pricingUrl,
+  unsubscribeUrl,
+  marketingPostalAddress,
+  locale: rawLocale,
+}: {
+  customerName: string;
+  purchaseName: string;
+  amount: number | null | undefined;
+  currency: string | null | undefined;
+  pricingUrl: string;
+  unsubscribeUrl: string;
+  marketingPostalAddress: string;
+  locale?: string | null;
+}): CustomerEmailContent {
+  const locale = normalizeCustomerEmailLocale(rawLocale);
+  const greeting =
+    customerName.trim() ||
+    (locale === 'zh' ? '你好' : locale === 'ja' ? 'お客様' : 'there');
+  const formattedAmount = formatCustomerPaymentAmount(amount, currency);
+  const copy = {
+    en: {
+      subject: 'You left a BabyBoogey checkout unfinished',
+      preheader: 'Your BabyBoogey order is still unpaid.',
+      title: 'Still thinking it over?',
+      body: [
+        `Hi ${greeting}, your recent BabyBoogey checkout was not completed and this order is still unpaid.`,
+        'If you still want more credits or a clean download, review the current options and start a fresh secure checkout.',
+      ],
+      item: 'Item',
+      amount: 'Checkout amount',
+      cta: 'Review current options',
+      footer:
+        'You are receiving this occasional product reminder because you started a BabyBoogey checkout.',
+      unsubscribe: 'Unsubscribe from product reminders',
+    },
+    ja: {
+      subject: 'BabyBoogey の決済が完了していません',
+      preheader: '最近の BabyBoogey 注文は未払いのままです。',
+      title: 'もう少し検討しますか？',
+      body: [
+        `${greeting}さん、最近開始した BabyBoogey の決済は完了しておらず、この注文は未払いのままです。`,
+        '追加クレジットや透かしなしのダウンロードをご希望の場合は、現在のプランを確認して新しい安全な決済を開始できます。',
+      ],
+      item: '内容',
+      amount: '決済金額',
+      cta: '現在のプランを見る',
+      footer:
+        'BabyBoogey の決済を開始した方へ、プロダクトのお知らせとしてお送りしています。',
+      unsubscribe: 'プロダクトのお知らせを停止',
+    },
+    zh: {
+      subject: '你的 BabyBoogey 结账还没有完成',
+      preheader: '最近打开的 BabyBoogey 订单仍未支付。',
+      title: '还在考虑吗？',
+      body: [
+        `${greeting}，你最近打开的 BabyBoogey 结账没有完成，这笔订单目前仍未支付。`,
+        '如果你仍需要更多积分或无水印下载，可以查看当前方案并重新开启一次安全结账。',
+      ],
+      item: '购买内容',
+      amount: '结账金额',
+      cta: '查看当前方案',
+      footer: '你收到这封产品提醒，是因为你曾打开 BabyBoogey 结账页面。',
+      unsubscribe: '退订产品提醒',
+    },
+  }[locale];
+
+  return {
+    subject: copy.subject,
+    ...renderEmailShell({
+      preheader: copy.preheader,
+      title: copy.title,
+      body: copy.body,
+      details: [
+        [copy.item, purchaseName || 'BabyBoogey credits'],
+        [copy.amount, formattedAmount],
+      ],
+      ctaLabel: copy.cta,
+      ctaUrl: pricingUrl,
+      footer: copy.footer,
+      locale,
+      marketingPostalAddress,
+      unsubscribe: {
+        label: copy.unsubscribe,
+        url: unsubscribeUrl,
+      },
     }),
   };
 }

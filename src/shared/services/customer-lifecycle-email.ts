@@ -25,6 +25,10 @@ import {
   getSubscriptionReminderMilestones,
   getSubscriptionReminderMode,
 } from './customer-email-content';
+import {
+  queueDueReactivationEmails,
+  type ReactivationQueueResult,
+} from './customer-reactivation-email';
 
 const REMINDER_LOOKAHEAD_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -277,19 +281,35 @@ export async function runCustomerEmailMaintenance({
   emailService,
   now = new Date(),
   baseUrl = envConfigs.app_url,
+  reactivationEnabled = envConfigs.reactivation_emails_enabled.toLowerCase() ===
+    'true',
+  marketingPostalAddress = envConfigs.email_marketing_postal_address,
+  unsubscribeSecret = envConfigs.email_unsubscribe_secret,
 }: {
   database?: UnsafeAny;
   emailService?: EmailManager;
   now?: Date;
   baseUrl?: string;
+  reactivationEnabled?: boolean;
+  marketingPostalAddress?: string;
+  unsubscribeSecret?: string;
 } = {}): Promise<{
   reminders: { due: number };
+  reactivation: ReactivationQueueResult;
   deliveries: { attempted: number; sent: number };
 }> {
   const reminders = await queueDueSubscriptionReminders({
     database,
     now,
     baseUrl,
+  });
+  const reactivation = await queueDueReactivationEmails({
+    database,
+    now,
+    baseUrl,
+    enabled: reactivationEnabled,
+    marketingPostalAddress,
+    unsubscribeSecret,
   });
   const deliveries = await retryCustomerEmailDeliveries({
     database,
@@ -298,7 +318,8 @@ export async function runCustomerEmailMaintenance({
   });
   console.info('[customer-email] maintenance complete', {
     reminders,
+    reactivation,
     deliveries,
   });
-  return { reminders, deliveries };
+  return { reminders, reactivation, deliveries };
 }

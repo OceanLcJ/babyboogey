@@ -31,6 +31,13 @@ EMAIL_FROM_ADDRESS = "support@babyboogey.com"
 EMAIL_FROM_NAME = "BabyBoogey"
 EMAIL_REPLY_TO = "support@babyboogey.com"
 PAYMENT_ALERT_EMAIL = "2113191149@qq.com"
+DAILY_REPORT_EMAIL = "2113191149@qq.com"
+GA4_PROPERTY_ID = "522640605"
+# Set GA4_SERVICE_ACCOUNT_JSON with `wrangler secret put`; never commit it.
+# Customer reactivation email is enabled; the postal-address footer is optional.
+REACTIVATION_EMAILS_ENABLED = "true"
+# Optional: set EMAIL_UNSUBSCRIBE_SECRET for a dedicated signing key.
+# When absent, the Worker falls back to the existing AUTH_SECRET.
 
 # theme
 NEXT_PUBLIC_THEME = "default"

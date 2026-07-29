@@ -6,34 +6,105 @@ import type { CloudflareEmailBinding } from '@/extensions/email';
 import handler from './.open-next/worker.js';
 
 type WorkerEnvironment = {
+  AUTH_SECRET?: string;
   DB: UnsafeAny;
   EMAIL: CloudflareEmailBinding;
+  DAILY_REPORT_EMAIL?: string;
   EMAIL_FROM_ADDRESS?: string;
   EMAIL_FROM_NAME?: string;
+  EMAIL_MARKETING_POSTAL_ADDRESS?: string;
   EMAIL_REPLY_TO?: string;
+  EMAIL_UNSUBSCRIBE_SECRET?: string;
+  GA4_PROPERTY_ID?: string;
+  GA4_SERVICE_ACCOUNT_JSON?: string;
   NEXT_PUBLIC_APP_URL?: string;
+  REACTIVATION_EMAILS_ENABLED?: string;
+};
+
+type WorkerExecutionContext = {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException(): void;
 };
 
 const worker = {
   fetch: handler.fetch,
 
-  async scheduled(_event: unknown, env: WorkerEnvironment) {
+  async scheduled(
+    _event: unknown,
+    env: WorkerEnvironment,
+    ctx: WorkerExecutionContext
+  ) {
     const baseUrl = env.NEXT_PUBLIC_APP_URL || 'https://www.babyboogey.com';
-    const [{ getEmailServiceWithBinding }, { runCustomerEmailMaintenance }] =
-      await Promise.all([
-        import('@/shared/services/email'),
-        import('@/shared/services/customer-lifecycle-email'),
-      ]);
+    const [
+      { getEmailServiceWithBinding },
+      { runCustomerEmailMaintenance },
+      { runDailyOperationsReport },
+    ] = await Promise.all([
+      import('@/shared/services/email'),
+      import('@/shared/services/customer-lifecycle-email'),
+      import('@/shared/services/daily-operations-report'),
+    ]);
     const database = drizzle(env.DB);
     const emailService = getEmailServiceWithBinding(env.EMAIL, {
       fromEmail: env.EMAIL_FROM_ADDRESS,
       fromName: env.EMAIL_FROM_NAME,
       replyTo: env.EMAIL_REPLY_TO,
     });
-    await runCustomerEmailMaintenance({
+    try {
+      await runCustomerEmailMaintenance({
+        database,
+        emailService,
+        baseUrl,
+        reactivationEnabled: env.REACTIVATION_EMAILS_ENABLED === 'true',
+        marketingPostalAddress: env.EMAIL_MARKETING_POSTAL_ADDRESS,
+        unsubscribeSecret: env.EMAIL_UNSUBSCRIBE_SECRET || env.AUTH_SECRET,
+      });
+    } catch (error) {
+      console.error('[customer-email] scheduled maintenance failed', {
+        error:
+          error instanceof Error
+            ? error.message.slice(0, 180)
+            : String(error).slice(0, 180),
+      });
+    }
+    await runDailyOperationsReport({
       database,
+      d1Database: env.DB,
       emailService,
+      recipient: env.DAILY_REPORT_EMAIL,
+      ga4PropertyId: env.GA4_PROPERTY_ID,
+      ga4ServiceAccountJson: env.GA4_SERVICE_ACCOUNT_JSON,
       baseUrl,
+      healthCheck: async () => {
+        const startedAt = Date.now();
+        try {
+          const response = await (handler.fetch as UnsafeAny)(
+            new Request(new URL('/robots.txt', baseUrl), {
+              headers: {
+                'User-Agent': 'BabyBoogey-Daily-Operations-Report/1.0',
+              },
+            }),
+            env,
+            ctx
+          );
+          await response.body?.cancel();
+          return {
+            online: response.ok,
+            statusCode: response.status,
+            latencyMs: Date.now() - startedAt,
+          };
+        } catch (error) {
+          return {
+            online: false,
+            statusCode: null,
+            latencyMs: Date.now() - startedAt,
+            detail:
+              error instanceof Error
+                ? error.message.slice(0, 180)
+                : String(error).slice(0, 180),
+          };
+        }
+      },
     });
   },
 };

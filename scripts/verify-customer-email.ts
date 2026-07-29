@@ -21,18 +21,28 @@ async function main() {
       retryCustomerEmailDeliveries,
     },
     {
+      buildCheckoutAbandonedReactivationEmail,
       buildCustomerPaymentReceiptEmail,
       buildSubscriptionReminderEmail,
+      buildUnusedCreditsReactivationEmail,
       buildWelcomeEmail,
       getSubscriptionReminderMilestones,
       getSubscriptionReminderMode,
     },
     { runCustomerEmailMaintenance },
+    { queueDueReactivationEmails },
+    {
+      createMarketingUnsubscribeToken,
+      unsubscribeMarketingEmail,
+      verifyMarketingUnsubscribeToken,
+    },
   ] = await Promise.all([
     import('@/extensions/email'),
     import('@/shared/models/customer-email-delivery'),
     import('@/shared/services/customer-email-content'),
     import('@/shared/services/customer-lifecycle-email'),
+    import('@/shared/services/customer-reactivation-email'),
+    import('@/shared/services/marketing-email-preference'),
   ]);
 
   const client = createClient({ url: 'file::memory:' });
@@ -40,7 +50,9 @@ async function main() {
   CREATE TABLE "user" (
     "id" text PRIMARY KEY NOT NULL,
     "name" text NOT NULL,
-    "email" text NOT NULL UNIQUE
+    "email" text NOT NULL UNIQUE,
+    "locale" text NOT NULL DEFAULT '',
+    "created_at" integer NOT NULL
   );
   CREATE TABLE "subscription" (
     "id" text PRIMARY KEY NOT NULL,
@@ -54,6 +66,34 @@ async function main() {
     "product_name" text,
     "deleted_at" integer
   );
+  CREATE TABLE "credit" (
+    "id" text PRIMARY KEY NOT NULL,
+    "user_id" text NOT NULL,
+    "transaction_type" text NOT NULL,
+    "status" text NOT NULL,
+    "remaining_credits" integer NOT NULL,
+    "expires_at" integer
+  );
+  CREATE TABLE "ai_task" (
+    "id" text PRIMARY KEY NOT NULL,
+    "user_id" text NOT NULL,
+    "created_at" integer NOT NULL
+  );
+  CREATE TABLE "order" (
+    "id" text PRIMARY KEY NOT NULL,
+    "order_no" text NOT NULL UNIQUE,
+    "user_id" text NOT NULL,
+    "status" text NOT NULL,
+    "amount" integer NOT NULL,
+    "currency" text NOT NULL,
+    "payment_session_id" text,
+    "payment_amount" integer,
+    "paid_at" integer,
+    "created_at" integer NOT NULL,
+    "description" text,
+    "plan_name" text,
+    "product_name" text
+  );
 `);
   const migration = await readFile(
     resolve(
@@ -63,9 +103,23 @@ async function main() {
     'utf8'
   );
   await client.executeMultiple(migration);
+  const reactivationMigration = await readFile(
+    resolve(
+      process.cwd(),
+      'src/config/db/migrations-d1/0007_reactivation_email.sql'
+    ),
+    'utf8'
+  );
+  await client.executeMultiple(reactivationMigration);
   await client.execute({
-    sql: 'INSERT INTO "user" ("id", "name", "email") VALUES (?, ?, ?)',
-    args: ['user-1', 'A <Baby>', 'customer@example.com'],
+    sql: 'INSERT INTO "user" ("id", "name", "email", "locale", "created_at") VALUES (?, ?, ?, ?, ?)',
+    args: [
+      'user-1',
+      'A <Baby>',
+      'customer@example.com',
+      'zh',
+      new Date('2026-07-10T00:00:00.000Z').getTime(),
+    ],
   });
   const database = drizzle(client) as UnsafeAny;
 
@@ -133,6 +187,53 @@ async function main() {
       billingUrl: 'https://www.babyboogey.com/settings/billing',
     }).subject,
     /subscription ends tomorrow/
+  );
+
+  const unsubscribeSecret =
+    'test-only-reactivation-unsubscribe-secret-32-characters';
+  const unsubscribeToken = await createMarketingUnsubscribeToken({
+    userId: 'user-1',
+    secret: unsubscribeSecret,
+  });
+  assert.deepEqual(
+    await verifyMarketingUnsubscribeToken({
+      token: unsubscribeToken,
+      secret: unsubscribeSecret,
+    }),
+    { userId: 'user-1' }
+  );
+  assert.equal(
+    await verifyMarketingUnsubscribeToken({
+      token: `${unsubscribeToken.slice(0, -1)}x`,
+      secret: unsubscribeSecret,
+    }),
+    null
+  );
+  const unusedCreditsContent = buildUnusedCreditsReactivationEmail({
+    customerName: '小宝',
+    remainingCredits: 75,
+    createUrl: 'https://www.babyboogey.com/zh',
+    unsubscribeUrl:
+      'https://www.babyboogey.com/api/email/unsubscribe?token=test',
+    marketingPostalAddress: 'Test business address',
+    locale: 'zh',
+  });
+  assert.match(unusedCreditsContent.subject, /75/);
+  assert.match(unusedCreditsContent.html, /退订产品提醒/);
+  assert.match(unusedCreditsContent.text, /Test business address/);
+  assert.match(
+    buildCheckoutAbandonedReactivationEmail({
+      customerName: 'A <Baby>',
+      purchaseName: 'Dance credits',
+      amount: 299,
+      currency: 'usd',
+      pricingUrl: 'https://www.babyboogey.com/pricing',
+      unsubscribeUrl:
+        'https://www.babyboogey.com/api/email/unsubscribe?token=test',
+      marketingPostalAddress: 'Test business address',
+      locale: 'en',
+    }).html,
+    /A &lt;Baby&gt;/
   );
 
   let providerCalls = 0;
@@ -268,8 +369,105 @@ async function main() {
   assert.equal(maintenance.deliveries.sent, 1);
   assert.equal(scheduledCalls, 1);
 
+  await client.execute('DELETE FROM customer_email_delivery');
+  await client.execute({
+    sql: `INSERT INTO "credit" (
+      "id", "user_id", "transaction_type", "status", "remaining_credits", "expires_at"
+    ) VALUES (?, ?, ?, ?, ?, NULL)`,
+    args: ['credit-1', 'user-1', 'grant', 'active', 75],
+  });
+  await client.execute({
+    sql: `INSERT INTO "order" (
+      "id", "order_no", "user_id", "status", "amount", "currency",
+      "payment_session_id", "created_at", "description"
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [
+      'order-1',
+      'order-no-1',
+      'user-1',
+      'failed',
+      299,
+      'usd',
+      'cs_test_1',
+      now.getTime() - 3 * 60 * 60 * 1000,
+      'Dance credits',
+    ],
+  });
+  const reactivation = await queueDueReactivationEmails({
+    database,
+    now,
+    baseUrl: 'https://www.babyboogey.com',
+    enabled: true,
+    unsubscribeSecret,
+    marketingPostalAddress: '',
+  });
+  assert.equal(reactivation.enabled, true);
+  assert.equal(reactivation.unusedCredits.queued, 1);
+  assert.equal(reactivation.checkoutAbandoned.queued, 1);
+  const marketingRows = await client.execute(
+    'SELECT kind, headers FROM customer_email_delivery ORDER BY kind'
+  );
+  assert.equal(marketingRows.rows.length, 2);
+  assert.ok(
+    marketingRows.rows.every((row) =>
+      String(row.headers).includes('List-Unsubscribe')
+    )
+  );
+
+  // A later successful purchase must suppress the already queued checkout
+  // reminder while allowing the still-relevant unused-credit reminder.
+  await client.execute({
+    sql: 'UPDATE "order" SET status = ?, payment_amount = ?, paid_at = ? WHERE id = ?',
+    args: ['paid', 299, now.getTime(), 'order-1'],
+  });
+  let reactivationProviderCalls = 0;
+  const reactivationService = createEmailService(async () => {
+    reactivationProviderCalls += 1;
+    return { messageId: `cf-reactivation-${reactivationProviderCalls}` };
+  });
+  const reactivationDelivery = await retryCustomerEmailDeliveries({
+    database,
+    emailService: reactivationService,
+  });
+  assert.equal(reactivationDelivery.attempted, 2);
+  assert.equal(reactivationDelivery.sent, 1);
+  assert.equal(reactivationProviderCalls, 1);
+  const suppressedCheckout = await client.execute({
+    sql: 'SELECT status, last_error FROM customer_email_delivery WHERE kind = ?',
+    args: ['reactivation_checkout_abandoned'],
+  });
+  assert.equal(suppressedCheckout.rows[0]?.status, 'suppressed');
+  assert.equal(
+    suppressedCheckout.rows[0]?.last_error,
+    'checkout_no_longer_unpaid'
+  );
+
+  await client.execute('DELETE FROM customer_email_delivery');
+  await queueCustomerEmail(
+    {
+      userId: 'user-1',
+      kind: CUSTOMER_EMAIL_KINDS.REACTIVATION_UNUSED_CREDITS,
+      dedupeKey: 'reactivation:unsubscribe-test:user-1',
+      referenceId: 'user-1',
+      recipient: 'customer@example.com',
+      ...unusedCreditsContent,
+    },
+    database
+  );
+  await unsubscribeMarketingEmail({
+    userId: 'user-1',
+    database,
+    now,
+  });
+  const optedOutRow = await client.execute({
+    sql: 'SELECT status, last_error FROM customer_email_delivery WHERE dedupe_key = ?',
+    args: ['reactivation:unsubscribe-test:user-1'],
+  });
+  assert.equal(optedOutRow.rows[0]?.status, 'suppressed');
+  assert.equal(optedOutRow.rows[0]?.last_error, 'marketing_unsubscribed');
+
   await client.close();
-  console.log('customer lifecycle email verification passed');
+  console.log('customer lifecycle and reactivation email verification passed');
 }
 
 main().catch((error) => {
