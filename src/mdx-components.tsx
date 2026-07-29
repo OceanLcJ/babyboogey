@@ -15,6 +15,25 @@ type FAQAccordionItem = {
   answer: React.ReactNode;
 };
 
+function EditorialExternalLink({
+  href,
+  label,
+  className,
+  ...props
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { label: string }) {
+  return (
+    <a
+      {...props}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn('text-primary', className)}
+    >
+      {label}
+    </a>
+  );
+}
+
 function FAQAccordion({
   items,
   className,
@@ -156,6 +175,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     AccordionTrigger,
     AccordionContent,
     FAQAccordion,
+    EditorialExternalLink,
     ...components,
   };
 
