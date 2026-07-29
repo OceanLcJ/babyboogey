@@ -321,6 +321,7 @@ export const customerEmailDelivery = table(
     subject: varchar('subject', { length: 255 }).notNull(),
     html: longtext('html').notNull(),
     text: longtext('text').notNull(),
+    headers: text('headers'),
     status: varchar('status', { length: 20 }).notNull().default('pending'),
     attempts: int('attempts').notNull().default(0),
     maxAttempts: int('max_attempts').notNull().default(5),
@@ -339,6 +340,53 @@ export const customerEmailDelivery = table(
       table.updatedAt
     ),
     index('idx_customer_email_delivery_user_kind').on(table.userId, table.kind),
+  ]
+);
+
+export const customerEmailPreference = table(
+  'customer_email_preference',
+  {
+    userId: varchar191('user_id')
+      .primaryKey()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    marketingOptOutAt: timestamp('marketing_opt_out_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index('idx_customer_email_preference_opt_out').on(table.marketingOptOutAt),
+  ]
+);
+
+export const operatorEmailDelivery = table(
+  'operator_email_delivery',
+  {
+    id: varchar191('id').primaryKey(),
+    kind: varchar('kind', { length: 50 }).notNull(),
+    dedupeKey: varchar191('dedupe_key').notNull(),
+    reportDate: varchar('report_date', { length: 10 }).notNull(),
+    recipient: varchar('recipient', { length: 320 }).notNull(),
+    subject: varchar('subject', { length: 255 }).notNull(),
+    html: longtext('html').notNull(),
+    text: longtext('text').notNull(),
+    status: varchar('status', { length: 20 }).notNull().default('pending'),
+    attempts: int('attempts').notNull().default(0),
+    maxAttempts: int('max_attempts').notNull().default(5),
+    claimedAt: timestamp('claimed_at'),
+    sentAt: timestamp('sent_at'),
+    providerMessageId: varchar191('provider_message_id'),
+    lastError: text('last_error'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_operator_email_delivery_dedupe_key').on(table.dedupeKey),
+    index('idx_operator_email_delivery_status').on(
+      table.status,
+      table.attempts,
+      table.updatedAt
+    ),
+    index('idx_operator_email_delivery_report_date').on(table.reportDate),
   ]
 );
 

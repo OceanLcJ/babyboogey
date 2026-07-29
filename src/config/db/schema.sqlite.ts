@@ -362,6 +362,7 @@ export const customerEmailDelivery = table(
     subject: text('subject').notNull(),
     html: text('html').notNull(),
     text: text('text').notNull(),
+    headers: text('headers'),
     status: text('status').notNull().default('pending'),
     attempts: integer('attempts').notNull().default(0),
     maxAttempts: integer('max_attempts').notNull().default(5),
@@ -385,6 +386,65 @@ export const customerEmailDelivery = table(
       table.updatedAt
     ),
     index('idx_customer_email_delivery_user_kind').on(table.userId, table.kind),
+  ]
+);
+
+export const customerEmailPreference = table(
+  'customer_email_preference',
+  {
+    userId: text('user_id')
+      .primaryKey()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    marketingOptOutAt: integer('marketing_opt_out_at', {
+      mode: 'timestamp_ms',
+    }),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index('idx_customer_email_preference_opt_out').on(table.marketingOptOutAt),
+  ]
+);
+
+export const operatorEmailDelivery = table(
+  'operator_email_delivery',
+  {
+    id: text('id').primaryKey(),
+    kind: text('kind').notNull(),
+    dedupeKey: text('dedupe_key').notNull(),
+    reportDate: text('report_date').notNull(),
+    recipient: text('recipient').notNull(),
+    subject: text('subject').notNull(),
+    html: text('html').notNull(),
+    text: text('text').notNull(),
+    status: text('status').notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    maxAttempts: integer('max_attempts').notNull().default(5),
+    claimedAt: integer('claimed_at', { mode: 'timestamp_ms' }),
+    sentAt: integer('sent_at', { mode: 'timestamp_ms' }),
+    providerMessageId: text('provider_message_id'),
+    lastError: text('last_error'),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sqliteNowMs)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex('uidx_operator_email_delivery_dedupe_key').on(table.dedupeKey),
+    index('idx_operator_email_delivery_status').on(
+      table.status,
+      table.attempts,
+      table.updatedAt
+    ),
+    index('idx_operator_email_delivery_report_date').on(table.reportDate),
   ]
 );
 

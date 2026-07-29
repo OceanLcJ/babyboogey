@@ -1,11 +1,20 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import { and, asc, eq, isNull, lt, or, sql } from 'drizzle-orm';
+import { and, asc, eq, gt, isNull, lt, or, sql, sum } from 'drizzle-orm';
 
 import { db } from '@/core/db';
-import { customerEmailDelivery } from '@/config/db/schema';
+import {
+  aiTask,
+  credit,
+  customerEmailDelivery,
+  order,
+} from '@/config/db/schema';
 import type { EmailManager } from '@/extensions/email';
 import { getUuid } from '@/shared/lib/hash';
 import { getEmailService } from '@/shared/services/email';
+import {
+  hasMarketingEmailOptOut,
+  MARKETING_EMAIL_KINDS,
+} from '@/shared/services/marketing-email-preference';
 
 import type { CustomerEmailContent } from '../services/customer-email-content';
 
@@ -15,6 +24,8 @@ export const CUSTOMER_EMAIL_MAX_ATTEMPTS = 5;
 export const CUSTOMER_EMAIL_KINDS = {
   OPERATOR_PAYMENT_ALERT: 'operator_payment_alert',
   PAYMENT_RECEIPT: 'payment_receipt',
+  REACTIVATION_CHECKOUT_ABANDONED: MARKETING_EMAIL_KINDS.CHECKOUT_ABANDONED,
+  REACTIVATION_UNUSED_CREDITS: MARKETING_EMAIL_KINDS.UNUSED_CREDITS,
   SUBSCRIPTION_REMINDER: 'subscription_reminder',
   VERIFICATION: 'verification',
   WELCOME: 'welcome',
@@ -27,6 +38,7 @@ export type CustomerEmailDeliveryStatus =
   | 'failed'
   | 'pending'
   | 'sending'
+  | 'suppressed'
   | 'sent';
 
 export type CustomerEmailDelivery = typeof customerEmailDelivery.$inferSelect;
@@ -37,6 +49,7 @@ export type CustomerEmailDeliveryResult =
   | 'duplicate'
   | 'exhausted'
   | 'failed'
+  | 'suppressed'
   | 'sent';
 
 export interface QueueCustomerEmailInput extends CustomerEmailContent {
@@ -45,6 +58,7 @@ export interface QueueCustomerEmailInput extends CustomerEmailContent {
   dedupeKey: string;
   referenceId?: string;
   recipient: string;
+  headers?: Record<string, string>;
 }
 
 function getDatabase(database?: UnsafeAny): UnsafeAny {
@@ -70,12 +84,117 @@ export function buildCustomerEmailDeliveryRow(
     subject: input.subject,
     html: input.html,
     text: input.text,
+    headers: input.headers ? JSON.stringify(input.headers) : null,
     status: 'pending',
     attempts: 0,
     maxAttempts: CUSTOMER_EMAIL_MAX_ATTEMPTS,
     createdAt: now,
     updatedAt: now,
   };
+}
+
+function parseStoredHeaders(value: string | null): Record<string, string> {
+  if (!value) return {};
+  try {
+    const parsed = JSON.parse(value) as Record<string, unknown>;
+    return Object.fromEntries(
+      Object.entries(parsed).filter(
+        (entry): entry is [string, string] =>
+          typeof entry[0] === 'string' && typeof entry[1] === 'string'
+      )
+    );
+  } catch {
+    return {};
+  }
+}
+
+async function getMarketingSuppressionReason({
+  database,
+  userId,
+  kind,
+  referenceId,
+  deliveryCreatedAt,
+}: {
+  database: UnsafeAny;
+  userId: string;
+  kind: string;
+  referenceId: string | null;
+  deliveryCreatedAt: Date;
+}): Promise<string | null> {
+  const isMarketing =
+    kind === MARKETING_EMAIL_KINDS.UNUSED_CREDITS ||
+    kind === MARKETING_EMAIL_KINDS.CHECKOUT_ABANDONED;
+  if (!isMarketing) return null;
+  if (await hasMarketingEmailOptOut(userId, database)) {
+    return 'marketing_unsubscribed';
+  }
+
+  if (kind === MARKETING_EMAIL_KINDS.UNUSED_CREDITS) {
+    const [balance] = await database
+      .select({ total: sum(credit.remainingCredits) })
+      .from(credit)
+      .where(
+        and(
+          eq(credit.userId, userId),
+          eq(credit.transactionType, 'grant'),
+          eq(credit.status, 'active'),
+          gt(credit.remainingCredits, 0),
+          or(isNull(credit.expiresAt), gt(credit.expiresAt, new Date()))
+        )
+      )
+      .limit(1);
+    if (Number(balance?.total || 0) <= 0) {
+      return 'no_remaining_credits';
+    }
+
+    const [recentTask] = await database
+      .select({ id: aiTask.id })
+      .from(aiTask)
+      .where(
+        and(eq(aiTask.userId, userId), gt(aiTask.createdAt, deliveryCreatedAt))
+      )
+      .limit(1);
+    if (recentTask) return 'user_reactivated';
+    return null;
+  }
+
+  if (!referenceId) return 'missing_checkout_reference';
+  const [checkoutOrder] = await database
+    .select({
+      userId: order.userId,
+      status: order.status,
+      createdAt: order.createdAt,
+    })
+    .from(order)
+    .where(eq(order.orderNo, referenceId))
+    .limit(1);
+  if (
+    !checkoutOrder ||
+    checkoutOrder.userId !== userId ||
+    !['created', 'failed'].includes(checkoutOrder.status)
+  ) {
+    return 'checkout_no_longer_unpaid';
+  }
+
+  const [laterPaidOrder] = await database
+    .select({ id: order.id })
+    .from(order)
+    .where(
+      and(
+        eq(order.userId, userId),
+        eq(order.status, 'paid'),
+        sql`coalesce(${order.paymentAmount}, ${order.amount}, 0) > 0`,
+        or(
+          gt(order.paidAt, checkoutOrder.createdAt),
+          and(
+            isNull(order.paidAt),
+            gt(order.createdAt, checkoutOrder.createdAt)
+          )
+        )
+      )
+    )
+    .limit(1);
+  return laterPaidOrder ? 'checkout_paid_later' : null;
 }
 
 export async function insertCustomerEmailDeliveries(
@@ -145,6 +264,11 @@ export async function attemptCustomerEmailDelivery(
       subject: customerEmailDelivery.subject,
       html: customerEmailDelivery.html,
       text: customerEmailDelivery.text,
+      headers: customerEmailDelivery.headers,
+      userId: customerEmailDelivery.userId,
+      kind: customerEmailDelivery.kind,
+      referenceId: customerEmailDelivery.referenceId,
+      createdAt: customerEmailDelivery.createdAt,
     });
 
   if (!claimed) {
@@ -166,12 +290,37 @@ export async function attemptCustomerEmailDelivery(
   }
 
   try {
+    const suppressionReason = await getMarketingSuppressionReason({
+      database: databaseClient,
+      userId: claimed.userId,
+      kind: claimed.kind,
+      referenceId: claimed.referenceId,
+      deliveryCreatedAt: claimed.createdAt,
+    });
+    if (suppressionReason) {
+      await databaseClient
+        .update(customerEmailDelivery)
+        .set({
+          status: 'suppressed',
+          claimedAt: null,
+          lastError: suppressionReason,
+          updatedAt: new Date(),
+        })
+        .where(eq(customerEmailDelivery.id, claimed.id));
+      console.info('[customer-email] marketing delivery suppressed', {
+        dedupeKey,
+        reason: suppressionReason,
+      });
+      return 'suppressed';
+    }
+
     const emailService = options.emailService ?? (await getEmailService());
     const result = await emailService.sendEmail({
       to: claimed.recipient,
       subject: claimed.subject,
       html: claimed.html,
       text: claimed.text,
+      headers: parseStoredHeaders(claimed.headers),
     });
     if (!result.success) {
       throw new Error(result.error || 'Cloudflare rejected the email');
