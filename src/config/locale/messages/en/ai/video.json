@@ -113,12 +113,31 @@
     "insufficient_credits_modal": {
       "title": "Not enough credits",
       "description": "This video needs {required} credits, but you only have {remaining}.",
-      "recommended": "Smallest pack that works",
+      "recommended": "Recommended subscription",
+      "pack_recommended": "Recommended top-up",
+      "plan_title": "{plan} subscription",
+      "plan_credits": "{credits} credits per {period}",
       "pack_title": "{credits} credit pack",
-      "enough_for_video": "{available} credits after purchase — enough for this {required}-credit video",
-      "trust_note": "One-time purchase · credits never expire · failed generations are refunded",
-      "cta_buy": "Get {credits} Credits — {price}",
-      "cta_plans": "View all plans"
+      "pack_subtitle": "One-time credits that never expire",
+      "period_month": "month",
+      "period_year": "year",
+      "plans": {
+        "starter": "Starter",
+        "standard": "Standard",
+        "premium": "Premium"
+      },
+      "enough_for_video": "Your balance becomes {available} credits — enough for this {required}-credit video",
+      "pack_enough_for_video": "Your balance becomes {available} credits — enough for this {required}-credit video",
+      "trust_note": "Credits refresh each billing period · cancel anytime · failed generations are refunded",
+      "pack_trust_note": "One-time purchase · credits never expire · failed generations are refunded",
+      "cta_subscribe": "Subscribe to {plan} — {price}",
+      "cta_upgrade": "Upgrade to {plan}",
+      "cta_buy_pack": "Get {credits} Credits — {price}",
+      "manage_title": "Review your current subscription",
+      "manage_description": "We could not match a suitable upgrade or top-up for your current subscription.",
+      "cta_manage": "Manage subscription",
+      "cta_plans": "View all subscription plans",
+      "cta_packs": "View all credit packs"
     },
     "errors": {
       "timeout_actionable": "Generation timed out. Please try again, switch template, or choose 720p for faster results.",

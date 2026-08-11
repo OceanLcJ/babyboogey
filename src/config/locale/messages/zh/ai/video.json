@@ -113,12 +113,31 @@
     "insufficient_credits_modal": {
       "title": "积分不足",
       "description": "生成此视频需要 {required} 积分，当前仅剩 {remaining} 积分。",
-      "recommended": "保证够用的最小积分包",
+      "recommended": "推荐订阅方案",
+      "pack_recommended": "推荐加购积分包",
+      "plan_title": "{plan}订阅",
+      "plan_credits": "每{period}包含 {credits} 积分",
       "pack_title": "{credits} 积分包",
-      "enough_for_video": "购买后共有 {available} 积分，足够生成当前这条 {required} 积分的视频",
-      "trust_note": "一次性购买 · 积分永久有效 · 生成失败自动退回",
-      "cta_buy": "获取 {credits} 积分 — {price}",
-      "cta_plans": "查看全部方案"
+      "pack_subtitle": "一次性购买，积分永久有效",
+      "period_month": "月",
+      "period_year": "年",
+      "plans": {
+        "starter": "入门版",
+        "standard": "标准版",
+        "premium": "高级版"
+      },
+      "enough_for_video": "订阅后共有 {available} 积分，足够生成当前这条 {required} 积分的视频",
+      "pack_enough_for_video": "购买后共有 {available} 积分，足够生成当前这条 {required} 积分的视频",
+      "trust_note": "每个账期自动发放积分 · 随时可取消 · 生成失败自动退回",
+      "pack_trust_note": "一次性购买 · 积分永久有效 · 生成失败自动退回",
+      "cta_subscribe": "订阅{plan} — {price}",
+      "cta_upgrade": "升级到{plan}",
+      "cta_buy_pack": "获取 {credits} 积分 — {price}",
+      "manage_title": "请检查当前订阅",
+      "manage_description": "暂时无法为当前订阅匹配合适的升级或积分包。",
+      "cta_manage": "管理订阅",
+      "cta_plans": "查看全部订阅方案",
+      "cta_packs": "查看全部积分包"
     },
     "errors": {
       "timeout_actionable": "生成超时，请重试；也可切换模板或选择 720p 提升速度。",

@@ -301,6 +301,15 @@ export function Pricing({
     currentSubscription?.productId,
   ]);
 
+  useEffect(() => {
+    const requestedGroup = new URLSearchParams(window.location.search).get(
+      'group'
+    );
+    if (requestedGroup && visibleGroupNames.has(requestedGroup)) {
+      setGroup(requestedGroup);
+    }
+  }, [visibleGroupNames]);
+
   // Currency state management for each item
   // Store selected currency and displayed item for each product_id
   const [itemCurrencies, setItemCurrencies] = useState<

@@ -113,12 +113,31 @@
     "insufficient_credits_modal": {
       "title": "クレジットが不足しています",
       "description": "この動画の生成には {required} クレジットが必要ですが、残り {remaining} クレジットしかありません。",
-      "recommended": "この動画に必要な最小パック",
+      "recommended": "おすすめのサブスクリプション",
+      "pack_recommended": "おすすめのクレジット追加",
+      "plan_title": "{plan}サブスクリプション",
+      "plan_credits": "{period}ごとに {credits} クレジット",
       "pack_title": "{credits} クレジットパック",
-      "enough_for_video": "購入後は {available} クレジットになり、{required} クレジットのこの動画を作成できます",
-      "trust_note": "買い切り · クレジットは無期限 · 生成失敗時は自動返却",
-      "cta_buy": "{credits} クレジットを取得 — {price}",
-      "cta_plans": "全プランを見る"
+      "pack_subtitle": "買い切りで、クレジットは無期限です",
+      "period_month": "1か月",
+      "period_year": "1年",
+      "plans": {
+        "starter": "スターター",
+        "standard": "スタンダード",
+        "premium": "プレミアム"
+      },
+      "enough_for_video": "登録後の残高は {available} クレジットになり、この {required} クレジットの動画を作成できます",
+      "pack_enough_for_video": "購入後の残高は {available} クレジットになり、この {required} クレジットの動画を作成できます",
+      "trust_note": "請求期間ごとにクレジット付与 · いつでも解約可能 · 生成失敗時は自動返却",
+      "pack_trust_note": "買い切り · クレジットは無期限 · 生成失敗時は自動返却",
+      "cta_subscribe": "{plan}に登録 — {price}",
+      "cta_upgrade": "{plan}にアップグレード",
+      "cta_buy_pack": "{credits} クレジットを取得 — {price}",
+      "manage_title": "現在のサブスクリプションをご確認ください",
+      "manage_description": "現在のサブスクリプションに適したアップグレードまたはクレジット追加を確認できませんでした。",
+      "cta_manage": "サブスクリプションを管理",
+      "cta_plans": "すべてのサブスクリプションを見る",
+      "cta_packs": "すべてのクレジットパックを見る"
     },
     "errors": {
       "timeout_actionable": "生成がタイムアウトしました。もう一度試すか、テンプレートを変更するか、より速い結果を得るために720pを選択してください。",
