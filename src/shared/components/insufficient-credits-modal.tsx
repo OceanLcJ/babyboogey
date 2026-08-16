@@ -20,6 +20,7 @@ import {
 
 type SubscriptionPlanItem = PricingItem & {
   planKey: 'starter' | 'standard' | 'premium';
+  monthlyEquivalent?: string;
 };
 
 // Keep these product snapshots aligned with the server-owned pricing locale
@@ -74,9 +75,10 @@ const YEARLY_SUBSCRIPTIONS: SubscriptionPlanItem[] = [
     plan_name: 'Starter',
     planKey: 'starter',
     title: 'Starter',
-    amount: 10788,
+    amount: 8388,
     currency: 'USD',
-    price: '$107.88/yr',
+    price: '$83.88/year',
+    monthlyEquivalent: '$6.99/mo',
     credits: 5160,
     valid_days: 365,
     interval: 'year',
@@ -87,9 +89,10 @@ const YEARLY_SUBSCRIPTIONS: SubscriptionPlanItem[] = [
     plan_name: 'Standard',
     planKey: 'standard',
     title: 'Standard',
-    amount: 20388,
+    amount: 15948,
     currency: 'USD',
-    price: '$203.88/yr',
+    price: '$159.48/year',
+    monthlyEquivalent: '$13.29/mo',
     credits: 14040,
     valid_days: 365,
     interval: 'year',
@@ -100,9 +103,10 @@ const YEARLY_SUBSCRIPTIONS: SubscriptionPlanItem[] = [
     plan_name: 'Premium',
     planKey: 'premium',
     title: 'Premium',
-    amount: 38388,
+    amount: 30228,
     currency: 'USD',
-    price: '$383.88/yr',
+    price: '$302.28/year',
+    monthlyEquivalent: '$25.19/mo',
     credits: 34560,
     valid_days: 365,
     interval: 'year',
@@ -119,19 +123,19 @@ const CREDIT_PACKS: PricingItem[] = [
     product_id: 'single-video',
     product_name: 'Single Video Credit Pack',
     title: 'Single Video',
-    amount: 299,
+    amount: 599,
     currency: 'USD',
-    price: '$2.99',
-    credits: 75,
+    price: '$5.99',
+    credits: 150,
     interval: 'one-time',
   },
   {
     product_id: 'starter',
     product_name: 'Starter Credit Pack',
     title: 'Starter',
-    amount: 999,
+    amount: 1499,
     currency: 'USD',
-    price: '$9.99',
+    price: '$14.99',
     credits: 410,
     interval: 'one-time',
   },
@@ -139,10 +143,20 @@ const CREDIT_PACKS: PricingItem[] = [
     product_id: 'standard',
     product_name: 'Standard Credit Pack',
     title: 'Standard',
-    amount: 1999,
+    amount: 2999,
     currency: 'USD',
-    price: '$19.99',
+    price: '$29.99',
     credits: 1170,
+    interval: 'one-time',
+  },
+  {
+    product_id: 'premium',
+    product_name: 'Premium Credit Pack',
+    title: 'Premium',
+    amount: 5999,
+    currency: 'USD',
+    price: '$59.99',
+    credits: 3040,
     interval: 'one-time',
   },
 ];
@@ -151,14 +165,21 @@ function recommendSubscription({
   creditsNeeded,
   hasSubscription,
   currentProductId,
+  preferredInterval,
 }: {
   creditsNeeded: number;
   hasSubscription: boolean;
   currentProductId?: string | null;
+  preferredInterval: 'month' | 'year';
 }) {
+  const preferredPlans =
+    preferredInterval === 'year'
+      ? YEARLY_SUBSCRIPTIONS
+      : MONTHLY_SUBSCRIPTIONS;
+
   if (!hasSubscription) {
     return (
-      MONTHLY_SUBSCRIPTIONS.find(
+      preferredPlans.find(
         (item) => Number(item.credits || 0) >= creditsNeeded
       ) || null
     );
@@ -175,10 +196,17 @@ function recommendSubscription({
   const plans =
     currentPlan.interval === 'year'
       ? YEARLY_SUBSCRIPTIONS
-      : MONTHLY_SUBSCRIPTIONS;
+      : preferredPlans;
+  const currentPlanIndex = plans.findIndex(
+    (item) => item.planKey === currentPlan.planKey
+  );
+  const eligiblePlans =
+    preferredInterval === 'year' && currentPlan.interval === 'month'
+      ? plans.slice(Math.max(0, currentPlanIndex))
+      : plans;
 
   return (
-    plans.find(
+    eligiblePlans.find(
       (item) =>
         Number(item.credits || 0) > currentCredits &&
         Number(item.credits || 0) - currentCredits >= creditsNeeded
@@ -210,10 +238,12 @@ export function InsufficientCreditsModal({
   const currentPlan = ALL_SUBSCRIPTIONS.find(
     (item) => item.product_id === currentProductId
   );
+
   const recommendedPlan = recommendSubscription({
     creditsNeeded,
     hasSubscription,
     currentProductId,
+    preferredInterval: 'month',
   });
   const currentPlanGroup =
     currentPlan?.interval === 'year'
@@ -223,7 +253,7 @@ export function InsufficientCreditsModal({
     currentPlan &&
       currentPlanGroup.at(-1)?.product_id === currentPlan.product_id
   );
-  const recommendedPack = isHighestSubscription
+  const recommendedPack = !recommendedPlan && isHighestSubscription
     ? CREDIT_PACKS.find(
         (item) => Number(item.credits || 0) >= creditsNeeded
       ) || null
@@ -236,6 +266,7 @@ export function InsufficientCreditsModal({
       ? Math.max(0, itemCredits - Number(currentPlan?.credits || 0))
       : itemCredits;
   const itemPrice = recommendedItem?.price || '';
+  const monthlyEquivalent = recommendedPlan?.monthlyEquivalent || '';
   const creditsAfterPurchase = remainingCredits + grantedCredits;
   const isBuying = isLoading && productId === recommendedItem?.product_id;
   const pricingGroup = recommendedPack
@@ -276,7 +307,11 @@ export function InsufficientCreditsModal({
               <div className="mb-3 flex items-start justify-between gap-4">
                 <div>
                   <p className="text-primary text-xs font-semibold tracking-wide uppercase">
-                    {recommendedPack ? t('pack_recommended') : t('recommended')}
+                    {recommendedPack
+                      ? t('pack_recommended')
+                      : recommendedPlan?.interval === 'year'
+                        ? t('annual_recommended')
+                        : t('recommended')}
                   </p>
                   <p className="mt-1 font-semibold">
                     {recommendedPack
@@ -330,28 +365,36 @@ export function InsufficientCreditsModal({
 
           <DialogFooter className="flex-col gap-2 sm:flex-col">
             {recommendedItem ? (
-              <Button
-                className="w-full"
-                onClick={handleBuy}
-                disabled={isBuying}
-              >
-                {isBuying ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Zap className="mr-2 h-4 w-4" />
-                )}
-                {recommendedPack
-                  ? t('cta_buy_pack', {
-                      credits: itemCredits,
-                      price: itemPrice,
-                    })
-                  : hasSubscription
-                    ? t('cta_upgrade', { plan: localizedPlanName })
-                    : t('cta_subscribe', {
-                        plan: localizedPlanName,
+              <>
+                <Button
+                  className="w-full"
+                  onClick={handleBuy}
+                  disabled={isBuying}
+                >
+                  {isBuying ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Zap className="mr-2 h-4 w-4" />
+                  )}
+                  {recommendedPack
+                    ? t('cta_buy_pack', {
+                        credits: itemCredits,
                         price: itemPrice,
-                      })}
-              </Button>
+                      })
+                    : hasSubscription
+                      ? t('cta_upgrade', { plan: localizedPlanName })
+                      : t('cta_subscribe', {
+                          plan: localizedPlanName,
+                          price: itemPrice,
+                        })}
+                </Button>
+                {recommendedPlan?.interval === 'year' &&
+                  monthlyEquivalent && (
+                    <p className="text-muted-foreground -mt-1 text-center text-xs">
+                      {t('annual_billing_note', { price: monthlyEquivalent })}
+                    </p>
+                  )}
+              </>
             ) : (
               <Button className="w-full" asChild>
                 <Link href="/settings/billing" onClick={onClose}>

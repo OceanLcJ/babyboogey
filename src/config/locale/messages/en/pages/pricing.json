@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Pricing",
-    "description": "Choose the best plan for your AI baby dance video needs"
+    "description": "AI baby dance videos from $6.99/mo — no watermark, commercial license, cancel anytime"
   },
   "page": {
     "title": "Choose Your Perfect Plan",
@@ -10,11 +10,13 @@
         "id": "baby-dance-pricing",
         "block": "pricing",
         "title": "Choose Your Perfect Plan",
-        "description": "Select the best plan for your AI baby dance video needs. All plans support HD 1080p and SD 720p video generation.",
+        "description": "Create full 5-second 720p dance videos and adorable 2K AI baby photos. Choose a subscription for the best value or top up only when you need it.",
+        "tip": "Annual prices are simply our monthly rates minus 30% — no inflated “was” prices.",
         "groups": [
           {
-            "name": "credits",
-            "title": "Credit Packs",
+            "name": "yearly",
+            "title": "Yearly",
+            "label": "Save 30% — 3+ months free",
             "is_featured": true
           },
           {
@@ -22,107 +24,110 @@
             "title": "Monthly"
           },
           {
-            "name": "yearly",
-            "title": "Yearly",
-            "label": "Save 30%"
+            "name": "credits",
+            "title": "Credit Packs"
           }
         ],
         "items": [
           {
-            "title": "Single Video",
-            "description": "Just enough for one dance video",
-            "features_title": "Includes:",
-            "features": [
-              "75 credits (never expire)",
-              "1 short dance video (5s, 720p)",
-              "No watermark",
-              "Commercial license",
-              "Private storage"
-            ],
-            "interval": "one-time",
-            "amount": 299,
-            "currency": "USD",
-            "price": "$2.99",
-            "original_price": "$4.36",
-            "unit": "",
-            "is_featured": false,
-            "button": {
-              "title": "Buy Now",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "single-video",
-            "product_name": "Single Video Credit Pack",
-            "credits": 75,
-            "group": "credits"
-          },
-          {
             "title": "Starter",
-            "description": "Perfect for getting started",
-            "features_title": "Includes:",
+            "description": "3+ months free — perfect first year",
+            "tip": "billed once a year · just $6.99/mo",
             "features": [
-              "410 credits (never expire)",
-              "~30 AI baby photos (2K)",
-              "~5 short dance videos (5s, 720p)",
+              "430 credits/month",
+              "Enough for 2 full dance videos (5s, 720p) or 8 adorable AI baby photos (2K)",
               "No watermark",
               "Commercial license",
               "Private storage"
             ],
-            "interval": "one-time",
-            "amount": 999,
+            "interval": "year",
+            "amount": 8388,
             "currency": "USD",
-            "price": "$9.99",
-            "original_price": "$19.82",
-            "unit": "",
-            "label": "Popular",
-            "is_featured": true,
+            "price": "$83.88",
+            "original_price": "$9.99/mo",
+            "unit": "/ year",
             "button": {
-              "title": "Buy Now",
+              "title": "Subscribe",
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "starter",
-            "product_name": "Starter Credit Pack",
-            "credits": 410,
-            "group": "credits"
+            "product_id": "starter-yearly",
+            "product_name": "Starter Yearly",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Starter"
           },
           {
             "title": "Standard",
-            "description": "Best value for casual creators",
-            "is_featured": false,
-            "features_title": "Includes:",
+            "description": "3+ months free — our most popular plan",
+            "label": "Popular",
+            "tip": "billed once a year · just $13.29/mo",
             "features": [
-              "1170 credits (never expire)",
-              "~90 AI baby photos (2K)",
-              "~15 short dance videos (5s, 720p)",
+              "1,170 credits/month",
+              "Enough for 7 full dance videos (5s, 720p) or 23 adorable AI baby photos (2K)",
               "No watermark",
               "Commercial license",
-              "Private storage"
+              "Private storage",
+              "Priority support"
             ],
-            "interval": "one-time",
-            "amount": 1999,
+            "interval": "year",
+            "amount": 15948,
             "currency": "USD",
-            "price": "$19.99",
-            "original_price": "$39.82",
-            "unit": "",
+            "price": "$159.48",
+            "original_price": "$18.99/mo",
+            "unit": "/ year",
+            "is_featured": true,
             "button": {
-              "title": "Buy Now",
+              "title": "Subscribe",
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "standard",
-            "product_name": "Standard Credit Pack",
-            "credits": 1170,
-            "group": "credits"
+            "product_id": "standard-yearly",
+            "product_name": "Standard Yearly",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "Premium",
+            "description": "3+ months free — for the superfans",
+            "tip": "billed once a year · just $25.19/mo",
+            "features": [
+              "2,880 credits/month",
+              "Enough for 19 full dance videos (5s, 720p) or 57 adorable AI baby photos (2K)",
+              "No watermark",
+              "Commercial license",
+              "Private storage",
+              "Priority support"
+            ],
+            "interval": "year",
+            "amount": 30228,
+            "currency": "USD",
+            "price": "$302.28",
+            "original_price": "$35.99/mo",
+            "unit": "/ year",
+            "button": {
+              "title": "Subscribe",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium-yearly",
+            "product_name": "Premium Yearly",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Premium"
           },
           {
             "title": "Starter",
-            "description": "Perfect for getting started",
-            "features_title": "Includes:",
+            "description": "Enough for 2 full dance videos or 8 adorable AI baby photos",
+            "tip": "Switch to annual — save 30%",
             "features": [
               "430 credits/month",
-              "~35 AI baby photos (2K)/month",
-              "~5 short dance videos (5s, 720p)/month",
+              "Full dance videos in crisp 720p HD",
+              "Adorable 2K AI baby photos",
               "No watermark",
               "Commercial license",
               "Private storage"
@@ -131,9 +136,7 @@
             "amount": 999,
             "currency": "USD",
             "price": "$9.99",
-            "original_price": "$14.28",
             "unit": "/ month",
-            "is_featured": false,
             "button": {
               "title": "Subscribe",
               "url": "/pricing",
@@ -148,13 +151,13 @@
           },
           {
             "title": "Standard",
-            "description": "Best value for regular creators",
+            "description": "Enough for 7 full dance videos or 23 adorable AI baby photos",
             "label": "Popular",
-            "features_title": "Includes:",
+            "tip": "Switch to annual — save 30%",
             "features": [
-              "1170 credits/month",
-              "~90 AI baby photos (2K)/month",
-              "~15 short dance videos (5s, 720p)/month",
+              "1,170 credits/month",
+              "Full dance videos in crisp 720p HD",
+              "Adorable 2K AI baby photos",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -164,7 +167,6 @@
             "amount": 1899,
             "currency": "USD",
             "price": "$18.99",
-            "original_price": "$29.22",
             "unit": "/ month",
             "is_featured": true,
             "button": {
@@ -181,12 +183,12 @@
           },
           {
             "title": "Premium",
-            "description": "Unlimited creativity",
-            "features_title": "Includes:",
+            "description": "Enough for 19 full dance videos or 57 adorable AI baby photos",
+            "tip": "Switch to annual — save 30%",
             "features": [
-              "2880 credits/month",
-              "~240 AI baby photos (2K)/month",
-              "~38 short dance videos (5s, 720p)/month",
+              "2,880 credits/month",
+              "Full dance videos in crisp 720p HD",
+              "Adorable 2K AI baby photos",
               "No watermark",
               "Commercial license",
               "Private storage",
@@ -196,9 +198,7 @@
             "amount": 3599,
             "currency": "USD",
             "price": "$35.99",
-            "original_price": "$57.59",
             "unit": "/ month",
-            "is_featured": false,
             "button": {
               "title": "Subscribe",
               "url": "/pricing",
@@ -212,100 +212,93 @@
             "plan_name": "Premium"
           },
           {
-            "title": "Starter",
-            "description": "Perfect for getting started",
-            "features_title": "Includes:",
+            "title": "Single Video",
+            "description": "One full 5-second 720p dance video, ready when you are",
+            "tip": "One-time top-up · annual plans save 30% per credit",
             "features": [
-              "430 credits/month",
-              "~35 AI baby photos (2K)/month",
-              "~5 short dance videos (5s, 720p)/month",
+              "150 credits",
+              "One-time purchase · credits never expire",
+              "Failed generations are automatically refunded",
               "No watermark",
-              "Commercial license",
-              "Private storage"
+              "Commercial license"
             ],
-            "interval": "year",
-            "amount": 10788,
+            "interval": "one-time",
+            "amount": 599,
             "currency": "USD",
-            "price": "$8.99",
-            "original_price": "$12.82",
-            "unit": "/ month",
-            "is_featured": false,
-            "button": {
-              "title": "Subscribe",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "starter-yearly",
-            "product_name": "Starter Yearly",
-            "credits": 5160,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "Starter"
+            "price": "$5.99",
+            "unit": "",
+            "button": { "title": "Buy Now", "url": "/pricing", "icon": "Zap" },
+            "product_id": "single-video",
+            "product_name": "Single Video Credit Pack",
+            "credits": 150,
+            "group": "credits"
           },
           {
-            "title": "Standard",
-            "description": "Best value for regular creators",
-            "label": "Popular",
-            "features_title": "Includes:",
+            "title": "Starter Top-up",
+            "description": "Enough for 2 full dance videos or 8 adorable AI baby photos",
+            "tip": "One-time top-up · annual plans save 30% per credit",
             "features": [
-              "1170 credits/month",
-              "~90 AI baby photos (2K)/month",
-              "~15 short dance videos (5s, 720p)/month",
-              "No watermark",
-              "Commercial license",
-              "Private storage",
-              "Priority support"
+              "410 credits",
+              "Crisp 720p HD videos · adorable 2K photos",
+              "One-time purchase · credits never expire",
+              "Failed generations are automatically refunded",
+              "Commercial license"
             ],
-            "interval": "year",
-            "amount": 20388,
+            "interval": "one-time",
+            "amount": 1499,
             "currency": "USD",
-            "price": "$16.99",
-            "original_price": "$24.25",
-            "unit": "/ month",
+            "price": "$14.99",
+            "unit": "",
+            "button": { "title": "Buy Now", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter",
+            "product_name": "Starter Credit Pack",
+            "credits": 410,
+            "group": "credits"
+          },
+          {
+            "title": "Standard Top-up",
+            "description": "Enough for 7 full dance videos or 23 adorable AI baby photos",
+            "tip": "One-time top-up · annual plans save 30% per credit",
+            "features": [
+              "1,170 credits",
+              "Crisp 720p HD videos · adorable 2K photos",
+              "One-time purchase · credits never expire",
+              "Failed generations are automatically refunded",
+              "Commercial license"
+            ],
+            "interval": "one-time",
+            "amount": 2999,
+            "currency": "USD",
+            "price": "$29.99",
+            "unit": "",
             "is_featured": true,
-            "button": {
-              "title": "Subscribe",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "standard-yearly",
-            "product_name": "Standard Yearly",
-            "credits": 14040,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "Standard"
+            "button": { "title": "Buy Now", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard",
+            "product_name": "Standard Credit Pack",
+            "credits": 1170,
+            "group": "credits"
           },
           {
-            "title": "Premium",
-            "description": "Unlimited creativity",
-            "features_title": "Includes:",
+            "title": "Premium Top-up",
+            "description": "Enough for 20 full dance videos or 60 adorable AI baby photos",
+            "tip": "One-time top-up · annual plans save 30% per credit",
             "features": [
-              "2880 credits/month",
-              "~240 AI baby photos (2K)/month",
-              "~38 short dance videos (5s, 720p)/month",
-              "No watermark",
-              "Commercial license",
-              "Private storage",
-              "Priority support"
+              "3,040 credits",
+              "Crisp 720p HD videos · adorable 2K photos",
+              "One-time purchase · credits never expire",
+              "Failed generations are automatically refunded",
+              "Commercial license"
             ],
-            "interval": "year",
-            "amount": 38388,
+            "interval": "one-time",
+            "amount": 5999,
             "currency": "USD",
-            "price": "$31.99",
-            "original_price": "$45.94",
-            "unit": "/ month",
-            "is_featured": false,
-            "button": {
-              "title": "Subscribe",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "premium-yearly",
-            "product_name": "Premium Yearly",
-            "credits": 34560,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "Premium"
+            "price": "$59.99",
+            "unit": "",
+            "button": { "title": "Buy Now", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium",
+            "product_name": "Premium Credit Pack",
+            "credits": 3040,
+            "group": "credits"
           }
         ]
       }
@@ -314,6 +307,10 @@
   "messages": {
     "current_plan": "Current Plan",
     "processing": "Processing",
+    "credits_monthly": "credits/mo",
+    "credits_yearly": "credits/year",
+    "credits_one_time": "credits",
+    "per_credit": "/cr",
     "credit_pack_subscribers_only": "Credit packs are available to subscribers only. Please subscribe first."
   }
 }

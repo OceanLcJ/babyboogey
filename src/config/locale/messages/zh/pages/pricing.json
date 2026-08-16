@@ -1,319 +1,286 @@
 {
   "metadata": {
     "title": "价格",
-    "description": "为您的AI宝宝跳舞视频选择最佳方案"
+    "description": "AI 宝宝跳舞视频每月 $6.99 起 — 无水印、可商用、随时取消"
   },
   "page": {
-    "title": "选择最适合您的套餐",
+    "title": "选择适合你的套餐",
     "sections": {
       "pricing": {
         "id": "baby-dance-pricing",
         "block": "pricing",
-        "title": "选择最适合您的套餐",
-        "description": "为您的AI宝宝跳舞视频需求选择最佳方案。所有套餐均支持高清1080p和标清720p视频生成。",
+        "title": "选择适合你的套餐",
+        "description": "创作完整的 5 秒 720p 跳舞视频和可爱的 2K AI 宝宝照片。订阅更划算，也可以仅在需要时按需加购积分。",
+        "tip": "年付价格就是月付价格直减 30%——没有虚高的“原价”。",
         "groups": [
           {
-            "name": "credits",
-            "title": "积分包",
+            "name": "yearly",
+            "title": "年付",
+            "label": "省 30% — 相当于免费 3 个多月",
             "is_featured": true
           },
-          {
-            "name": "monthly",
-            "title": "月度订阅"
-          },
-          {
-            "name": "yearly",
-            "title": "年度订阅",
-            "label": "省30%"
-          }
+          { "name": "monthly", "title": "月付" },
+          { "name": "credits", "title": "积分包" }
         ],
         "items": [
           {
-            "title": "单视频包",
-            "description": "刚好够生成一个舞蹈视频",
-            "features_title": "包含内容：",
+            "title": "入门版",
+            "description": "相当于多送 3 个月 — 入门首选",
+            "tip": "每年一次性付费 · 相当于每月仅 $6.99",
             "features": [
-              "75积分（永久有效）",
-              "1个短舞蹈视频（5秒, 720p）",
+              "每月 430 积分",
+              "足够生成 2 个完整跳舞视频（5 秒，720p）或 8 张可爱 AI 宝宝照片（2K）",
               "无水印",
-              "商业授权",
-              "私有存储"
+              "商业使用许可",
+              "私密存储"
             ],
-            "interval": "one-time",
-            "amount": 299,
+            "interval": "year",
+            "amount": 8388,
             "currency": "USD",
-            "price": "$2.99",
-            "original_price": "$4.36",
-            "unit": "",
-            "is_featured": false,
-            "button": {
-              "title": "立即购买",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "single-video",
-            "product_name": "单视频积分包",
-            "credits": 75,
-            "group": "credits"
+            "price": "$83.88",
+            "original_price": "$9.99/月",
+            "unit": "/ 年",
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter-yearly",
+            "product_name": "Starter Yearly",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Starter"
           },
           {
-            "title": "入门包",
-            "description": "完美的入门体验",
+            "title": "标准版",
+            "description": "相当于多送 3 个月 — 最受欢迎",
             "label": "热门",
-            "is_featured": true,
-            "features_title": "包含内容：",
+            "tip": "每年一次性付费 · 相当于每月仅 $13.29",
             "features": [
-              "410积分（永久有效）",
-              "~30张AI宝宝照片（2K）",
-              "~5个短舞蹈视频（5秒, 720p）",
+              "每月 1,170 积分",
+              "足够生成 7 个完整跳舞视频（5 秒，720p）或 23 张可爱 AI 宝宝照片（2K）",
               "无水印",
-              "商业授权",
-              "私有存储"
+              "商业使用许可",
+              "私密存储",
+              "优先支持"
             ],
-            "interval": "one-time",
-            "amount": 999,
+            "interval": "year",
+            "amount": 15948,
             "currency": "USD",
-            "price": "$9.99",
-            "original_price": "$19.82",
-            "unit": "",
-            "button": {
-              "title": "立即购买",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "starter",
-            "product_name": "入门积分包",
-            "credits": 410,
-            "group": "credits"
+            "price": "$159.48",
+            "original_price": "$18.99/月",
+            "unit": "/ 年",
+            "is_featured": true,
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard-yearly",
+            "product_name": "Standard Yearly",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Standard"
           },
           {
-            "title": "标准包",
-            "description": "休闲创作超值之选",
-            "is_featured": false,
-            "features_title": "包含内容：",
+            "title": "高级版",
+            "description": "相当于多送 3 个月 — 重度用户之选",
+            "tip": "每年一次性付费 · 相当于每月仅 $25.19",
             "features": [
-              "1170积分（永久有效）",
-              "~90张AI宝宝照片（2K）",
-              "~15个短舞蹈视频（5秒, 720p）",
+              "每月 2,880 积分",
+              "足够生成 19 个完整跳舞视频（5 秒，720p）或 57 张可爱 AI 宝宝照片（2K）",
               "无水印",
-              "商业授权",
-              "私有存储"
+              "商业使用许可",
+              "私密存储",
+              "优先支持"
             ],
-            "interval": "one-time",
-            "amount": 1999,
+            "interval": "year",
+            "amount": 30228,
             "currency": "USD",
-            "price": "$19.99",
-            "original_price": "$39.82",
-            "unit": "",
-            "button": {
-              "title": "立即购买",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "standard",
-            "product_name": "标准积分包",
-            "credits": 1170,
-            "group": "credits"
+            "price": "$302.28",
+            "original_price": "$35.99/月",
+            "unit": "/ 年",
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium-yearly",
+            "product_name": "Premium Yearly",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Premium"
           },
           {
             "title": "入门版",
-            "description": "完美的入门体验",
-            "features_title": "包含内容：",
+            "description": "足够生成 2 个完整跳舞视频或 8 张可爱 AI 宝宝照片",
+            "tip": "切换年付，立省 30%",
             "features": [
-              "430积分/月",
-              "~35张AI宝宝照片（2K）/月",
-              "~5个短舞蹈视频（5秒, 720p）/月",
+              "每月 430 积分",
+              "清晰的 720p 高清跳舞视频",
+              "可爱的 2K AI 宝宝照片",
               "无水印",
-              "商业授权",
-              "私有存储"
+              "商业使用许可",
+              "私密存储"
             ],
             "interval": "month",
             "amount": 999,
             "currency": "USD",
             "price": "$9.99",
-            "original_price": "$14.28",
             "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
             "product_id": "starter-monthly",
-            "product_name": "入门版月度订阅",
+            "product_name": "Starter Monthly",
             "credits": 430,
             "valid_days": 30,
             "group": "monthly",
-            "plan_name": "入门版"
+            "plan_name": "Starter"
           },
           {
             "title": "标准版",
-            "description": "常规创作者的超值选择",
+            "description": "足够生成 7 个完整跳舞视频或 23 张可爱 AI 宝宝照片",
             "label": "热门",
-            "features_title": "包含内容：",
+            "tip": "切换年付，立省 30%",
             "features": [
-              "1170积分/月",
-              "~90张AI宝宝照片（2K）/月",
-              "~15个短舞蹈视频（5秒, 720p）/月",
+              "每月 1,170 积分",
+              "清晰的 720p 高清跳舞视频",
+              "可爱的 2K AI 宝宝照片",
               "无水印",
-              "商业授权",
-              "私有存储",
-              "优先客服支持"
+              "商业使用许可",
+              "私密存储",
+              "优先支持"
             ],
             "interval": "month",
             "amount": 1899,
             "currency": "USD",
             "price": "$18.99",
-            "original_price": "$29.22",
             "unit": "/ 月",
             "is_featured": true,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
             "product_id": "standard-monthly",
-            "product_name": "标准版月度订阅",
+            "product_name": "Standard Monthly",
             "credits": 1170,
             "valid_days": 30,
             "group": "monthly",
-            "plan_name": "标准版"
+            "plan_name": "Standard"
           },
           {
             "title": "高级版",
-            "description": "无限创意释放",
-            "features_title": "包含内容：",
+            "description": "足够生成 19 个完整跳舞视频或 57 张可爱 AI 宝宝照片",
+            "tip": "切换年付，立省 30%",
             "features": [
-              "2880积分/月",
-              "~240张AI宝宝照片（2K）/月",
-              "~38个短舞蹈视频（5秒, 720p）/月",
+              "每月 2,880 积分",
+              "清晰的 720p 高清跳舞视频",
+              "可爱的 2K AI 宝宝照片",
               "无水印",
-              "商业授权",
-              "私有存储",
-              "优先客服支持"
+              "商业使用许可",
+              "私密存储",
+              "优先支持"
             ],
             "interval": "month",
             "amount": 3599,
             "currency": "USD",
             "price": "$35.99",
-            "original_price": "$57.59",
             "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
+            "button": { "title": "订阅", "url": "/pricing", "icon": "Zap" },
             "product_id": "premium-monthly",
-            "product_name": "高级版月度订阅",
+            "product_name": "Premium Monthly",
             "credits": 2880,
             "valid_days": 30,
             "group": "monthly",
-            "plan_name": "高级版"
+            "plan_name": "Premium"
           },
           {
-            "title": "入门版",
-            "description": "完美的入门体验",
-            "features_title": "包含内容：",
+            "title": "单个视频",
+            "description": "随时可生成一个完整的 5 秒 720p 跳舞视频",
+            "tip": "一次性补充 · 年付每积分省 30%",
             "features": [
-              "430积分/月",
-              "~35张AI宝宝照片（2K）/月",
-              "~5个短舞蹈视频（5秒, 720p）/月",
+              "150 积分",
+              "一次性购买 · 积分永久有效",
+              "生成失败自动退还积分",
               "无水印",
-              "商业授权",
-              "私有存储"
+              "商业使用许可"
             ],
-            "interval": "year",
-            "amount": 10788,
+            "interval": "one-time",
+            "amount": 599,
             "currency": "USD",
-            "price": "$8.99",
-            "original_price": "$12.82",
-            "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "starter-yearly",
-            "product_name": "入门版年度订阅",
-            "credits": 5160,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "入门版"
+            "price": "$5.99",
+            "unit": "",
+            "button": { "title": "立即购买", "url": "/pricing", "icon": "Zap" },
+            "product_id": "single-video",
+            "product_name": "Single Video Credit Pack",
+            "credits": 150,
+            "group": "credits"
           },
           {
-            "title": "标准版",
-            "description": "常规创作者的超值选择",
-            "label": "热门",
-            "features_title": "包含内容：",
+            "title": "入门补充包",
+            "description": "足够生成 2 个完整跳舞视频或 8 张可爱 AI 宝宝照片",
+            "tip": "一次性补充 · 年付每积分省 30%",
             "features": [
-              "1170积分/月",
-              "~90张AI宝宝照片（2K）/月",
-              "~15个短舞蹈视频（5秒, 720p）/月",
-              "无水印",
-              "商业授权",
-              "私有存储",
-              "优先客服支持"
+              "410 积分",
+              "清晰 720p 高清视频 · 可爱 2K 照片",
+              "一次性购买 · 积分永久有效",
+              "生成失败自动退还积分",
+              "商业使用许可"
             ],
-            "interval": "year",
-            "amount": 20388,
+            "interval": "one-time",
+            "amount": 1499,
             "currency": "USD",
-            "price": "$16.99",
-            "original_price": "$24.25",
-            "unit": "/ 月",
+            "price": "$14.99",
+            "unit": "",
+            "button": { "title": "立即购买", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter",
+            "product_name": "Starter Credit Pack",
+            "credits": 410,
+            "group": "credits"
+          },
+          {
+            "title": "标准补充包",
+            "description": "足够生成 7 个完整跳舞视频或 23 张可爱 AI 宝宝照片",
+            "tip": "一次性补充 · 年付每积分省 30%",
+            "features": [
+              "1,170 积分",
+              "清晰 720p 高清视频 · 可爱 2K 照片",
+              "一次性购买 · 积分永久有效",
+              "生成失败自动退还积分",
+              "商业使用许可"
+            ],
+            "interval": "one-time",
+            "amount": 2999,
+            "currency": "USD",
+            "price": "$29.99",
+            "unit": "",
             "is_featured": true,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "standard-yearly",
-            "product_name": "标准版年度订阅",
-            "credits": 14040,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "标准版"
+            "button": { "title": "立即购买", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard",
+            "product_name": "Standard Credit Pack",
+            "credits": 1170,
+            "group": "credits"
           },
           {
-            "title": "高级版",
-            "description": "无限创意释放",
-            "features_title": "包含内容：",
+            "title": "高级补充包",
+            "description": "足够生成 20 个完整跳舞视频或 60 张可爱 AI 宝宝照片",
+            "tip": "一次性补充 · 年付每积分省 30%",
             "features": [
-              "2880积分/月",
-              "~240张AI宝宝照片（2K）/月",
-              "~38个短舞蹈视频（5秒, 720p）/月",
-              "无水印",
-              "商业授权",
-              "私有存储",
-              "优先客服支持"
+              "3,040 积分",
+              "清晰 720p 高清视频 · 可爱 2K 照片",
+              "一次性购买 · 积分永久有效",
+              "生成失败自动退还积分",
+              "商业使用许可"
             ],
-            "interval": "year",
-            "amount": 38388,
+            "interval": "one-time",
+            "amount": 5999,
             "currency": "USD",
-            "price": "$31.99",
-            "original_price": "$45.94",
-            "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "订阅",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "premium-yearly",
-            "product_name": "高级版年度订阅",
-            "credits": 34560,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "高级版"
+            "price": "$59.99",
+            "unit": "",
+            "button": { "title": "立即购买", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium",
+            "product_name": "Premium Credit Pack",
+            "credits": 3040,
+            "group": "credits"
           }
         ]
       }
     }
   },
   "messages": {
-    "current_plan": "当前方案",
+    "current_plan": "当前套餐",
     "processing": "处理中",
-    "credit_pack_subscribers_only": "积分包仅限订阅用户购买，请先订阅。"
+    "credits_monthly": "积分/月",
+    "credits_yearly": "积分/年",
+    "credits_one_time": "积分",
+    "per_credit": "/积分",
+    "credit_pack_subscribers_only": "积分包仅对订阅用户开放，请先订阅。"
   }
 }

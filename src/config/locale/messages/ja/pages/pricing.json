@@ -1,80 +1,227 @@
 {
   "metadata": {
-    "title": "料金",
-    "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選択してください"
+    "title": "料金プラン",
+    "description": "AI赤ちゃんダンス動画が月$6.99から — 透かしなし・商用利用可・いつでも解約OK"
   },
   "page": {
-    "title": "あなたにぴったりのプランを選択",
+    "title": "あなたにぴったりのプラン",
     "sections": {
       "pricing": {
         "id": "baby-dance-pricing",
         "block": "pricing",
-        "title": "あなたにぴったりのプランを選択",
-        "description": "あなたのAI赤ちゃんダンス動画のニーズに最適なプランを選んでください。すべてのプランでHD 1080pおよびSD 720p動画の生成をサポートしています。",
+        "title": "あなたにぴったりのプラン",
+        "description": "5秒・720pのフルダンス動画と、かわいい2K AIベビーフォトを作成。お得なサブスクリプションのほか、必要な時だけクレジットを追加できます。",
+        "tip": "年額料金は月額料金からそのまま30%割引。実態のない「通常価格」は使いません。",
         "groups": [
           {
-            "name": "credits",
-            "title": "クレジットパック",
+            "name": "yearly",
+            "title": "年払い",
+            "label": "30%お得 — 3か月分以上が無料",
             "is_featured": true
           },
-          {
-            "name": "monthly",
-            "title": "月額"
-          },
-          {
-            "name": "yearly",
-            "title": "年額",
-            "label": "30%お得"
-          }
+          { "name": "monthly", "title": "月払い" },
+          { "name": "credits", "title": "クレジットパック" }
         ],
         "items": [
           {
-            "title": "シングル動画",
-            "description": "ダンス動画1本分のクレジット",
-            "features_title": "含まれるもの:",
+            "title": "スターター",
+            "description": "3か月分以上が無料 — はじめての1年に最適",
+            "tip": "年1回払い · 月あたりわずか$6.99",
             "features": [
-              "75 クレジット (無期限)",
-              "短尺ダンス動画 1本 (5秒, 720p)",
+              "月430クレジット",
+              "フルダンス動画2本（5秒・720p）または、かわいいAIベビーフォト8枚（2K）分",
               "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
+              "商用利用ライセンス",
+              "非公開ストレージ"
+            ],
+            "interval": "year",
+            "amount": 8388,
+            "currency": "USD",
+            "price": "$83.88",
+            "original_price": "$9.99/月",
+            "unit": "/ 年",
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter-yearly",
+            "product_name": "Starter Yearly",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "スタンダード",
+            "description": "3か月分以上が無料 — 一番人気のプラン",
+            "label": "人気",
+            "tip": "年1回払い · 月あたりわずか$13.29",
+            "features": [
+              "月1,170クレジット",
+              "フルダンス動画7本（5秒・720p）または、かわいいAIベビーフォト23枚（2K）分",
+              "透かしなし",
+              "商用利用ライセンス",
+              "非公開ストレージ",
+              "優先サポート"
+            ],
+            "interval": "year",
+            "amount": 15948,
+            "currency": "USD",
+            "price": "$159.48",
+            "original_price": "$18.99/月",
+            "unit": "/ 年",
+            "is_featured": true,
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard-yearly",
+            "product_name": "Standard Yearly",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "プレミアム",
+            "description": "3か月分以上が無料 — ヘビーユーザー向け",
+            "tip": "年1回払い · 月あたりわずか$25.19",
+            "features": [
+              "月2,880クレジット",
+              "フルダンス動画19本（5秒・720p）または、かわいいAIベビーフォト57枚（2K）分",
+              "透かしなし",
+              "商用利用ライセンス",
+              "非公開ストレージ",
+              "優先サポート"
+            ],
+            "interval": "year",
+            "amount": 30228,
+            "currency": "USD",
+            "price": "$302.28",
+            "original_price": "$35.99/月",
+            "unit": "/ 年",
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium-yearly",
+            "product_name": "Premium Yearly",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Premium"
+          },
+          {
+            "title": "スターター",
+            "description": "フルダンス動画2本または、かわいいAIベビーフォト8枚分",
+            "tip": "年払いに切替で30%お得",
+            "features": [
+              "月430クレジット",
+              "鮮明な720p HDのフルダンス動画",
+              "かわいい2K AIベビーフォト",
+              "透かしなし",
+              "商用利用ライセンス",
+              "非公開ストレージ"
+            ],
+            "interval": "month",
+            "amount": 999,
+            "currency": "USD",
+            "price": "$9.99",
+            "unit": "/ 月",
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter-monthly",
+            "product_name": "Starter Monthly",
+            "credits": 430,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "スタンダード",
+            "description": "フルダンス動画7本または、かわいいAIベビーフォト23枚分",
+            "label": "人気",
+            "tip": "年払いに切替で30%お得",
+            "features": [
+              "月1,170クレジット",
+              "鮮明な720p HDのフルダンス動画",
+              "かわいい2K AIベビーフォト",
+              "透かしなし",
+              "商用利用ライセンス",
+              "非公開ストレージ",
+              "優先サポート"
+            ],
+            "interval": "month",
+            "amount": 1899,
+            "currency": "USD",
+            "price": "$18.99",
+            "unit": "/ 月",
+            "is_featured": true,
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard-monthly",
+            "product_name": "Standard Monthly",
+            "credits": 1170,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "プレミアム",
+            "description": "フルダンス動画19本または、かわいいAIベビーフォト57枚分",
+            "tip": "年払いに切替で30%お得",
+            "features": [
+              "月2,880クレジット",
+              "鮮明な720p HDのフルダンス動画",
+              "かわいい2K AIベビーフォト",
+              "透かしなし",
+              "商用利用ライセンス",
+              "非公開ストレージ",
+              "優先サポート"
+            ],
+            "interval": "month",
+            "amount": 3599,
+            "currency": "USD",
+            "price": "$35.99",
+            "unit": "/ 月",
+            "button": { "title": "登録する", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium-monthly",
+            "product_name": "Premium Monthly",
+            "credits": 2880,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Premium"
+          },
+          {
+            "title": "動画1本分",
+            "description": "好きな時に5秒・720pのフルダンス動画を1本作成",
+            "tip": "1回限りの追加 · 年払いなら1クレジットあたり30%お得",
+            "features": [
+              "150クレジット",
+              "1回限りの購入 · クレジットは無期限",
+              "生成失敗時は自動返却",
+              "透かしなし",
+              "商用利用ライセンス"
             ],
             "interval": "one-time",
-            "amount": 299,
+            "amount": 599,
             "currency": "USD",
-            "price": "$2.99",
-            "original_price": "$4.36",
+            "price": "$5.99",
             "unit": "",
-            "is_featured": false,
             "button": {
               "title": "今すぐ購入",
               "url": "/pricing",
               "icon": "Zap"
             },
             "product_id": "single-video",
-            "product_name": "シングル動画クレジットパック",
-            "credits": 75,
+            "product_name": "Single Video Credit Pack",
+            "credits": 150,
             "group": "credits"
           },
           {
-            "title": "スターター",
-            "description": "始めるのに最適",
-            "label": "人気",
-            "is_featured": true,
-            "features_title": "含まれるもの:",
+            "title": "スターター追加",
+            "description": "フルダンス動画2本または、かわいいAIベビーフォト8枚分",
+            "tip": "1回限りの追加 · 年払いなら1クレジットあたり30%お得",
             "features": [
-              "410 クレジット (無期限)",
-              "AI 赤ちゃん写真 約30枚 (2K)",
-              "短尺ダンス動画 約5本 (5秒, 720p)",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
+              "410クレジット",
+              "鮮明な720p HD動画 · かわいい2K写真",
+              "1回限りの購入 · クレジットは無期限",
+              "生成失敗時は自動返却",
+              "商用利用ライセンス"
             ],
             "interval": "one-time",
-            "amount": 999,
+            "amount": 1499,
             "currency": "USD",
-            "price": "$9.99",
-            "original_price": "$19.82",
+            "price": "$14.99",
             "unit": "",
             "button": {
               "title": "今すぐ購入",
@@ -82,230 +229,62 @@
               "icon": "Zap"
             },
             "product_id": "starter",
-            "product_name": "スタータークレジットパック",
+            "product_name": "Starter Credit Pack",
             "credits": 410,
             "group": "credits"
           },
           {
-            "title": "スタンダード",
-            "description": "カジュアルなクリエイターに最適",
-            "is_featured": false,
-            "features_title": "含まれるもの:",
+            "title": "スタンダード追加",
+            "description": "フルダンス動画7本または、かわいいAIベビーフォト23枚分",
+            "tip": "1回限りの追加 · 年払いなら1クレジットあたり30%お得",
             "features": [
-              "1170 クレジット (無期限)",
-              "AI 赤ちゃん写真 約90枚 (2K)",
-              "短尺ダンス動画 約15本 (5秒, 720p)",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
+              "1,170クレジット",
+              "鮮明な720p HD動画 · かわいい2K写真",
+              "1回限りの購入 · クレジットは無期限",
+              "生成失敗時は自動返却",
+              "商用利用ライセンス"
             ],
             "interval": "one-time",
-            "amount": 1999,
+            "amount": 2999,
             "currency": "USD",
-            "price": "$19.99",
-            "original_price": "$39.82",
+            "price": "$29.99",
             "unit": "",
+            "is_featured": true,
             "button": {
               "title": "今すぐ購入",
               "url": "/pricing",
               "icon": "Zap"
             },
             "product_id": "standard",
-            "product_name": "スタンダードクレジットパック",
+            "product_name": "Standard Credit Pack",
             "credits": 1170,
             "group": "credits"
           },
           {
-            "title": "スターター",
-            "description": "始めるのに最適",
-            "features_title": "含まれるもの:",
+            "title": "プレミアム追加",
+            "description": "フルダンス動画20本または、かわいいAIベビーフォト60枚分",
+            "tip": "1回限りの追加 · 年払いなら1クレジットあたり30%お得",
             "features": [
-              "430 クレジット/月",
-              "AI 赤ちゃん写真 約35枚 (2K)/月",
-              "短尺ダンス動画 約5本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
+              "3,040クレジット",
+              "鮮明な720p HD動画 · かわいい2K写真",
+              "1回限りの購入 · クレジットは無期限",
+              "生成失敗時は自動返却",
+              "商用利用ライセンス"
             ],
-            "interval": "month",
-            "amount": 999,
+            "interval": "one-time",
+            "amount": 5999,
             "currency": "USD",
-            "price": "$9.99",
-            "original_price": "$14.28",
-            "unit": "/ 月",
-            "is_featured": false,
+            "price": "$59.99",
+            "unit": "",
             "button": {
-              "title": "登録",
+              "title": "今すぐ購入",
               "url": "/pricing",
               "icon": "Zap"
             },
-            "product_id": "starter-monthly",
-            "product_name": "スターター月額",
-            "credits": 430,
-            "valid_days": 30,
-            "group": "monthly",
-            "plan_name": "スターター"
-          },
-          {
-            "title": "スタンダード",
-            "description": "定期的なクリエイターに最適",
-            "label": "人気",
-            "features_title": "含まれるもの:",
-            "features": [
-              "1170 クレジット/月",
-              "AI 赤ちゃん写真 約90枚 (2K)/月",
-              "短尺ダンス動画 約15本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ",
-              "優先サポート"
-            ],
-            "interval": "month",
-            "amount": 1899,
-            "currency": "USD",
-            "price": "$18.99",
-            "original_price": "$29.22",
-            "unit": "/ 月",
-            "is_featured": true,
-            "button": {
-              "title": "登録",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "standard-monthly",
-            "product_name": "スタンダード月額",
-            "credits": 1170,
-            "valid_days": 30,
-            "group": "monthly",
-            "plan_name": "スタンダード"
-          },
-          {
-            "title": "プレミアム",
-            "description": "無限の創造性",
-            "features_title": "含まれるもの:",
-            "features": [
-              "2880 クレジット/月",
-              "AI 赤ちゃん写真 約240枚 (2K)/月",
-              "短尺ダンス動画 約38本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ",
-              "優先サポート"
-            ],
-            "interval": "month",
-            "amount": 3599,
-            "currency": "USD",
-            "price": "$35.99",
-            "original_price": "$57.59",
-            "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "登録",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "premium-monthly",
-            "product_name": "プレミアム月額",
-            "credits": 2880,
-            "valid_days": 30,
-            "group": "monthly",
-            "plan_name": "プレミアム"
-          },
-          {
-            "title": "スターター",
-            "description": "始めるのに最適",
-            "features_title": "含まれるもの:",
-            "features": [
-              "430 クレジット/月",
-              "AI 赤ちゃん写真 約35枚 (2K)/月",
-              "短尺ダンス動画 約5本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ"
-            ],
-            "interval": "year",
-            "amount": 10788,
-            "currency": "USD",
-            "price": "$8.99",
-            "original_price": "$12.82",
-            "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "登録",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "starter-yearly",
-            "product_name": "スターター年額",
-            "credits": 5160,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "スターター"
-          },
-          {
-            "title": "スタンダード",
-            "description": "定期的なクリエイターに最適",
-            "label": "人気",
-            "features_title": "含まれるもの:",
-            "features": [
-              "1170 クレジット/月",
-              "AI 赤ちゃん写真 約90枚 (2K)/月",
-              "短尺ダンス動画 約15本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ",
-              "優先サポート"
-            ],
-            "interval": "year",
-            "amount": 20388,
-            "currency": "USD",
-            "price": "$16.99",
-            "original_price": "$24.25",
-            "unit": "/ 月",
-            "is_featured": true,
-            "button": {
-              "title": "登録",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "standard-yearly",
-            "product_name": "スタンダード年額",
-            "credits": 14040,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "スタンダード"
-          },
-          {
-            "title": "プレミアム",
-            "description": "無限の創造性",
-            "features_title": "含まれるもの:",
-            "features": [
-              "2880 クレジット/月",
-              "AI 赤ちゃん写真 約240枚 (2K)/月",
-              "短尺ダンス動画 約38本 (5秒, 720p)/月",
-              "透かしなし",
-              "商用ライセンス",
-              "プライベートストレージ",
-              "優先サポート"
-            ],
-            "interval": "year",
-            "amount": 38388,
-            "currency": "USD",
-            "price": "$31.99",
-            "original_price": "$45.94",
-            "unit": "/ 月",
-            "is_featured": false,
-            "button": {
-              "title": "登録",
-              "url": "/pricing",
-              "icon": "Zap"
-            },
-            "product_id": "premium-yearly",
-            "product_name": "プレミアム年額",
-            "credits": 34560,
-            "valid_days": 365,
-            "group": "yearly",
-            "plan_name": "プレミアム"
+            "product_id": "premium",
+            "product_name": "Premium Credit Pack",
+            "credits": 3040,
+            "group": "credits"
           }
         ]
       }
@@ -314,6 +293,10 @@
   "messages": {
     "current_plan": "現在のプラン",
     "processing": "処理中",
-    "credit_pack_subscribers_only": "クレジットパックはサブスクライバーのみ利用可能です。先にサブスクリプション登録をお願いします。"
+    "credits_monthly": "クレジット/月",
+    "credits_yearly": "クレジット/年",
+    "credits_one_time": "クレジット",
+    "per_credit": "/クレジット",
+    "credit_pack_subscribers_only": "クレジットパックはサブスク利用者のみ購入できます。まずプランにご登録ください。"
   }
 }

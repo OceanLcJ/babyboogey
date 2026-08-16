@@ -796,6 +796,11 @@
   color: var(--muted-foreground); text-decoration: line-through;
   margin-left: 2px;
 }
+.bb-home-price-billing {
+  margin: -4px 0 10px;
+  font-size: 0.74rem; font-weight: 800; line-height: 1.45;
+  color: color-mix(in srgb, var(--foreground) 66%, transparent);
+}
 .bb-home-price-desc {
   margin: 0 0 18px;
   font-size: 0.88rem; line-height: 1.55;

@@ -373,7 +373,7 @@ export function HomeTestimonials({ section }: { section?: Section }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Pricing — credit-pack group only (landing preview)                          */
+/* Pricing — yearly first, then monthly after the conversion nudge            */
 /* -------------------------------------------------------------------------- */
 
 export function HomePricing({ section }: { section?: Section }) {
@@ -384,7 +384,8 @@ export function HomePricing({ section }: { section?: Section }) {
   const groupName = featuredGroup?.name;
   const groupItems = groupName
     ? items.filter((it) => it.group === groupName)
-    : items.filter((it) => it.interval === 'one-time');
+    : items.filter((it) => it.interval === 'year');
+  const monthlyItems = items.filter((it) => it.group === 'monthly');
 
   if (groupItems.length === 0) return null;
 
@@ -408,6 +409,7 @@ export function HomePricing({ section }: { section?: Section }) {
 
         <HomePricingGrid
           items={groupItems}
+          monthlyItems={monthlyItems}
           popularLabel={section.popular_label}
         />
       </div>

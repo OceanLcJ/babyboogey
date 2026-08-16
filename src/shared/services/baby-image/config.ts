@@ -31,12 +31,12 @@ export function isBabyImageResolution(
   );
 }
 
-// Credit cost per generation, keyed by output resolution. Derived from the
-// underlying kie nano-banana-pro unit cost (8 / 14 credits per image) with a
-// target net margin of ~70% at the Premium pack tier.
+// Server-owned credit cost per generation. Keep these values aligned with
+// scripts/verify-pricing-economics.ts; clients may display them but cannot
+// override the amount charged by the generate route.
 export const BABY_IMAGE_COST_CREDITS: Record<BabyImageResolution, number> = {
-  '2k': 12,
-  '4k': 25,
+  '2k': 50,
+  '4k': 70,
 };
 
 export function resolveBabyImageResolution(

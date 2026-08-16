@@ -15,10 +15,13 @@ export const generateMetadata = getMetadata({
 
 export default async function PricingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ group?: string }>;
 }) {
   const { locale } = await params;
+  const { group } = await searchParams;
   setRequestLocale(locale);
 
   // get current subscription
@@ -43,6 +46,9 @@ export default async function PricingPage({
         ...t.raw('page.sections.pricing'),
         data: {
           currentSubscription,
+          initialGroup: ['credits', 'monthly', 'yearly'].includes(group || '')
+            ? group
+            : undefined,
         },
       },
     },

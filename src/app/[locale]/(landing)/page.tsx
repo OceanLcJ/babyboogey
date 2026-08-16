@@ -17,7 +17,7 @@ import {
   HomeUsage,
 } from '@/shared/blocks/generator/home-landing';
 import '@/shared/blocks/generator/home-landing.css';
-import type { DynamicPage } from '@/shared/types/blocks/landing';
+import type { DynamicPage, Section } from '@/shared/types/blocks/landing';
 
 export const generateMetadata = getMetadata({
   metadataKey: 'common.metadata',
@@ -36,6 +36,7 @@ export default async function LandingPage({
   setRequestLocale(locale);
 
   const tIndex = await getTranslations('pages.index');
+  const tPricing = await getTranslations('pages.pricing');
   const tMeta = await getTranslations('common.metadata');
   const customHero = tIndex.raw('custom_hero') as {
     title_line1: string;
@@ -65,6 +66,7 @@ export default async function LandingPage({
   }
 
   const sections = page.sections || {};
+  const pricingSection = tPricing.raw('page.sections.pricing') as Section;
 
   // Build FAQ items for JSON-LD
   const faqSection = sections.faq as UnsafeAny;
@@ -289,7 +291,7 @@ export default async function LandingPage({
       <HomeUsage section={sections.usage} />
       <HomeFeatures section={sections.features} />
       <HomeTestimonials section={sections.testimonials} />
-      <HomePricing section={sections.pricing} />
+      <HomePricing section={pricingSection} />
       <HomeFaq section={sections.faq} />
       <HomeCta section={sections.cta} />
     </>

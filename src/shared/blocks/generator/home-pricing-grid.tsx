@@ -1,29 +1,49 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { SmartIcon } from '@/shared/blocks/common';
 import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
+import { useAppContext } from '@/shared/contexts/app';
 import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
 import { cn } from '@/shared/lib/utils';
 import type { PricingItem } from '@/shared/types/blocks/pricing';
 
 export function HomePricingGrid({
   items,
+  monthlyItems,
   popularLabel,
 }: {
   items: PricingItem[];
+  monthlyItems: PricingItem[];
   popularLabel?: string;
 }) {
   const t = useTranslations('pages.pricing.messages');
+  const { user, isCheckSign } = useAppContext();
   const { pricingItem, isLoading, productId, checkout, startPayment } =
     usePricingCheckout();
+  const [promotionElapsed, setPromotionElapsed] = useState(false);
+  const isYearlySubscriber = Boolean(
+    user?.membership?.subscription?.productId?.endsWith('-yearly')
+  );
+
+  useEffect(() => {
+    if (monthlyItems.length === 0) return;
+
+    const timer = window.setTimeout(() => setPromotionElapsed(true), 2000);
+    return () => window.clearTimeout(timer);
+  }, [monthlyItems.length]);
+
+  const showMonthly =
+    promotionElapsed && !isCheckSign && !isYearlySubscriber;
+  const displayedItems = showMonthly ? monthlyItems : items;
 
   return (
     <>
       <div className="bb-home-price-grid">
-        {items.map((item, i) => {
+        {displayedItems.map((item, i) => {
           const isItemLoading = isLoading && item.product_id === productId;
 
           return (
@@ -41,6 +61,7 @@ export function HomePricingGrid({
                 {item.unit && <span>{item.unit}</span>}
                 {item.original_price && <s>{item.original_price}</s>}
               </div>
+              {item.tip && <p className="bb-home-price-billing">{item.tip}</p>}
               {item.description && (
                 <p className="bb-home-price-desc">{item.description}</p>
               )}

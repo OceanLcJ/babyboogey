@@ -2,14 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-
 import { useLocale, useTranslations } from 'next-intl';
 
 import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
-import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
-import { useAppContext } from '@/shared/contexts/app';
 import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
 import { cn } from '@/shared/lib/utils';
 import { Subscription } from '@/shared/models/subscription';
@@ -65,21 +62,27 @@ function resolveDefaultGroup({
   items,
   groups,
   currentProductId,
+  initialGroup,
 }: {
   items: PricingItem[];
   groups?: PricingType['groups'];
   currentProductId?: string | null;
+  initialGroup?: string;
 }): string {
   if (!items.length) return '';
 
+  const requestedGroup = initialGroup
+    ? groups?.find((group) => group.name === initialGroup)?.name
+    : undefined;
   const currentItem = currentProductId
     ? items.find((i) => i.product_id === currentProductId)
     : undefined;
   const featuredGroup = groups?.find((g) => g.is_featured);
 
   return (
-    currentItem?.group ||
+    requestedGroup ||
     featuredGroup?.name ||
+    currentItem?.group ||
     groups?.[0]?.name ||
     items[0]?.group ||
     ''
@@ -94,55 +97,48 @@ function PricingCardGrid({
   activeProductId,
   processingText,
   currentPlanText,
+  creditUnits,
   currentSubscription,
 }: {
   items: PricingItem[];
-  itemCurrencies: Record<string, { selectedCurrency: string; displayedItem: PricingItem }>;
+  itemCurrencies: Record<
+    string,
+    { selectedCurrency: string; displayedItem: PricingItem }
+  >;
   handlePayment: (item: PricingItem) => void;
   isLoading: boolean;
   activeProductId: string | undefined;
   processingText: string;
   currentPlanText: string;
+  creditUnits: {
+    monthly: string;
+    yearly: string;
+    oneTime: string;
+    perCredit: string;
+  };
   currentSubscription?: Subscription;
 }) {
-  const svPerCr = useMemo(() => {
-    const sv = items.find((i) => i.product_id === 'single-video');
-    if (!sv?.credits || !sv.amount) return 0;
-    return sv.amount / 100 / sv.credits;
-  }, [items]);
-
   const gridClass =
     items.length <= 3 ? 'bb-credit-grid bb-credit-grid--3' : 'bb-credit-grid';
 
   return (
     <div className={cn(gridClass, 'mx-auto w-full')}>
       {items.map((item) => {
-        const displayedItem = itemCurrencies[item.product_id]?.displayedItem || item;
+        const displayedItem =
+          itemCurrencies[item.product_id]?.displayedItem || item;
         const isSubscription = item.interval !== 'one-time';
         const rawCredits = item.credits ?? 0;
-        const displayCredits =
-          item.interval === 'year' ? Math.round(rawCredits / 12) : rawCredits;
-        const creditUnit = isSubscription ? 'credits/mo' : 'credits';
+        const displayCredits = rawCredits;
+        const creditUnit =
+          item.interval === 'year'
+            ? creditUnits.yearly
+            : item.interval === 'month'
+              ? creditUnits.monthly
+              : creditUnits.oneTime;
 
         const dollarAmt = displayedItem.amount / 100;
-        const perCreditCents = rawCredits > 0 ? (dollarAmt / rawCredits) * 100 : 0;
-
-        let savingsPct = 0;
-        if (displayedItem.original_price) {
-          const origNum = parseFloat(
-            displayedItem.original_price.replace(/[^0-9.]/g, '')
-          );
-          if (origNum > dollarAmt)
-            savingsPct = Math.round((1 - dollarAmt / origNum) * 100);
-        }
-
-        const cheaperPct =
-          !isSubscription &&
-          item.product_id !== 'single-video' &&
-          svPerCr > 0 &&
-          perCreditCents > 0
-            ? Math.round((1 - dollarAmt / rawCredits / svPerCr) * 100)
-            : 0;
+        const perCreditCents =
+          rawCredits > 0 ? (dollarAmt / rawCredits) * 100 : 0;
 
         const isCurrentPlan =
           !!currentSubscription &&
@@ -157,15 +153,14 @@ function PricingCardGrid({
             )}
             data-label={item.label}
           >
-            <div className="bb-credit-count">{displayCredits.toLocaleString()}</div>
+            <div className="bb-credit-count">
+              {displayCredits.toLocaleString()}
+            </div>
             <div className="bb-credit-unit">{creditUnit}</div>
 
-            {perCreditCents > 0 && (
+            {isSubscription && perCreditCents > 0 && (
               <div className="bb-credit-per">
-                {perCreditCents.toFixed(1)}¢<span>/cr</span>
-                {cheaperPct > 0 && (
-                  <span className="bb-credit-cheaper">{cheaperPct}% cheaper</span>
-                )}
+                {perCreditCents.toFixed(1)}¢<span>{creditUnits.perCredit}</span>
               </div>
             )}
 
@@ -175,12 +170,15 @@ function PricingCardGrid({
                 <span className="bb-credit-period">{displayedItem.unit}</span>
               )}
               {displayedItem.original_price && (
-                <span className="bb-credit-orig">{displayedItem.original_price}</span>
-              )}
-              {savingsPct > 0 && (
-                <span className="bb-credit-save">Save {savingsPct}%</span>
+                <span className="bb-credit-orig">
+                  {displayedItem.original_price}
+                </span>
               )}
             </div>
+
+            {item.tip && (
+              <div className="bb-credit-billing-note">{item.tip}</div>
+            )}
 
             <div className="bb-credit-name">{item.title}</div>
             {item.description && (
@@ -234,15 +232,17 @@ export function Pricing({
   section,
   className,
   currentSubscription,
+  initialGroup,
 }: {
   section: PricingType;
   className?: string;
   currentSubscription?: Subscription;
+  initialGroup?: string;
 }) {
   const locale = useLocale();
   const t = useTranslations('pages.pricing.messages');
+  const sectionTip = (section as PricingType & { tip?: string }).tip;
 
-  const { user } = useAppContext();
   const { pricingItem, isLoading, productId, checkout, startPayment } =
     usePricingCheckout();
 
@@ -261,8 +261,10 @@ export function Pricing({
       items: visibleItems,
       groups: visibleGroups,
       currentProductId: currentSubscription?.productId,
+      initialGroup,
     });
   });
+  const [hasUserSelectedGroup, setHasUserSelectedGroup] = useState(false);
 
   const visibleGroupNames = useMemo(
     () =>
@@ -291,6 +293,7 @@ export function Pricing({
         items: visibleItems,
         groups: visibleGroups,
         currentProductId: currentSubscription?.productId,
+        initialGroup,
       })
     );
   }, [
@@ -299,16 +302,29 @@ export function Pricing({
     visibleGroups,
     visibleItems,
     currentSubscription?.productId,
+    initialGroup,
   ]);
 
   useEffect(() => {
-    const requestedGroup = new URLSearchParams(window.location.search).get(
-      'group'
-    );
-    if (requestedGroup && visibleGroupNames.has(requestedGroup)) {
-      setGroup(requestedGroup);
+    if (
+      initialGroup ||
+      hasUserSelectedGroup ||
+      currentSubscription?.interval === 'year' ||
+      group !== 'yearly' ||
+      !visibleGroupNames.has('monthly')
+    ) {
+      return;
     }
-  }, [visibleGroupNames]);
+
+    const timer = window.setTimeout(() => setGroup('monthly'), 2000);
+    return () => window.clearTimeout(timer);
+  }, [
+    currentSubscription?.interval,
+    group,
+    hasUserSelectedGroup,
+    initialGroup,
+    visibleGroupNames,
+  ]);
 
   // Currency state management for each item
   // Store selected currency and displayed item for each product_id
@@ -422,15 +438,37 @@ export function Pricing({
 
       <div className="container">
         {visibleGroups.length > 0 && (
-          <div className="mx-auto mt-8 mb-16 flex w-full justify-center md:max-w-lg">
-            <Tabs value={group} onValueChange={setGroup} className="">
-              <TabsList>
+          <div className="mx-auto mt-8 mb-16 flex w-full justify-center md:max-w-2xl">
+            <Tabs
+              value={group}
+              onValueChange={(nextGroup) => {
+                setHasUserSelectedGroup(true);
+                setGroup(nextGroup);
+              }}
+              className="w-full"
+            >
+              <TabsList
+                aria-label={section.title}
+                className="bb-pricing-tabs"
+              >
                 {visibleGroups.map((item, i) => {
                   return (
-                    <TabsTrigger key={i} value={item.name || ''}>
-                      {item.title}
+                    <TabsTrigger
+                      key={i}
+                      value={item.name || ''}
+                      className={cn(
+                        'bb-pricing-tab',
+                        item.name === 'credits' &&
+                          'bb-pricing-tab--credits'
+                      )}
+                    >
+                      <span className="bb-pricing-tab-title">
+                        {item.title}
+                      </span>
                       {item.label && (
-                        <Badge className="ml-2">{item.label}</Badge>
+                        <span className="bb-pricing-tab-corner">
+                          {item.label}
+                        </span>
                       )}
                     </TabsTrigger>
                   );
@@ -448,8 +486,19 @@ export function Pricing({
           activeProductId={productId ?? undefined}
           processingText={t('processing')}
           currentPlanText={t('current_plan')}
+          creditUnits={{
+            monthly: t('credits_monthly'),
+            yearly: t('credits_yearly'),
+            oneTime: t('credits_one_time'),
+            perCredit: t('per_credit'),
+          }}
           currentSubscription={currentSubscription}
         />
+        {sectionTip && (
+          <p className="text-muted-foreground mx-auto mt-8 max-w-3xl text-center text-sm leading-6">
+            {sectionTip}
+          </p>
+        )}
       </div>
 
       <PaymentModal

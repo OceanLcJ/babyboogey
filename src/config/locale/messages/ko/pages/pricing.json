@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "title": "요금제",
+    "description": "AI 아기 댄스 영상 월 $6.99부터 — 워터마크 없음 · 상업적 사용 가능 · 언제든 해지"
+  },
+  "page": {
+    "title": "나에게 맞는 요금제 선택",
+    "sections": {
+      "pricing": {
+        "id": "baby-dance-pricing",
+        "block": "pricing",
+        "title": "나에게 맞는 요금제 선택",
+        "description": "5초 720p 풀 댄스 영상과 사랑스러운 2K AI 아기 사진을 만드세요. 구독으로 더 알뜰하게 이용하거나 필요할 때만 크레딧을 충전할 수 있습니다.",
+        "tip": "연간 요금은 월간 요금에서 정확히 30% 할인한 가격입니다. 부풀린 ‘정가’는 없습니다.",
+        "groups": [
+          {
+            "name": "yearly",
+            "title": "연간",
+            "label": "30% 절약 — 3개월 이상 무료",
+            "is_featured": true
+          },
+          { "name": "monthly", "title": "월간" },
+          { "name": "credits", "title": "크레딧 팩" }
+        ],
+        "items": [
+          {
+            "title": "스타터",
+            "description": "3개월 이상 무료 — 첫해에 딱 맞는 선택",
+            "tip": "연 1회 결제 · 월 환산 $6.99",
+            "features": [
+              "월 430 크레딧",
+              "풀 댄스 영상 2개(5초, 720p) 또는 사랑스러운 AI 아기 사진 8장(2K) 분량",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소"
+            ],
+            "interval": "year",
+            "amount": 8388,
+            "currency": "USD",
+            "price": "$83.88",
+            "original_price": "$9.99/월",
+            "unit": "/ 년",
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter-yearly",
+            "product_name": "Starter Yearly",
+            "credits": 5160,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "스탠다드",
+            "description": "3개월 이상 무료 — 가장 인기 있는 플랜",
+            "label": "인기",
+            "tip": "연 1회 결제 · 월 환산 $13.29",
+            "features": [
+              "월 1,170 크레딧",
+              "풀 댄스 영상 7개(5초, 720p) 또는 사랑스러운 AI 아기 사진 23장(2K) 분량",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소",
+              "우선 지원"
+            ],
+            "interval": "year",
+            "amount": 15948,
+            "currency": "USD",
+            "price": "$159.48",
+            "original_price": "$18.99/월",
+            "unit": "/ 년",
+            "is_featured": true,
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard-yearly",
+            "product_name": "Standard Yearly",
+            "credits": 14040,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "프리미엄",
+            "description": "3개월 이상 무료 — 헤비 유저에게 추천",
+            "tip": "연 1회 결제 · 월 환산 $25.19",
+            "features": [
+              "월 2,880 크레딧",
+              "풀 댄스 영상 19개(5초, 720p) 또는 사랑스러운 AI 아기 사진 57장(2K) 분량",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소",
+              "우선 지원"
+            ],
+            "interval": "year",
+            "amount": 30228,
+            "currency": "USD",
+            "price": "$302.28",
+            "original_price": "$35.99/월",
+            "unit": "/ 년",
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium-yearly",
+            "product_name": "Premium Yearly",
+            "credits": 34560,
+            "valid_days": 365,
+            "group": "yearly",
+            "plan_name": "Premium"
+          },
+          {
+            "title": "스타터",
+            "description": "풀 댄스 영상 2개 또는 사랑스러운 AI 아기 사진 8장 분량",
+            "tip": "연간으로 전환하면 30% 절약",
+            "features": [
+              "월 430 크레딧",
+              "선명한 720p HD 풀 댄스 영상",
+              "사랑스러운 2K AI 아기 사진",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소"
+            ],
+            "interval": "month",
+            "amount": 999,
+            "currency": "USD",
+            "price": "$9.99",
+            "unit": "/ 월",
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "starter-monthly",
+            "product_name": "Starter Monthly",
+            "credits": 430,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Starter"
+          },
+          {
+            "title": "스탠다드",
+            "description": "풀 댄스 영상 7개 또는 사랑스러운 AI 아기 사진 23장 분량",
+            "label": "인기",
+            "tip": "연간으로 전환하면 30% 절약",
+            "features": [
+              "월 1,170 크레딧",
+              "선명한 720p HD 풀 댄스 영상",
+              "사랑스러운 2K AI 아기 사진",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소",
+              "우선 지원"
+            ],
+            "interval": "month",
+            "amount": 1899,
+            "currency": "USD",
+            "price": "$18.99",
+            "unit": "/ 월",
+            "is_featured": true,
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "standard-monthly",
+            "product_name": "Standard Monthly",
+            "credits": 1170,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Standard"
+          },
+          {
+            "title": "프리미엄",
+            "description": "풀 댄스 영상 19개 또는 사랑스러운 AI 아기 사진 57장 분량",
+            "tip": "연간으로 전환하면 30% 절약",
+            "features": [
+              "월 2,880 크레딧",
+              "선명한 720p HD 풀 댄스 영상",
+              "사랑스러운 2K AI 아기 사진",
+              "워터마크 없음",
+              "상업적 사용 허용",
+              "비공개 저장소",
+              "우선 지원"
+            ],
+            "interval": "month",
+            "amount": 3599,
+            "currency": "USD",
+            "price": "$35.99",
+            "unit": "/ 월",
+            "button": { "title": "구독하기", "url": "/pricing", "icon": "Zap" },
+            "product_id": "premium-monthly",
+            "product_name": "Premium Monthly",
+            "credits": 2880,
+            "valid_days": 30,
+            "group": "monthly",
+            "plan_name": "Premium"
+          },
+          {
+            "title": "영상 1개",
+            "description": "필요할 때 바로 만드는 5초 720p 풀 댄스 영상 1개",
+            "tip": "1회 충전 · 연간 플랜은 크레딧당 30% 절약",
+            "features": [
+              "150 크레딧",
+              "1회 구매 · 크레딧은 만료되지 않음",
+              "생성 실패 시 자동 환불",
+              "워터마크 없음",
+              "상업적 사용 허용"
+            ],
+            "interval": "one-time",
+            "amount": 599,
+            "currency": "USD",
+            "price": "$5.99",
+            "unit": "",
+            "button": {
+              "title": "지금 구매",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "single-video",
+            "product_name": "Single Video Credit Pack",
+            "credits": 150,
+            "group": "credits"
+          },
+          {
+            "title": "스타터 충전",
+            "description": "풀 댄스 영상 2개 또는 사랑스러운 AI 아기 사진 8장 분량",
+            "tip": "1회 충전 · 연간 플랜은 크레딧당 30% 절약",
+            "features": [
+              "410 크레딧",
+              "선명한 720p HD 영상 · 사랑스러운 2K 사진",
+              "1회 구매 · 크레딧은 만료되지 않음",
+              "생성 실패 시 자동 환불",
+              "상업적 사용 허용"
+            ],
+            "interval": "one-time",
+            "amount": 1499,
+            "currency": "USD",
+            "price": "$14.99",
+            "unit": "",
+            "button": {
+              "title": "지금 구매",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "starter",
+            "product_name": "Starter Credit Pack",
+            "credits": 410,
+            "group": "credits"
+          },
+          {
+            "title": "스탠다드 충전",
+            "description": "풀 댄스 영상 7개 또는 사랑스러운 AI 아기 사진 23장 분량",
+            "tip": "1회 충전 · 연간 플랜은 크레딧당 30% 절약",
+            "features": [
+              "1,170 크레딧",
+              "선명한 720p HD 영상 · 사랑스러운 2K 사진",
+              "1회 구매 · 크레딧은 만료되지 않음",
+              "생성 실패 시 자동 환불",
+              "상업적 사용 허용"
+            ],
+            "interval": "one-time",
+            "amount": 2999,
+            "currency": "USD",
+            "price": "$29.99",
+            "unit": "",
+            "is_featured": true,
+            "button": {
+              "title": "지금 구매",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "standard",
+            "product_name": "Standard Credit Pack",
+            "credits": 1170,
+            "group": "credits"
+          },
+          {
+            "title": "프리미엄 충전",
+            "description": "풀 댄스 영상 20개 또는 사랑스러운 AI 아기 사진 60장 분량",
+            "tip": "1회 충전 · 연간 플랜은 크레딧당 30% 절약",
+            "features": [
+              "3,040 크레딧",
+              "선명한 720p HD 영상 · 사랑스러운 2K 사진",
+              "1회 구매 · 크레딧은 만료되지 않음",
+              "생성 실패 시 자동 환불",
+              "상업적 사용 허용"
+            ],
+            "interval": "one-time",
+            "amount": 5999,
+            "currency": "USD",
+            "price": "$59.99",
+            "unit": "",
+            "button": {
+              "title": "지금 구매",
+              "url": "/pricing",
+              "icon": "Zap"
+            },
+            "product_id": "premium",
+            "product_name": "Premium Credit Pack",
+            "credits": 3040,
+            "group": "credits"
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "current_plan": "현재 요금제",
+    "processing": "처리 중",
+    "credits_monthly": "크레딧/월",
+    "credits_yearly": "크레딧/년",
+    "credits_one_time": "크레딧",
+    "per_credit": "/크레딧",
+    "credit_pack_subscribers_only": "크레딧 팩은 구독자만 구매할 수 있습니다. 먼저 구독해 주세요."
+  }
+}

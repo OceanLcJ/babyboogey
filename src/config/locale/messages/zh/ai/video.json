@@ -112,8 +112,9 @@
     },
     "insufficient_credits_modal": {
       "title": "积分不足",
-      "description": "生成此视频需要 {required} 积分，当前仅剩 {remaining} 积分。",
+      "description": "生成此视频需要 {required} 积分——你目前有 {remaining} 积分。",
       "recommended": "推荐订阅方案",
+      "annual_recommended": "最划算：比月付省 30%",
       "pack_recommended": "推荐加购积分包",
       "plan_title": "{plan}订阅",
       "plan_credits": "每{period}包含 {credits} 积分",
@@ -131,6 +132,7 @@
       "trust_note": "每个账期自动发放积分 · 随时可取消 · 生成失败自动退回",
       "pack_trust_note": "一次性购买 · 积分永久有效 · 生成失败自动退回",
       "cta_subscribe": "订阅{plan} — {price}",
+      "annual_billing_note": "相当于每月仅 {price}，每年一次性付费",
       "cta_upgrade": "升级到{plan}",
       "cta_buy_pack": "获取 {credits} 积分 — {price}",
       "manage_title": "请检查当前订阅",

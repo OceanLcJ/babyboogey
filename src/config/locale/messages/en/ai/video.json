@@ -112,8 +112,9 @@
     },
     "insufficient_credits_modal": {
       "title": "Not enough credits",
-      "description": "This video needs {required} credits, but you only have {remaining}.",
+      "description": "This video needs {required} credits — you have {remaining}.",
       "recommended": "Recommended subscription",
+      "annual_recommended": "Best value: save 30% vs monthly",
       "pack_recommended": "Recommended top-up",
       "plan_title": "{plan} subscription",
       "plan_credits": "{credits} credits per {period}",
@@ -131,6 +132,7 @@
       "trust_note": "Credits refresh each billing period · cancel anytime · failed generations are refunded",
       "pack_trust_note": "One-time purchase · credits never expire · failed generations are refunded",
       "cta_subscribe": "Subscribe to {plan} — {price}",
+      "annual_billing_note": "That’s just {price}, billed once a year",
       "cta_upgrade": "Upgrade to {plan}",
       "cta_buy_pack": "Get {credits} Credits — {price}",
       "manage_title": "Review your current subscription",

@@ -1,6 +1,7 @@
 // Per-second credit pricing for Kling 2.6 motion-control video generation.
-// Derived from the kie per-second cost (11 / 18 credits per second for
-// 720p / 1080p) with a target net margin of ~70% at the Premium pack tier.
+// Keep these server-owned rates aligned with scripts/verify-pricing-economics.ts.
+// The public UI may display the rates, but clients never choose the amount
+// charged: the generate route resolves resolution and template duration here.
 export const VIDEO_RESOLUTIONS = ['720p', '1080p'] as const;
 export type VideoResolution = (typeof VIDEO_RESOLUTIONS)[number];
 export const VIDEO_DEFAULT_RESOLUTION: VideoResolution = '720p';
@@ -8,8 +9,8 @@ export const BABY_VIDEO_PROVIDER = 'kie';
 export const BABY_VIDEO_MOTION_MODEL = 'kling-2.6/motion-control';
 
 export const VIDEO_COST_CREDITS_PER_SECOND: Record<VideoResolution, number> = {
-  '720p': 15,
-  '1080p': 25,
+  '720p': 30,
+  '1080p': 50,
 };
 
 export function isVideoResolution(value: unknown): value is VideoResolution {
@@ -28,7 +29,7 @@ export function resolveVideoResolution(value: unknown): VideoResolution {
 // duration here before computing the credit cost — this prevents a malicious
 // client from submitting a long template while claiming a short duration.
 export const VIDEO_TEMPLATE_DURATION_SECONDS: Record<string, number> = {
-  'temp-05': 4,
+  'temp-05': 5,
   'viral-dance': 5,
   'temp-01': 15,
   'temp-02': 9,

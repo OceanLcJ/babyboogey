@@ -112,8 +112,9 @@
     },
     "insufficient_credits_modal": {
       "title": "クレジットが不足しています",
-      "description": "この動画の生成には {required} クレジットが必要ですが、残り {remaining} クレジットしかありません。",
+      "description": "この動画には {required} クレジットが必要です — 現在は {remaining} クレジットです。",
       "recommended": "おすすめのサブスクリプション",
+      "annual_recommended": "最もお得：月払いより30%節約",
       "pack_recommended": "おすすめのクレジット追加",
       "plan_title": "{plan}サブスクリプション",
       "plan_credits": "{period}ごとに {credits} クレジット",
@@ -131,6 +132,7 @@
       "trust_note": "請求期間ごとにクレジット付与 · いつでも解約可能 · 生成失敗時は自動返却",
       "pack_trust_note": "買い切り · クレジットは無期限 · 生成失敗時は自動返却",
       "cta_subscribe": "{plan}に登録 — {price}",
+      "annual_billing_note": "月あたりわずか{price}、年1回払い",
       "cta_upgrade": "{plan}にアップグレード",
       "cta_buy_pack": "{credits} クレジットを取得 — {price}",
       "manage_title": "現在のサブスクリプションをご確認ください",
