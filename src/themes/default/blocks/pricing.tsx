@@ -8,6 +8,7 @@ import { PaymentModal } from '@/shared/blocks/payment/payment-modal';
 import { Button } from '@/shared/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 import { usePricingCheckout } from '@/shared/hooks/use-pricing-checkout';
+import { trackAnalyticsEvent } from '@/shared/lib/analytics-events';
 import { cn } from '@/shared/lib/utils';
 import { Subscription } from '@/shared/models/subscription';
 import {
@@ -255,6 +256,22 @@ export function Pricing({
     if (!section.items) return [];
     return section.items;
   }, [section.items]);
+
+  useEffect(() => {
+    if (!visibleItems.length) return;
+
+    trackAnalyticsEvent('view_item_list', {
+      item_list_id: section.id || 'pricing',
+      item_list_name: 'Pricing',
+      items: visibleItems.map((item, index) => ({
+        item_id: item.product_id,
+        item_name: item.product_name || item.title || item.product_id,
+        index,
+        price: Number(item.amount || 0) / 100,
+        currency: String(item.currency || 'USD').toUpperCase(),
+      })),
+    });
+  }, [section.id, visibleItems]);
 
   const [group, setGroup] = useState(() => {
     return resolveDefaultGroup({

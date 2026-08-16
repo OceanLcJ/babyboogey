@@ -15,7 +15,8 @@ const PAYMENT_QUERY_KEYS = [
 export function PaymentReturnTracker() {
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (url.searchParams.get('payment_status') !== 'success') {
+    const paymentStatus = url.searchParams.get('payment_status');
+    if (paymentStatus !== 'success' && paymentStatus !== 'cancelled') {
       return;
     }
 
@@ -25,7 +26,7 @@ export function PaymentReturnTracker() {
       url.searchParams.get('payment_currency') || 'USD'
     ).toUpperCase();
     const value = Number(url.searchParams.get('payment_value') || 0);
-    const dedupeKey = `bb_purchase_${transactionId}`;
+    const dedupeKey = `bb_${paymentStatus}_${transactionId || productId}`;
     let alreadyTracked = false;
 
     try {
@@ -50,8 +51,12 @@ export function PaymentReturnTracker() {
           : undefined,
       };
 
-      trackAnalyticsEvent('purchase', properties);
-      trackAnalyticsEvent('checkout_completed', properties);
+      if (paymentStatus === 'success') {
+        trackAnalyticsEvent('purchase', properties);
+        trackAnalyticsEvent('checkout_completed', properties);
+      } else {
+        trackAnalyticsEvent('checkout_cancelled', properties);
+      }
 
       if (transactionId) {
         try {

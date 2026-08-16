@@ -9,6 +9,7 @@ import { useRouter } from '@/core/i18n/navigation';
 import { defaultLocale } from '@/config/locale';
 import { Button } from '@/shared/components/ui/button';
 import { useAppContext } from '@/shared/contexts/app';
+import { trackAnalyticsEvent } from '@/shared/lib/analytics-events';
 import { cn } from '@/shared/lib/utils';
 import { Button as ButtonType } from '@/shared/types/blocks/common';
 
@@ -17,11 +18,13 @@ export function SocialProviders({
   callbackUrl,
   loading,
   setLoading,
+  mode = 'sign_in',
 }: {
   configs: Record<string, string>;
   callbackUrl: string;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  mode?: 'sign_in' | 'sign_up';
 }) {
   const t = useTranslations('common.sign');
   const locale = useLocale();
@@ -50,6 +53,10 @@ export function SocialProviders({
           // Do NOT reset loading here; navigation may not have completed yet.
         },
         onSuccess: (ctx) => {
+          trackAnalyticsEvent(mode === 'sign_up' ? 'sign_up' : 'login', {
+            method: provider,
+          });
+
           // Close modal if any; navigation will proceed.
           setIsShowSignModal(false);
         },

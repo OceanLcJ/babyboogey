@@ -153,7 +153,20 @@ export function usePricingCheckout() {
   };
 
   const startPayment = async (item: PricingItem) => {
+    const pricingAnalytics = {
+      item_id: item.product_id,
+      item_name: item.product_name || item.title || item.product_id,
+      currency: String(item.currency || 'USD').toUpperCase(),
+      value: Number(item.amount || 0) / 100,
+    };
+
+    trackAnalyticsEvent('pricing_cta_click', pricingAnalytics);
+
     if (!user) {
+      trackAnalyticsEvent('pricing_auth_gate_shown', {
+        ...pricingAnalytics,
+        auth_action: 'sign_in_or_sign_up',
+      });
       setIsShowSignModal(true);
       return;
     }

@@ -20,6 +20,7 @@ import {
 } from '@/shared/components/ui/card';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
+import { trackAnalyticsEvent } from '@/shared/lib/analytics-events';
 
 import { SocialProviders } from './social-providers';
 
@@ -116,11 +117,13 @@ export function SignUp({
             // Do NOT reset loading here; navigation may not have completed yet.
           },
           onSuccess: (ctx) => {
+            trackAnalyticsEvent('sign_up', {
+              method: 'email',
+              email_verification_required: emailVerificationEnabled,
+            });
+
             // report affiliate
             reportAffiliate({ userEmail: email });
-
-            const emailVerificationEnabled =
-              configs.email_verification_enabled === 'true';
 
             if (emailVerificationEnabled) {
               const normalizedCallbackUrl = stripLocalePrefix(callbackUrl);
@@ -234,6 +237,7 @@ export function SignUp({
             callbackUrl={callbackUrl || '/'}
             loading={loading}
             setLoading={setLoading}
+            mode="sign_up"
           />
         </div>
       </CardContent>

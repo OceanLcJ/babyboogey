@@ -311,6 +311,22 @@ export async function POST(req: Request) {
       });
     }
 
+    const cancelBaseUrl = videoUnlockTarget
+      ? callbackUrl
+      : `${callbackBaseUrl}/pricing`;
+    const trackedCancelUrl = new URL(cancelBaseUrl, configs.app_url);
+    trackedCancelUrl.searchParams.set('payment_status', 'cancelled');
+    trackedCancelUrl.searchParams.set('payment_order', orderNo);
+    trackedCancelUrl.searchParams.set('payment_product', product_id);
+    trackedCancelUrl.searchParams.set(
+      'payment_value',
+      String(Number(checkoutAmount || 0) / 100)
+    );
+    trackedCancelUrl.searchParams.set(
+      'payment_currency',
+      checkoutCurrency.toUpperCase()
+    );
+
     // build checkout order
     const checkoutOrder: PaymentOrder = {
       orderNo,
@@ -333,7 +349,7 @@ export async function POST(req: Request) {
           : metadata,
       }),
       successUrl: `${configs.app_url}/api/payment/callback?order_no=${orderNo}`,
-      cancelUrl: videoUnlockTarget ? callbackUrl : `${callbackBaseUrl}/pricing`,
+      cancelUrl: trackedCancelUrl.toString(),
     };
 
     // checkout with predefined product
